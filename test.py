@@ -1,9 +1,37 @@
 import pandas as pd
 import numpy as np
-import re # Regex
+import re # REGEX
 import matplotlib.pyplot as plt # 2) For understanding dataset
 from pandas.plotting import scatter_matrix # 2) For understanding dataset
 from sklearn.preprocessing import StandardScaler # 3) For scaling numerical data (Data pre-processing)
+from sklearn.preprocessing import PolynomialFeatures # 4) For converting features to polynomial
+from sklearn import linear_model # 4) Linear Regression classifier
+
+''' Functions '''
+
+# Function to clean strings (accepts a sequence-typed variable containing dirty strings and returns a list of the cleaned strings)
+def clean_string (sequence):
+
+    # Initialise list containing cleaned strings
+    list_cleaned_strings = []
+
+    # Loop to clean strings in the sequence object
+    for item in sequence:
+
+        # Convert item into a string
+        #item = str (item)
+
+        # Remove heading and trailing whitespaces
+        item = item.strip ()
+
+        # Remove any non-word characters from the item
+        item = re.sub (r"\W", "", item)
+
+        # Append cleaned string into the list of cleaned strings
+        list_cleaned_strings.append (item)
+
+    # Return list of cleaned strings
+    return list_cleaned_strings
 
 # Global variables
 train_file_path = "/home/p/Desktop/csitml/train.csv"
@@ -154,8 +182,9 @@ if (preliminary_check == True):
 # During data pre-processing, should code such that any missing value/abnormal valued data will be normalised (cater to any situation of poor data quality)
 # -> DP should be flexible enough to cater to any data field but also apply column-specific processings (ie Male and Female to 1/0..)
 
-''' Empty values processing '''
+# Note that ORDER in data pre-processing is important!
 
+''' Empty values processing '''
 # Drop empty rows and columns
 train_data.dropna (how = "all", inplace = True) # Drop empty rows
 train_data.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
@@ -194,30 +223,20 @@ if (len(list_columns_empty) > 0): # Check if list containing empty columns has a
             # missing values like cabin in this case)
             # Advanced processing can include NLP, viewing the correlations btwn existing fields.. before assigning the value
             # Will not really expand too much on this as quite intuitive and depends on a case by case basis
+            
+            # Get mode of string value
+            mode_string = train_data [column].mode () [0]
 
-            # Specific processing for 'Embark' column
-            if column == "Embarked":
-                
-                # Get mode of string value
-                mode_string = train_data.Embarked.mode ().iloc [0]
-
-                train_data [column].fillna (mode_string, inplace = True) # OR train_data.fillna (median)
-                
-            # Processing for 'Cabin' column
-            else:
-                
-                # Do nothing
-                pass
+            # Fill empty values in column with the most recurring value
+            train_data [column].fillna (mode_string, inplace = True)
 
 # Drop unused/unselected features
 train_data = train_data.drop (['Ticket', 'Cabin', 'Name'], axis = 1)
 
-
 ''' Numeric processing '''
-
 # Scale Age and Fare
 scaled_columns = ['Age', 'Fare']
-scaler = StandardScaler ()
+scaler = StandardScaler () 
 
 # Loop to scale columns in the scaled_columns list
 for column in scaled_columns:
@@ -228,47 +247,64 @@ for column in scaled_columns:
     # Update dataset with scaled values
     train_data [column] = scaled
 
-
 ''' String processing '''
-
-# Clean column names/labels
-
-# Initialise list
-cleaned_column_name = []
-
-# Loop to clean column names
-for column_name in train_data.columns:
-
-    # Remove heading and trailing whitespaces in column names
-    cleaned_column_name.append (column_name.strip ())
-
-# Update dataset with cleaned column names
-train_data.columns = cleaned_column_name
-
-
-# Will not really expand too much on this as quite intuitive and depends on a case by case basis
-# strip off whitespace and weird characters
-
-# INPUT VALIDATION (REGEX AND COMMON SENSE FOR EACH COLUMN!)
-
-
-
 # Label encoding to change labels to numeric values
-# Change gender
+# Change gender to numeric values
 train_data.loc [train_data ["Sex"] == "male", "Sex"] = 0
 train_data.loc [train_data ["Sex"] == "female", "Sex"] = 1
-# Change embarked port
+# Change embarked port to numeric values
 train_data.loc [train_data ["Embarked"] == "S", "Embarked"] = 0
 train_data.loc [train_data ["Embarked"] == "C", "Embarked"] = 1
 train_data.loc [train_data ["Embarked"] == "Q", "Embarked"] = 2
 
+# Clean stringed columns and column values (use REGEX and exercise common sense for EACH DIFFERENT column!)
+# Clean column names/labels
+train_data.columns = clean_string (train_data.columns) # Call clean_string function and update dataset with cleaned column names
 
+# Clean string column data values
+for column in train_data.columns: # Loop to access list of column names
 
+    # Get data type of column
+    column_datatype = train_data [column].dtype
+
+    # Check if datatype of column is a string
+    if (column_datatype == np.object):
+
+        # Call clean_string function and update dataset column with the cleaned column values
+        train_data [column] = clean_string (train_data [column].values)
 
 # Export cleaned dataset into a CSV file
 train_data.to_csv (clean_file_path)
 
-# Remove whitespaces and weird characters from column names
+# Get cleaned data
+clean_data = pd.read_csv (clean_file_path, index_col = "PassengerId")
+
 # 4) Train model
-# ***Experiment with which features to add and drop to obtain a higher accuracy! 
-# (just trial and error until get the best accuracy, however need to make sure of the bias-variance tradeoff!)***
+
+# ***Experiment with which algorithms to use, what features to add and drop to obtain a higher accuracy! 
+# Can also try more advanced things like cross validation, transforming the dataset into a different from..
+# -> Just trial and error until get the best accuracy, however need to make sure of the bias-variance tradeoff! (difference of >= 3.5% in accuracy may be indicative of this)
+
+# Specify target feature/result
+target = train_data.Survived
+
+# Specify selected features
+features = train_data [["Pclass", "Age", "SibSp", "Parch", "Fare", "Embarked", "Sex" ]].values
+
+# Sometimes features are better represented as polynomials
+# Create polynomial converter
+polynomial = PolynomialFeatures (degree = 2)
+
+# Convert features to polynomial
+poly_features = polynomial.fit_transform (features)
+
+# Create algorithm classfiers
+linear_regression_classifier = linear_model.LogisticRegression ()
+
+# Fit features and target to algorithm classifiers and get results
+linear_regression_result = linear_regression_classifier.fit (features, target)
+#poly_linear_regression_result = linear_regression_classifier.fit (poly_features, target)
+
+# Get score of classifier (check against training dataset)
+print ("Linear regression: ", linear_regression_result.score (features, target)) # Result is over train data, not test data
+# print ("Linear regression: ", poly_linear_regression_result.score (poly_features, target)) # Result is over train data, not test data
