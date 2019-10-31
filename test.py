@@ -8,7 +8,9 @@ from sklearn.preprocessing import MinMaxScaler # 3) For scaling numerical data (
 from sklearn.model_selection import train_test_split # 4) For splitting dataset into train/test sets
 from sklearn import linear_model # 4) Linear Regression classifier
 from sklearn.naive_bayes import GaussianNB # 4) Naive Bayes classifier
+from sklearn.ensemble import RandomForestClassifier # 4) Random Forest classifier
 from sklearn.metrics import accuracy_score # 4) Accuracy scorer
+from sklearn.model_selection import cross_val_score # 4) Cross validation scorer
 
 # Suppress scikit-learn FutureWarnings
 from warnings import simplefilter
@@ -307,11 +309,11 @@ clean_data = pd.read_csv (clean_file_path, index_col = "PassengerId")
 
 ''' Get target variable (result) and selected features '''
 
-# Method 1: Split dataset into training and testing datasets (usually used when dataset is LABELLED and has many records!)
+# Method 1: Split dataset into training and testing datasets [TRAIN_TEST_SPLIT] (usually used when dataset is LABELLED and has many records!)
 # y = train_data.Survived # Target result
 # x = train_data.drop (['Survived'], axis = 1) # Features
 
-# Split data into training and testing sets
+# Split data into training and testing sets (using train_test_split)
 # x_train, x_test, y_train, y_test_result = train_test_split (x, y, test_size = 0.3, random_state = 123, stratify = y)
 
 # Method 2: Use two separate datasets (csv files) that are prepared beforehand
@@ -447,10 +449,29 @@ clean_test_data_2 = pd.read_csv (clean_test_file_path) # Just for the PassengerI
 # Specify selected features [also known as the x values]
 features_test = clean_test_data [["Pclass", "Age", "SibSp", "Parch", "Fare", "Embarked", "Sex" ]]
 
+# Method 3: Combine the separate training and testing datasets together to get a larger dataset [GridSearchCV]
 
-# Create algorithm classfiers
+# For this case, ignore the missing Survived column in the testing dataset (just use the values
+# provided in the training dataset)
+
+# Combine cleaned training dataset together with cleaned testing dataset
+combined_data = clean_data.drop (['Survived'], axis = 1).append (clean_test_data)
+
+# Specify target variable (from cleaned training dataset) and features (combined data)
+target_variable = clean_data.Survived # Target result
+feature_variables = combined_data # Features
+
+# Export combined data to a CSV file
+combined_data.to_csv ('combined.csv')
+
+# Split combined dataset into training and testing parts
+train = combined_data.iloc [:891]
+test = combined_data.iloc [891:]
+
+# Create algorithm classfiers (play with hyperparameters here to tune models)
 linear_regression_classifier = linear_model.LogisticRegression ()
 gaussiannb_classifier = GaussianNB ()
+random_forest_classifier = RandomForestClassifier (n_estimators=50, max_features='sqrt')
 
 # Fit features and target to models and get results [model = algorithm.fit (features/x, target/y)]
 # Method 1:
@@ -458,8 +479,13 @@ gaussiannb_classifier = GaussianNB ()
 # gaussiannb_model = gaussiannb_classifier.fit (x_train, y_train)
 
 # Method 2:
-linear_regression_model = linear_regression_classifier.fit (features, target)
-gaussiannb_model = gaussiannb_classifier.fit (features, target)
+# linear_regression_model = linear_regression_classifier.fit (features, target)
+# gaussiannb_model = gaussiannb_classifier.fit (features, target)
+
+# Method 3:
+linear_regression_model = linear_regression_classifier.fit (train, target_variable)
+gaussiannb_model = gaussiannb_classifier.fit (train, target_variable)
+random_forest_model = random_forest_classifier.fit (train, target_variable)
 
 # For the training of the model, need to test the model first against 
 # the training dataset, followed by the testing dataset (get 2 accuracy scores)
@@ -474,10 +500,24 @@ print ("\nAccuracies of model against TRAINING dataset:\n")
 # print ("Gaussian NB: ", gaussiannb_model.score (x_train, y_train)) # Result is over train data, not test data
 
 # Method 2:
-print ("Method 2 (using separate training and testing datasets):")
-print ("Linear regression: ", linear_regression_model.score (features, target)) # Result is over train data, not test data
-print ("Gaussian NB: ", gaussiannb_model.score (features, target)) # Result is over train data, not test data
+# print ("Method 2 (using separate training and testing datasets):")
+# print ("Linear regression: ", linear_regression_model.score (features, target)) # Result is over train data, not test data
+# print ("Gaussian NB: ", gaussiannb_model.score (features, target)) # Result is over train data, not test data
 
+# Method 3:
+print ("Method 3 (using combined training and testing datasets):")
+print ("Linear regression: ", linear_regression_model.score (train, target_variable)) # Result is over train data, not test data
+print ("Gaussian NB: ", gaussiannb_model.score (train, target_variable)) # Result is over train data, not test data
+print ("Random Forest: ", random_forest_model.score (train, target_variable)) # Result is over train data, not test data
+
+# Method 3:
+print ("\nUsing cross-validation on training dataset:")
+
+# Get list of accuracies
+list_cross_val_score = cross_val_score (random_forest_model, train, target_variable, cv = 5, scoring = 'accuracy')
+
+print ("List of scores: ", list_cross_val_score)
+print ("Mean score: ", np.mean (list_cross_val_score))
 
 # Test models B: Test against the TESTING dataset
 
@@ -497,10 +537,27 @@ y_test_gnb = gaussiannb_model.predict (features_test) # Store predicted results 
 dict_model_predictions ['Linear regression'] = y_test_lr
 dict_model_predictions ['Gaussian NB'] = y_test_gnb
 
+# View importance/weightage of each feature for the Random Forest model
+# Create empty dictionary to contain feature-importance mappings
+dict_feature_importance = {}
+
+# Loop to fill dictionary
+for column in combined_data.columns:
+    
+    # Get the individual weightages of each feature (returns a ndarray of the effect of each feature on the model)
+    for importance in random_forest_model.feature_importances_:
+        
+        # Assign mappings
+        dict_feature_importance [column] = importance
+
 # Results of predictions
 print ("\n\nPredictions for Kaggle:")
 for key in dict_model_predictions:
     print (key, ": ", dict_model_predictions [key], "\n")
+
+# Print features in ascending order of importance
+print ("Random Forest:")
+print ("Features importance: ", sorted (dict_feature_importance.items ()))
 
 # Get accuracies of model
 print ("\nAccuracies of model against testing dataset:")
