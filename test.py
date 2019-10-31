@@ -262,12 +262,19 @@ for column in scaled_columns:
 ''' String processing '''
 # Label encoding to change labels to numeric values
 # Change gender to numeric values
-train_data.loc [train_data ["Sex"] == "male", "Sex"] = 0
-train_data.loc [train_data ["Sex"] == "female", "Sex"] = 1
+train_data.Sex = train_data.Sex.map ({'male': 0, 'female': 1})
+
+# OR
+# train_data.loc [train_data ["Sex"] == "male", "Sex"] = 0
+# train_data.loc [train_data ["Sex"] == "female", "Sex"] = 1
+
 # Change embarked port to numeric values
-train_data.loc [train_data ["Embarked"] == "S", "Embarked"] = 0
-train_data.loc [train_data ["Embarked"] == "C", "Embarked"] = 1
-train_data.loc [train_data ["Embarked"] == "Q", "Embarked"] = 2
+train_data.Embarked = train_data.Embarked.map ({'S': 0, 'C': 1, 'Q': 2})
+
+# OR
+# train_data.loc [train_data ["Embarked"] == "S", "Embarked"] = 0
+# train_data.loc [train_data ["Embarked"] == "C", "Embarked"] = 1
+# train_data.loc [train_data ["Embarked"] == "Q", "Embarked"] = 2
 
 # Clean stringed columns and column values (use REGEX and exercise common sense for EACH DIFFERENT column!)
 # Clean column names/labels
@@ -294,15 +301,15 @@ clean_data = pd.read_csv (clean_file_path, index_col = "PassengerId")
 # 4) Train model
 
 # ***Experiment with which algorithms to use, what features to add and drop to obtain a higher accuracy! 
-# Can also try more advanced things like cross validation, transforming the dataset into a different from..
+# Can also try more advanced things like cross validation, GridSearchCV, transforming the dataset into a different from..
 # -> Just trial and error until get the best accuracy, however need to make sure of the bias-variance tradeoff! 
 #  (difference of >= 3.5% in accuracy between the accuracy on training data and on testing data may be indicative of this)
 
 ''' Get target variable (result) and selected features '''
 
-# Method 1: Split dataset into training and testing datasets (usually used when dataset is LABELLED and had many records!)
-y = train_data.Survived # Target result
-x = train_data.drop (['Survived'], axis = 1) # Features
+# Method 1: Split dataset into training and testing datasets (usually used when dataset is LABELLED and has many records!)
+# y = train_data.Survived # Target result
+# x = train_data.drop (['Survived'], axis = 1) # Features
 
 # Split data into training and testing sets
 # x_train, x_test, y_train, y_test_result = train_test_split (x, y, test_size = 0.3, random_state = 123, stratify = y)
@@ -315,43 +322,6 @@ target = train_data.Survived
 features = train_data [["Pclass", "Age", "SibSp", "Parch", "Fare", "Embarked", "Sex" ]]
 # OR features = train_data [["Pclass", "Age", "SibSp", "Parch", "Fare", "Embarked", "Sex" ]].values
 
-# Create algorithm classfiers
-linear_regression_classifier = linear_model.LogisticRegression ()
-gaussiannb_classifier = GaussianNB ()
-
-# Fit features and target to models and get results [model = algorithm.fit (features/x, target/y)]
-# Method 1:
-# linear_regression_model = linear_regression_classifier.fit (x_train, y_train)
-# gaussiannb_model = gaussiannb_classifier.fit (x_train, y_train)
-
-# Method 2:
-linear_regression_model = linear_regression_classifier.fit (features, target)
-gaussiannb_model = gaussiannb_classifier.fit (features, target)
-
-# For the training of the model, need to test the model first against 
-# the training dataset, followed by the testing dataset (get 2 accuracy scores)
-
-# Test models A: First check against training dataset
-print ("\nAccuracies of model against training dataset:")
-
-# Method 1:
-# print ("Method 1 (splitting into dataset training and testing datasets):")
-# print ("Linear regression: ", linear_regression_model.score (x_train, y_train)) # Result is over train data, not test data
-# print ("Gaussian NB: ", gaussiannb_model.score (x_train, y_train)) # Result is over train data, not test data
-
-# Method 2:
-print ("Method 2 (using separate training and testing datasets):")
-print ("Linear regression: ", linear_regression_model.score (features, target)) # Result is over train data, not test data
-print ("Gaussian NB: ", gaussiannb_model.score (features, target)) # Result is over train data, not test data
-
-
-# Test models B: Test against the testing dataset
-# Get predicted values from models
-# Method 1:
-# y_test_lr = linear_regression_model.predict (x_test) # Store predicted results of model
-# y_test_gnb = gaussiannb_model.predict (x_test) # Store predicted results of model
-
-# Method 2:
 # Get testing data
 test_data = pd.read_csv (test_file_path, index_col="PassengerId")
 
@@ -418,7 +388,7 @@ test_data = test_data.drop (['Ticket', 'Cabin', 'Name'], axis = 1)
 # For scaling, there are many types of scaling that can be used such as the StandardScaler (for normal data distribution)
 # as well as the MinMaxScaler (for unusually distributed data) [the type of scaler to use depends on the distribution of the dataset!]
 scaled_columns = ['Age', 'Fare']
-scaler = StandardScaler () # Will result in negative values which will need to be considered and dealed with later on as some algorithms do not work with negative values!
+#scaler = StandardScaler () # Will result in negative values which will need to be considered and dealed with later on as some algorithms do not work with negative values!
 minmax_scaler = MinMaxScaler ()
 
 # Loop to scale columns in the scaled_columns list
@@ -434,12 +404,19 @@ for column in scaled_columns:
 ''' String processing '''
 # Label encoding to change labels to numeric values
 # Change gender to numeric values
-test_data.loc [test_data ["Sex"] == "male", "Sex"] = 0
-test_data.loc [test_data ["Sex"] == "female", "Sex"] = 1
+test_data.Sex = test_data.Sex.map ({'male': 0, 'female': 1})
+
+# OR
+# test_data.loc [test_data ["Sex"] == "male", "Sex"] = 0
+# test_data.loc [test_data ["Sex"] == "female", "Sex"] = 1
+
 # Change embarked port to numeric values
-test_data.loc [test_data ["Embarked"] == "S", "Embarked"] = 0
-test_data.loc [test_data ["Embarked"] == "C", "Embarked"] = 1
-test_data.loc [test_data ["Embarked"] == "Q", "Embarked"] = 2
+test_data.Embarked = test_data.Embarked.map ({'S': 0, 'C': 1, 'Q': 2})
+
+# OR
+# test_data.loc [test_data ["Embarked"] == "S", "Embarked"] = 0
+# test_data.loc [test_data ["Embarked"] == "C", "Embarked"] = 1
+# test_data.loc [test_data ["Embarked"] == "Q", "Embarked"] = 2
 
 # Clean stringed columns and column values (use REGEX and exercise common sense for EACH DIFFERENT column!)
 # Clean column names/labels
@@ -462,7 +439,7 @@ test_data.to_csv (clean_test_file_path)
 
 # Get cleaned test data
 clean_test_data = pd.read_csv (clean_test_file_path, index_col = "PassengerId")
-clean_test_data_2 = pd.read_csv (clean_test_file_path) # Just for PassengerId as used as index_col in previous DataFrames
+clean_test_data_2 = pd.read_csv (clean_test_file_path) # Just for the PassengerId as it is used as index_col in previous DataFrames (exporting predictions)
 
 # Specify target feature/result [also known as the y value]
 # target_test = clean_test_data.Survived # Not present as the testing dataset provided by Kaggle does not have this
@@ -470,37 +447,87 @@ clean_test_data_2 = pd.read_csv (clean_test_file_path) # Just for PassengerId as
 # Specify selected features [also known as the x values]
 features_test = clean_test_data [["Pclass", "Age", "SibSp", "Parch", "Fare", "Embarked", "Sex" ]]
 
+
+# Create algorithm classfiers
+linear_regression_classifier = linear_model.LogisticRegression ()
+gaussiannb_classifier = GaussianNB ()
+
+# Fit features and target to models and get results [model = algorithm.fit (features/x, target/y)]
+# Method 1:
+# linear_regression_model = linear_regression_classifier.fit (x_train, y_train)
+# gaussiannb_model = gaussiannb_classifier.fit (x_train, y_train)
+
+# Method 2:
+linear_regression_model = linear_regression_classifier.fit (features, target)
+gaussiannb_model = gaussiannb_classifier.fit (features, target)
+
+# For the training of the model, need to test the model first against 
+# the training dataset, followed by the testing dataset (get 2 accuracy scores)
+# Next, compare these 2 accuracies. If the accuracies are more than 3.5%-5% apart, this suggets overfitting
+
+# Test models A: First check against training dataset
+print ("\nAccuracies of model against TRAINING dataset:\n")
+
+# Method 1:
+# print ("Method 1 (splitting into dataset training and testing datasets):")
+# print ("Linear regression: ", linear_regression_model.score (x_train, y_train)) # Result is over train data, not test data
+# print ("Gaussian NB: ", gaussiannb_model.score (x_train, y_train)) # Result is over train data, not test data
+
+# Method 2:
+print ("Method 2 (using separate training and testing datasets):")
+print ("Linear regression: ", linear_regression_model.score (features, target)) # Result is over train data, not test data
+print ("Gaussian NB: ", gaussiannb_model.score (features, target)) # Result is over train data, not test data
+
+
+# Test models B: Test against the TESTING dataset
+
+# Dictionary to store results
+dict_model_predictions = {}
+
+# Get predicted values from models
+# Method 1:
+# y_test_lr = linear_regression_model.predict (x_test) # Store predicted results of model
+# y_test_gnb = gaussiannb_model.predict (x_test) # Store predicted results of model
+
+# Method 2:
 y_test_lr = linear_regression_model.predict (features_test) # Store predicted results of model
 y_test_gnb = gaussiannb_model.predict (features_test) # Store predicted results of model
 
+# Store values in a dictionary
+dict_model_predictions ['Linear regression'] = y_test_lr
+dict_model_predictions ['Gaussian NB'] = y_test_gnb
+
+# Results of predictions
+print ("\n\nPredictions for Kaggle:")
+for key in dict_model_predictions:
+    print (key, ": ", dict_model_predictions [key], "\n")
+
 # Get accuracies of model
-print ("\n\nAccuracies of model against testing dataset:")
+print ("\nAccuracies of model against testing dataset:")
 
 # Method 1:
 # print ("Linear Regression: ", accuracy_score (y_test_result, y_test_lr))
 # print ("Gaussian NB: ", accuracy_score (y_test_result, y_test_gnb))
 
 # Method 2:
-# print ("Linear Regression: ", accuracy_score (target_test, y_test_lr))
+# print ("Linear Regression: ", accuracy_score (target_test, y_test_lr)) # We cannot do this for the Kaggle dataset as the testing data provided does not have the Survived column
 # print ("Gaussian NB: ", accuracy_score (target_test, y_test_gnb))
-
-# Results of predictions
-print ("\n\nPredictions for Kaggle:")
-print ("Linear Regression: ", y_test_lr)
-print ("Gaussian NB: ", y_test_gnb)
 
 # IMPORTANT: If the difference between the accuracy of the model on the training and testing dataset is >= 3.5%, may indicate presence of bias (over-fitting)
 # Calculate difference between accuracies and print warning
 pass
 
+# Export prediction results for Kaggle
+for key in dict_model_predictions:
 
-# Export results
-submission = pd.DataFrame ({
-    "PassengerId": clean_test_data_2.PassengerId,
-    "Survived": y_test_lr
-})
+    # Create new DataFrame with required columns
+    submission = pd.DataFrame ({"PassengerId": clean_test_data_2.PassengerId, "Survived": dict_model_predictions [key]})
 
-submission.to_csv ("prediction.csv", index=False)
+    # Format file name (replace whitespaces with a hyphen)
+    file_name = "prediction-" + re.sub (r"\s", "-", key.lower()) + ".csv"
+
+    # Export dataframe
+    submission.to_csv (file_name, index = False)
 
 # Save models
 # pickle
