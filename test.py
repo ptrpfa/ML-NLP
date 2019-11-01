@@ -488,12 +488,27 @@ linear_regression_model = linear_regression_classifier.fit (train, target_variab
 gaussiannb_model = gaussiannb_classifier.fit (train, target_variable)
 random_forest_model = random_forest_classifier.fit (train, target_variable)
 
+# Fine-tune/Refine models
+# GridSearchCV to to tune hyperparameters of models
+
+# Dictionary to store parameters and parameter values to test
+parameter_grid = {
+                 'max_depth' : [4, 6, 8],
+                 'n_estimators': [50, 10],
+                 'max_features': ['sqrt', 'auto', 'log2'],
+                 'min_samples_split': [2, 3, 10],
+                 'min_samples_leaf': [1, 3, 10],
+                 'bootstrap': [True, False],
+                 }
+
+#grid_search = GridSearchCV (estimator)
+
 # For the training of the model, need to test the model first against 
 # the training dataset, followed by the testing dataset (get 2 accuracy scores)
 # Next, compare these 2 accuracies. If the accuracies are more than 3.5%-5% apart, this suggets overfitting
 
 # Test models A: First check against training dataset
-print ("\nAccuracies of model against TRAINING dataset:\n")
+print ("\n***Accuracies of model against TRAINING dataset:***\n")
 
 # Method 1:
 # print ("Method 1 (splitting into dataset training and testing datasets):")
@@ -587,6 +602,9 @@ print ("\nAccuracies of model against testing dataset:")
 # Method 2:
 # print ("Linear Regression: ", accuracy_score (target_test, y_test_lr)) # We cannot do this for the Kaggle dataset as the testing data provided does not have the Survived column
 # print ("Gaussian NB: ", accuracy_score (target_test, y_test_gnb))
+
+# Method 3:
+# Should use Cross Validation to get the accuracy against testing data (more accurate)
 
 # IMPORTANT: If the difference between the accuracy of the model on the training and testing dataset is >= 3.5%, may indicate presence of bias (over-fitting)
 # Calculate difference between accuracies and print warning
