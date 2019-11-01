@@ -11,6 +11,7 @@ from sklearn.naive_bayes import GaussianNB # 4) Naive Bayes classifier
 from sklearn.ensemble import RandomForestClassifier # 4) Random Forest classifier
 from sklearn.metrics import accuracy_score # 4) Accuracy scorer
 from sklearn.model_selection import cross_val_score # 4) Cross validation scorer
+from sklearn.model_selection import GridSearchCV # 4) For model hyperparameters tuning
 
 # Suppress scikit-learn FutureWarnings
 from warnings import simplefilter
@@ -510,12 +511,23 @@ print ("Linear regression: ", linear_regression_model.score (train, target_varia
 print ("Gaussian NB: ", gaussiannb_model.score (train, target_variable)) # Result is over train data, not test data
 print ("Random Forest: ", random_forest_model.score (train, target_variable)) # Result is over train data, not test data
 
-# Method 3:
+# Cross validation
 print ("\nUsing cross-validation on training dataset:")
 
 # Get list of accuracies
 list_cross_val_score = cross_val_score (random_forest_model, train, target_variable, cv = 5, scoring = 'accuracy')
 
+print ("Random Forest:")
+print ("List of scores: ", list_cross_val_score)
+print ("Mean score: ", np.mean (list_cross_val_score))
+
+print ("\nLinear Regression:")
+list_cross_val_score = cross_val_score (linear_regression_model, train, target_variable, cv = 5, scoring = 'accuracy')
+print ("List of scores: ", list_cross_val_score)
+print ("Mean score: ", np.mean (list_cross_val_score))
+
+print ("\nGaussian NB:")
+list_cross_val_score = cross_val_score (gaussiannb_model, train, target_variable, cv = 5, scoring = 'accuracy')
 print ("List of scores: ", list_cross_val_score)
 print ("Mean score: ", np.mean (list_cross_val_score))
 
@@ -530,12 +542,18 @@ dict_model_predictions = {}
 # y_test_gnb = gaussiannb_model.predict (x_test) # Store predicted results of model
 
 # Method 2:
-y_test_lr = linear_regression_model.predict (features_test) # Store predicted results of model
-y_test_gnb = gaussiannb_model.predict (features_test) # Store predicted results of model
+# y_test_lr = linear_regression_model.predict (features_test) # Store predicted results of model
+# y_test_gnb = gaussiannb_model.predict (features_test) # Store predicted results of model
+
+# Method 3:
+y_test_lr = linear_regression_model.predict (test) # Store predicted results of model
+y_test_gnb = gaussiannb_model.predict (test) # Store predicted results of model
+y_test_randforest = random_forest_model.predict (test) # Store predicted results of model
 
 # Store values in a dictionary
 dict_model_predictions ['Linear regression'] = y_test_lr
 dict_model_predictions ['Gaussian NB'] = y_test_gnb
+dict_model_predictions ['Random Forest'] = y_test_randforest
 
 # View importance/weightage of each feature for the Random Forest model
 # Create empty dictionary to contain feature-importance mappings
