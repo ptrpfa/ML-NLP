@@ -23,3 +23,7 @@ Now you can install all the dependencies from the requirements file
 Then just run this command to get matplotlib to run
 
 `echo "backend: TkAgg" > ~/.matplotlib/matplotlibrc`
+
+Tutorials at:
+https://github.com/Arkham/jack-dies
+https://www.youtube.com/watch?v=fS70iptz-XU

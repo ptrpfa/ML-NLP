@@ -44,10 +44,10 @@ def clean_string (sequence):
     return list_cleaned_strings
 
 # Global variables
-train_file_path = "/home/p/Desktop/csitml/train.csv"
-test_file_path = "/home/p/Desktop/csitml/test.csv"
-clean_file_path = '/home/p/Desktop/csitml/clean.csv' # Cleaned dataset file path
-clean_test_file_path = "/home/p/Desktop/csitml/clean-test.csv" # Cleaned test dataset file path
+train_file_path = "/home/p/Desktop/csitml/ML/titanic/train.csv"
+test_file_path = "/home/p/Desktop/csitml/ML/titanic/test.csv"
+clean_file_path = '/home/p/Desktop/csitml/ML/titanic/clean.csv' # Cleaned dataset file path
+clean_test_file_path = "/home/p/Desktop/csitml/ML/titanic/clean-test.csv" # Cleaned test dataset file path
 list_columns_empty = [] # Empty list to store the names of columns containing null values
 preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
 
@@ -472,7 +472,14 @@ test = combined_data.iloc [891:]
 # Create algorithm classfiers (play with hyperparameters here to tune models)
 linear_regression_classifier = linear_model.LogisticRegression ()
 gaussiannb_classifier = GaussianNB ()
-random_forest_classifier = RandomForestClassifier (n_estimators=50, max_features='sqrt')
+# random_forest_classifier = RandomForestClassifier (n_estimators=50, max_features='sqrt')
+random_forest_classifier = RandomForestClassifier(bootstrap=False, class_weight=None, criterion='gini',
+                       max_depth=8, max_features='log2', max_leaf_nodes=None,
+                       min_impurity_decrease=0.0, min_impurity_split=None,
+                       min_samples_leaf=3, min_samples_split=10,
+                       min_weight_fraction_leaf=0.0, n_estimators=10,
+                       n_jobs=None, oob_score=False, random_state=None,
+                       verbose=0, warm_start=False) # Best estimator given by GridSearchCV
 
 # Fit features and target to models and get results [model = algorithm.fit (features/x, target/y)]
 # Method 1:
@@ -488,20 +495,48 @@ linear_regression_model = linear_regression_classifier.fit (train, target_variab
 gaussiannb_model = gaussiannb_classifier.fit (train, target_variable)
 random_forest_model = random_forest_classifier.fit (train, target_variable)
 
-# Fine-tune/Refine models
-# GridSearchCV to to tune hyperparameters of models
+""" Fine-tune/Refine models """
+print ("\n***Fine-tuning models***")
 
+# View importance/weightage of each feature for the Random Forest model
+# Create empty dictionary to contain feature-importance mappings
+dict_feature_importance = {}
+
+# Loop to fill dictionary
+for column in combined_data.columns:
+    
+    # Get the individual weightages of each feature (returns a ndarray of the effect of each feature on the model)
+    for importance in random_forest_model.feature_importances_:
+        
+        # Assign mappings
+        dict_feature_importance [column] = importance
+
+# Print features in ascending order of importance
+print ("Random Forest:")
+print ("Features importance: ", sorted (dict_feature_importance.items ()))
+
+# GridSearchCV to to tune hyperparameters of models
 # Dictionary to store parameters and parameter values to test
 parameter_grid = {
-                 'max_depth' : [4, 6, 8],
-                 'n_estimators': [50, 10],
-                 'max_features': ['sqrt', 'auto', 'log2'],
-                 'min_samples_split': [2, 3, 10],
-                 'min_samples_leaf': [1, 3, 10],
-                 'bootstrap': [True, False],
+                 'max_depth' : [4, 6, 8],                   #  Maximum depth of the tree
+                 'n_estimators': [50, 10],                  #   Number of trees in the forest
+                 'max_features': ['sqrt', 'auto', 'log2'],  #   No of features to consider when looking for the best split
+                 'min_samples_split': [2, 3, 10],           #   Minimum number of samples required to split an internal node
+                 'min_samples_leaf': [1, 3, 10],            #   Minimum number of samples required to be at a leaf node
+                 'bootstrap': [True, False],                #   Whether bootstrap samples are used when building trees
                  }
 
-#grid_search = GridSearchCV (estimator)
+# Create Grid Search object
+grid_search = GridSearchCV (estimator = random_forest_model, param_grid = parameter_grid, 
+                scoring = "accuracy", n_jobs = 4, iid = False, cv = 10, verbose = 1)
+
+# Fit features and target variable to grid search object
+grid_search.fit (train, target_variable)
+
+# Get fine-tuned details
+print ("Best score: ", grid_search.best_score_)
+print ("Best parameters: ", grid_search.best_params_)
+print ("Best estimator: ", grid_search.best_estimator_)
 
 # For the training of the model, need to test the model first against 
 # the training dataset, followed by the testing dataset (get 2 accuracy scores)
@@ -570,27 +605,10 @@ dict_model_predictions ['Linear regression'] = y_test_lr
 dict_model_predictions ['Gaussian NB'] = y_test_gnb
 dict_model_predictions ['Random Forest'] = y_test_randforest
 
-# View importance/weightage of each feature for the Random Forest model
-# Create empty dictionary to contain feature-importance mappings
-dict_feature_importance = {}
-
-# Loop to fill dictionary
-for column in combined_data.columns:
-    
-    # Get the individual weightages of each feature (returns a ndarray of the effect of each feature on the model)
-    for importance in random_forest_model.feature_importances_:
-        
-        # Assign mappings
-        dict_feature_importance [column] = importance
-
 # Results of predictions
 print ("\n\nPredictions for Kaggle:")
 for key in dict_model_predictions:
     print (key, ": ", dict_model_predictions [key], "\n")
-
-# Print features in ascending order of importance
-print ("Random Forest:")
-print ("Features importance: ", sorted (dict_feature_importance.items ()))
 
 # Get accuracies of model
 print ("\nAccuracies of model against testing dataset:")
@@ -605,6 +623,7 @@ print ("\nAccuracies of model against testing dataset:")
 
 # Method 3:
 # Should use Cross Validation to get the accuracy against testing data (more accurate)
+print ("NO TESTING DATASET FOR KAGGLE TITANIC CHALLENGE")
 
 # IMPORTANT: If the difference between the accuracy of the model on the training and testing dataset is >= 3.5%, may indicate presence of bias (over-fitting)
 # Calculate difference between accuracies and print warning
@@ -613,7 +632,7 @@ pass
 # Export prediction results for Kaggle
 for key in dict_model_predictions:
 
-    # Create new DataFrame with required columns
+    # Create new DataFrame with required columns (Key: Column, Value: Column value)
     submission = pd.DataFrame ({"PassengerId": clean_test_data_2.PassengerId, "Survived": dict_model_predictions [key]})
 
     # Format file name (replace whitespaces with a hyphen)
@@ -622,5 +641,5 @@ for key in dict_model_predictions:
     # Export dataframe
     submission.to_csv (file_name, index = False)
 
-# Save models
+# Save models (serialization)
 # pickle
