@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import re # REGEX
+import pickle 
 import matplotlib.pyplot as plt # 2) For understanding dataset
 from pandas.plotting import scatter_matrix # 2) For understanding dataset
 from sklearn.preprocessing import StandardScaler # 3) For scaling numerical data (Data pre-processing)
@@ -43,11 +44,45 @@ def clean_string (sequence):
     # Return list of cleaned strings
     return list_cleaned_strings
 
+# Function to pickle object (accepts object to pickle and its filename to save as)
+def pickle_object (pickle_object, filename):
+
+    # Get full filepath
+    filepath = pickles_file_path + filename
+
+    # Create file object to store object to pickle
+    file_pickle = open (filepath, 'ab') # a = append, b = bytes
+
+    # Pickle (serialise) object [store object as a file]
+    pickle.dump (pickle_object, file_pickle)
+
+    # Close file object
+    file_pickle.close ()
+
+# Function to load pickle object (accepts filename of pickle to load and returns the de-pickled object)
+def load_pickle (filename):
+
+     # Get full filepath
+    filepath = pickles_file_path + filename
+
+    # Create file object accessing the pickle file
+    file_pickle = open (filepath, 'rb') # r = read, b = bytes
+
+    # Get pickled object
+    pickled_object = pickle.load (file_pickle)
+
+    # Close file object
+    file_pickle.close ()
+
+    # Return pickle object
+    return pickled_object
+
 # Global variables
 train_file_path = "/home/p/Desktop/csitml/ML/titanic/train.csv"
 test_file_path = "/home/p/Desktop/csitml/ML/titanic/test.csv"
 clean_file_path = '/home/p/Desktop/csitml/ML/titanic/clean.csv' # Cleaned dataset file path
 clean_test_file_path = "/home/p/Desktop/csitml/ML/titanic/clean-test.csv" # Cleaned test dataset file path
+pickles_file_path = "/home/p/Desktop/csitml/ML/titanic/pickles/" # File path containing pickled objects
 list_columns_empty = [] # Empty list to store the names of columns containing null values
 preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
 
@@ -493,7 +528,10 @@ random_forest_classifier = RandomForestClassifier(bootstrap=False, class_weight=
 # Method 3:
 linear_regression_model = linear_regression_classifier.fit (train, target_variable)
 gaussiannb_model = gaussiannb_classifier.fit (train, target_variable)
-random_forest_model = random_forest_classifier.fit (train, target_variable)
+# random_forest_model = random_forest_classifier.fit (train, target_variable)
+
+# Get pickled object
+random_forest_model = load_pickle ("random-forest-model")
 
 """ Fine-tune/Refine models """
 print ("\n***Fine-tuning models***")
@@ -641,5 +679,12 @@ for key in dict_model_predictions:
     # Export dataframe
     submission.to_csv (file_name, index = False)
 
-# Save models (serialization)
-# pickle
+# Save models (pickling/serialization)
+# Models
+pickle_object (linear_regression_model, "linear-regression-model")
+pickle_object (gaussiannb_model, "gaussiannb-model")
+pickle_object (random_forest_model, "random-forest-model")
+
+# Grid Search
+pickle_object (grid_search, "grid-search")
+
