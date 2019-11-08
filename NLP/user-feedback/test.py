@@ -10,4 +10,8 @@ from sklearn.metrics import accuracy_score # 4) Accuracy scorer
 from sklearn.model_selection import cross_val_score # 4) Cross validation scorer
 from sklearn.model_selection import GridSearchCV # 4) For model hyperparameters tuning
 
+# Global variables
+bugcoderegex = "" # Still WIP currently [Assume EC is the first string split by space ie '00001 Error occurred' [for subject]]
+
 # Create spam-detection model to filter out spam
+
