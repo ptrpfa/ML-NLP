@@ -1,1 +1,2 @@
 Spam dataset: http://www.dt.fee.unicamp.br/~tiago/smsspamcollection/
+	      https://www.kaggle.com/uciml/sms-spam-collection-dataset/data
