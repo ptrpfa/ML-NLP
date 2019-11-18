@@ -16,8 +16,10 @@ from sklearn.model_selection import GridSearchCV # 4) For model hyperparameters 
 from nltk import stem # NLP
 from nltk.corpus import stopwords # NLP
 from sklearn.feature_extraction.text import TfidfVectorizer # NLP Vectorizer
-import seaborn as sn # For visualisation
 import matplotlib.pyplot as plt # For visualisation
+from sklearn.metrics import confusion_matrix # 4.5) For determination of model accuracy
+from sklearn.utils.multiclass import unique_labels # 4.5) For determination of model accuracy
+from sklearn.metrics import classification_report # 4.5) For determination of model accuracy
 
 # Suppress scikit-learn FutureWarnings
 from warnings import simplefilter
@@ -101,127 +103,6 @@ def load_pickle (filename):
     # Return pickle object
     return pickled_object
 
-# Function to create spam detection model
-def create_spam_detection_model (features, target):
-
-    # 4) Create spam-detection classfiers to filter out spam
-    svm_classifier = svm. SVC (C=10, cache_size=200, class_weight=None, coef0=0.0,
-        decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
-        max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
-        verbose=False)
-
-    logistic_regression_classifier = LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
-                   intercept_scaling=1, l1_ratio=None, max_iter=100,
-                   multi_class='warn', n_jobs=None, penalty='l2',
-                   random_state=1, solver='liblinear', tol=0.0001, verbose=0,
-                   warm_start=False)
-
-    # GridSearchCV to to tune hyperparameters of models
-    """
-    # Dictionary to store parameters and parameter values to test
-    parameter_grid = {
-                    'C': [0.001, 0.01, 0.1, 1, 10,1000],
-                    'degree': [1, 3, 5, 10],
-                    'gamma': [0.001, 0.01, 0.1, 1],
-                    'random_state': [1, 5, 10, 50, 55, 70, 100, 123]
-                    }
-
-    # Create Grid Search object
-    grid_search = GridSearchCV (estimator = svm_classifier, param_grid = parameter_grid, 
-                    scoring = "accuracy", n_jobs = 4, iid = False, cv = 10, verbose = 1)
-
-    # Fit features and target variable to grid search object
-    grid_search.fit (features, target)
-
-    # Get fine-tuned details
-    print ("Best score: ", grid_search.best_score_)
-    print ("Best parameters: ", grid_search.best_params_)
-    print ("Best estimator: ", grid_search.best_estimator_)
-
-    # SVM:
-    # Best score:  0.981328511060382
-    # Best parameters:  {'C': 10, 'degree': 1, 'gamma': 0.1, 'random_state': 1}
-    # Best estimator:  SVC(C=10, cache_size=200, class_weight=None, coef0=0.0,
-    #     decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
-    #     max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
-    #     verbose=False)
-    """
-    """
-    # Dictionary to store parameters and parameter values to test
-    parameter_grid = {
-                    'C': [0.001, 0.01, 0.1, 1, 10,1000],
-                    'penalty': ['l1', 'l2'],
-                    'random_state': [1, 5, 10, 50, 55, 70, 100, 123]
-                    }
-
-    # Create Grid Search object
-    grid_search = GridSearchCV (estimator = logistic_regression_classifier, param_grid = parameter_grid, 
-                    scoring = "accuracy", n_jobs = 4, iid = False, cv = 10, verbose = 1)
-
-    # Fit features and target variable to grid search object
-    grid_search.fit (features, target)
-
-    # Get fine-tuned details
-    print ("LR:")
-    print ("Best score: ", grid_search.best_score_)
-    print ("Best parameters: ", grid_search.best_params_)
-    print ("Best estimator: ", grid_search.best_estimator_)
-    """
-
-    # Get list of accuracies
-    print ("***Model accuracies***")
-
-    """ SVM """
-    print ("SVM:")
-
-    # Using cross validation
-    list_cross_val_score = cross_val_score (svm_classifier, features, target, cv = 5, scoring = 'accuracy')
-
-    print ("Cross-validation:")
-    print ("List of scores: ", list_cross_val_score)
-    print ("Mean score: ", np.mean (list_cross_val_score), "\n")
-
-    # Using train-test-split
-    print ("Train-test-split:")
-    x_train, x_test, y_train, y_test_result = train_test_split (features, target, test_size = 0.3, random_state = 123, stratify = target)
-    svm_model = svm_classifier.fit (x_train, y_train) # Fit model with training data
-    y_test_svm = svm_model.predict (x_test) # Store predicted results of model
-
-    # Accuracy against training data
-    print ("Training data accuracy: ", svm_model.score (x_train, y_train)) # Result is over train data, not test data
-    print ("Testing data accuracy: ", accuracy_score (y_test_result, y_test_svm)) # Testing data accuracy
-    
-    """ Logistic Regression """
-    print ("\nLogistic Regression:")
-
-    # Using cross validation
-    list_cross_val_score = cross_val_score (logistic_regression_classifier, features, target, cv = 5, scoring = 'accuracy')
-
-    print ("Cross-validation:")
-    print ("List of scores: ", list_cross_val_score)
-    print ("Mean score: ", np.mean (list_cross_val_score), "\n")
-
-    # Using train-test-split
-    print ("Train-test-split:")
-    x_train, x_test, y_train, y_test_result = train_test_split (features, target, test_size = 0.3, random_state = 123, stratify = target)
-    logistic_regression_model = logistic_regression_classifier.fit (x_train, y_train) # Fit model with training data
-    y_test_logistic_regression = logistic_regression_model.predict (x_test) # Store predicted results of model
-
-    # Accuracy against training data
-    print ("Training data accuracy: ", logistic_regression_model.score (x_train, y_train)) # Result is over train data, not test data
-    print ("Testing data accuracy: ", accuracy_score (y_test_result, y_test_logistic_regression)) # Testing data accuracy
-
-    # Save models (pickling/serialization)
-    pickle_object (svm_model, "svm-model.pkl")
-    pickle_object (logistic_regression_model, "logistic-regression-model.pkl")
-
-
-    # Plot confusion matrix
-    
-
-
-    plt.show ()
-
 # Global variables
 train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/data/spam-ham.txt" # Dataset file path
 clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/v1/data/clean-spam-ham.csv' # Cleaned dataset file path
@@ -273,10 +154,199 @@ features = vectorizer.fit_transform(features) # Returns a matrix
 # data_dtm = pd.DataFrame(features.toarray(), columns=vectorizer.get_feature_names()) # Convert DTM to DataFrame
 # data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/spam-detect/v1/data/dtm.csv", index = False, encoding="utf-8") # Save DTM
 pickle_object (vectorizer, "tfid-vectorizer.pkl")
-#test
-# 4) Load models
-create_spam_detection_model (features, target) # Create spam-detection classfier to filter out spam
 
+# 4) # Create spam-detection classfiers to filter out spam
+"""
+NOTE: Spam-detection model is CONSERVATIVE
+Model tends to classify spam messages as not spam
+-> Better to be more conservative as would rather mislabel spam as not spam than genuine messages 
+as spam, which will result in lost of feedback
+"""
+
+# 4) Create spam-detection classfiers to filter out spam
+svm_classifier = svm. SVC (C=10, cache_size=200, class_weight=None, coef0=0.0,
+    decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
+    max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
+    verbose=False)
+
+logistic_regression_classifier = LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
+                intercept_scaling=1, l1_ratio=None, max_iter=100,
+                multi_class='warn', n_jobs=None, penalty='l2',
+                random_state=1, solver='liblinear', tol=0.0001, verbose=0,
+                warm_start=False)
+
+# GridSearchCV to to tune hyperparameters of models
+"""
+# Dictionary to store parameters and parameter values to test
+parameter_grid = {
+                'C': [0.001, 0.01, 0.1, 1, 10,1000],
+                'degree': [1, 3, 5, 10],
+                'gamma': [0.001, 0.01, 0.1, 1],
+                'random_state': [1, 5, 10, 50, 55, 70, 100, 123]
+                }
+
+# Create Grid Search object
+grid_search = GridSearchCV (estimator = svm_classifier, param_grid = parameter_grid, 
+                scoring = "accuracy", n_jobs = 4, iid = False, cv = 10, verbose = 1)
+
+# Fit features and target variable to grid search object
+grid_search.fit (features, target)
+
+# Get fine-tuned details
+print ("Best score: ", grid_search.best_score_)
+print ("Best parameters: ", grid_search.best_params_)
+print ("Best estimator: ", grid_search.best_estimator_)
+
+# SVM:
+# Best score:  0.981328511060382
+# Best parameters:  {'C': 10, 'degree': 1, 'gamma': 0.1, 'random_state': 1}
+# Best estimator:  SVC(C=10, cache_size=200, class_weight=None, coef0=0.0,
+#     decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
+#     max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
+#     verbose=False)
+"""
+"""
+# Dictionary to store parameters and parameter values to test
+parameter_grid = {
+                'C': [0.001, 0.01, 0.1, 1, 10,1000],
+                'penalty': ['l1', 'l2'],
+                'random_state': [1, 5, 10, 50, 55, 70, 100, 123]
+                }
+
+# Create Grid Search object
+grid_search = GridSearchCV (estimator = logistic_regression_classifier, param_grid = parameter_grid, 
+                scoring = "accuracy", n_jobs = 4, iid = False, cv = 10, verbose = 1)
+
+# Fit features and target variable to grid search object
+grid_search.fit (features, target)
+
+# Get fine-tuned details
+print ("LR:")
+print ("Best score: ", grid_search.best_score_)
+print ("Best parameters: ", grid_search.best_params_)
+print ("Best estimator: ", grid_search.best_estimator_)
+"""
+
+# Get list of accuracies
+print ("***Model accuracies***")
+
+""" SVM """
+print ("SVM:")
+
+# Using cross validation
+list_cross_val_score = cross_val_score (svm_classifier, features, target, cv = 5, scoring = 'accuracy')
+
+print ("Cross-validation:")
+print ("List of scores: ", list_cross_val_score)
+print ("Mean score: ", np.mean (list_cross_val_score), "\n")
+
+# Using train-test-split
+print ("Train-test-split:")
+x_train, x_test, y_train, y_test_result = train_test_split (features, target, test_size = 0.3, random_state = 123, stratify = target)
+svm_model = svm_classifier.fit (x_train, y_train) # Fit model with training data
+y_test_svm = svm_model.predict (x_test) # Store predicted results of model
+
+# Accuracy against training data
+print ("Training data accuracy: ", svm_model.score (x_train, y_train)) # Result is over train data, not test data
+print ("Testing data accuracy: ", accuracy_score (y_test_result, y_test_svm), "\n") # Testing data accuracy
+
+# Classification report
+print ("Classification Report:")
+print (classification_report (y_test_result, y_test_svm))
+
+""" Logistic Regression """
+print ("\nLogistic Regression:")
+
+# Using cross validation
+list_cross_val_score = cross_val_score (logistic_regression_classifier, features, target, cv = 5, scoring = 'accuracy')
+
+print ("Cross-validation:")
+print ("List of scores: ", list_cross_val_score)
+print ("Mean score: ", np.mean (list_cross_val_score), "\n")
+
+# Using train-test-split
+print ("Train-test-split:")
+x_train, x_test, y_train, y_test_result = train_test_split (features, target, test_size = 0.3, random_state = 123, stratify = target)
+logistic_regression_model = logistic_regression_classifier.fit (x_train, y_train) # Fit model with training data
+y_test_logistic_regression = logistic_regression_model.predict (x_test) # Store predicted results of model
+
+# Accuracy against training data
+print ("Training data accuracy: ", logistic_regression_model.score (x_train, y_train)) # Result is over train data, not test data
+print ("Testing data accuracy: ", accuracy_score (y_test_result, y_test_logistic_regression), "\n") # Testing data accuracy
+
+# Classification report
+print ("Classification Report:")
+print (classification_report (y_test_result, y_test_logistic_regression))
+
+# Save models (pickling/serialization)
+pickle_object (svm_model, "svm-model.pkl")
+pickle_object (logistic_regression_model, "logistic-regression-model.pkl")
+
+# Plot confusion matrices
+""" SVM """
+# Create confusion matrix
+cm = confusion_matrix(y_test_result, y_test_svm)
+cmap = plt.cm.Blues
+# Confusion matrix variable
+classes = train_data.label.map ({1:'spam', 0:'ham'}).unique()
+classes = classes[unique_labels(y_test_result, y_test_svm)]
+
+fig, ax = plt.subplots()
+im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
+ax.figure.colorbar(im, ax=ax)
+ax.set(xticks=np.arange(cm.shape[1]),
+    yticks=np.arange(cm.shape[0]),
+    xticklabels=classes, yticklabels=classes,
+    title='SVM Confusion Matrix',
+    ylabel='True label',
+    xlabel='Predicted label')
+
+# Rotate the tick labels and set their alignment.
+plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+            rotation_mode="anchor")
+
+# Loop over data dimensions and create text annotations.
+thresh = cm.max() / 2.
+for i in range(cm.shape[0]):
+    for j in range(cm.shape[1]):
+        ax.text(j, i, format(cm[i, j], 'd'),
+                ha="center", va="center",
+                color="white" if cm[i, j] > thresh else "black")
+fig.tight_layout()
+
+""" Logistic Regression """
+# Create confusion matrix
+cm = confusion_matrix(y_test_result, y_test_logistic_regression)
+cmap = plt.cm.Blues
+classes = classes[unique_labels(y_test_result, y_test_logistic_regression)]
+fig, ax = plt.subplots()
+im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
+ax.figure.colorbar(im, ax=ax)
+ax.set(xticks=np.arange(cm.shape[1]),
+    yticks=np.arange(cm.shape[0]),
+    xticklabels=classes, yticklabels=classes,
+    title='Logistic Regression Confusion Matrix',
+    ylabel='True label',
+    xlabel='Predicted label')
+
+# Rotate the tick labels and set their alignment.
+plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+            rotation_mode="anchor")
+
+# Loop over data dimensions and create text annotations.
+thresh = cm.max() / 2.
+for i in range(cm.shape[0]):
+    for j in range(cm.shape[1]):
+        ax.text(j, i, format(cm[i, j], 'd'),
+                ha="center", va="center",
+                color="white" if cm[i, j] > thresh else "black")
+fig.tight_layout()
+
+# Plot visualisations
+plt.show ()
+
+
+"""
 #svm_model = load_pickle ("svm-model.pkl")
 
 # # JUST TO CHECK
@@ -335,3 +405,4 @@ if (message_check == True):
     # y_test_predict = logistic_regression_model.predict (features) # Store predicted results of model
 
     print (y_test_predict)
+"""
