@@ -172,6 +172,8 @@ Improvements that could be done:
 -Better and more dataset added
 -Further model refinements like boosting..
 
+Use F1 scoring for binary classfication of SPAM or HAM (not spam)
+
 """
 
 # 4) Create spam-detection classfiers to filter out spam
