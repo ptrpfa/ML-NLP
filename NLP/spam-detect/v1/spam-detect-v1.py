@@ -166,11 +166,17 @@ Models tend to classify spam messages as not spam
 Since the accuracy of the model is quite high, will not go into further enhancements on the spam-detection model 
 such as applying Boosting (due to time-constraint and lack of practicality as the model is the first pass/layer 
 in the data mining process)
+
+
+Improvements that could be done:
+-Better and more dataset added
+-Further model refinements like boosting..
+
 """
 
 # 4) Create spam-detection classfiers to filter out spam
-svm_classifier = svm. SVC (C=10, cache_size=200, class_weight=None, coef0=0.0,
-    decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
+svm_classifier = svm.SVC(C=1000, cache_size=200, class_weight=None, coef0=0.0,
+    decision_function_shape='ovr', degree=1, gamma=0.01, kernel='rbf',
     max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
     verbose=False)
 
@@ -184,30 +190,39 @@ logistic_regression_classifier = LogisticRegression(C=1000, class_weight=None, d
 # """
 # SVM:
 # Dictionary to store parameters and parameter values to test
-parameter_grid = {
-                'C': [0.001, 0.01, 0.1, 1, 10,1000],
-                'degree': [1, 3, 5, 10],
-                'gamma': [0.001, 0.01, 0.1, 1],
-                'random_state': [1, 5, 10, 50, 55, 70, 100, 123]
-                }
+# parameter_grid = {
+#                 'C': [0.001, 0.01, 0.1, 1, 10,1000],
+#                 'degree': [1, 3, 5, 10],
+#                 'gamma': [0.001, 0.01, 0.1, 1],
+#                 'random_state': [1, 5, 10, 50, 55, 70, 100, 123]
+#                 }
 
-# Create Grid Search object
-grid_search = GridSearchCV (estimator = svm_classifier, param_grid = parameter_grid, 
-                scoring = "f1", n_jobs = 4, iid = False, cv = 10, verbose = 1)
+# # Create Grid Search object
+# grid_search = GridSearchCV (estimator = svm_classifier, param_grid = parameter_grid, 
+#                 scoring = "f1", n_jobs = 4, iid = False, cv = 10, verbose = 1)
 
-# Fit features and target variable to grid search object
-grid_search.fit (features, target)
+# # Fit features and target variable to grid search object
+# grid_search.fit (features, target)
 
-# Get fine-tuned details
-print ("Best score: ", grid_search.best_score_)
-print ("Best parameters: ", grid_search.best_params_)
-print ("Best estimator: ", grid_search.best_estimator_)
+# # Get fine-tuned details
+# print ("Best score: ", grid_search.best_score_)
+# print ("Best parameters: ", grid_search.best_params_)
+# print ("Best estimator: ", grid_search.best_estimator_)
 
 # SVM:
+# Accuracy scoring:
 # Best score:  0.981328511060382
 # Best parameters:  {'C': 10, 'degree': 1, 'gamma': 0.1, 'random_state': 1}
 # Best estimator:  SVC(C=10, cache_size=200, class_weight=None, coef0=0.0,
 #     decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
+#     max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
+#     verbose=False)
+# 
+# F1 scoring:
+# Best score:  0.9261331832519227
+# Best parameters:  {'C': 1000, 'degree': 1, 'gamma': 0.01, 'random_state': 1}
+# Best estimator:  SVC(C=1000, cache_size=200, class_weight=None, coef0=0.0,
+#     decision_function_shape='ovr', degree=1, gamma=0.01, kernel='rbf',
 #     max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
 #     verbose=False)
 # """
