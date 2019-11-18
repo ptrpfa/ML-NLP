@@ -23,17 +23,23 @@ import matplotlib.pyplot as plt # For visualisation
 from warnings import simplefilter
 simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
 
+"""CAN CONSIDER MAKING A SEPARATE FUNCTION FOR CLEANING TEST DATA AS THIS CLEANSING IS SPECIFIC TO TRAINING DATA!"""
 # Function to clean strings (accepts a sequence-typed variable containing dirty strings and returns a list of the cleaned strings)
 def clean_string (sequence):
 
     # Initialise list containing cleaned strings
     list_cleaned_strings = []
 
+    # REGEX for CSIT's custom error code
+    bugcoderegex = "" # Still WIP currently [Assume EC is the first string split by space ie '00001 Error occurred' [for subject]]
+
+    # Initialise list containing white-listed strings [NOTE: SHOULD BE IN LOWERCASE]
+    whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 
+                'software engineering & analytics', 'comms-tech', 
+                'systems & network infrastructure', 'crypto-tech']
+
     # Loop to clean strings in the sequence object
     for item in sequence:
-
-        # Convert item into a string
-        #item = str (item)
         
         # Decode HTML encoded characters (&amp; -> &)
         item = html.unescape (item)
@@ -41,19 +47,20 @@ def clean_string (sequence):
         # Change text to lowercase
         item = item.lower ()
 
-        #  Remove punctuations from text
-        #item = re.sub('[%s]' % re.escape(string.punctuation), '', item)
+        # Apply further cleansing if string is not whitelisted
+        if (item not in whitelist):          
 
-        # Remove any non-word characters from the item
-        item = re.sub (r"[^a-zA-Z0-9 ]", "", item)
+            #  Remove punctuations from text
+            #item = re.sub('[%s]' % re.escape(string.punctuation), '', item)
 
-        # Replace multiple consecutive spaces with a single space
-        item = re.sub (r"[ ]{2,}", " ", item)
+            # Remove any non-word characters from the item
+            item = re.sub (r"[^a-zA-Z0-9 ]", "", item)
 
-        # Remove heading and trailing whitespaces
-        item = item.strip ()
+            # Replace multiple consecutive spaces with a single space
+            item = re.sub (r"[ ]{2,}", " ", item)
 
-        # Remove 
+            # Remove heading and trailing whitespaces
+            item = item.strip ()
 
         # Append cleaned string into the list of cleaned strings
         list_cleaned_strings.append (item)
@@ -215,26 +222,26 @@ def create_spam_detection_model (features, target):
 
     plt.show ()
 
-
 # Global variables
 train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/data/spam-ham.txt" # Dataset file path
 clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/v1/data/clean-spam-ham.csv' # Cleaned dataset file path
 pickles_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/pickles/" # File path containing pickled objects
+preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
 message_check = False # Boolean to trigger prompt for user message to check whether it is spam or not
-
-bugcoderegex = "" # Still WIP currently [Assume EC is the first string split by space ie '00001 Error occurred' [for subject]]
 
 # 1) Get data
 train_data = pd.read_csv (train_file_path, sep = "\t", encoding = 'utf-8')
-print (train_data)
+# print (train_data)
 
 # 2) Understand dataset
-# Print some information of about the data
-print ("***Preliminary information about dataset***")
-print ("Dimensions: ", train_data.shape, "\n")
-print (train_data.head ())
-print ("Columns and data types:")
-print (train_data.dtypes, "\n")
+if (preliminary_check == True): # Check boolean to display preliminary information
+
+    # Print some information of about the data
+    print ("***Preliminary information about dataset***")
+    print ("Dimensions: ", train_data.shape, "\n")
+    print (train_data.head ())
+    print ("Columns and data types:")
+    print (train_data.dtypes, "\n")
 
 # 3) Data pre-processing
 train_data.text = clean_string (train_data.text) # Clean text
