@@ -107,6 +107,7 @@ def load_pickle (filename):
 train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/data/spam-ham.txt" # Dataset file path
 clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/v1/data/clean-spam-ham.csv' # Cleaned dataset file path
 pickles_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/pickles/" # File path containing pickled objects
+accuracy_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/accuracies/" # Model accuracy results file path
 preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
 message_check = False # Boolean to trigger prompt for user message to check whether it is spam or not
 
@@ -153,14 +154,18 @@ features = vectorizer.fit_transform(features) # Returns a matrix
 # print (vectorizer.get_feature_names()) # Get features (words)
 # data_dtm = pd.DataFrame(features.toarray(), columns=vectorizer.get_feature_names()) # Convert DTM to DataFrame
 # data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/spam-detect/v1/data/dtm.csv", index = False, encoding="utf-8") # Save DTM
-pickle_object (vectorizer, "tfid-vectorizer.pkl")
 
-# 4) # Create spam-detection classfiers to filter out spam
+# 4) # Create spam-detection models to filter out spam
 """
-NOTE: Spam-detection model is CONSERVATIVE
-Model tends to classify spam messages as not spam
--> Better to be more conservative as would rather mislabel spam as not spam than genuine messages 
-as spam, which will result in lost of feedback
+NOTE: The Spam-detection models are CONSERVATIVE
+Models tend to classify spam messages as not spam
+-> However, it is better to be more conservative as we would rather mislabel spam as not spam rather than have
+   genuine messages be labeled as spam, which would result in the lost of valuable feedback
+-> Model is better at identifying true negative (ham) over true postive (spam) [which is better for conservative]
+
+Since the accuracy of the model is quite high, will not go into further enhancements on the spam-detection model 
+such as applying Boosting (due to time-constraint and lack of practicality as the model is the first pass/layer 
+in the data mining process)
 """
 
 # 4) Create spam-detection classfiers to filter out spam
@@ -175,8 +180,9 @@ logistic_regression_classifier = LogisticRegression(C=1000, class_weight=None, d
                 random_state=1, solver='liblinear', tol=0.0001, verbose=0,
                 warm_start=False)
 
-# GridSearchCV to to tune hyperparameters of models
-"""
+# GridSearchCV to tune hyperparameters of models
+# """
+# SVM:
 # Dictionary to store parameters and parameter values to test
 parameter_grid = {
                 'C': [0.001, 0.01, 0.1, 1, 10,1000],
@@ -187,7 +193,7 @@ parameter_grid = {
 
 # Create Grid Search object
 grid_search = GridSearchCV (estimator = svm_classifier, param_grid = parameter_grid, 
-                scoring = "accuracy", n_jobs = 4, iid = False, cv = 10, verbose = 1)
+                scoring = "f1", n_jobs = 4, iid = False, cv = 10, verbose = 1)
 
 # Fit features and target variable to grid search object
 grid_search.fit (features, target)
@@ -204,8 +210,10 @@ print ("Best estimator: ", grid_search.best_estimator_)
 #     decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
 #     max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
 #     verbose=False)
+# """
+
 """
-"""
+Logistic Regression:
 # Dictionary to store parameters and parameter values to test
 parameter_grid = {
                 'C': [0.001, 0.01, 0.1, 1, 10,1000],
@@ -228,13 +236,19 @@ print ("Best estimator: ", grid_search.best_estimator_)
 """
 
 # Get list of accuracies
-print ("***Model accuracies***")
+print ("*** Model Scorings ***")
+
+""" Classification Accuracy """
+print ("--- Classification Accuracies: ---")
+print ("(Only effective if have BALANCED DATA aka distribution of categories/classes is EQUAL!)")
+print ("Distribution of spam/ham data:")
+print (train_data.label.map ({1:'spam', 0:'ham'}).value_counts (normalize = True), "\n")
 
 """ SVM """
 print ("SVM:")
 
 # Using cross validation
-list_cross_val_score = cross_val_score (svm_classifier, features, target, cv = 5, scoring = 'accuracy')
+list_cross_val_score = cross_val_score (svm_classifier, features, target, cv = 5, scoring = 'f1')
 
 print ("Cross-validation:")
 print ("List of scores: ", list_cross_val_score)
@@ -252,13 +266,13 @@ print ("Testing data accuracy: ", accuracy_score (y_test_result, y_test_svm), "\
 
 # Classification report
 print ("Classification Report:")
-print (classification_report (y_test_result, y_test_svm))
+print (classification_report (y_test_result, y_test_svm, target_names = ['ham', 'spam']))
 
 """ Logistic Regression """
 print ("\nLogistic Regression:")
 
 # Using cross validation
-list_cross_val_score = cross_val_score (logistic_regression_classifier, features, target, cv = 5, scoring = 'accuracy')
+list_cross_val_score = cross_val_score (logistic_regression_classifier, features, target, cv = 5, scoring = 'f1')
 
 print ("Cross-validation:")
 print ("List of scores: ", list_cross_val_score)
@@ -276,11 +290,12 @@ print ("Testing data accuracy: ", accuracy_score (y_test_result, y_test_logistic
 
 # Classification report
 print ("Classification Report:")
-print (classification_report (y_test_result, y_test_logistic_regression))
+print (classification_report (y_test_result, y_test_logistic_regression, target_names = ['ham', 'spam']))
 
 # Save models (pickling/serialization)
-pickle_object (svm_model, "svm-model.pkl")
-pickle_object (logistic_regression_model, "logistic-regression-model.pkl")
+pickle_object (vectorizer, "tfid-vectorizer.pkl") # TFIDF Vectorizer
+pickle_object (svm_model, "svm-model.pkl")  # SVM Model
+pickle_object (logistic_regression_model, "logistic-regression-model.pkl") # Logistic Regression Model
 
 # Plot confusion matrices
 """ SVM """
