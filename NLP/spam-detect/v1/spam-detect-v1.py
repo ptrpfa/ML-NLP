@@ -273,7 +273,7 @@ features = vectorizer.fit_transform(features) # Returns a matrix
 # data_dtm = pd.DataFrame(features.toarray(), columns=vectorizer.get_feature_names()) # Convert DTM to DataFrame
 # data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/spam-detect/v1/data/dtm.csv", index = False, encoding="utf-8") # Save DTM
 pickle_object (vectorizer, "tfid-vectorizer.pkl")
-
+#test
 # 4) Load models
 create_spam_detection_model (features, target) # Create spam-detection classfier to filter out spam
 
