@@ -8,8 +8,7 @@ from nltk import stem # NLP
 from nltk.corpus import stopwords # NLP
 from sklearn.model_selection import train_test_split # 4) For splitting dataset into train/test sets
 from sklearn import linear_model # 4) Linear Regression classifier
-from sklearn.naive_bayes import GaussianNB # 4) Naive Bayes classifier
-from sklearn.ensemble import RandomForestClassifier # 4) Random Forest classifier
+from sklearn.naive_bayes import MultinomialNB # 4) Naive Bayes classifier
 from sklearn import svm # 4) SVM classifier
 from sklearn.linear_model import LogisticRegression # 4) Logistic Regression classifier
 from sklearn.model_selection import GridSearchCV # 4) For model hyperparameters tuning
@@ -244,10 +243,12 @@ svm_classifier = svm.SVC(C=1000, cache_size=200, class_weight=None, coef0=0.0,
     verbose=False)
 
 logistic_regression_classifier = LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
-                intercept_scaling=1, l1_ratio=None, max_iter=100,
-                multi_class='warn', n_jobs=None, penalty='l2',
-                random_state=1, solver='liblinear', tol=0.0001, verbose=0,
-                warm_start=False)
+    intercept_scaling=1, l1_ratio=None, max_iter=100,
+    multi_class='warn', n_jobs=None, penalty='l2',
+    random_state=1, solver='liblinear', tol=0.0001, verbose=0,
+    warm_start=False)
+
+gaussiannb_classifier = MultinomialNB ()
 
 # GridSearchCV to tune hyperparameters of models
 """
@@ -291,7 +292,7 @@ Best estimator:  SVC(C=1000, cache_size=200, class_weight=None, coef0=0.0,
 """
 
 """
-Logistic Regression:
+# Logistic Regression:
 # Dictionary to store parameters and parameter values to test
 parameter_grid = {
                 'C': [0.001, 0.01, 0.1, 1, 10,1000],
@@ -301,7 +302,7 @@ parameter_grid = {
 
 # Create Grid Search object
 grid_search = GridSearchCV (estimator = logistic_regression_classifier, param_grid = parameter_grid, 
-                scoring = "accuracy", n_jobs = 4, iid = False, cv = 10, verbose = 1)
+                scoring = "f1", n_jobs = 4, iid = False, cv = 10, verbose = 1)
 
 # Fit features and target variable to grid search object
 grid_search.fit (features, target)
@@ -311,6 +312,23 @@ print ("LR:")
 print ("Best score: ", grid_search.best_score_)
 print ("Best parameters: ", grid_search.best_params_)
 print ("Best estimator: ", grid_search.best_estimator_)
+
+Accuracy scoring:
+LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
+                intercept_scaling=1, l1_ratio=None, max_iter=100,
+                multi_class='warn', n_jobs=None, penalty='l2',
+                random_state=1, solver='liblinear', tol=0.0001, verbose=0,
+                warm_start=False)
+
+F1 Scoring:
+Best score:  0.9199723347445232
+Best parameters:  {'C': 1000, 'penalty': 'l2', 'random_state': 1}
+Best estimator:  LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
+                   intercept_scaling=1, l1_ratio=None, max_iter=100,
+                   multi_class='warn', n_jobs=None, penalty='l2',
+                   random_state=1, solver='liblinear', tol=0.0001, verbose=0,
+                   warm_start=False)
+
 """
 
 # Get list of accuracies
@@ -327,13 +345,15 @@ print (train_data.label.map ({1:'spam', 0:'ham'}).value_counts (normalize = True
 x_train, x_test, y_train, y_test_result = train_test_split (features, target, test_size = 0.3, random_state = 123, stratify = target)
 target_names = ['ham', 'spam'] # For labelling target variable in classification report
 
-# Fit models with training data
+# Fit classifiers (models) with training data
 svm_model = svm_classifier.fit (x_train, y_train) 
-logistic_regression_model = logistic_regression_classifier.fit (x_train, y_train) # Fit model with training data
+logistic_regression_model = logistic_regression_classifier.fit (x_train, y_train) 
+gaussiannb_model = gaussiannb_classifier.fit (x_train.todense (), y_train) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
 
 # Store predicted results of models
 y_test_svm = svm_model.predict (x_test) 
-y_test_logistic_regression = logistic_regression_model.predict (x_test) # Store predicted results of model
+y_test_logistic_regression = logistic_regression_model.predict (x_test) 
+y_test_gnb = gaussiannb_model.predict (x_test.todense ()) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
 
 # Get classification accuracies of models
 # SVM
@@ -342,11 +362,15 @@ classification_accuracy (svm_classifier, svm_model, features, target, x_train, y
 # Logistic Regression
 classification_accuracy (logistic_regression_classifier, logistic_regression_model, features, target, x_train, y_train,
                          y_test_logistic_regression, "f1", "Logistic Regression classification accuracy:", target_names)
+# Naive Bayes
+classification_accuracy (gaussiannb_classifier, gaussiannb_model, features.todense (), target, x_train.todense (), y_train,
+                         y_test_gnb, "f1", "Naive Bayes classification accuracy:", target_names)
 
 # Save models (pickling/serialization)
-pickle_object (vectorizer, "tfid-vectorizer.pkl") # TFIDF Vectorizer
+pickle_object (vectorizer, "tfid-vectorizer.pkl") # TF-IDF Vectorizer
 pickle_object (svm_model, "svm-model.pkl") # SVM Model
 pickle_object (logistic_regression_model, "logistic-regression-model.pkl") # Logistic Regression Model
+pickle_object (gaussiannb_model, "naive-bayes-model.pkl") # Naive Bayes Model
 
 # Plot confusion matrices
 classes = train_data.label.map ({1:'spam', 0:'ham'}).unique () # Classes refer to possible unique values of the target variable
@@ -356,6 +380,9 @@ plot_confusion_matrix (y_test_result, y_test_svm, classes, "SVM Confusion Matrix
 
 # Logistic Regression Confusion Matrix
 plot_confusion_matrix (y_test_result, y_test_logistic_regression, classes, "Logistic Regression Confusion Matrix")
+
+# Naive Bayes Confusion Matrix
+plot_confusion_matrix (y_test_result, y_test_gnb, classes, "Naive Bayes Confusion Matrix")
 
 # Display visualisations
 plt.show ()
