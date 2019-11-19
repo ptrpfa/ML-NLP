@@ -104,7 +104,7 @@ def load_pickle (filename):
     return pickled_object
 
 # Function to plot confusion matrix of model results
-def plot_confusion_matrix (y_test, y_pred, classes, title):
+def plot_confusion_matrix (y_test, y_pred, classes, title, filename):
 
     # Create confusion matrix
     cm = confusion_matrix (y_test, y_pred)
@@ -138,6 +138,9 @@ def plot_confusion_matrix (y_test, y_pred, classes, title):
 
     # Display confusion matrix
     # plt.show ()
+
+    # Save confusion matrix
+    plt.savefig (accuracy_file_path + filename)
 
 # Function to get Classification Accuracies of model
 def classification_accuracy (classifier, model, features, target, x_train, y_train, y_test, scoring, title, target_name):
@@ -376,13 +379,13 @@ pickle_object (gaussiannb_model, "naive-bayes-model.pkl") # Naive Bayes Model
 classes = train_data.label.map ({1:'spam', 0:'ham'}).unique () # Classes refer to possible unique values of the target variable
 
 # SVM Confusion Matrix
-plot_confusion_matrix (y_test_result, y_test_svm, classes, "SVM Confusion Matrix")
+plot_confusion_matrix (y_test_result, y_test_svm, classes, "SVM Confusion Matrix", "svm-cm.png")
 
 # Logistic Regression Confusion Matrix
-plot_confusion_matrix (y_test_result, y_test_logistic_regression, classes, "Logistic Regression Confusion Matrix")
+plot_confusion_matrix (y_test_result, y_test_logistic_regression, classes, "Logistic Regression Confusion Matrix", "lr-cm.png")
 
 # Naive Bayes Confusion Matrix
-plot_confusion_matrix (y_test_result, y_test_gnb, classes, "Naive Bayes Confusion Matrix")
+plot_confusion_matrix (y_test_result, y_test_gnb, classes, "Naive Bayes Confusion Matrix", "nb0-cm.png")
 
 # Display visualisations
 plt.show ()
