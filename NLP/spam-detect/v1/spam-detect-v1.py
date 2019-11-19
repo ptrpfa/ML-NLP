@@ -4,19 +4,20 @@ import re # REGEX
 import string
 import html
 import pickle 
+from nltk import stem # NLP
+from nltk.corpus import stopwords # NLP
 from sklearn.model_selection import train_test_split # 4) For splitting dataset into train/test sets
 from sklearn import linear_model # 4) Linear Regression classifier
 from sklearn.naive_bayes import GaussianNB # 4) Naive Bayes classifier
 from sklearn.ensemble import RandomForestClassifier # 4) Random Forest classifier
 from sklearn import svm # 4) SVM classifier
 from sklearn.linear_model import LogisticRegression # 4) Logistic Regression classifier
-from sklearn.metrics import accuracy_score # 4) Accuracy scorer
-from sklearn.model_selection import cross_val_score # 4) Cross validation scorer
 from sklearn.model_selection import GridSearchCV # 4) For model hyperparameters tuning
-from nltk import stem # NLP
-from nltk.corpus import stopwords # NLP
 from sklearn.feature_extraction.text import TfidfVectorizer # NLP Vectorizer
-import matplotlib.pyplot as plt # For visualisation
+import matplotlib.pyplot as plt # For visualisations
+import matplotlib # For visualisations
+from sklearn.metrics import accuracy_score # 4.5) Accuracy scorer
+from sklearn.model_selection import cross_val_score # 4.5) Cross validation scorer
 from sklearn.metrics import confusion_matrix # 4.5) For determination of model accuracy
 from sklearn.utils.multiclass import unique_labels # 4.5) For determination of model accuracy
 from sklearn.metrics import classification_report # 4.5) For determination of model accuracy
@@ -102,6 +103,66 @@ def load_pickle (filename):
 
     # Return pickle object
     return pickled_object
+
+# Function to plot confusion matrix of model results
+def plot_confusion_matrix (y_test, y_pred, classes, title):
+
+    # Create confusion matrix
+    cm = confusion_matrix (y_test, y_pred)
+
+    # Colour map
+    cmap = plt.cm.Blues
+
+    # OR (Random colour mapping)
+    # cmap = matplotlib.colors.ListedColormap (np.random.rand (256,3))
+
+    # Confusion matrix variable
+    classes = classes [unique_labels (y_test, y_pred)]
+    fig, ax = plt.subplots()
+    im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
+    ax.figure.colorbar(im, ax=ax)
+    ax.set(xticks=np.arange(cm.shape[1]),
+        yticks=np.arange(cm.shape[0]),
+        xticklabels=classes, yticklabels=classes,
+        title= title,
+        ylabel='True label',
+        xlabel='Predicted label')
+
+    # Loop over data dimensions and create text annotations.
+    thresh = cm.max() / 2.
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            ax.text(j, i, format(cm[i, j], 'd'),
+                    ha="center", va="center",
+                    color="white" if cm[i, j] > thresh else "black")
+    fig.tight_layout()
+
+    # Display confusion matrix
+    # plt.show ()
+
+# Function to get Classification Accuracies of model
+def classification_accuracy (classifier, model, features, target, x_train, y_train, y_test, scoring, title, target_name):
+
+    # Print title
+    print (title)
+
+    # Cross validation score
+    list_cross_val_score = cross_val_score (classifier, features, target, cv = 5, scoring = scoring)
+
+    print ("Cross-validation:")
+    print ("List of scores: ", list_cross_val_score)
+    print ("Mean score: ", np.mean (list_cross_val_score), "\n")
+
+    # Using train-test-split
+    print ("Train-test-split:")
+
+    # Accuracy against training data
+    print ("Training data accuracy: ", model.score (x_train, y_train)) # Result is over train data, not test data
+    print ("Testing data accuracy: ", accuracy_score (y_test_result, y_test), "\n") # Testing data accuracy
+
+    # Classification report
+    print ("Classification Report:")
+    print (classification_report (y_test_result, y_test, target_names = target_name))
 
 # Global variables
 train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/data/spam-ham.txt" # Dataset file path
@@ -189,45 +250,45 @@ logistic_regression_classifier = LogisticRegression(C=1000, class_weight=None, d
                 warm_start=False)
 
 # GridSearchCV to tune hyperparameters of models
-# """
-# SVM:
-# Dictionary to store parameters and parameter values to test
-# parameter_grid = {
-#                 'C': [0.001, 0.01, 0.1, 1, 10,1000],
-#                 'degree': [1, 3, 5, 10],
-#                 'gamma': [0.001, 0.01, 0.1, 1],
-#                 'random_state': [1, 5, 10, 50, 55, 70, 100, 123]
-#                 }
+"""
+SVM:
+Dictionary to store parameters and parameter values to test
+parameter_grid = {
+                'C': [0.001, 0.01, 0.1, 1, 10,1000],
+                'degree': [1, 3, 5, 10],
+                'gamma': [0.001, 0.01, 0.1, 1],
+                'random_state': [1, 5, 10, 50, 55, 70, 100, 123]
+                }
 
-# # Create Grid Search object
-# grid_search = GridSearchCV (estimator = svm_classifier, param_grid = parameter_grid, 
-#                 scoring = "f1", n_jobs = 4, iid = False, cv = 10, verbose = 1)
+# Create Grid Search object
+grid_search = GridSearchCV (estimator = svm_classifier, param_grid = parameter_grid, 
+                scoring = "f1", n_jobs = 4, iid = False, cv = 10, verbose = 1)
 
-# # Fit features and target variable to grid search object
-# grid_search.fit (features, target)
+# Fit features and target variable to grid search object
+grid_search.fit (features, target)
 
-# # Get fine-tuned details
-# print ("Best score: ", grid_search.best_score_)
-# print ("Best parameters: ", grid_search.best_params_)
-# print ("Best estimator: ", grid_search.best_estimator_)
+# Get fine-tuned details
+print ("Best score: ", grid_search.best_score_)
+print ("Best parameters: ", grid_search.best_params_)
+print ("Best estimator: ", grid_search.best_estimator_)
 
-# SVM:
-# Accuracy scoring:
-# Best score:  0.981328511060382
-# Best parameters:  {'C': 10, 'degree': 1, 'gamma': 0.1, 'random_state': 1}
-# Best estimator:  SVC(C=10, cache_size=200, class_weight=None, coef0=0.0,
-#     decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
-#     max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
-#     verbose=False)
-# 
-# F1 scoring:
-# Best score:  0.9261331832519227
-# Best parameters:  {'C': 1000, 'degree': 1, 'gamma': 0.01, 'random_state': 1}
-# Best estimator:  SVC(C=1000, cache_size=200, class_weight=None, coef0=0.0,
-#     decision_function_shape='ovr', degree=1, gamma=0.01, kernel='rbf',
-#     max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
-#     verbose=False)
-# """
+SVM:
+Accuracy scoring:
+Best score:  0.981328511060382
+Best parameters:  {'C': 10, 'degree': 1, 'gamma': 0.1, 'random_state': 1}
+Best estimator:  SVC(C=10, cache_size=200, class_weight=None, coef0=0.0,
+    decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
+    max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
+    verbose=False)
+
+F1 scoring:
+Best score:  0.9261331832519227
+Best parameters:  {'C': 1000, 'degree': 1, 'gamma': 0.01, 'random_state': 1}
+Best estimator:  SVC(C=1000, cache_size=200, class_weight=None, coef0=0.0,
+    decision_function_shape='ovr', degree=1, gamma=0.01, kernel='rbf',
+    max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
+    verbose=False)
+"""
 
 """
 Logistic Regression:
@@ -253,7 +314,7 @@ print ("Best estimator: ", grid_search.best_estimator_)
 """
 
 # Get list of accuracies
-print ("*** Model Scorings ***")
+print ("*** Model Scorings ***", "\n")
 
 """ Classification Accuracy """
 print ("--- Classification Accuracies: ---")
@@ -262,119 +323,41 @@ print ("Distribution of spam/ham data:")
 print (train_data.label.map ({1:'spam', 0:'ham'}).value_counts (normalize = True), "\n")
 
 """ SVM """
-print ("SVM:")
-
-# Using cross validation
-list_cross_val_score = cross_val_score (svm_classifier, features, target, cv = 5, scoring = 'f1')
-
-print ("Cross-validation:")
-print ("List of scores: ", list_cross_val_score)
-print ("Mean score: ", np.mean (list_cross_val_score), "\n")
-
-# Using train-test-split
-print ("Train-test-split:")
+# Train-test-split
 x_train, x_test, y_train, y_test_result = train_test_split (features, target, test_size = 0.3, random_state = 123, stratify = target)
-svm_model = svm_classifier.fit (x_train, y_train) # Fit model with training data
-y_test_svm = svm_model.predict (x_test) # Store predicted results of model
+target_names = ['ham', 'spam'] # For labelling target variable in classification report
 
-# Accuracy against training data
-print ("Training data accuracy: ", svm_model.score (x_train, y_train)) # Result is over train data, not test data
-print ("Testing data accuracy: ", accuracy_score (y_test_result, y_test_svm), "\n") # Testing data accuracy
-
-# Classification report
-print ("Classification Report:")
-print (classification_report (y_test_result, y_test_svm, target_names = ['ham', 'spam']))
-
-""" Logistic Regression """
-print ("\nLogistic Regression:")
-
-# Using cross validation
-list_cross_val_score = cross_val_score (logistic_regression_classifier, features, target, cv = 5, scoring = 'f1')
-
-print ("Cross-validation:")
-print ("List of scores: ", list_cross_val_score)
-print ("Mean score: ", np.mean (list_cross_val_score), "\n")
-
-# Using train-test-split
-print ("Train-test-split:")
-x_train, x_test, y_train, y_test_result = train_test_split (features, target, test_size = 0.3, random_state = 123, stratify = target)
+# Fit models with training data
+svm_model = svm_classifier.fit (x_train, y_train) 
 logistic_regression_model = logistic_regression_classifier.fit (x_train, y_train) # Fit model with training data
+
+# Store predicted results of models
+y_test_svm = svm_model.predict (x_test) 
 y_test_logistic_regression = logistic_regression_model.predict (x_test) # Store predicted results of model
 
-# Accuracy against training data
-print ("Training data accuracy: ", logistic_regression_model.score (x_train, y_train)) # Result is over train data, not test data
-print ("Testing data accuracy: ", accuracy_score (y_test_result, y_test_logistic_regression), "\n") # Testing data accuracy
-
-# Classification report
-print ("Classification Report:")
-print (classification_report (y_test_result, y_test_logistic_regression, target_names = ['ham', 'spam']))
+# Get classification accuracies of models
+# SVM
+classification_accuracy (svm_classifier, svm_model, features, target, x_train, y_train,
+                         y_test_svm, "f1", "SVM classification accuracy:", target_names)
+# Logistic Regression
+classification_accuracy (logistic_regression_classifier, logistic_regression_model, features, target, x_train, y_train,
+                         y_test_logistic_regression, "f1", "Logistic Regression classification accuracy:", target_names)
 
 # Save models (pickling/serialization)
 pickle_object (vectorizer, "tfid-vectorizer.pkl") # TFIDF Vectorizer
-pickle_object (svm_model, "svm-model.pkl")  # SVM Model
+pickle_object (svm_model, "svm-model.pkl") # SVM Model
 pickle_object (logistic_regression_model, "logistic-regression-model.pkl") # Logistic Regression Model
 
 # Plot confusion matrices
-""" SVM """
-# Create confusion matrix
-cm = confusion_matrix(y_test_result, y_test_svm)
-cmap = plt.cm.Blues
-# Confusion matrix variable
-classes = train_data.label.map ({1:'spam', 0:'ham'}).unique()
-classes = classes[unique_labels(y_test_result, y_test_svm)]
+classes = train_data.label.map ({1:'spam', 0:'ham'}).unique () # Classes refer to possible unique values of the target variable
 
-fig, ax = plt.subplots()
-im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
-ax.figure.colorbar(im, ax=ax)
-ax.set(xticks=np.arange(cm.shape[1]),
-    yticks=np.arange(cm.shape[0]),
-    xticklabels=classes, yticklabels=classes,
-    title='SVM Confusion Matrix',
-    ylabel='True label',
-    xlabel='Predicted label')
+# SVM Confusion Matrix
+plot_confusion_matrix (y_test_result, y_test_svm, classes, "SVM Confusion Matrix")
 
-# Rotate the tick labels and set their alignment.
-plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
-            rotation_mode="anchor")
+# Logistic Regression Confusion Matrix
+plot_confusion_matrix (y_test_result, y_test_logistic_regression, classes, "Logistic Regression Confusion Matrix")
 
-# Loop over data dimensions and create text annotations.
-thresh = cm.max() / 2.
-for i in range(cm.shape[0]):
-    for j in range(cm.shape[1]):
-        ax.text(j, i, format(cm[i, j], 'd'),
-                ha="center", va="center",
-                color="white" if cm[i, j] > thresh else "black")
-fig.tight_layout()
-
-""" Logistic Regression """
-# Create confusion matrix
-cm = confusion_matrix(y_test_result, y_test_logistic_regression)
-cmap = plt.cm.Blues
-classes = classes[unique_labels(y_test_result, y_test_logistic_regression)]
-fig, ax = plt.subplots()
-im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
-ax.figure.colorbar(im, ax=ax)
-ax.set(xticks=np.arange(cm.shape[1]),
-    yticks=np.arange(cm.shape[0]),
-    xticklabels=classes, yticklabels=classes,
-    title='Logistic Regression Confusion Matrix',
-    ylabel='True label',
-    xlabel='Predicted label')
-
-# Rotate the tick labels and set their alignment.
-plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
-            rotation_mode="anchor")
-
-# Loop over data dimensions and create text annotations.
-thresh = cm.max() / 2.
-for i in range(cm.shape[0]):
-    for j in range(cm.shape[1]):
-        ax.text(j, i, format(cm[i, j], 'd'),
-                ha="center", va="center",
-                color="white" if cm[i, j] > thresh else "black")
-fig.tight_layout()
-
-# Plot visualisations
+# Display visualisations
 plt.show ()
 
 
