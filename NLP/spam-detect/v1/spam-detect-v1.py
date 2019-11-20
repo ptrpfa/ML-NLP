@@ -4,6 +4,7 @@ import re # REGEX
 import string
 import html
 import pickle 
+import spacy
 from nltk import stem # NLP
 from nltk.corpus import stopwords # NLP
 from sklearn.model_selection import train_test_split # 4) For splitting dataset into train/test sets
@@ -43,34 +44,44 @@ def clean_string (sequence):
                 'crypto-technology', 'cryptography-technology']
 
     # Loop to clean strings in the sequence object
-    for item in sequence:
+    for string in sequence:
         
         # Decode HTML encoded characters (&amp; -> &)
-        item = html.unescape (item)
+        string = html.unescape (string)
 
         # Change text to lowercase
-        item = item.lower ()
+        string = string.lower ()
 
         # Apply further cleansing if string is not whitelisted
-        if (item not in whitelist):          
+        if (string not in whitelist):          
 
             #  Remove punctuations from text
-            #item = re.sub('[%s]' % re.escape(string.punctuation), '', item)
+            #string = re.sub('[%s]' % re.escape(string.punctuation), '', string)
 
-            # Remove any non-word characters from the item
-            item = re.sub (r"[^a-zA-Z0-9 ]", "", item)
+            # Remove any non-word characters from the string
+            string = re.sub (r"[^a-zA-Z0-9 ]", "", string)
 
             # Replace multiple consecutive spaces with a single space
-            item = re.sub (r"[ ]{2,}", " ", item)
+            string = re.sub (r"[ ]{2,}", " ", string)
 
             # Remove heading and trailing whitespaces
-            item = item.strip ()
+            string = string.strip ()
 
         # Append cleaned string into the list of cleaned strings
-        list_cleaned_strings.append (item)
+        list_cleaned_strings.append (string)
 
     # Return list of cleaned strings
     return list_cleaned_strings
+
+# Function to tokenize documents
+def tokenize (document):
+
+    # Create spaCy NLP object
+    nlp = spacy.load ("en_core_web_sm")
+    document = nlp (document)
+
+    # Loop to tokenize text
+    return ([token.lemma_ for token in document])
 
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
@@ -198,6 +209,7 @@ clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/v1/data/clean-spam-ham
 pickles_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/pickles/" # File path containing pickled objects
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/accuracies/" # Model accuracy results file path
 preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
+use_pickle = True # Boolean to trigger whether to use pickled objects or not
 message_check = False # Boolean to trigger prompt for user message to check whether it is spam or not
 
 # 1) Get data
@@ -217,6 +229,8 @@ if (preliminary_check == True): # Check boolean to display preliminary informati
 # 3) Data pre-processing
 train_data.text = clean_string (train_data.text) # Clean text
 
+# DO SOMETHING ABOUT THE WHITELIST AND BUGCODE!
+
 # Change spam/ham label to numeric values
 train_data.label = train_data.label.map ({'spam': 1, 'ham': 0})
 
@@ -235,14 +249,17 @@ target = train_data.label
 features = train_data.text
 
 # Create DTM of dataset (features)
-vectorizer = TfidfVectorizer () # Create vectorizer object
+vectorizer = TfidfVectorizer (tokenizer = tokenize, stop_words = 'english', min_df = 1) # Create vectorizer object
 
 # Fit data to vectorizer
-features = vectorizer.fit_transform(features) # Returns a matrix
-# print (features ,type (features))
-# print (vectorizer.get_feature_names()) # Get features (words)
-# data_dtm = pd.DataFrame(features.toarray(), columns=vectorizer.get_feature_names()) # Convert DTM to DataFrame
-# data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/spam-detect/v1/data/dtm.csv", index = False, encoding="utf-8") # Save DTM
+features = vectorizer.fit_transform (features) # Returns a matrix
+
+# Print information on vectorised words
+# print (features, type (features)) # Sparse matrix
+print ("Tokens:")
+print (vectorizer.get_feature_names()) # Get features (words)
+data_dtm = pd.DataFrame(features.toarray(), columns=vectorizer.get_feature_names()) # Convert DTM to DataFrame
+data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/spam-detect/v1/data/dtm.csv", index = False, encoding="utf-8") # Save DTM
 
 # 4) # Create spam-detection models to filter out spam
 """
@@ -260,7 +277,9 @@ Improvements that could be done:
 -Better and more dataset added
 -Further model refinements like boosting..
 
-Use F1 scoring for binary classfication of SPAM or HAM (not spam)
+Based on results, concluded that SVM model is the best performing model"
+-In terms of F1 score (useful for binary classfication of SPAM or HAM (not spam) and unbalanced data distribution)
+-In terms of accuracy, ROC, Recall, Precision..
 
 """
 
@@ -443,6 +462,7 @@ plot_confusion_matrix (y_test_result, y_test_mnb, classes, "Naive Bayes Confusio
 # plt.show ()
 
 # Save models (pickling/serialization)
+# PICKLE FEATURES!
 pickle_object (vectorizer, "tfid-vectorizer.pkl") # TF-IDF Vectorizer
 pickle_object (svm_model, "svm-model.pkl") # SVM Model
 pickle_object (logistic_regression_model, "logistic-regression-model.pkl") # Logistic Regression Model
