@@ -5,6 +5,7 @@ import string
 import html
 import pickle 
 import spacy
+import scipy
 from nltk import stem # NLP
 from nltk.corpus import stopwords # NLP
 from sklearn.model_selection import train_test_split # 4) For splitting dataset into train/test sets
@@ -248,18 +249,43 @@ train_data.to_csv (clean_file_path, index = False, encoding="utf-8")
 target = train_data.label
 features = train_data.text
 
-# Create DTM of dataset (features)
-vectorizer = TfidfVectorizer (tokenizer = tokenize, stop_words = 'english', min_df = 1) # Create vectorizer object
+# Create new vectorizers if not using pickled objects
+if (not use_pickle):
 
-# Fit data to vectorizer
-features = vectorizer.fit_transform (features) # Returns a matrix
+    # Create DTM of dataset (features)
+    vectorizer = TfidfVectorizer (tokenizer = tokenize, stop_words = 'english', min_df = 1) # Create vectorizer object
+    # vectorizer = TfidfVectorizer () # SIMPLE VECTORIZER
 
-# Print information on vectorised words
-# print (features, type (features)) # Sparse matrix
-print ("Tokens:")
-print (vectorizer.get_feature_names()) # Get features (words)
-data_dtm = pd.DataFrame(features.toarray(), columns=vectorizer.get_feature_names()) # Convert DTM to DataFrame
-data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/spam-detect/v1/data/dtm.csv", index = False, encoding="utf-8") # Save DTM
+    # Fit data to vectorizer
+    features = vectorizer.fit_transform (features) # Returns a sparse matrix
+    
+    # Print information on vectorised words
+    # print (features, type (features)) # Sparse matrix
+    print ("Tokens:")
+    print (vectorizer.get_feature_names()) # Get features (words)
+    data_dtm = pd.DataFrame(features.toarray(), columns=vectorizer.get_feature_names()) # Convert DTM to DataFrame
+    data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/spam-detect/v1/data/dtm.csv", index = False, encoding="utf-8") # Save DTM
+
+# Using pickled objects
+else:
+
+    # Load serialised vectorizer
+    vectorizer = load_pickle ("tfid-vectorizer.pkl")
+
+    # Load serialised features (sparse matrix)
+    # Load DTM and convert it into a sparse matrix
+    # features_dtm = pd.read_csv ("/home/p/Desktop/csitml/NLP/spam-detect/v1/data/dtm.csv") # Not used as DTM file is very large
+    # features = scipy.sparse.csr_matrix (features_dtm.values)
+
+    # OR 
+
+    # Load serialised object
+    features = load_pickle ("features.pkl")
+
+    # Print information on vectorised words
+    # print (features, type (features)) # Sparse matrix
+    # print ("Tokens:")
+    print (vectorizer.get_feature_names()) # Get features (words)
 
 # 4) # Create spam-detection models to filter out spam
 """
@@ -392,35 +418,46 @@ print (train_data.label.map ({1:'spam', 0:'ham'}).value_counts (normalize = True
 x_train, x_test, y_train, y_test_result = train_test_split (features, target, test_size = 0.3, random_state = 123, stratify = target)
 target_names = ['ham', 'spam'] # For labelling target variable in classification report
 
-# Fit classifiers (models) with training data
-svm_model = svm_classifier.fit (x_train, y_train) 
-logistic_regression_model = logistic_regression_classifier.fit (x_train, y_train) 
-multinomialnb_model = multinomialnb_classifier.fit (x_train.todense (), y_train) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
+# Create new models if not using serialised models
+if (not use_pickle):
+
+    # Fit classifiers (models) with training data
+    svm_model = svm_classifier.fit (x_train, y_train) 
+    logistic_regression_model = logistic_regression_classifier.fit (x_train, y_train) 
+    multinomialnb_model = multinomialnb_classifier.fit (x_train.todense (), y_train) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
+
+# Using pickled objects
+else:
+
+    # Load pickled models
+    svm_model = load_pickle ("svm-model.pkl") 
+    logistic_regression_model = load_pickle ("logistic-regression-model.pkl")
+    multinomialnb_model = load_pickle ("naive-bayes-model.pkl")
 
 # Store predicted results of models
 y_test_svm = svm_model.predict (x_test) 
 y_test_lr = logistic_regression_model.predict (x_test) 
 y_test_mnb = multinomialnb_model.predict (x_test.todense ()) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
 
-# Store predicted results (in probabilty) of models
-y_test_svm_prob = svm_model.predict_proba (x_test) 
-y_test_lr_prob = logistic_regression_model.predict_proba (x_test) 
-y_test_mnb_prob = multinomialnb_model.predict_proba (x_test.todense ()) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
+# # Store predicted results (in probabilty) of models
+# y_test_svm_prob = svm_model.predict_proba (x_test) 
+# y_test_lr_prob = logistic_regression_model.predict_proba (x_test) 
+# y_test_mnb_prob = multinomialnb_model.predict_proba (x_test.todense ()) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
 
 # Remove first column of probability of results
-y_test_svm_prob = y_test_svm_prob [:, 1]
-y_test_lr_prob = y_test_lr_prob [:, 1]
-y_test_mnb_prob = y_test_mnb_prob [:, 1]
+# y_test_svm_prob = y_test_svm_prob [:, 1]
+# y_test_lr_prob = y_test_lr_prob [:, 1]
+# y_test_mnb_prob = y_test_mnb_prob [:, 1]
 
 # Get False Positive Rate and True Positive Rate of models
-false_positive_rate_svm, true_positive_rate_svm, threshold_svm = metrics.roc_curve (y_test_result, y_test_svm_prob)
-false_positive_rate_lr, true_positive_rate_lr, threshold_lr = metrics.roc_curve (y_test_result, y_test_lr_prob)
-false_positive_rate_mnb, true_positive_rate_mnb, threshold_mnb = metrics.roc_curve (y_test_result, y_test_mnb_prob)
+# false_positive_rate_svm, true_positive_rate_svm, threshold_svm = metrics.roc_curve (y_test_result, y_test_svm_prob)
+# false_positive_rate_lr, true_positive_rate_lr, threshold_lr = metrics.roc_curve (y_test_result, y_test_lr_prob)
+# false_positive_rate_mnb, true_positive_rate_mnb, threshold_mnb = metrics.roc_curve (y_test_result, y_test_mnb_prob)
 
 # Calculate Area Under Curve of models' ROC curves
-svm_roc_auc = metrics.auc (false_positive_rate_svm, true_positive_rate_svm)
-lr_roc_auc = metrics.auc (false_positive_rate_lr, true_positive_rate_lr)
-mnb_roc_auc = metrics.auc (false_positive_rate_mnb, true_positive_rate_mnb)
+# svm_roc_auc = metrics.auc (false_positive_rate_svm, true_positive_rate_svm)
+# lr_roc_auc = metrics.auc (false_positive_rate_lr, true_positive_rate_lr)
+# mnb_roc_auc = metrics.auc (false_positive_rate_mnb, true_positive_rate_mnb)
 
 # Get classification accuracies of models
 # SVM
@@ -437,14 +474,14 @@ classification_accuracy (multinomialnb_classifier, multinomialnb_model, features
 
 """ Visualisations of model performance """
 # Plot ROC (Receiver Operating Characteristics) Curves
-dict_roc = { # Dictionary for passing model values to function
-    "SVM": [false_positive_rate_svm, true_positive_rate_svm, svm_roc_auc, 'red'],
-    "LR": [false_positive_rate_lr, true_positive_rate_lr, lr_roc_auc, 'blue'],
-    "MNB": [false_positive_rate_mnb, true_positive_rate_mnb, mnb_roc_auc, 'green']
-    }
+# dict_roc = { # Dictionary for passing model values to function
+#     "SVM": [false_positive_rate_svm, true_positive_rate_svm, svm_roc_auc, 'red'],
+#     "LR": [false_positive_rate_lr, true_positive_rate_lr, lr_roc_auc, 'blue'],
+#     "MNB": [false_positive_rate_mnb, true_positive_rate_mnb, mnb_roc_auc, 'green']
+#     }
 
 # Plot ROC curves
-plot_roc_curve (dict_roc)
+# plot_roc_curve (dict_roc)
 
 # Plot confusion matrices
 classes = train_data.label.map ({1:'spam', 0:'ham'}).unique () # Classes refer to possible unique values of the target variable
@@ -462,7 +499,7 @@ plot_confusion_matrix (y_test_result, y_test_mnb, classes, "Naive Bayes Confusio
 # plt.show ()
 
 # Save models (pickling/serialization)
-# PICKLE FEATURES!
+pickle_object (features, "features.pkl") # Sparse Matrix of features
 pickle_object (vectorizer, "tfid-vectorizer.pkl") # TF-IDF Vectorizer
 pickle_object (svm_model, "svm-model.pkl") # SVM Model
 pickle_object (logistic_regression_model, "logistic-regression-model.pkl") # Logistic Regression Model
