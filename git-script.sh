@@ -1,6 +1,5 @@
 #! /bin/bash
 
-commitname = $1
 git add .
-git commit -m '$commitname'
+git commit -m "cronjob push"
 git push origin master
