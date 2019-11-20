@@ -20,6 +20,7 @@ from sklearn.model_selection import cross_val_score # 4.5) Cross validation scor
 from sklearn.metrics import confusion_matrix # 4.5) For determination of model accuracy
 from sklearn.utils.multiclass import unique_labels # 4.5) For determination of model accuracy
 from sklearn.metrics import classification_report # 4.5) For determination of model accuracy
+import sklearn.metrics as metrics # 4.5) For determination of model accuracy
 
 # Suppress scikit-learn FutureWarnings
 from warnings import simplefilter
@@ -36,9 +37,10 @@ def clean_string (sequence):
     bugcoderegex = "" # Still WIP currently [Assume EC is the first string split by space ie '00001 Error occurred' [for subject]]
 
     # Initialise list containing white-listed strings [NOTE: SHOULD BE IN LOWERCASE]
-    whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 
-                'software engineering & analytics', 'comms-tech', 
-                'systems & network infrastructure', 'crypto-tech']
+    whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology',
+                'comms-tech', 'communications-tech', 'comms-technology',
+                'communications-technology', 'crypto-tech', 'cryptography-tech',
+                'crypto-technology', 'cryptography-technology']
 
     # Loop to clean strings in the sequence object
     for item in sequence:
@@ -142,6 +144,30 @@ def plot_confusion_matrix (y_test, y_pred, classes, title, filename):
     # Save confusion matrix
     plt.savefig (accuracy_file_path + filename)
 
+# Function to plot ROC curves of models
+def plot_roc_curve (dictionary): 
+    
+    # Receives dictionary in the format: 
+    # dictionary = {"model-name": [false_positive_rate, true_positive_rate, roc_auc, color]}
+
+    plt.title ("ROC Curves of Models")
+    plt.ylabel('True Positive Rate')
+    plt.xlabel('False Positive Rate')
+
+    # For loop to access each model in dictionary
+    for model in dictionary:
+
+        false_positive_rate = dictionary [model] [0]
+        true_positive_rate = dictionary [model] [1]
+        roc_auc = dictionary [model] [2]
+        random_color = dictionary [model] [3] # OR random_color = "#" + str (random.randint (0,999999)) 
+
+        plt.plot (false_positive_rate, true_positive_rate, random_color, label = "%s, AUC=%f" % (model, roc_auc))
+        plt.legend (loc = 'lower right')
+    
+    # Save ROC Curve figure
+    plt.savefig (accuracy_file_path + "roc-curves.png")
+
 # Function to get Classification Accuracies of model
 def classification_accuracy (classifier, model, features, target, x_train, y_train, y_test, scoring, title, target_name):
 
@@ -224,12 +250,11 @@ NOTE: The Spam-detection models are CONSERVATIVE
 Models tend to classify spam messages as not spam
 -> However, it is better to be more conservative as we would rather mislabel spam as not spam rather than have
    genuine messages be labeled as spam, which would result in the lost of valuable feedback
--> Model is better at identifying true negative (ham) over true postive (spam) [which is better for conservative]
+-> Model is better at identifying true negative (ham) over true postive (spam) [which is better for a conservative approach]
 
-Since the accuracy of the model is quite high, will not go into further enhancements on the spam-detection model 
+Since the accuracy of the model is quite high, we will not go into further enhancements on the spam-detection model 
 such as applying Boosting (due to time-constraint and lack of practicality as the model is the first pass/layer 
 in the data mining process)
-
 
 Improvements that could be done:
 -Better and more dataset added
@@ -242,7 +267,7 @@ Use F1 scoring for binary classfication of SPAM or HAM (not spam)
 # 4) Create spam-detection classfiers to filter out spam
 svm_classifier = svm.SVC(C=1000, cache_size=200, class_weight=None, coef0=0.0,
     decision_function_shape='ovr', degree=1, gamma=0.01, kernel='rbf',
-    max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
+    max_iter=-1, probability=True, random_state=1, shrinking=True, tol=0.001,
     verbose=False)
 
 logistic_regression_classifier = LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
@@ -251,7 +276,7 @@ logistic_regression_classifier = LogisticRegression(C=1000, class_weight=None, d
     random_state=1, solver='liblinear', tol=0.0001, verbose=0,
     warm_start=False)
 
-gaussiannb_classifier = MultinomialNB ()
+multinomialnb_classifier = MultinomialNB ()
 
 # GridSearchCV to tune hyperparameters of models
 """
@@ -334,8 +359,8 @@ Best estimator:  LogisticRegression(C=1000, class_weight=None, dual=False, fit_i
 
 """
 
-# Get list of accuracies
-print ("*** Model Scorings ***", "\n")
+# Get model performance metrics
+print ("*** Model Performance metrics ***", "\n")
 
 """ Classification Accuracy """
 print ("--- Classification Accuracies: ---")
@@ -351,44 +376,77 @@ target_names = ['ham', 'spam'] # For labelling target variable in classification
 # Fit classifiers (models) with training data
 svm_model = svm_classifier.fit (x_train, y_train) 
 logistic_regression_model = logistic_regression_classifier.fit (x_train, y_train) 
-gaussiannb_model = gaussiannb_classifier.fit (x_train.todense (), y_train) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
+multinomialnb_model = multinomialnb_classifier.fit (x_train.todense (), y_train) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
 
 # Store predicted results of models
 y_test_svm = svm_model.predict (x_test) 
-y_test_logistic_regression = logistic_regression_model.predict (x_test) 
-y_test_gnb = gaussiannb_model.predict (x_test.todense ()) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
+y_test_lr = logistic_regression_model.predict (x_test) 
+y_test_mnb = multinomialnb_model.predict (x_test.todense ()) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
+
+# Store predicted results (in probabilty) of models
+y_test_svm_prob = svm_model.predict_proba (x_test) 
+y_test_lr_prob = logistic_regression_model.predict_proba (x_test) 
+y_test_mnb_prob = multinomialnb_model.predict_proba (x_test.todense ()) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
+
+# Remove first column of probability of results
+y_test_svm_prob = y_test_svm_prob [:, 1]
+y_test_lr_prob = y_test_lr_prob [:, 1]
+y_test_mnb_prob = y_test_mnb_prob [:, 1]
+
+# Get False Positive Rate and True Positive Rate of models
+false_positive_rate_svm, true_positive_rate_svm, threshold_svm = metrics.roc_curve (y_test_result, y_test_svm_prob)
+false_positive_rate_lr, true_positive_rate_lr, threshold_lr = metrics.roc_curve (y_test_result, y_test_lr_prob)
+false_positive_rate_mnb, true_positive_rate_mnb, threshold_mnb = metrics.roc_curve (y_test_result, y_test_mnb_prob)
+
+# Calculate Area Under Curve of models' ROC curves
+svm_roc_auc = metrics.auc (false_positive_rate_svm, true_positive_rate_svm)
+lr_roc_auc = metrics.auc (false_positive_rate_lr, true_positive_rate_lr)
+mnb_roc_auc = metrics.auc (false_positive_rate_mnb, true_positive_rate_mnb)
 
 # Get classification accuracies of models
 # SVM
 classification_accuracy (svm_classifier, svm_model, features, target, x_train, y_train,
                          y_test_svm, "f1", "SVM classification accuracy:", target_names)
+
 # Logistic Regression
 classification_accuracy (logistic_regression_classifier, logistic_regression_model, features, target, x_train, y_train,
-                         y_test_logistic_regression, "f1", "Logistic Regression classification accuracy:", target_names)
-# Naive Bayes
-classification_accuracy (gaussiannb_classifier, gaussiannb_model, features.todense (), target, x_train.todense (), y_train,
-                         y_test_gnb, "f1", "Naive Bayes classification accuracy:", target_names)
+                         y_test_lr, "f1", "Logistic Regression classification accuracy:", target_names)
 
-# Save models (pickling/serialization)
-pickle_object (vectorizer, "tfid-vectorizer.pkl") # TF-IDF Vectorizer
-pickle_object (svm_model, "svm-model.pkl") # SVM Model
-pickle_object (logistic_regression_model, "logistic-regression-model.pkl") # Logistic Regression Model
-pickle_object (gaussiannb_model, "naive-bayes-model.pkl") # Naive Bayes Model
+# Naive Bayes
+classification_accuracy (multinomialnb_classifier, multinomialnb_model, features.todense (), target, x_train.todense (), y_train,
+                         y_test_mnb, "f1", "Naive Bayes classification accuracy:", target_names)
+
+""" Visualisations of model performance """
+# Plot ROC (Receiver Operating Characteristics) Curves
+dict_roc = { # Dictionary for passing model values to function
+    "SVM": [false_positive_rate_svm, true_positive_rate_svm, svm_roc_auc, 'red'],
+    "LR": [false_positive_rate_lr, true_positive_rate_lr, lr_roc_auc, 'blue'],
+    "MNB": [false_positive_rate_mnb, true_positive_rate_mnb, mnb_roc_auc, 'green']
+    }
+
+# Plot ROC curves
+plot_roc_curve (dict_roc)
 
 # Plot confusion matrices
 classes = train_data.label.map ({1:'spam', 0:'ham'}).unique () # Classes refer to possible unique values of the target variable
 
 # SVM Confusion Matrix
-plot_confusion_matrix (y_test_result, y_test_svm, classes, "SVM Confusion Matrix", "svm-cm.png")
+plot_confusion_matrix (y_test_result, y_test_svm, classes, "SVM Confusion Matrix", "svm-confusion-matrix.png")
 
 # Logistic Regression Confusion Matrix
-plot_confusion_matrix (y_test_result, y_test_logistic_regression, classes, "Logistic Regression Confusion Matrix", "lr-cm.png")
+plot_confusion_matrix (y_test_result, y_test_lr, classes, "Logistic Regression Confusion Matrix", "logistic-regression-confusion-matrix.png")
 
 # Naive Bayes Confusion Matrix
-plot_confusion_matrix (y_test_result, y_test_gnb, classes, "Naive Bayes Confusion Matrix", "nb0-cm.png")
+plot_confusion_matrix (y_test_result, y_test_mnb, classes, "Naive Bayes Confusion Matrix", "naive-bayes-confusion-matrix.png")
 
 # Display visualisations
-plt.show ()
+# plt.show ()
+
+# Save models (pickling/serialization)
+pickle_object (vectorizer, "tfid-vectorizer.pkl") # TF-IDF Vectorizer
+pickle_object (svm_model, "svm-model.pkl") # SVM Model
+pickle_object (logistic_regression_model, "logistic-regression-model.pkl") # Logistic Regression Model
+pickle_object (multinomialnb_model, "naive-bayes-model.pkl") # Naive Bayes Model
 
 
 """

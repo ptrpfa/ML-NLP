@@ -1,0 +1,66 @@
+*** Model Performance metrics *** 
+
+--- Classification Accuracies: ---
+(Only effective if have BALANCED DATA aka distribution of categories/classes is EQUAL!)
+Distribution of spam/ham data:
+ham     0.865889
+spam    0.134111
+Name: label, dtype: float64 
+
+SVM classification accuracy:
+Cross-validation:
+List of scores:  [0.92579505 0.91428571 0.90510949 0.91636364 0.90714286]
+Mean score:  0.9137393499693672 
+
+Train-test-split:
+Training data accuracy:  1.0
+Testing data accuracy:  0.9820466786355476 
+
+Classification Report:
+              precision    recall  f1-score   support
+
+         ham       0.98      1.00      0.99      1447
+        spam       0.98      0.88      0.93       224
+
+    accuracy                           0.98      1671
+   macro avg       0.98      0.94      0.96      1671
+weighted avg       0.98      0.98      0.98      1671
+
+Logistic Regression classification accuracy:
+Cross-validation:
+List of scores:  [0.91549296 0.91039427 0.90510949 0.90842491 0.9       ]
+Mean score:  0.9078843240910913 
+
+Train-test-split:
+Training data accuracy:  1.0
+Testing data accuracy:  0.9784560143626571 
+
+Classification Report:
+              precision    recall  f1-score   support
+
+         ham       0.98      1.00      0.99      1447
+        spam       0.98      0.86      0.91       224
+
+    accuracy                           0.98      1671
+   macro avg       0.98      0.93      0.95      1671
+weighted avg       0.98      0.98      0.98      1671
+
+Naive Bayes classification accuracy:
+Cross-validation:
+List of scores:  [0.82352941 0.76033058 0.7654321  0.76348548 0.77366255]
+Mean score:  0.7772880235322573 
+
+Train-test-split:
+Training data accuracy:  0.9579379328032829
+Testing data accuracy:  0.947935368043088 
+
+Classification Report:
+              precision    recall  f1-score   support
+
+         ham       0.94      1.00      0.97      1447
+        spam       1.00      0.61      0.76       224
+
+    accuracy                           0.95      1671
+   macro avg       0.97      0.81      0.86      1671
+weighted avg       0.95      0.95      0.94      1671
+
