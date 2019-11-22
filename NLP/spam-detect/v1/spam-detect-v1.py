@@ -347,6 +347,7 @@ message_check = False # Boolean to trigger prompt for user message to check whet
 
 # Program starts here
 program_start_time = datetime.datetime.now ()
+print ("Start time: " + program_start_time)
 
 # 1) Get data
 train_data = pd.read_csv (train_file_path, sep = "\t", encoding = 'utf-8')
