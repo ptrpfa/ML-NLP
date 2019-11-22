@@ -3,11 +3,11 @@ import numpy as np
 import re # REGEX
 import string
 import html
+import unidecode
 import pickle 
-import spacy
 import scipy
-from nltk import stem # NLP
-from nltk.corpus import stopwords # NLP
+import datetime
+import spacy # NLP
 from sklearn.model_selection import train_test_split # 4) For splitting dataset into train/test sets
 from sklearn import linear_model # 4) Linear Regression classifier
 from sklearn.naive_bayes import MultinomialNB # 4) Naive Bayes classifier
@@ -28,61 +28,171 @@ import sklearn.metrics as metrics # 4.5) For determination of model accuracy
 from warnings import simplefilter
 simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
 
-"""CAN CONSIDER MAKING A SEPARATE FUNCTION FOR CLEANING TEST DATA AS THIS CLEANSING IS SPECIFIC TO TRAINING DATA!"""
-# Function to clean strings (accepts a sequence-typed variable containing dirty strings and returns a list of the cleaned strings)
-def clean_string (sequence):
+def clean_document (corpus):
 
-    # Initialise list containing cleaned strings
-    list_cleaned_strings = []
+    # Initialise list containing cleaned documents
+    list_cleaned_documents = []
 
-    # REGEX for CSIT's custom error code
-    bugcoderegex = "" # Still WIP currently [Assume EC is the first string split by space ie '00001 Error occurred' [for subject]]
-
-    # Initialise list containing white-listed strings [NOTE: SHOULD BE IN LOWERCASE]
-    whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology',
-                'comms-tech', 'communications-tech', 'comms-technology',
-                'communications-technology', 'crypto-tech', 'cryptography-tech',
-                'crypto-technology', 'cryptography-technology']
-
-    # Loop to clean strings in the sequence object
-    for string in sequence:
+    # Loop to clean documents in the sequence object
+    for document in corpus:
         
         # Decode HTML encoded characters (&amp; -> &)
-        string = html.unescape (string)
+        document = html.unescape (document)
+
+        # Remove character accents (Má -> Ma) 
+        document = unidecode.unidecode (document)
 
         # Change text to lowercase
-        string = string.lower ()
+        document = document.lower ()
 
-        # Apply further cleansing if string is not whitelisted
-        if (string not in whitelist):          
+        # Remove heading and trailing whitespaces
+        document = document.strip ()
 
-            #  Remove punctuations from text
-            #string = re.sub('[%s]' % re.escape(string.punctuation), '', string)
+        # Get the number of hyperlink protocols contained in the document (http, https, ftp..)
+        hyperlink_protocol_count = document.count ("http") + document.count ("ftp")
 
-            # Remove any non-word characters from the string
-            string = re.sub (r"[^a-zA-Z0-9 ]", "", string)
+        # Intialise list containing the document's hyperlinks
+        list_document_hyperlinks = []
 
-            # Replace multiple consecutive spaces with a single space
-            string = re.sub (r"[ ]{2,}", " ", string)
+        # Initialise counter variable
+        counter = 0
 
-            # Remove heading and trailing whitespaces
-            string = string.strip ()
+        # Loop to extract hyperlinks with heading protocols within document
+        while (counter < hyperlink_protocol_count):
+            
+            # Get match object
+            match = re.match ("(.*)((?:http|ftp|https):?\/{1,2})([^\s]*)(.*)", document) # Group 1: Text in front of link, Group 2: Protocol, Group 3: Hyperlink, Group 4: Trailing text
 
-        # Append cleaned string into the list of cleaned strings
-        list_cleaned_strings.append (string)
+            # Check if a match object is obtained
+            if (match == None): # For redundancy
 
-    # Return list of cleaned strings
-    return list_cleaned_strings
+                # Skip current iteration
+                continue
+
+            # Get hyperlink
+            hyperlink = match.group (3)
+
+            # Remove heading and trailing periods from hyperlink (hyperlink is delimited previously by whitespace, so may have trailing period)
+            hyperlink = hyperlink.strip (".")
+
+            # Append hyperlink to list
+            list_document_hyperlinks.append (hyperlink)
+
+            # Remove hyperlink from document (note in this case the sequence where the hyperlink is in is lost [sequence does not matter for tokenization])
+            document = re.sub (r"(.*)((?:http|ftp|https):?\/{1,2})([^\s]*)(.*)", r"\1 \4", document) 
+
+            # Increment counter
+            counter += 1
+        
+        # Get the number of hyperlinks without heading protocols contained in the document (ie www.google.com, without https:// in front)
+        hyperlink_count = document.count ("www") 
+
+        # Initialise counter variable
+        counter = 0
+
+        # Loop to extract hyperlinks without heading protocols within document
+        while (counter < hyperlink_count):
+            
+            # Get match object
+            match = re.match ("(.*)(www\.[^\s]*)(.*)", document) # Group 1: Text in front of link, Group 2: Hyperlink, Group 3: Trailing text
+
+            # Check if a match object is obtained
+            if (match == None): # For redundancy
+
+                # Skip current iteration
+                continue
+
+            # Get hyperlink
+            hyperlink = match.group (2)
+
+            # Remove heading and trailing periods from hyperlink (hyperlink is delimited previously by whitespace, so may have trailing period)
+            hyperlink = hyperlink.strip (".")
+
+            # Append hyperlink to list
+            list_document_hyperlinks.append (hyperlink)
+
+            # Remove hyperlink from document (note in this case the sequence where the hyperlink is in is lost [sequence does not matter for tokenization])
+            document = re.sub (r"(.*)(www\.[^\s]*)(.*)", r"\1 \3", document) 
+
+            # Increment counter
+            counter += 1
+        
+        #  Remove punctuations from text
+        # document = re.sub('[%s]' % re.escape(string.punctuation), '', document)
+
+        # Remove any non-word characters from the document (Used over string.punctuation as provides more granular control)
+        document = re.sub (r"[^a-zA-Z0-9 ']", "", document) # Apostrophe not included as will result in weird tokenizations (for words like I'll, She's..)
+
+        # Extract words embedded within digits
+        document = re.sub (r"(\d+)([a-zA-Z]+)(\d+)", r"\1 \2 \3", document)
+
+        # Extract digits embedded within words
+        document = re.sub (r"([a-zA-Z]+)(\d+)([a-zA-Z]+)", r"\1 \2 \3", document)
+
+        # Insert back previously extracted hyperlinks into the document (maybe don't insert back until text is lemmatised/stemmed/tokenized)
+        for hyperlink in list_document_hyperlinks:
+            
+            # Hyperlink is inserted at a later stage as we don't want some REGEX transformations to be applied to it
+            document = document + " " + hyperlink
+
+        # Replace multiple consecutive spaces with a single space
+        document = re.sub (r"[ ]{2,}", " ", document)
+
+        # Append cleaned document into the list of cleaned documents
+        list_cleaned_documents.append (document)
+
+        # print ("document: ",document)
+
+    # Return list of cleaned documents
+    return list_cleaned_documents
 
 # Function to tokenize documents
 def tokenize (document):
 
     # Create spaCy NLP object
     nlp = spacy.load ("en_core_web_sm")
+
+    # Custom list of stop words to add to spaCy's existing stop word list
+    list_custom_stopwords = ["I", "i",  "yer", "ya", "yar", "u", "loh", "lor", "lah", "leh", "lei", "lar", "liao", "hmm", "hmmm", "mmm", "mmmmmm", "wah"] 
+
+    # Add custom stop words to spaCy's stop word list
+    for word in list_custom_stopwords:
+
+        # Add custom word to stopword word list
+        nlp.vocab [word].is_stop = True
+
+    # Convert document into a spaCy tokens document
     document = nlp (document)
 
+    # Initialise list to contain tokens
+    list_tokens = []
+
     # Loop to tokenize text
-    return ([token.lemma_ for token in document])
+    for token in document:
+
+        # Check if token is a stop word
+        if (token.is_stop):
+
+            # Skip current for-loop iteration if token is a stop word
+            continue
+        
+        # Get lemmatised form of token
+        lemmatised = token.lemma_
+
+        # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
+        if (lemmatised == "-PRON-"):
+
+            # Skip current for-loop iteration
+            continue
+
+        # Check if lemmatised token is already in the list of tokens
+        if (lemmatised not in list_tokens):
+
+            # Add new lemmatised token into the list of tokens if it is not inside
+            list_tokens.append (lemmatised)
+
+    # Return list of tokens to calling program
+    return (list_tokens)
 
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
@@ -91,7 +201,7 @@ def pickle_object (pickle_object, filename):
     filepath = pickles_file_path + filename
 
     # Create file object to store object to pickle
-    file_pickle = open (filepath, 'ab') # a = append, b = bytes
+    file_pickle = open (filepath, 'wb') # w = write, b = bytes (overwrite pre-existing files if any)
 
     # Pickle (serialise) object [store object as a file]
     pickle.dump (pickle_object, file_pickle)
@@ -181,9 +291,10 @@ def plot_roc_curve (dictionary):
     plt.savefig (accuracy_file_path + "roc-curves.png")
 
 # Function to get Classification Accuracies of model
-def classification_accuracy (classifier, model, features, target, x_train, y_train, y_test, scoring, title, target_name):
+def classification_accuracy (classifier, model, features, target, x_train, y_train, y_test, y_test_result, scoring, title, target_name):
 
     # Print title
+    print ("*" * 30) # Separator
     print (title)
 
     # Cross validation score
@@ -202,7 +313,28 @@ def classification_accuracy (classifier, model, features, target, x_train, y_tra
 
     # Classification report
     print ("Classification Report:")
-    print (classification_report (y_test_result, y_test, target_names = target_name))
+    print (classification_report (y_test_result, y_test, target_names = target_name), "\n")
+
+    # Precision scores
+    print ("Precision Scores: (Ability of classifier not to label as positive a sample that is negative)")
+    print ("Macro average: ", metrics.precision_score (y_test_result, y_test, average = 'macro'))  
+    print ("Micro average: ", metrics.precision_score (y_test_result, y_test, average = 'micro'))  
+    print ("Weighted average: ", metrics.precision_score (y_test_result, y_test, average = 'weighted'), "\n") 
+
+    # Recall scores
+    print ("Recall Scores: (Ability of the classifier to find all the positive samples)")
+    print ("Macro average: ", metrics.recall_score (y_test_result, y_test, average = 'macro'))  
+    print ("Micro average: ", metrics.recall_score (y_test_result, y_test, average = 'micro'))  
+    print ("Weighted average: ", metrics.recall_score (y_test_result, y_test, average = 'weighted'), "\n")  
+
+    # F1 Scoring
+    print ("F1 Scores:")
+    print ("Macro average: ", metrics.f1_score (y_test_result, y_test, average = 'macro'))  
+    print ("Micro average: ", metrics.f1_score (y_test_result, y_test, average = 'micro'))  
+    print ("Weighted average: ", metrics.f1_score (y_test_result, y_test, average = 'weighted'), "\n")  
+
+    # Logarithmic Loss score (closer to 0 better)
+    print ("Log Loss: ", metrics.log_loss (y_test_result, y_test), "\n")  
 
 # Global variables
 train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/data/spam-ham.txt" # Dataset file path
@@ -210,8 +342,11 @@ clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/v1/data/clean-spam-ham
 pickles_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/pickles/" # File path containing pickled objects
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/accuracies/" # Model accuracy results file path
 preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
-use_pickle = True # Boolean to trigger whether to use pickled objects or not
+use_pickle = False # Boolean to trigger whether to use pickled objects or not
 message_check = False # Boolean to trigger prompt for user message to check whether it is spam or not
+
+# Program starts here
+program_start_time = datetime.datetime.now ()
 
 # 1) Get data
 train_data = pd.read_csv (train_file_path, sep = "\t", encoding = 'utf-8')
@@ -228,9 +363,7 @@ if (preliminary_check == True): # Check boolean to display preliminary informati
     print (train_data.dtypes, "\n")
 
 # 3) Data pre-processing
-train_data.text = clean_string (train_data.text) # Clean text
-
-# DO SOMETHING ABOUT THE WHITELIST AND BUGCODE!
+train_data.text = clean_document (train_data.text) # Clean text
 
 # Change spam/ham label to numeric values
 train_data.label = train_data.label.map ({'spam': 1, 'ham': 0})
@@ -253,8 +386,15 @@ features = train_data.text
 if (not use_pickle):
 
     # Create DTM of dataset (features)
-    vectorizer = TfidfVectorizer (tokenizer = tokenize, stop_words = 'english', min_df = 1) # Create vectorizer object
+    
+    # Create vectorizer object
+    vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = True, strip_accents = 'unicode', 
+    stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95) 
+    
     # vectorizer = TfidfVectorizer () # SIMPLE VECTORIZER
+
+    # Should try HashingVectorizer combined with TFIDF Transformer
+
 
     # Fit data to vectorizer
     features = vectorizer.fit_transform (features) # Returns a sparse matrix
@@ -270,7 +410,7 @@ if (not use_pickle):
 else:
 
     # Load serialised vectorizer
-    vectorizer = load_pickle ("tfid-vectorizer.pkl")
+    vectorizer = load_pickle ("tfidf-vectorizer.pkl")
 
     # Load serialised features (sparse matrix)
     # Load DTM and convert it into a sparse matrix
@@ -346,22 +486,22 @@ print ("Best score: ", grid_search.best_score_)
 print ("Best parameters: ", grid_search.best_params_)
 print ("Best estimator: ", grid_search.best_estimator_)
 
-SVM:
-Accuracy scoring:
-Best score:  0.981328511060382
-Best parameters:  {'C': 10, 'degree': 1, 'gamma': 0.1, 'random_state': 1}
-Best estimator:  SVC(C=10, cache_size=200, class_weight=None, coef0=0.0,
-    decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
-    max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
-    verbose=False)
+# SVM:
+# Accuracy scoring:
+# Best score:  0.981328511060382
+# Best parameters:  {'C': 10, 'degree': 1, 'gamma': 0.1, 'random_state': 1}
+# Best estimator:  SVC(C=10, cache_size=200, class_weight=None, coef0=0.0,
+#     decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
+#     max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
+#     verbose=False)
 
-F1 scoring:
-Best score:  0.9261331832519227
-Best parameters:  {'C': 1000, 'degree': 1, 'gamma': 0.01, 'random_state': 1}
-Best estimator:  SVC(C=1000, cache_size=200, class_weight=None, coef0=0.0,
-    decision_function_shape='ovr', degree=1, gamma=0.01, kernel='rbf',
-    max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
-    verbose=False)
+# F1 scoring:
+# Best score:  0.9261331832519227
+# Best parameters:  {'C': 1000, 'degree': 1, 'gamma': 0.01, 'random_state': 1}
+# Best estimator:  SVC(C=1000, cache_size=200, class_weight=None, coef0=0.0,
+#     decision_function_shape='ovr', degree=1, gamma=0.01, kernel='rbf',
+#     max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
+#     verbose=False)
 """
 
 """
@@ -386,22 +526,21 @@ print ("Best score: ", grid_search.best_score_)
 print ("Best parameters: ", grid_search.best_params_)
 print ("Best estimator: ", grid_search.best_estimator_)
 
-Accuracy scoring:
-LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
-                intercept_scaling=1, l1_ratio=None, max_iter=100,
-                multi_class='warn', n_jobs=None, penalty='l2',
-                random_state=1, solver='liblinear', tol=0.0001, verbose=0,
-                warm_start=False)
+# Accuracy scoring:
+# LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
+#                 intercept_scaling=1, l1_ratio=None, max_iter=100,
+#                 multi_class='warn', n_jobs=None, penalty='l2',
+#                 random_state=1, solver='liblinear', tol=0.0001, verbose=0,
+#                 warm_start=False)
 
-F1 Scoring:
-Best score:  0.9199723347445232
-Best parameters:  {'C': 1000, 'penalty': 'l2', 'random_state': 1}
-Best estimator:  LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
-                   intercept_scaling=1, l1_ratio=None, max_iter=100,
-                   multi_class='warn', n_jobs=None, penalty='l2',
-                   random_state=1, solver='liblinear', tol=0.0001, verbose=0,
-                   warm_start=False)
-
+# F1 Scoring:
+# Best score:  0.9199723347445232
+# Best parameters:  {'C': 1000, 'penalty': 'l2', 'random_state': 1}
+# Best estimator:  LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
+#                    intercept_scaling=1, l1_ratio=None, max_iter=100,
+#                    multi_class='warn', n_jobs=None, penalty='l2',
+#                    random_state=1, solver='liblinear', tol=0.0001, verbose=0,
+#                    warm_start=False)
 """
 
 # Get model performance metrics
@@ -440,48 +579,48 @@ y_test_lr = logistic_regression_model.predict (x_test)
 y_test_mnb = multinomialnb_model.predict (x_test.todense ()) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
 
 # # Store predicted results (in probabilty) of models
-# y_test_svm_prob = svm_model.predict_proba (x_test) 
-# y_test_lr_prob = logistic_regression_model.predict_proba (x_test) 
-# y_test_mnb_prob = multinomialnb_model.predict_proba (x_test.todense ()) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
+y_test_svm_prob = svm_model.predict_proba (x_test) 
+y_test_lr_prob = logistic_regression_model.predict_proba (x_test) 
+y_test_mnb_prob = multinomialnb_model.predict_proba (x_test.todense ()) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
 
 # Remove first column of probability of results
-# y_test_svm_prob = y_test_svm_prob [:, 1]
-# y_test_lr_prob = y_test_lr_prob [:, 1]
-# y_test_mnb_prob = y_test_mnb_prob [:, 1]
+y_test_svm_prob = y_test_svm_prob [:, 1]
+y_test_lr_prob = y_test_lr_prob [:, 1]
+y_test_mnb_prob = y_test_mnb_prob [:, 1]
 
 # Get False Positive Rate and True Positive Rate of models
-# false_positive_rate_svm, true_positive_rate_svm, threshold_svm = metrics.roc_curve (y_test_result, y_test_svm_prob)
-# false_positive_rate_lr, true_positive_rate_lr, threshold_lr = metrics.roc_curve (y_test_result, y_test_lr_prob)
-# false_positive_rate_mnb, true_positive_rate_mnb, threshold_mnb = metrics.roc_curve (y_test_result, y_test_mnb_prob)
+false_positive_rate_svm, true_positive_rate_svm, threshold_svm = metrics.roc_curve (y_test_result, y_test_svm_prob)
+false_positive_rate_lr, true_positive_rate_lr, threshold_lr = metrics.roc_curve (y_test_result, y_test_lr_prob)
+false_positive_rate_mnb, true_positive_rate_mnb, threshold_mnb = metrics.roc_curve (y_test_result, y_test_mnb_prob)
 
 # Calculate Area Under Curve of models' ROC curves
-# svm_roc_auc = metrics.auc (false_positive_rate_svm, true_positive_rate_svm)
-# lr_roc_auc = metrics.auc (false_positive_rate_lr, true_positive_rate_lr)
-# mnb_roc_auc = metrics.auc (false_positive_rate_mnb, true_positive_rate_mnb)
+svm_roc_auc = metrics.auc (false_positive_rate_svm, true_positive_rate_svm)
+lr_roc_auc = metrics.auc (false_positive_rate_lr, true_positive_rate_lr)
+mnb_roc_auc = metrics.auc (false_positive_rate_mnb, true_positive_rate_mnb)
 
 # Get classification accuracies of models
 # SVM
 classification_accuracy (svm_classifier, svm_model, features, target, x_train, y_train,
-                         y_test_svm, "f1", "SVM classification accuracy:", target_names)
+                         y_test_svm, y_test_result, "f1", "SVM classification accuracy:", target_names)
 
 # Logistic Regression
 classification_accuracy (logistic_regression_classifier, logistic_regression_model, features, target, x_train, y_train,
-                         y_test_lr, "f1", "Logistic Regression classification accuracy:", target_names)
+                         y_test_lr, y_test_result, "f1", "Logistic Regression classification accuracy:", target_names)
 
 # Naive Bayes
 classification_accuracy (multinomialnb_classifier, multinomialnb_model, features.todense (), target, x_train.todense (), y_train,
-                         y_test_mnb, "f1", "Naive Bayes classification accuracy:", target_names)
+                         y_test_mnb, y_test_result, "f1", "Naive Bayes classification accuracy:", target_names)
 
 """ Visualisations of model performance """
 # Plot ROC (Receiver Operating Characteristics) Curves
-# dict_roc = { # Dictionary for passing model values to function
-#     "SVM": [false_positive_rate_svm, true_positive_rate_svm, svm_roc_auc, 'red'],
-#     "LR": [false_positive_rate_lr, true_positive_rate_lr, lr_roc_auc, 'blue'],
-#     "MNB": [false_positive_rate_mnb, true_positive_rate_mnb, mnb_roc_auc, 'green']
-#     }
+dict_roc = { # Dictionary for passing model values to function
+    "SVM": [false_positive_rate_svm, true_positive_rate_svm, svm_roc_auc, 'red'],
+    "LR": [false_positive_rate_lr, true_positive_rate_lr, lr_roc_auc, 'blue'],
+    "MNB": [false_positive_rate_mnb, true_positive_rate_mnb, mnb_roc_auc, 'green']
+    }
 
 # Plot ROC curves
-# plot_roc_curve (dict_roc)
+plot_roc_curve (dict_roc)
 
 # Plot confusion matrices
 classes = train_data.label.map ({1:'spam', 0:'ham'}).unique () # Classes refer to possible unique values of the target variable
@@ -496,11 +635,11 @@ plot_confusion_matrix (y_test_result, y_test_lr, classes, "Logistic Regression C
 plot_confusion_matrix (y_test_result, y_test_mnb, classes, "Naive Bayes Confusion Matrix", "naive-bayes-confusion-matrix.png")
 
 # Display visualisations
-# plt.show ()
+plt.show ()
 
 # Save models (pickling/serialization)
 pickle_object (features, "features.pkl") # Sparse Matrix of features
-pickle_object (vectorizer, "tfid-vectorizer.pkl") # TF-IDF Vectorizer
+pickle_object (vectorizer, "tfidf-vectorizer.pkl") # TF-IDF Vectorizer
 pickle_object (svm_model, "svm-model.pkl") # SVM Model
 pickle_object (logistic_regression_model, "logistic-regression-model.pkl") # Logistic Regression Model
 pickle_object (multinomialnb_model, "naive-bayes-model.pkl") # Naive Bayes Model
@@ -563,6 +702,17 @@ if (message_check == True):
     y_test_predict = svm_model.predict (features) # Store predicted results of model
     # OR 
     # y_test_predict = logistic_regression_model.predict (features) # Store predicted results of model
+    
+    # WHITELIST portion add when trying to test is a document is spam or not (if contain whitelisted words, not spam!)
+    # --> do this for BUGREGEX as well!
 
     print (y_test_predict)
 """
+
+# Program end time
+program_end_time = datetime.datetime.now ()
+program_run_time = program_end_time - program_start_time
+
+print ("\nProgram start time: ", program_start_time)
+print ("Program end time: ", program_end_time)
+print ("Program runtime: ", program_run_time.seconds, "seconds")
