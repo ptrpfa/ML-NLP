@@ -337,12 +337,12 @@ def classification_accuracy (classifier, model, features, target, x_train, y_tra
     print ("Log Loss: ", metrics.log_loss (y_test_result, y_test), "\n")  
 
 # Global variables
-train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/data/spam-ham.txt" # Dataset file path
-clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/v1/data/clean-spam-ham.csv' # Cleaned dataset file path
-pickles_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/pickles/" # File path containing pickled objects
-accuracy_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/accuracies/" # Model accuracy results file path
+train_file_path = "C:/Users/intern-peter/Desktop/Work/WIP/NLP/spam-detect/v1/data/spam-ham.txt" # Dataset file path
+clean_file_path = 'C:/Users/intern-peter/Desktop/Work/WIP/NLP/spam-detect/v1/data/clean-spam-ham.csv' # Cleaned dataset file path
+pickles_file_path = "C:/Users/intern-peter/Desktop/Work/WIP/NLP/spam-detect/v1/pickles/" # File path containing pickled objects
+accuracy_file_path = "C:/Users/intern-peter/Desktop/Work/WIP/NLP/spam-detect/v1/accuracies/" # Model accuracy results file path
 preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
-use_pickle = False # Boolean to trigger whether to use pickled objects or not
+use_pickle = True # Boolean to trigger whether to use pickled objects or not
 message_check = False # Boolean to trigger prompt for user message to check whether it is spam or not
 
 # Program starts here
@@ -405,7 +405,7 @@ if (not use_pickle):
     print ("Tokens:")
     print (vectorizer.get_feature_names()) # Get features (words)
     data_dtm = pd.DataFrame(features.toarray(), columns=vectorizer.get_feature_names()) # Convert DTM to DataFrame
-    data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/spam-detect/v1/data/dtm.csv", index = False, encoding="utf-8") # Save DTM
+    data_dtm.to_csv ("C:/Users/intern-peter/Desktop/Work/WIP/NLP/spam-detect/v1/data/dtm.csv", index = False, encoding="utf-8") # Save DTM
 
 # Using pickled objects
 else:
@@ -415,7 +415,7 @@ else:
 
     # Load serialised features (sparse matrix)
     # Load DTM and convert it into a sparse matrix
-    # features_dtm = pd.read_csv ("/home/p/Desktop/csitml/NLP/spam-detect/v1/data/dtm.csv") # Not used as DTM file is very large
+    # features_dtm = pd.read_csv ("C:/Users/intern-peter/Desktop/Work/WIP/NLP/spam-detect/v1/data/dtm.csv") # Not used as DTM file is very large
     # features = scipy.sparse.csr_matrix (features_dtm.values)
 
     # OR 
