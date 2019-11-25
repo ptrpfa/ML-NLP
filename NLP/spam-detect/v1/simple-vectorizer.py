@@ -63,7 +63,16 @@ def clean_document (corpus):
         while (counter < hyperlink_protocol_count):
             
             # Get match object
-            match = re.match ("(.*)((?:http|ftp|https):?\/{1,2})([^\s]*)(.*)", document) # Group 1: Text in front of link, Group 2: Protocol, Group 3: Hyperlink, Group 4: Trailing text
+            match = re.match (r"(.*)((?:http|ftp|https):?\/{1,2})([^\s]*)(.*)", document) # Group 1: Text in front of link, Group 2: Protocol, Group 3: Hyperlink, Group 4: Trailing text
+            
+            # Check if a match object is obtained
+            if (match == None): # For redundancy
+                
+                # Increment counter
+                counter += 1
+
+                # Skip current iteration
+                continue
 
             # Get hyperlink
             hyperlink = match.group (3)
@@ -90,7 +99,16 @@ def clean_document (corpus):
         while (counter < hyperlink_count):
             
             # Get match object
-            match = re.match ("(.*)(www\.[^\s]*)(.*)", document) # Group 1: Text in front of link, Group 2: Hyperlink, Group 3: Trailing text
+            match = re.match (r"(.*)(www\.[^\s]*)(.*)", document) # Group 1: Text in front of link, Group 2: Hyperlink, Group 3: Trailing text
+
+            # Check if a match object is obtained
+            if (match == None): # For redundancy
+                
+                # Increment counter
+                counter += 1
+
+                # Skip current iteration
+                continue
 
             # Get hyperlink
             hyperlink = match.group (2)
@@ -139,18 +157,6 @@ def clean_document (corpus):
 # Function to tokenize documents
 def tokenize (document):
 
-    # Create spaCy NLP object
-    nlp = spacy.load ("en_core_web_sm")
-
-    # Custom list of stop words to add to spaCy's existing stop word list
-    list_custom_stopwords = ["I", "i",  "yer", "ya", "yar", "u", "loh", "lor", "lah", "leh", "lei", "lar", "liao", "hmm", "hmmm", "mmm", "mmmmmm", "wah"] 
-
-    # Add custom stop words to spaCy's stop word list
-    for word in list_custom_stopwords:
-
-        # Add custom word to stopword word list
-        nlp.vocab [word].is_stop = True
-
     # Convert document into a spaCy tokens document
     document = nlp (document)
 
@@ -187,6 +193,19 @@ def tokenize (document):
 # Global variables
 train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/data/spam-ham-reduced.txt" # Dataset file path
 clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/v1/data/clean-spam-reduced.csv' # Cleaned dataset file path
+
+# Global NLP Objects
+# Create spaCy NLP object
+nlp = spacy.load ("en_core_web_sm")
+
+# Custom list of stop words to add to spaCy's existing stop word list
+list_custom_stopwords = ["I", "i",  "yer", "ya", "yar", "u", "loh", "lor", "lah", "leh", "lei", "lar", "liao", "hmm", "hmmm", "mmm", "mmmmmm", "wah"] 
+
+# Add custom stop words to spaCy's stop word list
+for word in list_custom_stopwords:
+
+    # Add custom word to stopword word list
+    nlp.vocab [word].is_stop = True
 
 # Program starts here
 program_start_time = datetime.datetime.now ()

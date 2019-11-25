@@ -714,6 +714,11 @@ if (message_check == True):
     # WHITELIST portion add when trying to test is a document is spam or not (if contain whitelisted words, not spam!)
     # --> do this for BUGREGEX as well!
 
+    whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology',
+                'comms-tech', 'communications-tech', 'comms-technology',
+                'communications-technology', 'crypto-tech', 'cryptography-tech',
+                'crypto-technology', 'cryptography-technology']
+
     print (y_test_predict)
 """
 
