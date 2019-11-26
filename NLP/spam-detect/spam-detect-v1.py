@@ -181,6 +181,12 @@ def tokenize (document):
             # Skip current for-loop iteration
             continue
 
+        # Check if lemmatised token is a single non-word character
+        if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+
+            # Skip current for-loop iteration
+            continue
+
         # Check if lemmatised token is already in the list of tokens (OMITTED as may affect the TF-IDF score of terms)
         # if (lemmatised not in list_tokens):
 
@@ -189,10 +195,15 @@ def tokenize (document):
 
         # Add lemmatised token into list of tokens
         list_tokens.append (lemmatised)
-# PRINT SPACE!
+
+        # Debugging
+        # if (" " in lemmatised):
+
+        #     print ("Space detected in ->", lemmatised)
+    
     # Return list of tokens to calling program
     return (list_tokens)
-
+    
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
 
@@ -341,8 +352,8 @@ clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/data/clean-spam-ham.cs
 pickles_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/pickles/" # File path containing pickled objects
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/accuracies/" # Model accuracy results file path
 preliminary_check = False   # Boolean to trigger display of preliminary dataset visualisations and presentations
-use_pickle = True           # Boolean to trigger whether to use pickled objects or not
-message_check = True        # Boolean to trigger prompt for user message to check whether it is spam or not
+use_pickle = False           # Boolean to trigger whether to use pickled objects or not
+message_check = False        # Boolean to trigger prompt for user message to check whether it is spam or not
 
 # Whitelisting
 whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitelist for identifying non-SPAM feedbacks
@@ -641,7 +652,7 @@ plot_confusion_matrix (y_test_result, y_test_lr, classes, "Logistic Regression C
 plot_confusion_matrix (y_test_result, y_test_mnb, classes, "Naive Bayes Confusion Matrix", "naive-bayes-confusion-matrix.png")
 
 # Display visualisations
-# plt.show ()
+plt.show ()
 
 # Save models (pickling/serialization)
 pickle_object (features, "features.pkl") # Sparse Matrix of features
@@ -701,9 +712,6 @@ if (message_check == True):
         # Data pre-processing
         df_input_string.text = clean_document (df_input_string.text) # Clean text
 
-        # Change spam/ham label to numeric values
-        df_input_string.label =  df_input_string.label.map ({'spam': 1, 'ham': 0})
-
         # Drop empty rows/columns
         df_input_string.dropna (how = "all", inplace = True) # Drop empty rows
         df_input_string.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
@@ -727,12 +735,12 @@ if (message_check == True):
     if (y_test_predict == 1):
 
         # Spam
-        print ("Message was a SPAM! -> ", y_test_predict)
+        print ("Message was a SPAM! ->", y_test_predict)
 
     else:
 
         # Not Spam
-        print ("Message was a HAM! -> ", y_test_predict)
+        print ("Message was a HAM! ->", y_test_predict)
 
 
 # Program end time
