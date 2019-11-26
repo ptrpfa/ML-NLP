@@ -68,8 +68,8 @@ def clean_document (corpus):
         # Remove character accents (Má -> Ma) 
         document = unidecode.unidecode (document)
 
-        # Change text to lowercase
-        document = document.lower ()
+        # Change text to lowercase (omitted as may affect the number of tokens created as well as may lose semantic value)
+        # document = document.lower ()
 
         # Remove heading and trailing whitespaces
         document = document.strip ()
@@ -153,7 +153,7 @@ def clean_document (corpus):
         # document = re.sub('[%s]' % re.escape(string.punctuation), '', document)
 
         # Remove any non-word characters from the document (Used over string.punctuation as provides more granular control)
-        document = re.sub (r"[^a-zA-Z0-9 ]", "", document) # Apostrophe not included as will result in weird tokenizations (for words like I'll, She's..)
+        document = re.sub (r"[^a-zA-Z0-9 ']", "", document) # Apostrophe included even though it will result in weird tokenizations (for words like I'll, She's..)
 
         # Extract words embedded within digits
         document = re.sub (r"(\d+)([a-zA-Z]+)(\d+)", r"\1 \2 \3", document)
@@ -211,12 +211,6 @@ def tokenize (document):
 
             # Skip current for-loop iteration
             continue
-
-        # Check if lemmatised token is already in the list of tokens (OMITTED as may affect the TF-IDF score of terms)
-        # if (lemmatised not in list_tokens):
-
-        #     # Add new lemmatised token into the list of tokens if it is not inside
-        #     list_tokens.append (lemmatised)
 
         # Add lemmatised token into list of tokens
         list_tokens.append (lemmatised)
@@ -372,7 +366,7 @@ clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/data/clean-spam-ham.cs
 pickles_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/pickles/" # File path containing pickled objects
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/accuracies/" # Model accuracy results file path
 preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
-use_pickle = True # Boolean to trigger whether to use pickled objects or not
+use_pickle = False # Boolean to trigger whether to use pickled objects or not
 message_check = False # Boolean to trigger prompt for user message to check whether it is spam or not
 
 # Whitelisting
@@ -438,7 +432,7 @@ features = train_data.text
 if (not use_pickle):
     
     # Create vectorizer object
-    vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = True, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95) 
+    vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95) 
     
     # Should try HashingVectorizer combined with TFIDF Transformer
     pass
