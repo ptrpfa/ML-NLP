@@ -28,6 +28,7 @@ import sklearn.metrics as metrics # 4.5) For determination of model accuracy
 from warnings import simplefilter
 simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
 
+# Function to clean corpus (accepts sequence-type corpus and returns a list of all cleaned documents)
 def clean_document (corpus):
 
     # Initialise list containing cleaned documents
@@ -99,7 +100,7 @@ def clean_document (corpus):
             # Get match object
             match = re.match (r"(.*)(www\.[^\s]*)(.*)", document) # Group 1: Text in front of link, Group 2: Hyperlink, Group 3: Trailing text
 
-            # Check if a match object is obtained
+            # Check if a match object is obtained (may have mismatches ie "awww")
             if (match == None): # For redundancy
                 
                 # Increment counter
@@ -147,6 +148,7 @@ def clean_document (corpus):
         # Append cleaned document into the list of cleaned documents
         list_cleaned_documents.append (document)
 
+        # For debugging
         # print ("document: ",document)
 
     # Return list of cleaned documents
@@ -179,11 +181,14 @@ def tokenize (document):
             # Skip current for-loop iteration
             continue
 
-        # Check if lemmatised token is already in the list of tokens
-        if (lemmatised not in list_tokens):
+        # Check if lemmatised token is already in the list of tokens (OMITTED as may affect the TF-IDF score of terms)
+        # if (lemmatised not in list_tokens):
 
-            # Add new lemmatised token into the list of tokens if it is not inside
-            list_tokens.append (lemmatised)
+        #     # Add new lemmatised token into the list of tokens if it is not inside
+        #     list_tokens.append (lemmatised)
+
+        # Add lemmatised token into list of tokens
+        list_tokens.append (lemmatised)
 
     # Return list of tokens to calling program
     return (list_tokens)
@@ -339,6 +344,14 @@ preliminary_check = False # Boolean to trigger display of preliminary dataset vi
 use_pickle = False # Boolean to trigger whether to use pickled objects or not
 message_check = False # Boolean to trigger prompt for user message to check whether it is spam or not
 
+# Whitelisting
+whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitelist for identifying non-SPAM feedbacks
+            'comms-tech', 'communications-tech', 'comms-technology',
+            'communications-technology', 'crypto-tech', 'cryptography-tech',
+            'crypto-technology', 'cryptography-technology']
+bugregex = "(.*)(BUG\d{6}\$)(.*)" # Assume bug code is BUGXXXXXX$ ($ is delimiter)
+
+
 # Global NLP Objects
 # Create spaCy NLP object
 nlp = spacy.load ("en_core_web_sm")
@@ -396,11 +409,8 @@ if (not use_pickle):
     # Create DTM of dataset (features)
     
     # Create vectorizer object
-    vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = True, strip_accents = 'unicode', 
-    stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95) 
+    vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = True, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95) 
     
-    # vectorizer = TfidfVectorizer () # SIMPLE VECTORIZER
-
     # Should try HashingVectorizer combined with TFIDF Transformer
 
 
@@ -458,14 +468,14 @@ Based on results, concluded that SVM model is the best performing model"
 """
 
 # 4) Create spam-detection classfiers to filter out spam
-svm_classifier = svm.SVC(C=1000, cache_size=200, class_weight=None, coef0=0.0,
-    decision_function_shape='ovr', degree=1, gamma=0.01, kernel='rbf',
+svm_classifier = svm.SVC (C=1000, cache_size=200, class_weight=None, coef0=0.0,
+    decision_function_shape='ovr', degree=1, gamma=0.001, kernel='rbf',
     max_iter=-1, probability=True, random_state=1, shrinking=True, tol=0.001,
     verbose=False)
 
-logistic_regression_classifier = LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
+logistic_regression_classifier = LogisticRegression (C=1000, class_weight=None, dual=False, fit_intercept=True,
     intercept_scaling=1, l1_ratio=None, max_iter=100,
-    multi_class='warn', n_jobs=None, penalty='l2',
+    multi_class='warn', n_jobs=None, penalty='l1',
     random_state=1, solver='liblinear', tol=0.0001, verbose=0,
     warm_start=False)
 
@@ -473,8 +483,8 @@ multinomialnb_classifier = MultinomialNB ()
 
 # GridSearchCV to tune hyperparameters of models
 """
-SVM:
-Dictionary to store parameters and parameter values to test
+# SVM:
+# Dictionary to store parameters and parameter values to test
 parameter_grid = {
                 'C': [0.001, 0.01, 0.1, 1, 10,1000],
                 'degree': [1, 3, 5, 10],
@@ -494,21 +504,15 @@ print ("Best score: ", grid_search.best_score_)
 print ("Best parameters: ", grid_search.best_params_)
 print ("Best estimator: ", grid_search.best_estimator_)
 
-# SVM:
-# Accuracy scoring:
-# Best score:  0.981328511060382
-# Best parameters:  {'C': 10, 'degree': 1, 'gamma': 0.1, 'random_state': 1}
-# Best estimator:  SVC(C=10, cache_size=200, class_weight=None, coef0=0.0,
-#     decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
-#     max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
-#     verbose=False)
 
+# SVM:
+# 
 # F1 scoring:
-# Best score:  0.9261331832519227
-# Best parameters:  {'C': 1000, 'degree': 1, 'gamma': 0.01, 'random_state': 1}
+# Best score:  0.8973526061818614
+# Best parameters:  {'C': 1000, 'degree': 1, 'gamma': 0.001, 'random_state': 1}
 # Best estimator:  SVC(C=1000, cache_size=200, class_weight=None, coef0=0.0,
-#     decision_function_shape='ovr', degree=1, gamma=0.01, kernel='rbf',
-#     max_iter=-1, probability=False, random_state=1, shrinking=True, tol=0.001,
+#     decision_function_shape='ovr', degree=1, gamma=0.001, kernel='rbf',
+#     max_iter=-1, probability=True, random_state=1, shrinking=True, tol=0.001,
 #     verbose=False)
 """
 
@@ -534,19 +538,15 @@ print ("Best score: ", grid_search.best_score_)
 print ("Best parameters: ", grid_search.best_params_)
 print ("Best estimator: ", grid_search.best_estimator_)
 
-# Accuracy scoring:
-# LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
-#                 intercept_scaling=1, l1_ratio=None, max_iter=100,
-#                 multi_class='warn', n_jobs=None, penalty='l2',
-#                 random_state=1, solver='liblinear', tol=0.0001, verbose=0,
-#                 warm_start=False)
 
+# Logistic Regression
+# 
 # F1 Scoring:
-# Best score:  0.9199723347445232
-# Best parameters:  {'C': 1000, 'penalty': 'l2', 'random_state': 1}
+# Best score:  0.9048442354890881
+# Best parameters:  {'C': 1000, 'penalty': 'l1', 'random_state': 1}
 # Best estimator:  LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
 #                    intercept_scaling=1, l1_ratio=None, max_iter=100,
-#                    multi_class='warn', n_jobs=None, penalty='l2',
+#                    multi_class='warn', n_jobs=None, penalty='l1',
 #                    random_state=1, solver='liblinear', tol=0.0001, verbose=0,
 #                    warm_start=False)
 """
@@ -654,72 +654,65 @@ pickle_object (multinomialnb_model, "naive-bayes-model.pkl") # Naive Bayes Model
 
 
 """
-#svm_model = load_pickle ("svm-model.pkl")
-
-# # JUST TO CHECK
-# print ("JUST TO CHECK!")
-# x_train, x_test, y_train, y_test_result = train_test_split (features, target, test_size = 0.3, random_state = 123, stratify = target)
-# y_test_svm = svm_model.predict (x_test) # Store predicted results of model
-
-# # Accuracy against training data
-# print ("Training data accuracy: ", svm_model.score (x_train, y_train)) # Result is over train data, not test data
-# print ("Testing data accuracy: ", accuracy_score (y_test_result, y_test_svm), "\n") # Testing data accuracy
-
 # Get input from user and check if it is spam
 if (message_check == True):
 
     # Get input from user and check if it is spam or not
     input_string = input ("Enter message to check: ")
 
-    # Clean string
-    # Decode HTML encoded characters (&amp; -> &)
-    input_string = html.unescape (input_string)
+    # Set initial value of y_test_predict (results of check)
+    y_test_predict = 1
 
-    # Change text to lowercase
-    input_string = input_string.lower ()
+    # Check if a BUGCODE or whitelisted word was detected in the input
+    if (): re.match and for loop
 
-    # Remove any non-word characters from the input_string
-    input_string = re.sub (r"[^a-zA-Z0-9 ]", "", input_string)
+    # Use models to predict SPAM or HAM if no whitelisted item was detected
+    else:
 
-    # Replace multiple consecutive spaces with a single space
-    input_string = re.sub (r"[ ]{2,}", " ", input_string)
+         # Create a DataFrame for the input string
+        default_values = {'label': 1, 'text': input_string} # Default value of label is SPAM
+        df_input_string = pd.DataFrame (default_values, index=[0])
 
-    # Remove heading and trailing whitespaces
-    input_string = input_string.strip ()
+        # Data pre-processing
+        df_input_string.text = clean_document (df_input_string.text) # Clean text
 
-    # Create a DataFrame for the input string
-    default_values = {'label': 1, 'text': input_string} # Default value of label is SPAM
-    df_input_string = pd.DataFrame (default_values, index=[0])
+        # Change spam/ham label to numeric values
+        df_input_string.label =  df_input_string.label.map ({'spam': 1, 'ham': 0})
 
-    # Drop empty rows/columns
-    df_input_string.dropna (how = "all", inplace = True) # Drop empty rows
-    df_input_string.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
+        # Drop empty rows/columns
+        df_input_string.dropna (how = "all", inplace = True) # Drop empty rows
+        df_input_string.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
 
-    # Remove with rows containing empty texts
-    df_input_string = df_input_string [df_input_string.text != ""]
+        # Remove with rows containing empty texts
+        df_input_string =  df_input_string [df_input_string.text != ""]
 
-    # Assign features
-    features = df_input_string.text
-    target = df_input_string.label
+        # Save cleaned dataset to CSV
+        df_input_string.to_csv (clean_file_path, index = False, encoding="utf-8")
 
-    # Create DTM of dataset (features)
-    # Fit data to vectorizer
-    features = vectorizer.transform (features) # Not fit_transform!
+        # Assign target and features variables
+        target =  df_input_string.label
+        features =  df_input_string.text
 
-    # Predict message is a spam or not
-    y_test_predict = svm_model.predict (features) # Store predicted results of model
-    # OR 
-    # y_test_predict = logistic_regression_model.predict (features) # Store predicted results of model
+        # Create DTM of dataset (features)
+        # Fit data to vectorizer
+        features = vectorizer.transform (features) # Not fit_transform!
+
+        # Predict message is a spam or not
+        y_test_predict = svm_model.predict (features) # Store predicted results of model
+        # OR 
+        # y_test_predict = logistic_regression_model.predict (features) # Store predicted results of model
     
-    # WHITELIST portion add when trying to test is a document is spam or not (if contain whitelisted words, not spam!)
-    # --> do this for BUGREGEX as well!
+    # Print results
+    if (y_test_predict == 1):
 
-    whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology',
-                'comms-tech', 'communications-tech', 'comms-technology',
-                'communications-technology', 'crypto-tech', 'cryptography-tech',
-                'crypto-technology', 'cryptography-technology']
+        # Spam
+        print ("Message was a SPAM! -> ", y_test_predict)
 
-    print (y_test_predict)
+    else:
+
+        # Not Spam
+        print ("Message was a HAM! -> ", y_test_predict)
+
 """
 
 # Program end time

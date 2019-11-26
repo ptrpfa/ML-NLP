@@ -237,9 +237,8 @@ print ("Distribution of spam/ham data:")
 print (train_data.label.map ({1:'spam', 0:'ham'}).value_counts (normalize = True), "\n")
 
 # Create DTM of dataset (features)
-# vectorizer = TfidfVectorizer (tokenizer = tokenize, stop_words = 'english', min_df = 1, ngram_range = (1,2)) # Create vectorizer object
-vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = True, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95) # Create vectorizer object
-# vectorizer = TfidfVectorizer () # SIMPLE VECTORIZER
+ # Create vectorizer object
+vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = True, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95)
 
 # Fit data to vectorizer
 features = vectorizer.fit_transform (features) # Returns a sparse matrix
