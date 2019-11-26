@@ -191,8 +191,8 @@ def tokenize (document):
     return (list_tokens)
 
 # Global variables
-train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/v1/data/spam-ham-reduced.txt" # Dataset file path
-clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/v1/data/clean-spam-reduced.csv' # Cleaned dataset file path
+train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/data/spam-ham-reduced.txt" # Dataset file path
+clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/data/clean-spam-reduced.csv' # Cleaned dataset file path
 
 # Global NLP Objects
 # Create spaCy NLP object
@@ -248,7 +248,7 @@ features = vectorizer.fit_transform (features) # Returns a sparse matrix
 print ("Tokens:")
 print (vectorizer.get_feature_names()) # Get features (words)
 data_dtm = pd.DataFrame(features.toarray(), columns=vectorizer.get_feature_names()) # Convert DTM to DataFrame
-data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/spam-detect/v1/data/dtm_reduced.csv", index = False, encoding="utf-8") # Save DTM
+data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/spam-detect/data/dtm_reduced.csv", index = False, encoding="utf-8") # Save DTM
 
 # Program end time
 program_end_time = datetime.datetime.now ()
