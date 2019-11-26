@@ -346,9 +346,9 @@ train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/data/spam-ham.txt" # D
 clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/data/clean-spam-ham.csv' # Cleaned dataset file path
 pickles_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/pickles/" # File path containing pickled objects
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/accuracies/" # Model accuracy results file path
-preliminary_check = False   # Boolean to trigger display of preliminary dataset visualisations and presentations
-use_pickle = False           # Boolean to trigger whether to use pickled objects or not
-message_check = False        # Boolean to trigger prompt for user message to check whether it is spam or not
+preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
+use_pickle = True # Boolean to trigger whether to use pickled objects or not
+message_check = False # Boolean to trigger prompt for user message to check whether it is spam or not
 
 # Whitelisting
 whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitelist for identifying non-SPAM feedbacks
@@ -363,7 +363,7 @@ bugcode_regex = r"(.*)(BUG\d{6}\$)(.*)" # Assume bug code is BUGXXXXXX$ ($ is de
 nlp = spacy.load ("en_core_web_sm")
 
 # Custom list of stop words to add to spaCy's existing stop word list
-list_custom_stopwords = ["I", "i",  "yer", "ya", "yar", "u", "loh", "lor", "lah", "leh", "lei", "lar", "liao", "hmm", "hmmm", "mmm", "mmmmmm", "wah"] 
+list_custom_stopwords = ["I", "i",  "yer", "ya", "yar", "u", "loh", "lor", "lah", "leh", "lei", "lar", "liao", "hmm", "hmmm", "mmm", "mmmmmm", "wah", "eh"] 
 
 # Add custom stop words to spaCy's stop word list
 for word in list_custom_stopwords:
@@ -446,7 +446,7 @@ else:
 
     # Print information on vectorised words
     # print (features, type (features)) # Sparse matrix
-    # print ("Tokens:")
+    print ("Tokens:")
     print (vectorizer.get_feature_names()) # Get features (words)
 
 # 4) # Create spam-detection models to filter out spam
@@ -468,6 +468,9 @@ Improvements that could be done:
 Based on results, concluded that SVM model is the best performing model"
 -In terms of F1 score (useful for binary classfication of SPAM or HAM (not spam) and unbalanced data distribution)
 -In terms of accuracy, ROC, Recall, Precision..
+
+Miscellaneous:
+spaCy is used over NLTK for things such as tokenization and lemmatisation due to it being a faster/more efficient library
 
 """
 
@@ -508,7 +511,6 @@ print ("Best score: ", grid_search.best_score_)
 print ("Best parameters: ", grid_search.best_params_)
 print ("Best estimator: ", grid_search.best_estimator_)
 
-
 # SVM:
 # 
 # F1 scoring:
@@ -541,7 +543,6 @@ print ("LR:")
 print ("Best score: ", grid_search.best_score_)
 print ("Best parameters: ", grid_search.best_params_)
 print ("Best estimator: ", grid_search.best_estimator_)
-
 
 # Logistic Regression
 # 
@@ -647,7 +648,7 @@ plot_confusion_matrix (y_test_result, y_test_lr, classes, "Logistic Regression C
 plot_confusion_matrix (y_test_result, y_test_mnb, classes, "Naive Bayes Confusion Matrix", "naive-bayes-confusion-matrix.png")
 
 # Display visualisations
-plt.show ()
+# plt.show ()
 
 # Save models (pickling/serialization)
 pickle_object (features, "features.pkl") # Sparse Matrix of features
@@ -664,7 +665,7 @@ if (message_check == True):
     input_string = input ("Enter message to check: ")
 
     # Set initial value of y_test_predict (results of check)
-    y_test_predict = 1
+    y_test_predict = 1 # Default value is SPAM [0 = HAM, 1 = SPAM]
 
     # Initialise check variables
     bugcode_match = False   # By default false
@@ -679,12 +680,12 @@ if (message_check == True):
         # Set bugcode_match to true
         bugcode_match = True
 
-    # Loop to access input string
-    for word in input_string.split (): # Each word is delimited by space character
+    # Check for WHITELIST matches
+    for whitelisted_string in whitelist:
 
-        # Check if word in string is whitelisted
-        if (word.lower () in whitelist):
-
+         # Check if whitelisted string is in the input string
+        if (whitelisted_string in input_string.lower ()):
+            
             # Set whitelist_match to true
             whitelist_match = True
 
@@ -725,6 +726,12 @@ if (message_check == True):
         y_test_predict = svm_model.predict (features) # Store predicted results of model
         # OR 
         # y_test_predict = logistic_regression_model.predict (features) # Store predicted results of model
+        # OR 
+        # y_test_predict = multinomialnb_model.predict (features) # Store predicted results of model
+    
+        print ("SVM: ", svm_model.predict (features))
+        print ("LR: ", logistic_regression_model.predict (features))
+        print ("MNB: ", multinomialnb_model.predict (features))
     
     # Print results
     if (y_test_predict == 1):
