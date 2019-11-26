@@ -195,11 +195,6 @@ def tokenize (document):
 
         # Add lemmatised token into list of tokens
         list_tokens.append (lemmatised)
-
-        # Debugging
-        # if (" " in lemmatised):
-
-        #     print ("Space detected in ->", lemmatised)
     
     # Return list of tokens to calling program
     return (list_tokens)
