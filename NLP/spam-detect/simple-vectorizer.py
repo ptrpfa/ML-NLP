@@ -129,7 +129,7 @@ def clean_document (corpus):
         # document = re.sub('[%s]' % re.escape(string.punctuation), '', document)
 
         # Remove any non-word characters from the document (Used over string.punctuation as provides more granular control)
-        document = re.sub (r"[^a-zA-Z0-9 ']", "", document) # Apostrophe not included as will result in weird tokenizations (for words like I'll, She's..)
+        document = re.sub (r"[^a-zA-Z0-9 ]", "", document) # Apostrophe not included as will result in weird tokenizations (for words like I'll, She's..)
 
         # Extract words embedded within digits
         document = re.sub (r"(\d+)([a-zA-Z]+)(\d+)", r"\1 \2 \3", document)

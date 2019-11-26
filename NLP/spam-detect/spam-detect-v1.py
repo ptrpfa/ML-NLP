@@ -128,7 +128,7 @@ def clean_document (corpus):
         # document = re.sub('[%s]' % re.escape(string.punctuation), '', document)
 
         # Remove any non-word characters from the document (Used over string.punctuation as provides more granular control)
-        document = re.sub (r"[^a-zA-Z0-9 ']", "", document) # Apostrophe not included as will result in weird tokenizations (for words like I'll, She's..)
+        document = re.sub (r"[^a-zA-Z0-9 ]", "", document) # Apostrophe not included as will result in weird tokenizations (for words like I'll, She's..)
 
         # Extract words embedded within digits
         document = re.sub (r"(\d+)([a-zA-Z]+)(\d+)", r"\1 \2 \3", document)
@@ -189,7 +189,7 @@ def tokenize (document):
 
         # Add lemmatised token into list of tokens
         list_tokens.append (lemmatised)
-
+# PRINT SPACE!
     # Return list of tokens to calling program
     return (list_tokens)
 
@@ -340,16 +340,16 @@ train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/data/spam-ham.txt" # D
 clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/data/clean-spam-ham.csv' # Cleaned dataset file path
 pickles_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/pickles/" # File path containing pickled objects
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/accuracies/" # Model accuracy results file path
-preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
-use_pickle = False # Boolean to trigger whether to use pickled objects or not
-message_check = False # Boolean to trigger prompt for user message to check whether it is spam or not
+preliminary_check = False   # Boolean to trigger display of preliminary dataset visualisations and presentations
+use_pickle = True           # Boolean to trigger whether to use pickled objects or not
+message_check = True        # Boolean to trigger prompt for user message to check whether it is spam or not
 
 # Whitelisting
 whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitelist for identifying non-SPAM feedbacks
             'comms-tech', 'communications-tech', 'comms-technology',
             'communications-technology', 'crypto-tech', 'cryptography-tech',
             'crypto-technology', 'cryptography-technology']
-bugregex = "(.*)(BUG\d{6}\$)(.*)" # Assume bug code is BUGXXXXXX$ ($ is delimiter)
+bugcode_regex = r"(.*)(BUG\d{6}\$)(.*)" # Assume bug code is BUGXXXXXX$ ($ is delimiter)
 
 
 # Global NLP Objects
@@ -405,16 +405,14 @@ features = train_data.text
 
 # Create new vectorizers if not using pickled objects
 if (not use_pickle):
-
-    # Create DTM of dataset (features)
     
     # Create vectorizer object
     vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = True, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95) 
     
     # Should try HashingVectorizer combined with TFIDF Transformer
+    pass
 
-
-    # Fit data to vectorizer
+    # Fit data to vectorizer (Create DTM of dataset (features))
     features = vectorizer.fit_transform (features) # Returns a sparse matrix
     
     # Print information on vectorised words
@@ -653,7 +651,6 @@ pickle_object (logistic_regression_model, "logistic-regression-model.pkl") # Log
 pickle_object (multinomialnb_model, "naive-bayes-model.pkl") # Naive Bayes Model
 
 
-"""
 # Get input from user and check if it is spam
 if (message_check == True):
 
@@ -663,15 +660,43 @@ if (message_check == True):
     # Set initial value of y_test_predict (results of check)
     y_test_predict = 1
 
-    # Check if a BUGCODE or whitelisted word was detected in the input
-    if (): re.match and for loop
+    # Initialise check variables
+    bugcode_match = False   # By default false
+    whitelist_match = False # By default false
+    
+    # Check for BUGCODE
+    match = re.match (bugcode_regex, input_string)
 
-    # Use models to predict SPAM or HAM if no whitelisted item was detected
+    # Check for BUGCODE matches
+    if (match != None):
+
+        # Set bugcode_match to true
+        bugcode_match = True
+
+    # Loop to access input string
+    for word in input_string.split (): # Each word is delimited by space character
+
+        # Check if word in string is whitelisted
+        if (word.lower () in whitelist):
+
+            # Set whitelist_match to true
+            whitelist_match = True
+
+            # Break out of loop
+            break
+
+    # Check if a BUGCODE or whitelisted word was detected in the input
+    if (bugcode_match == True or whitelist_match == True):
+
+        # Set input_string as HAM immediately if bugcode or whitelisted string is detected
+        y_test_predict = 0 
+
+    # Use models to predict SPAM or HAM if no whitelisted item or bugcode was detected
     else:
 
          # Create a DataFrame for the input string
         default_values = {'label': 1, 'text': input_string} # Default value of label is SPAM
-        df_input_string = pd.DataFrame (default_values, index=[0])
+        df_input_string = pd.DataFrame (default_values, index = [0])
 
         # Data pre-processing
         df_input_string.text = clean_document (df_input_string.text) # Clean text
@@ -686,15 +711,11 @@ if (message_check == True):
         # Remove with rows containing empty texts
         df_input_string =  df_input_string [df_input_string.text != ""]
 
-        # Save cleaned dataset to CSV
-        df_input_string.to_csv (clean_file_path, index = False, encoding="utf-8")
-
         # Assign target and features variables
         target =  df_input_string.label
         features =  df_input_string.text
 
-        # Create DTM of dataset (features)
-        # Fit data to vectorizer
+        # Fit data to vectorizer [Create DTM of dataset (features)]
         features = vectorizer.transform (features) # Not fit_transform!
 
         # Predict message is a spam or not
@@ -713,7 +734,6 @@ if (message_check == True):
         # Not Spam
         print ("Message was a HAM! -> ", y_test_predict)
 
-"""
 
 # Program end time
 program_end_time = datetime.datetime.now ()
