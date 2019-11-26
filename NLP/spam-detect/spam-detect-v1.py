@@ -28,6 +28,31 @@ import sklearn.metrics as metrics # 4.5) For determination of model accuracy
 from warnings import simplefilter
 simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
 
+"""
+NOTE: The Spam-detection models are CONSERVATIVE
+Models tend to classify spam messages as not spam
+-> However, it is better to be more conservative as we would rather mislabel spam as not spam rather than have
+   genuine messages be labeled as spam, which would result in the lost of valuable feedback
+-> Model is better at identifying true negative (ham) over true postive (spam) [which is better for a conservative approach]
+
+Since the accuracy of the model is quite high, we will not go into further enhancements on the spam-detection model 
+such as applying Boosting (due to time-constraint and lack of practicality as the model is the first pass/layer 
+in the data mining process)
+
+Improvements that could be done:
+-Better and more dataset added
+-Further model refinements like boosting..
+-Can implement another 'layer' for a feedback deception model (detection of false feedback)
+
+Based on results, concluded that SVM model is the best performing model"
+-In terms of F1 score (useful for binary classfication of SPAM or HAM (not spam) and unbalanced data distribution)
+-In terms of accuracy, ROC, Recall, Precision..
+
+Miscellaneous:
+spaCy is used over NLTK for things such as tokenization and lemmatisation due to it being a faster/more efficient library
+
+"""
+
 # Function to clean corpus (accepts sequence-type corpus and returns a list of all cleaned documents)
 def clean_document (corpus):
 
@@ -450,31 +475,7 @@ else:
     print (vectorizer.get_feature_names()) # Get features (words)
 
 # 4) # Create spam-detection models to filter out spam
-"""
-NOTE: The Spam-detection models are CONSERVATIVE
-Models tend to classify spam messages as not spam
--> However, it is better to be more conservative as we would rather mislabel spam as not spam rather than have
-   genuine messages be labeled as spam, which would result in the lost of valuable feedback
--> Model is better at identifying true negative (ham) over true postive (spam) [which is better for a conservative approach]
-
-Since the accuracy of the model is quite high, we will not go into further enhancements on the spam-detection model 
-such as applying Boosting (due to time-constraint and lack of practicality as the model is the first pass/layer 
-in the data mining process)
-
-Improvements that could be done:
--Better and more dataset added
--Further model refinements like boosting..
-
-Based on results, concluded that SVM model is the best performing model"
--In terms of F1 score (useful for binary classfication of SPAM or HAM (not spam) and unbalanced data distribution)
--In terms of accuracy, ROC, Recall, Precision..
-
-Miscellaneous:
-spaCy is used over NLTK for things such as tokenization and lemmatisation due to it being a faster/more efficient library
-
-"""
-
-# 4) Create spam-detection classfiers to filter out spam
+# Create spam-detection classfiers to filter out spam
 svm_classifier = svm.SVC (C=1000, cache_size=200, class_weight=None, coef0=0.0,
     decision_function_shape='ovr', degree=1, gamma=0.001, kernel='rbf',
     max_iter=-1, probability=True, random_state=1, shrinking=True, tol=0.001,
@@ -648,7 +649,7 @@ plot_confusion_matrix (y_test_result, y_test_lr, classes, "Logistic Regression C
 plot_confusion_matrix (y_test_result, y_test_mnb, classes, "Naive Bayes Confusion Matrix", "naive-bayes-confusion-matrix.png")
 
 # Display visualisations
-# plt.show ()
+plt.show ()
 
 # Save models (pickling/serialization)
 pickle_object (features, "features.pkl") # Sparse Matrix of features
