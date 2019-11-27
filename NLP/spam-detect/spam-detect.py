@@ -155,6 +155,9 @@ def clean_document (corpus):
         # Remove any non-word characters from the document (Used over string.punctuation as provides more granular control)
         document = re.sub (r"[^a-zA-Z0-9 ']", " ", document) # Apostrophe included even though it will result in weird tokenizations (for words like I'll, She's..)
 
+        # Alternative REGEX check for extracting words with embedded special characters (ie weed-deficient)
+        # (([a-zA-Z]+)([^a-zA-Z]+)([a-zA-Z]+)){1,}
+
         # Extract words embedded within digits
         document = re.sub (r"(\d+)([a-zA-Z]+)(\d+)", r"\1 \2 \3", document)
 
@@ -360,6 +363,19 @@ def classification_accuracy (classifier, model, features, target, x_train, y_tra
     # Logarithmic Loss score (closer to 0 better)
     print ("Log Loss: ", metrics.log_loss (y_test_result, y_test), "\n")  
 
+# Function to calculate runtime of models
+def model_runtime (duration, start_time, end_time):
+
+    # Difference in time
+    difference = end_time - start_time
+
+    # Calculate runtime
+    duration = duration + difference.seconds
+
+    # Return duration to calling program
+    return duration
+
+
 # Global variables
 train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/data/spam-ham.txt" # Dataset file path
 clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/data/clean-spam-ham.csv' # Cleaned dataset file path
@@ -368,6 +384,7 @@ accuracy_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/accuracies/" # Mode
 preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_pickle = False # Boolean to trigger whether to use pickled objects or not
 message_check = False # Boolean to trigger prompt for user message to check whether it is spam or not
+display_visuals = False # Boolean to trigger display of visualisations
 
 # Whitelisting
 whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitelist for identifying non-SPAM feedbacks
@@ -434,9 +451,6 @@ if (not use_pickle):
     # Create vectorizer object
     vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95) 
     
-    # Should try HashingVectorizer combined with TFIDF Transformer
-    pass
-
     # Fit data to vectorizer (Create DTM of dataset (features))
     features = vectorizer.fit_transform (features) # Returns a sparse matrix
     
@@ -483,8 +497,13 @@ logistic_regression_classifier = LogisticRegression (C=1000, class_weight=None, 
 
 multinomialnb_classifier = MultinomialNB ()
 
+# Initialise model durations
+svm_duration = 0
+lr_duration = 0
+mnb_duration = 0
+
 # GridSearchCV to tune hyperparameters of models
-"""
+
 # SVM:
 # Dictionary to store parameters and parameter values to test
 parameter_grid = {
@@ -515,9 +534,9 @@ print ("Best estimator: ", grid_search.best_estimator_)
 #     decision_function_shape='ovr', degree=1, gamma=0.001, kernel='rbf',
 #     max_iter=-1, probability=True, random_state=1, shrinking=True, tol=0.001,
 #     verbose=False)
-"""
 
-"""
+
+
 # Logistic Regression:
 # Dictionary to store parameters and parameter values to test
 parameter_grid = {
@@ -549,7 +568,7 @@ print ("Best estimator: ", grid_search.best_estimator_)
 #                    multi_class='warn', n_jobs=None, penalty='l1',
 #                    random_state=1, solver='liblinear', tol=0.0001, verbose=0,
 #                    warm_start=False)
-"""
+
 
 # Get model performance metrics
 print ("*** Model Performance metrics ***", "\n")
@@ -569,24 +588,57 @@ target_names = ['ham', 'spam'] # For labelling target variable in classification
 if (not use_pickle):
 
     # Fit classifiers (models) with training data
+    svm_start_time = datetime.datetime.now ()
     svm_model = svm_classifier.fit (x_train, y_train) 
+    svm_end_time = datetime.datetime.now ()
+    svm_duration = model_runtime (svm_duration, svm_start_time, svm_end_time)
+
+    lr_start_time = datetime.datetime.now ()
     logistic_regression_model = logistic_regression_classifier.fit (x_train, y_train) 
+    lr_end_time = datetime.datetime.now ()
+    lr_duration = model_runtime (lr_duration, lr_start_time, lr_end_time)
+
+    mnb_start_time = datetime.datetime.now ()
     multinomialnb_model = multinomialnb_classifier.fit (x_train.todense (), y_train) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
+    mnb_end_time = datetime.datetime.now ()
+    mnb_duration = model_runtime (mnb_duration, mnb_start_time, mnb_end_time)
 
 # Using pickled objects
 else:
 
     # Load pickled models
+    svm_start_time = datetime.datetime.now ()
     svm_model = load_pickle ("svm-model.pkl") 
+    svm_end_time = datetime.datetime.now ()
+    svm_duration = model_runtime (svm_duration, svm_start_time, svm_end_time)
+
+    lr_start_time = datetime.datetime.now ()
     logistic_regression_model = load_pickle ("logistic-regression-model.pkl")
+    lr_end_time = datetime.datetime.now ()
+    lr_duration = model_runtime (lr_duration, lr_start_time, lr_end_time)
+
+    mnb_start_time = datetime.datetime.now ()
     multinomialnb_model = load_pickle ("naive-bayes-model.pkl")
+    mnb_end_time = datetime.datetime.now ()
+    mnb_duration = model_runtime (mnb_duration, mnb_start_time, mnb_end_time)
 
 # Store predicted results of models
+svm_start_time = datetime.datetime.now ()
 y_test_svm = svm_model.predict (x_test) 
-y_test_lr = logistic_regression_model.predict (x_test) 
-y_test_mnb = multinomialnb_model.predict (x_test.todense ()) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
+svm_end_time = datetime.datetime.now ()
+svm_duration = model_runtime (svm_duration, svm_start_time, svm_end_time)
 
-# # Store predicted results (in probabilty) of models
+lr_start_time = datetime.datetime.now ()
+y_test_lr = logistic_regression_model.predict (x_test) 
+lr_end_time = datetime.datetime.now ()
+lr_duration = model_runtime (lr_duration, lr_start_time, lr_end_time)
+
+mnb_start_time = datetime.datetime.now ()
+y_test_mnb = multinomialnb_model.predict (x_test.todense ()) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
+mnb_end_time = datetime.datetime.now ()
+mnb_duration = model_runtime (mnb_duration, mnb_start_time, mnb_end_time)
+
+# Store predicted results (in probabilty) of models
 y_test_svm_prob = svm_model.predict_proba (x_test) 
 y_test_lr_prob = logistic_regression_model.predict_proba (x_test) 
 y_test_mnb_prob = multinomialnb_model.predict_proba (x_test.todense ()) # Need to convert sparse matrix (due to vectorizer) to a dense numpy array
@@ -608,16 +660,25 @@ mnb_roc_auc = metrics.auc (false_positive_rate_mnb, true_positive_rate_mnb)
 
 # Get classification accuracies of models
 # SVM
+svm_start_time = datetime.datetime.now ()
 classification_accuracy (svm_classifier, svm_model, features, target, x_train, y_train,
                          y_test_svm, y_test_result, "f1", "SVM classification accuracy:", target_names)
+svm_end_time = datetime.datetime.now ()
+svm_duration = model_runtime (svm_duration, svm_start_time, svm_end_time)
 
 # Logistic Regression
+lr_start_time = datetime.datetime.now ()
 classification_accuracy (logistic_regression_classifier, logistic_regression_model, features, target, x_train, y_train,
                          y_test_lr, y_test_result, "f1", "Logistic Regression classification accuracy:", target_names)
+lr_end_time = datetime.datetime.now ()
+lr_duration = model_runtime (lr_duration, lr_start_time, lr_end_time)
 
 # Naive Bayes
+mnb_start_time = datetime.datetime.now ()
 classification_accuracy (multinomialnb_classifier, multinomialnb_model, features.todense (), target, x_train.todense (), y_train,
                          y_test_mnb, y_test_result, "f1", "Naive Bayes classification accuracy:", target_names)
+mnb_end_time = datetime.datetime.now ()
+mnb_duration = model_runtime (mnb_duration, mnb_start_time, mnb_end_time)
 
 """ Visualisations of model performance """
 # Plot ROC (Receiver Operating Characteristics) Curves
@@ -642,8 +703,17 @@ plot_confusion_matrix (y_test_result, y_test_lr, classes, "Logistic Regression C
 # Naive Bayes Confusion Matrix
 plot_confusion_matrix (y_test_result, y_test_mnb, classes, "Naive Bayes Confusion Matrix", "naive-bayes-confusion-matrix.png")
 
-# Display visualisations
-plt.show ()
+# Display visualisations if global variable is True
+if (display_visuals == True):
+
+    # Show visualisations
+    plt.show ()
+
+# Print model runtime performances
+print ("Model runtimes:")
+print ("SVM: ", svm_duration, " seconds")
+print ("Logistic Regression: ", lr_duration, " seconds")
+print ("Naive Bayes: ", mnb_duration, " seconds")
 
 # Save models (pickling/serialization)
 pickle_object (features, "features.pkl") # Sparse Matrix of features
@@ -684,7 +754,7 @@ if (message_check == True):
             # Set whitelist_match to true
             whitelist_match = True
 
-            # Break out of loop
+            # Break out of loop if a match is found
             break
 
     # Check if a BUGCODE or whitelisted word was detected in the input
@@ -718,18 +788,18 @@ if (message_check == True):
         features = vectorizer.transform (features) # Not fit_transform!
 
         # Predict message is a spam or not
-        y_test_predict = svm_model.predict (features) # Store predicted results of model
-        # OR 
-        # y_test_predict = logistic_regression_model.predict (features) # Store predicted results of model
-        # OR 
-        # y_test_predict = multinomialnb_model.predict (features) # Store predicted results of model
-    
-        print ("SVM: ", svm_model.predict (features))
-        print ("LR: ", logistic_regression_model.predict (features))
-        print ("MNB: ", multinomialnb_model.predict (features))
+        y_test_predict_svm = svm_model.predict (features) # Store predicted results of model
+        y_test_predict_lr = logistic_regression_model.predict (features) # Store predicted results of model
+        y_test_predict_mnb = multinomialnb_model.predict (features) # Store predicted results of model
+
+        # Print results
+        print ("Results:")
+        print ("SVM: ", y_test_predict_svm)
+        print ("LR: ", y_test_predict_lr)
+        print ("MNB: ", y_test_predict_mnb)
     
     # Print results
-    if (y_test_predict == 1):
+    if (y_test_predict_svm == 1 or y_test_predict_lr == 1 or y_test_predict_mnb == 1):
 
         # Spam
         print ("Message was a SPAM! ->", y_test_predict)

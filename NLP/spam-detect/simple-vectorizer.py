@@ -29,7 +29,7 @@ from warnings import simplefilter
 simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
 
 """CAN CONSIDER MAKING A SEPARATE FUNCTION FOR CLEANING TEST DATA AS THIS CLEANSING IS SPECIFIC TO TRAINING DATA!"""
-# Function to clean documents (accepts a sequence-typed variable containing dirty documents and returns a list of the cleaned documents)
+# Function to clean corpus (accepts sequence-type corpus and returns a list of all cleaned documents)
 def clean_document (corpus):
 
     # Initialise list containing cleaned documents
@@ -44,8 +44,8 @@ def clean_document (corpus):
         # Remove character accents (Má -> Ma) 
         document = unidecode.unidecode (document)
 
-        # Change text to lowercase
-        document = document.lower ()
+        # Change text to lowercase (omitted as may affect the number of tokens created as well as may lose semantic value)
+        # document = document.lower ()
 
         # Remove heading and trailing whitespaces
         document = document.strip ()
@@ -64,7 +64,7 @@ def clean_document (corpus):
             
             # Get match object
             match = re.match (r"(.*)((?:http|ftp|https):?\/{1,2})([^\s]*)(.*)", document) # Group 1: Text in front of link, Group 2: Protocol, Group 3: Hyperlink, Group 4: Trailing text
-            
+
             # Check if a match object is obtained
             if (match == None): # For redundancy
                 
@@ -101,7 +101,7 @@ def clean_document (corpus):
             # Get match object
             match = re.match (r"(.*)(www\.[^\s]*)(.*)", document) # Group 1: Text in front of link, Group 2: Hyperlink, Group 3: Trailing text
 
-            # Check if a match object is obtained
+            # Check if a match object is obtained (may have mismatches ie "awww")
             if (match == None): # For redundancy
                 
                 # Increment counter
@@ -129,7 +129,10 @@ def clean_document (corpus):
         # document = re.sub('[%s]' % re.escape(string.punctuation), '', document)
 
         # Remove any non-word characters from the document (Used over string.punctuation as provides more granular control)
-        document = re.sub (r"[^a-zA-Z0-9 ]", "", document) # Apostrophe not included as will result in weird tokenizations (for words like I'll, She's..)
+        document = re.sub (r"[^a-zA-Z0-9 ']", " ", document) # Apostrophe included even though it will result in weird tokenizations (for words like I'll, She's..)
+
+        # Alternative REGEX check for extracting words with embedded special characters (ie weed-deficient)
+        # (([a-zA-Z]+)([^a-zA-Z]+)([a-zA-Z]+)){1,}
 
         # Extract words embedded within digits
         document = re.sub (r"(\d+)([a-zA-Z]+)(\d+)", r"\1 \2 \3", document)
@@ -149,7 +152,8 @@ def clean_document (corpus):
         # Append cleaned document into the list of cleaned documents
         list_cleaned_documents.append (document)
 
-        print ("document: ",document)
+        # For debugging
+        # print ("document: ",document)
 
     # Return list of cleaned documents
     return list_cleaned_documents
@@ -181,15 +185,18 @@ def tokenize (document):
             # Skip current for-loop iteration
             continue
 
-        # Check if lemmatised token is already in the list of tokens
-        if (lemmatised not in list_tokens):
+        # Check if lemmatised token is a single non-word character
+        if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
 
-            # Add new lemmatised token into the list of tokens if it is not inside
-            list_tokens.append (lemmatised)
+            # Skip current for-loop iteration
+            continue
 
+        # Add lemmatised token into list of tokens
+        list_tokens.append (lemmatised)
+    
     # Return list of tokens to calling program
     return (list_tokens)
-
+ 
 # Global variables
 train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/data/spam-ham-reduced.txt" # Dataset file path
 clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/data/clean-spam-reduced.csv' # Cleaned dataset file path
@@ -238,7 +245,7 @@ print (train_data.label.map ({1:'spam', 0:'ham'}).value_counts (normalize = True
 
 # Create DTM of dataset (features)
  # Create vectorizer object
-vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = True, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95)
+vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95)
 
 # Fit data to vectorizer
 features = vectorizer.fit_transform (features) # Returns a sparse matrix
