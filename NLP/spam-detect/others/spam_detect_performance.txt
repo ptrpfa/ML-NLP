@@ -1,0 +1,18 @@
+Spam-detection model TRAINING runtimes:
+
+No pickle:
+Model runtimes:
+SVM: 51.959172 seconds
+Logistic Regression: 0.46573699999999996 seconds
+Naive Bayes: 8.287621 seconds
+
+Pickled:
+Model runtimes:
+SVM: 60.17992 seconds
+Logistic Regression: 0.546816 seconds
+Naive Bayes: 10.04274 seconds
+
+Spam-detection model TESTING runtimes (single document test):
+SVM: [0] , Runtime:  0.000811 seconds
+LR: [0] , Runtime:  0.000269 seconds
+MNB: [0] , Runtime:  0.00054 seconds

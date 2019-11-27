@@ -44,9 +44,11 @@ Improvements that could be done:
 -Further model refinements like boosting..
 -Can implement another 'layer' for a feedback deception model (detection of false feedback)
 
-Based on results, concluded that SVM model is the best performing model"
+Based on overall results, concluded that LR/SVM models are the best performing models"
 -In terms of F1 score (useful for binary classfication of SPAM or HAM (not spam) and unbalanced data distribution)
 -In terms of accuracy, ROC, Recall, Precision..
+-SVM better at classifying HAM as HAM than LR and has better ROC curve
+-LR is slightly faster than SVM and has better overall metrics (F1, PR scores..)
 
 Miscellaneous:
 spaCy is used over NLTK for things such as tokenization and lemmatisation due to it being a faster/more efficient library
@@ -378,7 +380,7 @@ clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/data/clean-spam-ham.cs
 pickles_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/pickles/" # File path containing pickled objects
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/accuracies/" # Model accuracy results file path
 preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
-use_pickle = False # Boolean to trigger whether to use pickled objects or not
+use_pickle = True # Boolean to trigger whether to use pickled objects or not
 message_check = False # Boolean to trigger prompt for user message to check whether it is spam or not
 display_visuals = False # Boolean to trigger display of visualisations
 
