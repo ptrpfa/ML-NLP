@@ -40,7 +40,7 @@ such as applying Boosting (due to time-constraint and lack of practicality as th
 in the data mining process)
 
 Improvements that could be done:
--Better and more dataset added
+-Better and more dataset added (currently, SPAM messages are SMS SPAM, can try to find other types of SPAM and train the models accordingly)
 -Further model refinements like boosting..
 -Can implement another 'layer' for a feedback deception model (detection of false feedback)
 
@@ -125,7 +125,7 @@ def clean_document (corpus):
             # Get match object
             match = re.match (r"(.*)(www\.[^\s]*)(.*)", document) # Group 1: Text in front of link, Group 2: Hyperlink, Group 3: Trailing text
 
-            # Check if a match object is obtained (may have mismatches ie "awww")
+            # Check if a match object is obtained (as may have mismatches ie "awww")
             if (match == None): # For redundancy
                 
                 # Increment counter
@@ -287,9 +287,6 @@ def plot_confusion_matrix (y_test, y_pred, classes, title, filename):
                     color="white" if cm[i, j] > thresh else "black")
     fig.tight_layout()
 
-    # Display confusion matrix
-    # plt.show ()
-
     # Save confusion matrix
     plt.savefig (accuracy_file_path + filename)
 
@@ -370,11 +367,10 @@ def model_runtime (duration, start_time, end_time):
     difference = end_time - start_time
 
     # Calculate runtime
-    duration = duration + difference.seconds
+    duration = duration + (difference.seconds + difference.microseconds / (10**6))
 
     # Return duration to calling program
     return duration
-
 
 # Global variables
 train_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/data/spam-ham.txt" # Dataset file path
@@ -387,7 +383,7 @@ message_check = False # Boolean to trigger prompt for user message to check whet
 display_visuals = False # Boolean to trigger display of visualisations
 
 # Whitelisting
-whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitelist for identifying non-SPAM feedbacks
+whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitelist for identifying non-SPAM feedbacks (whitelist is in lowercase)
             'comms-tech', 'communications-tech', 'comms-technology',
             'communications-technology', 'crypto-tech', 'cryptography-tech',
             'crypto-technology', 'cryptography-technology']
@@ -485,14 +481,14 @@ else:
 # 4) # Create spam-detection models to filter out spam
 # Create spam-detection classfiers to filter out spam
 svm_classifier = svm.SVC (C=1000, cache_size=200, class_weight=None, coef0=0.0,
-    decision_function_shape='ovr', degree=1, gamma=0.001, kernel='rbf',
+    decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
     max_iter=-1, probability=True, random_state=1, shrinking=True, tol=0.001,
     verbose=False)
 
 logistic_regression_classifier = LogisticRegression (C=1000, class_weight=None, dual=False, fit_intercept=True,
     intercept_scaling=1, l1_ratio=None, max_iter=100,
     multi_class='warn', n_jobs=None, penalty='l1',
-    random_state=1, solver='liblinear', tol=0.0001, verbose=0,
+    random_state=70, solver='liblinear', tol=0.0001, verbose=0,
     warm_start=False)
 
 multinomialnb_classifier = MultinomialNB ()
@@ -503,7 +499,7 @@ lr_duration = 0
 mnb_duration = 0
 
 # GridSearchCV to tune hyperparameters of models
-
+"""
 # SVM:
 # Dictionary to store parameters and parameter values to test
 parameter_grid = {
@@ -521,6 +517,7 @@ grid_search = GridSearchCV (estimator = svm_classifier, param_grid = parameter_g
 grid_search.fit (features, target)
 
 # Get fine-tuned details
+print ("SVM:")
 print ("Best score: ", grid_search.best_score_)
 print ("Best parameters: ", grid_search.best_params_)
 print ("Best estimator: ", grid_search.best_estimator_)
@@ -528,15 +525,14 @@ print ("Best estimator: ", grid_search.best_estimator_)
 # SVM:
 # 
 # F1 scoring:
-# Best score:  0.8973526061818614
-# Best parameters:  {'C': 1000, 'degree': 1, 'gamma': 0.001, 'random_state': 1}
+# Best score:  0.9022935489333376
+# Best parameters:  {'C': 1000, 'degree': 1, 'gamma': 0.1, 'random_state': 1}
 # Best estimator:  SVC(C=1000, cache_size=200, class_weight=None, coef0=0.0,
-#     decision_function_shape='ovr', degree=1, gamma=0.001, kernel='rbf',
+#     decision_function_shape='ovr', degree=1, gamma=0.1, kernel='rbf',
 #     max_iter=-1, probability=True, random_state=1, shrinking=True, tol=0.001,
 #     verbose=False)
-
-
-
+"""
+"""
 # Logistic Regression:
 # Dictionary to store parameters and parameter values to test
 parameter_grid = {
@@ -561,14 +557,14 @@ print ("Best estimator: ", grid_search.best_estimator_)
 # Logistic Regression
 # 
 # F1 Scoring:
-# Best score:  0.9048442354890881
-# Best parameters:  {'C': 1000, 'penalty': 'l1', 'random_state': 1}
+# Best score:  0.9059455790341044
+# Best parameters:  {'C': 1000, 'penalty': 'l1', 'random_state': 70}
 # Best estimator:  LogisticRegression(C=1000, class_weight=None, dual=False, fit_intercept=True,
 #                    intercept_scaling=1, l1_ratio=None, max_iter=100,
 #                    multi_class='warn', n_jobs=None, penalty='l1',
-#                    random_state=1, solver='liblinear', tol=0.0001, verbose=0,
+#                    random_state=70, solver='liblinear', tol=0.0001, verbose=0,
 #                    warm_start=False)
-
+"""
 
 # Get model performance metrics
 print ("*** Model Performance metrics ***", "\n")
@@ -711,9 +707,9 @@ if (display_visuals == True):
 
 # Print model runtime performances
 print ("Model runtimes:")
-print ("SVM: ", svm_duration, " seconds")
-print ("Logistic Regression: ", lr_duration, " seconds")
-print ("Naive Bayes: ", mnb_duration, " seconds")
+print ("SVM:", svm_duration, "seconds")
+print ("Logistic Regression:", lr_duration, "seconds")
+print ("Naive Bayes:", mnb_duration, "seconds")
 
 # Save models (pickling/serialization)
 pickle_object (features, "features.pkl") # Sparse Matrix of features
@@ -727,7 +723,7 @@ pickle_object (multinomialnb_model, "naive-bayes-model.pkl") # Naive Bayes Model
 if (message_check == True):
 
     # Get input from user and check if it is spam or not
-    input_string = input ("Enter message to check: ")
+    input_string = input ("\nEnter message to check: ")
 
     # Set initial value of y_test_predict (results of check)
     y_test_predict = 1 # Default value is SPAM [0 = HAM, 1 = SPAM]
@@ -742,7 +738,7 @@ if (message_check == True):
     # Check for BUGCODE matches
     if (match != None):
 
-        # Set bugcode_match to true
+        # Set bugcode_match to True if input string contains a BUGCODE
         bugcode_match = True
 
     # Check for WHITELIST matches
@@ -754,13 +750,13 @@ if (message_check == True):
             # Set whitelist_match to true
             whitelist_match = True
 
-            # Break out of loop if a match is found
+            # Immediately break out of loop if a match is found
             break
 
     # Check if a BUGCODE or whitelisted word was detected in the input
     if (bugcode_match == True or whitelist_match == True):
 
-        # Set input_string as HAM immediately if bugcode or whitelisted string is detected
+        # Set input_string as HAM if bugcode or whitelisted string is detected
         y_test_predict = 0 
 
     # Use models to predict SPAM or HAM if no whitelisted item or bugcode was detected
@@ -788,15 +784,25 @@ if (message_check == True):
         features = vectorizer.transform (features) # Not fit_transform!
 
         # Predict message is a spam or not
-        y_test_predict_svm = svm_model.predict (features) # Store predicted results of model
-        y_test_predict_lr = logistic_regression_model.predict (features) # Store predicted results of model
-        y_test_predict_mnb = multinomialnb_model.predict (features) # Store predicted results of model
-
-        # Print results
         print ("Results:")
-        print ("SVM: ", y_test_predict_svm)
-        print ("LR: ", y_test_predict_lr)
-        print ("MNB: ", y_test_predict_mnb)
+
+        # SVM
+        start_time = datetime.datetime.now ()
+        y_test_predict_svm = svm_model.predict (features) # Store predicted results of model
+        end_time = datetime.datetime.now ()
+        print ("SVM:", y_test_predict_svm, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
+
+        # Logistic Regression
+        start_time = datetime.datetime.now ()
+        y_test_predict_lr = logistic_regression_model.predict (features) # Store predicted results of model
+        end_time = datetime.datetime.now ()
+        print ("LR:", y_test_predict_lr, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
+
+        # Naive Bayes
+        start_time = datetime.datetime.now ()
+        y_test_predict_mnb = multinomialnb_model.predict (features) # Store predicted results of model
+        end_time = datetime.datetime.now ()
+        print ("MNB:", y_test_predict_mnb, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
     
     # Print results
     if (y_test_predict_svm == 1 or y_test_predict_lr == 1 or y_test_predict_mnb == 1):
@@ -816,4 +822,4 @@ program_run_time = program_end_time - program_start_time
 
 print ("\nProgram start time: ", program_start_time)
 print ("Program end time: ", program_end_time)
-print ("Program runtime: ", program_run_time.seconds, "seconds")
+print ("Program runtime: ", program_run_time.seconds + (program_run_time.microseconds / (10**6)), "seconds")
