@@ -58,6 +58,14 @@ df = pd.read_sql (sql_query, db_connection, index_col = "CategoryID")
 
 # Create custom identifier (WebAppID_FeedbackID_CategoryID)
 
+"""
+Feedback features:
+-ID (WebAppID + FeedbackID + CategoryID)
+-Subject
+-Overall score
+-Main text
+"""
+
 # df = pd.read_sql ("SELECT * FROM Category", db_connection)
 print ("\nDF:\n", df)
 
