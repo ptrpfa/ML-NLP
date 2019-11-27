@@ -1,0 +1,48 @@
+Limitations:
+-May have limitation of spaCy's lemmatizer as tokens may be stemmed too much (either this or due to the fact that the dataset itself contains singlish and many abbreviations of words like thks as well as typos)
+
+--------------------------------------------------------------------------Data pre-processing:
+
+After first pass data cleaning, tokens containing:
+Words embedded within digits:  087147403231winawkage16
+Words embedded within digits:  087147403231winawkage16 ps
+Words embedded within digits:  146tf15
+Words embedded within digits:  180430jul05
+Words embedded within digits:  180430jul05 tms
+Words embedded within digits:  1a7
+Words embedded within digits:  1a7 rw
+Words embedded within digits:  2bremovedmobypobox734
+Words embedded within digits:  2bremovedmobypobox734 ls
+Words embedded within digits:  3422landsroww1
+Words embedded within digits:  3422landsroww1 j
+Words embedded within digits:  38wp150
+Words embedded within digits:  38wp150 ppm
+Words embedded within digits:  3age16
+Words embedded within digits:  3age16 www.ldew.com
+Words embedded within digits:  4235wc1
+Words embedded within digits:  4235wc1 n
+Words embedded within digits:  4qf2
+Words embedded within digits:  6a5
+Words embedded within digits:  6a5 ecef
+Words embedded within digits:  8r74
+Words embedded within digits:  8r74 blind
+Words embedded within digits:  91ff937819
+Words embedded within digits:  91ff937819 firsttrue
+
+--> Will not be cleansed further as the tokens matched above are within hyperlinks (which are added after extraction of embedded words/digits)
+
+--------------------------------------------------------------------------
+Archived:
+
+first round of tokenization resulted in many unseparated bigrams/trigrams
+-> Due to both data pre-processing's replacement of special characters with an empty character as well as due to dataset messages consisting of many stickedwords (ie weed-deficient -> weeddeficient)
+--> CHANGED REMOVAL TO SPACE (PENDING RESULTS) (resulted in slightly lower accuracy but better tokens!)
+
+May want to spend more time pre-processing data to clean sticked words (ie hellothere)
+
+May not want to lowercase when tokenising and may not want to omit the apostrophe
+--> LOWERCASE PENDING RESULTS (resulted in slightly lower accuracy)
+--> APOS PENDING RESULTS (resulted in slightly lower accuracy)
+
+
+
