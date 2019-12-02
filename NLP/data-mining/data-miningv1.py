@@ -1,5 +1,5 @@
 import pandas as pd
-import pymysql # MySQL
+import mysql.connector #MySQL
 import numpy as np
 import re # REGEX
 import string
@@ -35,27 +35,58 @@ feedback_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/feedback.csv" 
 clean_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/clean-feedback.csv' # Cleaned dataset file path
 pickles_file_path = "/home/p/Desktop/csitml/NLP/data-mining/pickles/" # File path containing pickled objects
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/data-mining/accuracies/" # Model accuracy results file path
+preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 
 # Database global variables
 mysql_user = "root"         # MySQL username
 mysql_password = "csitroot" # MySQL password
 mysql_host = "localhost"    # MySQL host
-mysql_schema = "csitDB"     # MySQL schema
+mysql_schema = "csitDB"     # MySQL schema (NOTE: MySQL in Windows is case-insensitive)
 
 # Program starts here
 program_start_time = datetime.datetime.now ()
 print ("Start time: ", program_start_time)
 
 # 1) Get dataset
-# Create mySQL connection object to the database
-db_connection = pymysql.connect (host = mysql_host, user = mysql_user, password = mysql_password, db = mysql_schema)
+try:
 
- # Create SQL query to get Feedback table values
-sql_query = "SELECT * FROM %s" % (feedback_table)
+    # Create MySQL connection object to the database
+    db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
-# Execute query and convert Feedback table into a pandas DataFrame
-df = pd.read_sql (sql_query, db_connection, index_col = "CategoryID")
+    # Create SQL query to get Feedback table values
+    sql_query = "SELECT * FROM %s" % (feedback_table)
 
+    # Execute query and convert Feedback table into a pandas DataFrame
+    feedback_df = pd.read_sql (sql_query, db_connection)
+    # feedback_df = pd.read_sql (sql_query, db_connection, index_col = "FeedbackID")
+
+except mysql.connector.Error as error:
+
+    # Print MySQL connection error
+    print ("MySQL error:", error)
+
+except:
+
+    # Print other errors
+    print ("Error occurred attempting to establish database connection")
+
+finally:
+
+    # Close connection object once Feedback has been obtained
+    db_connection.close () # Close MySQL connection
+
+# 2) Understand dataset
+if (preliminary_check == True): # Check boolean to display preliminary information
+
+    # Print some information of about the data
+    print ("\n***Preliminary information about dataset***\n")
+    print ("Dimensions: ", feedback_df.shape, "\n")
+    print ("First few records:")
+    print (feedback_df.head (), "\n")
+    print ("Columns and data types:")
+    print (feedback_df.dtypes, "\n")
+
+# 3) Data pre-processing
 # Create custom identifier (WebAppID_FeedbackID_CategoryID)
 
 """
@@ -66,11 +97,7 @@ Feedback features:
 -Main text
 """
 
-# df = pd.read_sql ("SELECT * FROM Category", db_connection)
-print ("\nDF:\n", df)
 
-# Close MySQL connection
-db_connection.close ()
 
 # Program end time
 program_end_time = datetime.datetime.now ()
@@ -78,4 +105,4 @@ program_run_time = program_end_time - program_start_time
 
 print ("\nProgram start time: ", program_start_time)
 print ("Program end time: ", program_end_time)
-print ("Program runtime: ", program_run_time.seconds, "seconds")
+print ("Program runtime: ", (program_run_time.seconds + program_run_time.microseconds / (10**6)), "seconds")
