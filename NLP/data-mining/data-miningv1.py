@@ -58,7 +58,6 @@ try:
 
     # Execute query and convert Feedback table into a pandas DataFrame
     feedback_df = pd.read_sql (sql_query, db_connection)
-    # feedback_df = pd.read_sql (sql_query, db_connection, index_col = "FeedbackID")
 
 except mysql.connector.Error as error:
 
