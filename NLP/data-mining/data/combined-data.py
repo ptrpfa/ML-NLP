@@ -97,7 +97,7 @@ combined_df = combined_df.append (pan_df, ignore_index = True)
 # 2) Processing for Maalej Dataset
 """
 Maalej Dataset:
-3691 reviews
+3689 reviews
 Bug Report/Problem Discovery (370)
 Feature Request (252)
 Rating (2461) (General)
@@ -128,9 +128,18 @@ maalej_df.appId.fillna ("Not stated", inplace = True) # Fill null values
 maalej_df.Remarks = maalej_df ['Remarks'] + " AppID: " + maalej_df ['appId'] + " Src: " + maalej_df ['dataSource'] # Append appID and dataSource to Remarks
 maalej_df = maalej_df.drop (['appId', 'dataSource'], axis = 1) # Drop unused appId and dataSource columns
 
-# Re-label categories
-maalej_df.task = maalej_df.task.map ({'FR': 'feature request', 'RT': "rating", 'UE': 'user experience', 'PD': 'problem discovery'}) 
-maalej_df.title.fillna (maalej_df ['task'], inplace = True) # Fill null values
+maalej_df.task = maalej_df.task.map ({'FR': 'feature request', 'RT': "rating", 'UE': 'user experience', 'PD': 'problem discovery'}) # Re-label categories
+maalej_df.title.fillna (maalej_df ['task'], inplace = True) # Fill null values in Title with the Category (task)
+maalej_df ['WebAppID'] = 99 # New column for WebAppID (Default value is set to 99)
+
+# Re-label categories to respective IDs and change categories to the generalised categories
+maalej_df.task = maalej_df.task.map ({'feature request': 5, 'rating': 4, 'user experience': 4, 'problem discovery': 2})
+
+# Rename columns
+maalej_df = maalej_df.rename (columns = {"task": "CategoryID", "review": "MainText", "title": "Subject", "rating": "Rating"})
+
+# Rearrange DataFrame
+maalej_df = maalej_df [["WebAppID", "CategoryID", "Subject", "MainText", "Rating", "Remarks"]]
 
 # Print information about dataset
 print ("\n***Maalej Dataset***")
@@ -138,19 +147,24 @@ print ("Dimensions: ", maalej_df.shape)
 print (maalej_df.head ())
 print ("\nColumns and data types:")
 print (maalej_df.dtypes, "\n")
-print (maalej_df.Remarks)
 
 # Save formatted Pan dataset to CSV
 maalej_df.to_csv (clean_file_path + "maalej.csv", index = False, encoding = "utf-8")
 
+# Append dataset to combined DataFrame
+combined_df = combined_df.append (maalej_df, ignore_index = True)
+
+# 3) Processing for REJ Dataset
+pass
+# JSON
 
 
 # Print combined dataset information
-# print ("\n***COMBINED Dataset***")
-# print ("Dimensions: ", combined_df.shape)
-# print (combined_df.head ())
-# print ("\nColumns and data types:")
-# print (combined_df.dtypes, "\n")
+print ("\n***COMBINED Dataset***")
+print ("Dimensions: ", combined_df.shape)
+print (combined_df.head ())
+print ("\nColumns and data types:")
+print (combined_df.dtypes, "\n")
 
 # Export combined dataframe
 combined_df.to_csv (combined_file_path, index = False, encoding = "utf-8")
