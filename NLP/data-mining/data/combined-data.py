@@ -31,9 +31,8 @@ from warnings import simplefilter
 simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
 
 # Global variables
-combined_df = pd.DataFrame () # Initialise DataFrame to contain combined feedback data
-file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/combined.csv' # Combined dataset file path
-combined_clean_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/clean-combined.csv' # Cleaned dataset file path
+combined_df = pd.DataFrame (columns = ["WebAppID", "CategoryID", "Subject", "MainText", "Rating", "Remarks"]) # Initialise DataFrame to contain combined feedback data
+combined_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/clean/combined.csv' # Cleaned dataset file path
 clean_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/clean/' # File path for folder containing formatted and cleaned datasets
 
 # Datasets
@@ -62,20 +61,45 @@ Will classify the four categories into the three general Feedback categories of:
 """
 
 # Get DataFrame object of the dataset
-pan_df = pd.read_excel (pan_file_path, index_col = "id")
+# pan_df = pd.read_excel (pan_file_path, index_col = "id")
+pan_df = pd.read_excel (pan_file_path)
+
+# Feature engineer Pan dataset
+pan_df.id = ["P_" + str (id_no) for id_no in list (pan_df.id)] # Append dataset identifier to ID
+pan_df ['Remarks'] = pan_df.id # Fill remarks with the custom dataset identifier of each feedback 
+pan_df = pan_df.drop (['id'], axis = 1) # Drop unused ID column
+
+pan_df ['Subject'] = [cname for cname in pan_df.class_name] # Since Pan dataset does not have any Subject values, use its previous class name as the subject
+pan_df ['Rating'] = 3 # New column for rating (Default value is set to 3)
+pan_df ['WebAppID'] = 99 # New column for WebAppID (Default value is set to 99)
 
 # Re-label categories to respective IDs and change categories to the generalised categories
-pan_df.class_name = pan_df.class_name.map ({'feature request': 5, 'information giving': 4, 'information seeking': 4, 'problem discovery': 2})
-pan_df ['rating'] = 3 # New column for rating (Default value is set to 3)
+pan_df.class_name = pan_df.class_name.map ({'feature request': 5, 'information giving': 4, 'information seeking': 4, 'problem discovery': 2}) 
 
-# Save formatted dataset to CSV
-pan_df.to_csv (clean_file_path + "pan.csv", index = True, encoding="utf-8")
+# Rename columns
+pan_df = pan_df.rename (columns = {"class_name": "CategoryID", "review": "MainText"})
 
-print ("\n***Preliminary information about dataset***")
+# Rearrange DataFrame
+pan_df = pan_df [["WebAppID", "CategoryID", "Subject", "MainText", "Rating", "Remarks"]]
+
+# Print information about dataset
+print ("\n***Pan Dataset***")
 print ("Dimensions: ", pan_df.shape)
 print (pan_df.head ())
 print ("\nColumns and data types:")
 print (pan_df.dtypes, "\n")
+
+# Save formatted dataset to CSV
+pan_df.to_csv (clean_file_path + "pan.csv", index = False, encoding = "utf-8")
+
+# Append dataset to combined DataFrame
+combined_df = combined_df.append (pan_df, ignore_index = True)
+print ("Combined:")
+print (combined_df.head ())
+
+
+# Export combined dataframe
+combined_df.to_csv (combined_file_path, index = False, encoding = "utf-8")
 
 # Program end time
 program_end_time = datetime.datetime.now ()
