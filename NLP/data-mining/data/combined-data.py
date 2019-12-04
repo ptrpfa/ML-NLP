@@ -37,7 +37,7 @@ clean_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/clean/' 
 
 # Datasets
 pan_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Pan_Dataset.xlsx" # Dataset file path
-maleej_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Maalej_Dataset.xlsx" # Dataset file path
+maalej_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Maalej_Dataset.xlsx" # Dataset file path
 rej_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/REJ/all.json" # Dataset file path
 bfj_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/BFJ/Re2015_Training_Set.sql" # Dataset file path
 
@@ -61,7 +61,6 @@ Will classify the four categories into the three general Feedback categories of:
 """
 
 # Get DataFrame object of the dataset
-# pan_df = pd.read_excel (pan_file_path, index_col = "id")
 pan_df = pd.read_excel (pan_file_path)
 
 # Feature engineer Pan dataset
@@ -89,14 +88,69 @@ print (pan_df.head ())
 print ("\nColumns and data types:")
 print (pan_df.dtypes, "\n")
 
-# Save formatted dataset to CSV
+# Save formatted Pan dataset to CSV
 pan_df.to_csv (clean_file_path + "pan.csv", index = False, encoding = "utf-8")
 
 # Append dataset to combined DataFrame
 combined_df = combined_df.append (pan_df, ignore_index = True)
-print ("Combined:")
-print (combined_df.head ())
 
+# 2) Processing for Maalej Dataset
+"""
+Maalej Dataset:
+3691 reviews
+Bug Report/Problem Discovery (370)
+Feature Request (252)
+Rating (2461) (General)
+User Experience (607) (General)
+
+Will classify the four categories into the three general Feedback categories of:
+-Bug (ID: 2)
+-Feature Request (ID: 5)
+-General (ID: 4)
+"""
+
+# Get DataFrame object of the dataset
+maalej_df = pd.read_excel (maalej_file_path)
+
+# Feature engineer Maalej dataset
+# Drop unused columns
+maalej_df = maalej_df.drop (['past', 'stopwords_removal', 'reviewer', 'id', 'stemmed', 
+                             'fee', 'future', 'lemmatized_comment', 'sentiScore', 'sentiScore_neg', 
+                             'reviewId', 'stopwords_removal_nltk', 'present_simple', 'date', 
+                             'sentiScore_pos', 'present_con', 'length_words', 'stopwords_removal_lemmatization', 
+                             'Exclude'], axis = 1)
+
+maalej_df.id_num = ["M_" + str (id_no) for id_no in list (maalej_df.id_num)] # Append dataset identifier to ID
+maalej_df ['Remarks'] = maalej_df.id_num # Fill remarks with the custom dataset identifier of each feedback 
+maalej_df = maalej_df.drop (['id_num'], axis = 1) # Drop unused ID column
+
+maalej_df.appId.fillna ("Not stated", inplace = True) # Fill null values
+maalej_df.Remarks = maalej_df ['Remarks'] + " AppID: " + maalej_df ['appId'] + " Src: " + maalej_df ['dataSource'] # Append appID and dataSource to Remarks
+maalej_df = maalej_df.drop (['appId', 'dataSource'], axis = 1) # Drop unused appId and dataSource columns
+
+# Re-label categories
+maalej_df.task = maalej_df.task.map ({'FR': 'feature request', 'RT': "rating", 'UE': 'user experience', 'PD': 'problem discovery'}) 
+maalej_df.title.fillna (maalej_df ['task'], inplace = True) # Fill null values
+
+# Print information about dataset
+print ("\n***Maalej Dataset***")
+print ("Dimensions: ", maalej_df.shape)
+print (maalej_df.head ())
+print ("\nColumns and data types:")
+print (maalej_df.dtypes, "\n")
+print (maalej_df.Remarks)
+
+# Save formatted Pan dataset to CSV
+maalej_df.to_csv (clean_file_path + "maalej.csv", index = False, encoding = "utf-8")
+
+
+
+# Print combined dataset information
+# print ("\n***COMBINED Dataset***")
+# print ("Dimensions: ", combined_df.shape)
+# print (combined_df.head ())
+# print ("\nColumns and data types:")
+# print (combined_df.dtypes, "\n")
 
 # Export combined dataframe
 combined_df.to_csv (combined_file_path, index = False, encoding = "utf-8")
