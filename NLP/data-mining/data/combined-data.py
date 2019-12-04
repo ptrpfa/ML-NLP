@@ -1,6 +1,8 @@
 # Program to combine the data from each of the four datasets used from Hamburg University and Mendeley Data respectively
 
 import pandas as pd
+import mysql.connector #MySQL
+from sqlalchemy import create_engine
 import numpy as np
 import re # REGEX
 import string
@@ -40,6 +42,13 @@ pan_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Pan_Datase
 maalej_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Maalej_Dataset.xlsx" # Dataset file path
 rej_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Unused/REJ/all.json" # Additional Dataset file path [NOT USED]
 bfj_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Unused/BFJ/Re2015_Training_Set.sql" # Additional Dataset file path [NOT USED]
+
+# Database global variables
+mysql_user = "root"         # MySQL username
+mysql_password = "csitroot" # MySQL password
+mysql_host = "localhost"    # MySQL host
+mysql_schema = "csitDB"     # MySQL schema (NOTE: MySQL in Windows is case-insensitive)
+feedback_table = "Feedback" # Name of feedback table in database
 
 # Program starts here
 program_start_time = datetime.datetime.now ()
@@ -192,7 +201,17 @@ print ("\nColumns and data types:")
 print (combined_df.dtypes, "\n")
 
 # Export combined dataframe
-combined_df.to_csv (combined_file_path, index = False, encoding = "utf-8")
+combined_df.to_csv (combined_file_path, index = False, encoding = "utf-8") 
+
+# Create SQLAlchemy engine object [mysql://user:password@host/database]
+engine = create_engine ("mysql://{user}:{password}@{host}/{schema}".format (user = mysql_user, password = mysql_password, host = mysql_host, schema = mysql_schema)) 
+connection = engine.connect ()
+
+# Insert combined dataframe to the database
+combined_df.to_sql (name = feedback_table, con = connection, if_exists = "append", index = False, chunksize = 1000) # Insert 1000 rows into database at a time
+
+# Close connection object once Feedback has been inserted
+connection.close () # Close MySQL connection
 
 # Program end time
 program_end_time = datetime.datetime.now ()

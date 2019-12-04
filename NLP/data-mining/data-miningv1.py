@@ -59,6 +59,9 @@ try:
     # Execute query and convert Feedback table into a pandas DataFrame
     feedback_df = pd.read_sql (sql_query, db_connection)
 
+    # Save dataframe as a CSV file
+    feedback_df.to_csv (feedback_file_path, index = False, encoding = "utf-8")
+
 except mysql.connector.Error as error:
 
     # Print MySQL connection error
