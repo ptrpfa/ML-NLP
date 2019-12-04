@@ -38,8 +38,8 @@ clean_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/clean/' 
 # Datasets
 pan_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Pan_Dataset.xlsx" # Dataset file path
 maalej_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Maalej_Dataset.xlsx" # Dataset file path
-rej_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/REJ/all.json" # Dataset file path
-bfj_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/BFJ/Re2015_Training_Set.sql" # Dataset file path
+rej_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Unused/REJ/all.json" # Additional Dataset file path [NOT USED]
+bfj_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Unused/BFJ/Re2015_Training_Set.sql" # Additional Dataset file path [NOT USED]
 
 # Program starts here
 program_start_time = datetime.datetime.now ()
@@ -148,16 +148,41 @@ print (maalej_df.head ())
 print ("\nColumns and data types:")
 print (maalej_df.dtypes, "\n")
 
-# Save formatted Pan dataset to CSV
+# Save formatted Maalej dataset to CSV
 maalej_df.to_csv (clean_file_path + "maalej.csv", index = False, encoding = "utf-8")
 
 # Append dataset to combined DataFrame
 combined_df = combined_df.append (maalej_df, ignore_index = True)
 
-# 3) Processing for REJ Dataset
-pass
-# JSON
 
+# Additional: 3) Processing for REJ Dataset & 4) Processing for BFJ Dataset
+"""
+Bug Report
+Feature Request
+Rating (General)
+User Experience (General)
+
+Will classify the four categories into the three general Feedback categories of:
+-Bug (ID: 2)
+-Feature Request (ID: 5)
+-General (ID: 4)
+"""
+
+# # Get DataFrame object of the dataset
+# rej_df = pd.read_json (rej_file_path, orient = "split")
+
+# # Print information about dataset
+# print ("\n***REJ Dataset***")
+# print ("Dimensions: ", rej_df.shape)
+# print (rej_df.head ())
+# print ("\nColumns and data types:")
+# print (rej_df.dtypes, "\n")
+
+# Note: REJ and BFJ datasets not used in this case as it was found that the datasets obtained were duplicates
+
+
+# Remove duplicate feedback reviews (keeps first occurance of duplicated feedback)
+combined_df.drop_duplicates (subset = "MainText", keep = "first", inplace = True)
 
 # Print combined dataset information
 print ("\n***COMBINED Dataset***")
