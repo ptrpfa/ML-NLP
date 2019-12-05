@@ -288,6 +288,26 @@ if (preprocess_data == True):
 
 else:
 
+    # Remove Feedback data with custom removal Remarks ("TRASH RECORD")
+    # Create MySQL connection and cursor objects to the database
+    db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+    db_cursor = db_connection.cursor ()
+
+    # Create SQL statement to delete records with the Remarks set as 'TRASH RECORD'
+    sql = "DELETE FROM Feedback WHERE Remarks = 'TRASH RECORD';" 
+
+    # Execute SQL statement
+    db_cursor.execute (sql)
+
+    # Commit changes made
+    db_connection.commit ()
+
+    print (db_cursor.rowcount, "trash record(s) deleted")
+
+    # Close connection objects once Feedback has been obtained
+    db_cursor.close ()
+    db_connection.close () # Close MySQL connection
+
     # Do something else
     pass
 
@@ -338,9 +358,6 @@ if (preliminary_check == True): # Check boolean to display preliminary informati
 # 3) Data pre-processing
 
 """
-# Execute this after pre-processing (before analysis using models)
-DELETE FROM Feedback WHERE Remarks = 'TRASH RECORD';
-
 # DO THESE AFTER UPDATING DATABASE!
 # Remove with rows containing empty texts [DO THIS LATER ON!]
 feedback_to_clean_df = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned != ""]
