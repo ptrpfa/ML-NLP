@@ -148,6 +148,12 @@ def clean_document (corpus):
 
         # Replace multiple consecutive spaces with a single space
         document = re.sub (r"[ ]{2,}", " ", document)
+        
+        # Check if document is just a single space
+        if (document == " "):
+
+            # Replace document with an empty string if it consists of just a single non-word character
+            document = ""
 
         # Append cleaned document into the list of cleaned documents
         list_cleaned_documents.append (document)

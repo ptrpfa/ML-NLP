@@ -154,7 +154,7 @@ def clean_document (corpus):
         #  Remove punctuations from text
         # document = re.sub('[%s]' % re.escape(string.punctuation), '', document)
 
-        # Remove any non-word characters from the document (Used over string.punctuation as provides more granular control)
+        # Remove any non-word characters from the document (replace characters with space) [Used over string.punctuation as provides more granular control]
         document = re.sub (r"[^a-zA-Z0-9 ']", " ", document) # Apostrophe included even though it will result in weird tokenizations (for words like I'll, She's..)
 
         # Alternative REGEX check for extracting words with embedded special characters (ie weed-deficient)
@@ -174,7 +174,13 @@ def clean_document (corpus):
 
         # Replace multiple consecutive spaces with a single space
         document = re.sub (r"[ ]{2,}", " ", document)
+        
+       # Check if document is just a single space
+        if (document == " "):
 
+            # Replace document with an empty string if it consists of just a single non-word character
+            document = ""
+            
         # Append cleaned document into the list of cleaned documents
         list_cleaned_documents.append (document)
 
@@ -381,7 +387,7 @@ pickles_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/pickles/" # File pat
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/accuracies/" # Model accuracy results file path
 preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_pickle = True # Boolean to trigger whether to use pickled objects or not
-message_check = False # Boolean to trigger prompt for user message to check whether it is spam or not
+message_check = True # Boolean to trigger prompt for user message to check whether it is spam or not
 display_visuals = False # Boolean to trigger display of visualisations
 
 # Whitelisting

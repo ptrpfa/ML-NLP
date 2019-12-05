@@ -1,36 +1,8 @@
 # Program to combine the data from each of the four datasets used from Hamburg University and Mendeley Data respectively
-
 import pandas as pd
 import mysql.connector #MySQL
 from sqlalchemy import create_engine
-import numpy as np
-import re # REGEX
-import string
-import html
-import unidecode
-import pickle 
-import scipy
 import datetime
-import spacy # NLP
-from sklearn.model_selection import train_test_split # 4) For splitting dataset into train/test sets
-from sklearn import linear_model # 4) Linear Regression classifier
-from sklearn.naive_bayes import MultinomialNB # 4) Naive Bayes classifier
-from sklearn import svm # 4) SVM classifier
-from sklearn.linear_model import LogisticRegression # 4) Logistic Regression classifier
-from sklearn.model_selection import GridSearchCV # 4) For model hyperparameters tuning
-from sklearn.feature_extraction.text import TfidfVectorizer # NLP Vectorizer
-import matplotlib.pyplot as plt # For visualisations
-import matplotlib # For visualisations
-from sklearn.metrics import accuracy_score # 4.5) Accuracy scorer
-from sklearn.model_selection import cross_val_score # 4.5) Cross validation scorer
-from sklearn.metrics import confusion_matrix # 4.5) For determination of model accuracy
-from sklearn.utils.multiclass import unique_labels # 4.5) For determination of model accuracy
-from sklearn.metrics import classification_report # 4.5) For determination of model accuracy
-import sklearn.metrics as metrics # 4.5) For determination of model accuracy
-
-# Suppress scikit-learn FutureWarnings
-from warnings import simplefilter
-simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
 
 # Global variables
 combined_df = pd.DataFrame (columns = ["WebAppID", "CategoryID", "Subject", "MainText", "Rating", "Remarks"]) # Initialise DataFrame to contain combined feedback data
@@ -40,7 +12,7 @@ clean_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/clean/' 
 # Datasets
 pan_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Pan_Dataset.xlsx" # Dataset file path
 maalej_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Maalej_Dataset.xlsx" # Dataset file path
-rej_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Unused/REJ/all.json" # Additional Dataset file path [NOT USED]
+rej_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Unused/REJ/categorised/" # Additional Dataset file path [NOT USED]
 bfj_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Unused/BFJ/Re2015_Training_Set.sql" # Additional Dataset file path [NOT USED]
 
 # Database global variables
@@ -176,19 +148,47 @@ Will classify the four categories into the three general Feedback categories of:
 -Feature Request (ID: 5)
 -General (ID: 4)
 """
+"""
+# Get DataFrame object of the dataset
+rej_df = pd.DataFrame (columns = ["WebAppID", "CategoryID", "Subject", "MainText", "Rating", "Remarks"]) # Initialise REJ Dataset dataframe
 
-# # Get DataFrame object of the dataset
-# rej_df = pd.read_json (rej_file_path, orient = "split")
+# Note: Not using all.json of REJ dataset as some records are missing category classifications
+rej_df_bug = pd.read_json (rej_file_path + "Bug.json", orient = "records")
+rej_df_feature = pd.read_json (rej_file_path + "Feature.json", orient = "records")
+rej_df_rating = pd.read_json (rej_file_path + "Rating.json", orient = "records")
+rej_df_userexp = pd.read_json (rej_file_path + "UserExperience.json", orient = "records")
 
 # # Print information about dataset
-# print ("\n***REJ Dataset***")
-# print ("Dimensions: ", rej_df.shape)
-# print (rej_df.head ())
-# print ("\nColumns and data types:")
-# print (rej_df.dtypes, "\n")
+print ("\n***REJ Bug Dataset***")
+print ("Dimensions: ", rej_df_bug.shape)
+print (rej_df_bug.head ())
+print ("\nColumns and data types:")
+print (rej_df_bug.dtypes, "\n")
 
-# Note: REJ and BFJ datasets not used in this case as it was found that the datasets obtained were duplicates
+print ("\n***REJ Feature Dataset***")
+print ("Dimensions: ", rej_df_feature.shape)
+print (rej_df_feature.head ())
+print ("\nColumns and data types:")
+print (rej_df_feature.dtypes, "\n")
 
+print ("\n***REJ Rating Dataset***")
+print ("Dimensions: ", rej_df_rating.shape)
+print (rej_df_rating.head ())
+print ("\nColumns and data types:")
+print (rej_df_rating.dtypes, "\n")
+
+print ("\n***REJ User Experience Dataset***")
+print ("Dimensions: ", rej_df_userexp.shape)
+print (rej_df_userexp.head ())
+print ("\nColumns and data types:")
+print (rej_df_userexp.dtypes, "\n")
+
+# Save formatted REJ dataset to CSV
+rej_df_bug.to_csv (clean_file_path + "rej_bug.csv", index = False, encoding = "utf-8")
+rej_df_feature.to_csv (clean_file_path + "rej_feature.csv", index = False, encoding = "utf-8")
+rej_df_rating.to_csv (clean_file_path + "rej_rating.csv", index = False, encoding = "utf-8")
+rej_df_userexp.to_csv (clean_file_path + "rej_userexperience.csv", index = False, encoding = "utf-8")
+"""
 
 # Remove duplicate feedback reviews (keeps first occurance of duplicated feedback)
 combined_df.drop_duplicates (subset = "MainText", keep = "first", inplace = True)
@@ -204,14 +204,14 @@ print (combined_df.dtypes, "\n")
 combined_df.to_csv (combined_file_path, index = False, encoding = "utf-8") 
 
 # Create SQLAlchemy engine object [mysql://user:password@host/database]
-engine = create_engine ("mysql://{user}:{password}@{host}/{schema}".format (user = mysql_user, password = mysql_password, host = mysql_host, schema = mysql_schema)) 
-connection = engine.connect ()
+db_engine = create_engine ("mysql://{user}:{password}@{host}/{schema}".format (user = mysql_user, password = mysql_password, host = mysql_host, schema = mysql_schema)) 
+db_connection = db_engine.connect () # Establish a connection to the database
 
 # Insert combined dataframe to the database
-combined_df.to_sql (name = feedback_table, con = connection, if_exists = "append", index = False, chunksize = 1000) # Insert 1000 rows into database at a time
+# combined_df.to_sql (name = feedback_table, con = db_connection, if_exists = "append", index = False, chunksize = 1000) # Insert 1000 rows into database at a time
 
 # Close connection object once Feedback has been inserted
-connection.close () # Close MySQL connection
+db_connection.close () # Close MySQL connection
 
 # Program end time
 program_end_time = datetime.datetime.now ()
