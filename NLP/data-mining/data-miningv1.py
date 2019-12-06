@@ -191,12 +191,11 @@ def load_pickle (filename):
 
 
 # Global variables
-feedback_table = "Feedback" # Name of feedback table in database
 feedback_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/feedback.csv" # Dataset file path
 clean_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/clean-feedback.csv' # Cleaned dataset file path
 pickles_file_path = "/home/p/Desktop/csitml/NLP/data-mining/pickles/" # File path containing pickled objects
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/data-mining/accuracies/" # Model accuracy results file path
-preprocess_data = True # Default boolean to trigger pre-processing of Feedback data in the database
+preprocess_data = True # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 
 # Database global variables
@@ -204,12 +203,13 @@ mysql_user = "root"         # MySQL username
 mysql_password = "csitroot" # MySQL password
 mysql_host = "localhost"    # MySQL host
 mysql_schema = "csitDB"     # MySQL schema (NOTE: MySQL in Windows is case-insensitive)
+feedback_table = "Feedback" # Name of feedback table in database
 
 # Program starts here
 program_start_time = datetime.datetime.now ()
 print ("Start time: ", program_start_time)
 
-# 1) Check if there are any Feedback in the database which have not been pre-processed
+# Check if there are any Feedback in the database which have not been pre-processed yet
 try:
 
     # Create MySQL connection object to the database
@@ -229,14 +229,16 @@ try:
 
     else:
 
-        # Set boolean to pre-process data to True if dataframe obtained is not empty
+        # Set boolean to pre-process data to True (default value) if dataframe obtained is not empty
         preprocess_data = True
 
+# Catch MySQL Exception
 except mysql.connector.Error as error:
 
     # Print MySQL connection error
     print ("MySQL error:", error)
 
+# Catch other errors
 except:
 
     # Print other errors
@@ -247,48 +249,65 @@ finally:
     # Close connection object once Feedback has been obtained
     db_connection.close () # Close MySQL connection
 
-# Check boolean to see whether to pre-process data
-if (preprocess_data == True):
+# Check boolean to see whether or not to pre-process data
+if (preprocess_data == True): # Pre-process feedback if there are texts that have not been cleaned
 
     # Pre-process new Feedback data that have not been pre-processed
     feedback_to_clean_df.MainTextCleaned = clean_document (feedback_to_clean_df.MainText) # Clean main text
     feedback_to_clean_df.SubjectCleaned = clean_document (feedback_to_clean_df.Subject) # Clean subject text
     
-     # Extract rows containing empty texts and combine them into a new dataframe
-    feedback_to_clean_df_empty = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned == ""]
-    feedback_to_clean_df_empty = feedback_to_clean_df_empty.append (feedback_to_clean_df [feedback_to_clean_df.SubjectCleaned == ""], ignore_index = True)
-    feedback_to_clean_df_empty ['Remarks'] = "TRASH RECORD" # Set remarks of empty rows to custom remark for removal ("TRASH RECORD")
+     # Extract rows containing empty texts and combine them into a new dataframe containing trash records (records to be removed later on)
+    feedback_to_clean_df_trash = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned == ""]
+    feedback_to_clean_df_trash = feedback_to_clean_df_trash.append (feedback_to_clean_df [feedback_to_clean_df.SubjectCleaned == ""], ignore_index = True)
+    feedback_to_clean_df_trash ['Remarks'] = "TRASH RECORD" # Set remarks of empty rows to custom remark for removal ("TRASH RECORD")
 
-    # Remove rows containing empty texts 
+    # Remove rows containing empty texts (remove trash records from current dataframe)
     feedback_to_clean_df = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned != ""]
     feedback_to_clean_df = feedback_to_clean_df [feedback_to_clean_df.SubjectCleaned != ""]
 
     # Combined newly labelled empty rows into the previous dataframe (Rows with empty Subject or MainText now have the Remark 'TRASH RECORD' for later removal)
-    feedback_to_clean_df = feedback_to_clean_df.append (feedback_to_clean_df_empty, ignore_index = True)
+    feedback_to_clean_df = feedback_to_clean_df.append (feedback_to_clean_df_trash, ignore_index = True)
 
-    # Create MySQL connection and cursor objects to the database
-    db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
-    db_cursor = db_connection.cursor ()
+    # Connect to database to update values
+    try:
 
-    # Update database table with the newly pre-processed data
-    for index, row in feedback_to_clean_df.iterrows ():
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
 
-        # Create SQL statement to get Feedback table values
-        sql = "UPDATE Feedback SET Remarks = %s, MainTextCleaned = %s, SubjectCleaned = %s WHERE FeedbackID = %s AND CategoryID = %s AND WebAppID = %s;" 
+        # Update database table with the newly pre-processed data
+        for index, row in feedback_to_clean_df.iterrows ():
 
-        # Execute SQL statement
-        db_cursor.execute (sql, (row ['Remarks'], row ['MainTextCleaned'], row ['SubjectCleaned'], row ['FeedbackID'], row ['CategoryID'], row ['WebAppID']))
+            # Create SQL statement to get Feedback table values
+            sql = "UPDATE Feedback SET Remarks = %s, MainTextCleaned = %s, SubjectCleaned = %s WHERE FeedbackID = %s AND CategoryID = %s AND WebAppID = %s;" 
 
-        # Commit changes made
-        db_connection.commit ()
+            # Execute SQL statement
+            db_cursor.execute (sql, (row ['Remarks'], row ['MainTextCleaned'], row ['SubjectCleaned'], row ['FeedbackID'], row ['CategoryID'], row ['WebAppID']))
 
-    # Close connection objects once Feedback has been obtained
-    db_cursor.close ()
-    db_connection.close () # Close MySQL connection
+            # Commit changes made
+            db_connection.commit ()
 
-else:
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
 
-    # Remove Feedback data with custom removal Remarks ("TRASH RECORD")
+        # Print MySQL connection error
+        print ("MySQL error:", error)
+
+    # Catch other errors
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection")
+
+    finally:
+
+        # Close connection objects once Feedback has been obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
+
+# Remove Feedback data with custom removal Remarks ("TRASH RECORD")
+try:
+
     # Create MySQL connection and cursor objects to the database
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
     db_cursor = db_connection.cursor ()
@@ -304,12 +323,27 @@ else:
 
     print (db_cursor.rowcount, "trash record(s) deleted")
 
+# Catch MySQL Exception
+except mysql.connector.Error as error:
+
+    # Print MySQL connection error
+    print ("MySQL error:", error)
+
+# Catch other errors
+except:
+
+    # Print other errors
+    print ("Error occurred attempting to establish database connection")
+
+finally:
+
     # Close connection objects once Feedback has been obtained
     db_cursor.close ()
     db_connection.close () # Close MySQL connection
 
-    # Do something else
-    pass
+
+# Do something else
+pass
 
 """
 # 1) Get dataset
