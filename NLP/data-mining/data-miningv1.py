@@ -199,6 +199,7 @@ feedback_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/feedback.csv" 
 pickles_file_path = "/home/p/Desktop/csitml/NLP/data-mining/pickles/" # File path containing pickled objects
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/data-mining/accuracies/" # Model accuracy results file path
 preprocess_data = True # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
+remove_trash_data = False # Boolean to trigger deletion of trash Feedback data in the database (Default value is FALSE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 
 # Database global variables
@@ -329,43 +330,46 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
         # Print debugging message
         print (len (feedback_to_clean_df), "record(s) successfully pre-processed")
 
-# Remove trash Feedback data marked with custom removal Remarks ("TRASH RECORD")
-try: # Trash Feedback are feedback which has either its SubjectCleaned or MainTextCleaned empty after data cleaning (meaning that they contain and are made up of invalid characters)
+# Check boolean to see whether or not to delete records (intrusive) that contain the custom TRASH RECORD identifier in Remarks
+if (remove_trash_data == True):
 
-    print ("Removing TRASH records from the database..")
+    # Remove trash Feedback data marked with custom removal Remarks ("TRASH RECORD")
+    try: # Trash Feedback are feedback which has either its SubjectCleaned or MainTextCleaned empty after data cleaning (meaning that they contain and are made up of invalid characters)
 
-    # Create MySQL connection and cursor objects to the database
-    db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
-    db_cursor = db_connection.cursor ()
+        print ("Removing TRASH records from the database..")
 
-    # Create SQL statement to delete records with the Remarks set as 'TRASH RECORD'
-    sql = "DELETE FROM %s WHERE Remarks = \'%s\';" % (feedback_table, trash_record)
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
 
-    # Execute SQL statement
-    db_cursor.execute (sql)
+        # Create SQL statement to delete records with the Remarks set as 'TRASH RECORD'
+        sql = "DELETE FROM %s WHERE Remarks = \'%s\';" % (feedback_table, trash_record)
 
-    # Commit changes made
-    db_connection.commit ()
+        # Execute SQL statement
+        db_cursor.execute (sql)
 
-    print (db_cursor.rowcount, "trash record(s) deleted")
+        # Commit changes made
+        db_connection.commit ()
 
-# Catch MySQL Exception
-except mysql.connector.Error as error:
+        print (db_cursor.rowcount, "trash record(s) deleted")
 
-    # Print MySQL connection error
-    print ("MySQL error:", error)
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
 
-# Catch other errors
-except:
+        # Print MySQL connection error
+        print ("MySQL error:", error)
 
-    # Print other errors
-    print ("Error occurred attempting to establish database connection")
+    # Catch other errors
+    except:
 
-finally:
+        # Print other errors
+        print ("Error occurred attempting to establish database connection")
 
-    # Close connection objects once Feedback has been obtained
-    db_cursor.close ()
-    db_connection.close () # Close MySQL connection
+    finally:
+
+        # Close connection objects once Feedback has been obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
 
 """ Start DATA MINING process """
 print ("\n\n***Data Mining***\n")
@@ -377,7 +381,8 @@ try:
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
     # Create SQL query to get Feedback table values
-    sql_query = "SELECT * FROM %s" % (feedback_table)
+    sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `ID`, OverallScore, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s;" % (feedback_table)
+    # sql_query = "SELECT * FROM %s" % (feedback_table)
 
     # Execute query and convert Feedback table into a pandas DataFrame
     feedback_df = pd.read_sql (sql_query, db_connection)
