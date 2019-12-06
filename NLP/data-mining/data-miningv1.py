@@ -194,8 +194,8 @@ def load_pickle (filename):
 
 
 # Global variables
-feedback_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/feedback.csv" # Dataset file path
-clean_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/clean-feedback.csv' # Cleaned dataset file path
+raw_feedback_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/raw-feedback.csv' # Raw dataset file path (dataset PRIOR to data mining)
+feedback_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/feedback.csv" # Dataset file path (dataset AFTER data mining)
 pickles_file_path = "/home/p/Desktop/csitml/NLP/data-mining/pickles/" # File path containing pickled objects
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/data-mining/accuracies/" # Model accuracy results file path
 preprocess_data = True # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
@@ -212,6 +212,9 @@ trash_record = "TRASH RECORD"   # Custom identifier for identifying records to b
 # Program starts here
 program_start_time = datetime.datetime.now ()
 print ("Start time: ", program_start_time)
+
+""" Preliminary preparations before data mining process """
+print ("\n***Preliminary preparations before data mining process***\n")
 
 # Check if there are any Feedback in the database which have not been pre-processed yet
 try:
@@ -257,7 +260,7 @@ finally:
 if (preprocess_data == True): # Pre-process feedback if there are texts that have not been cleaned
 
     # Print debugging message
-    print ("\nUnprocessed feedback data detected..")
+    print ("Unprocessed feedback data detected..")
     print ("Pre-processing:", len (feedback_to_clean_df), "record(s)")
 
     # print ("Records:")
@@ -329,7 +332,7 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
 # Remove trash Feedback data marked with custom removal Remarks ("TRASH RECORD")
 try: # Trash Feedback are feedback which has either its SubjectCleaned or MainTextCleaned empty after data cleaning (meaning that they contain and are made up of invalid characters)
 
-    print ("\nRemoving TRASH records from the database..")
+    print ("Removing TRASH records from the database..")
 
     # Create MySQL connection and cursor objects to the database
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
@@ -364,11 +367,9 @@ finally:
     db_cursor.close ()
     db_connection.close () # Close MySQL connection
 
+""" Start DATA MINING process """
+print ("\n\n***Data Mining***\n")
 
-# Do something else
-pass
-
-"""
 # 1) Get dataset
 try:
 
@@ -399,38 +400,19 @@ finally:
     # Close connection object once Feedback has been obtained
     db_connection.close () # Close MySQL connection
 
-
 # 2) Understand dataset
 if (preliminary_check == True): # Check boolean to display preliminary information
 
     # Print some information of about the data
-    print ("\n***Preliminary information about dataset***\n")
+    print ("Preliminary information about dataset:")
     print ("Dimensions: ", feedback_df.shape, "\n")
     print ("First few records:")
     print (feedback_df.head (), "\n")
     print ("Columns and data types:")
     print (feedback_df.dtypes, "\n")
-"""
 
-# 3) Data pre-processing
-
-"""
-# DO THESE AFTER UPDATING DATABASE!
-# Remove with rows containing empty texts [DO THIS LATER ON!]
-feedback_to_clean_df = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned != ""]
-feedback_to_clean_df = feedback_to_clean_df [feedback_to_clean_df.SubjectCleaned != ""]
-
-# Update database with cleaned MainText and Subject
-# Create SQLAlchemy engine object [mysql://user:password@host/database]
-db_engine = create_engine ("mysql://{user}:{password}@{host}/{schema}".format (user = mysql_user, password = mysql_password, host = mysql_host, schema = mysql_schema)) 
-db_connection = db_engine.connect () # Establish a connection to the database
-
-# Insert combined dataframe to the database
-# combined_df.to_sql (name = feedback_table, con = db_connection, if_exists = "append", index = False, chunksize = 1000) # Insert 1000 rows into database at a time
-
-# Close connection object once Feedback has been inserted
-db_connection.close () # Close MySQL connection
-"""
+# 3) Feature Engineering (Data pre-processing)
+pass
 
 # Create custom identifier (WebAppID_FeedbackID_CategoryID)
 
