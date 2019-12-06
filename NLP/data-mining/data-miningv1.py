@@ -30,6 +30,9 @@ import sklearn.metrics as metrics # 4.5) For determination of model accuracy
 from warnings import simplefilter
 simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
 
+# Pre-requisite:
+# SET SQL Setting SET SQL_SAFE_UPDATES = 0; # To allow for updates using non-key columns in the WHERE clause
+
 # Function to clean corpus (accepts sequence-type corpus and returns a list of all cleaned documents)
 def clean_document (corpus):
 
@@ -199,11 +202,12 @@ preprocess_data = True # Boolean to trigger pre-processing of Feedback data in t
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 
 # Database global variables
-mysql_user = "root"         # MySQL username
-mysql_password = "csitroot" # MySQL password
-mysql_host = "localhost"    # MySQL host
-mysql_schema = "csitDB"     # MySQL schema (NOTE: MySQL in Windows is case-insensitive)
-feedback_table = "Feedback" # Name of feedback table in database
+mysql_user = "root"             # MySQL username
+mysql_password = "csitroot"     # MySQL password
+mysql_host = "localhost"        # MySQL host
+mysql_schema = "csitDB"         # MySQL schema (NOTE: MySQL in Windows is case-insensitive)
+feedback_table = "Feedback"     # Name of feedback table in database
+trash_record = "TRASH RECORD"   # Custom identifier for identifying records to be deleted (NOTE: MySQL is case-insensitive!)
 
 # Program starts here
 program_start_time = datetime.datetime.now ()
@@ -249,17 +253,30 @@ finally:
     # Close connection object once Feedback has been obtained
     db_connection.close () # Close MySQL connection
 
-# Check boolean to see whether or not to pre-process data
+# Check boolean to see whether or not data pre-processing needs to be first carried out on the Feedbacks collected
 if (preprocess_data == True): # Pre-process feedback if there are texts that have not been cleaned
+
+    # Print debugging message
+    print ("\nUnprocessed feedback data detected..")
+    print ("Pre-processing:", len (feedback_to_clean_df), "record(s)")
+
+    # print ("Records:")
+    # print (feedback_to_clean_df)
 
     # Pre-process new Feedback data that have not been pre-processed
     feedback_to_clean_df.MainTextCleaned = clean_document (feedback_to_clean_df.MainText) # Clean main text
     feedback_to_clean_df.SubjectCleaned = clean_document (feedback_to_clean_df.Subject) # Clean subject text
     
      # Extract rows containing empty texts and combine them into a new dataframe containing trash records (records to be removed later on)
-    feedback_to_clean_df_trash = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned == ""]
-    feedback_to_clean_df_trash = feedback_to_clean_df_trash.append (feedback_to_clean_df [feedback_to_clean_df.SubjectCleaned == ""], ignore_index = True)
-    feedback_to_clean_df_trash ['Remarks'] = "TRASH RECORD" # Set remarks of empty rows to custom remark for removal ("TRASH RECORD")
+    feedback_to_clean_df_trash = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned == ""] # Get feedback with MainTextCleaned set to blank
+    feedback_to_clean_df_trash = feedback_to_clean_df_trash.append (feedback_to_clean_df [feedback_to_clean_df.SubjectCleaned == ""], ignore_index = True) # Get feedback with SubjectCleaned set to blank
+    feedback_to_clean_df_trash ['Remarks'] = trash_record # Set remarks of empty rows to custom trash record identifier remark for removal ("TRASH RECORD")
+
+    # Remove duplicate trash feedbacks (for trash feedback with both blanks for SubjectCleaned and MainTextCleaned)[keeps first occurance of duplicated feedback]
+    feedback_to_clean_df_trash.drop_duplicates (subset = "FeedbackID", keep = "first", inplace = True)
+
+    # Print debugging message
+    print ("Number of trash record(s) found:", len (feedback_to_clean_df_trash), "record(s)")
 
     # Remove rows containing empty texts (remove trash records from current dataframe)
     feedback_to_clean_df = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned != ""]
@@ -279,7 +296,8 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
         for index, row in feedback_to_clean_df.iterrows ():
 
             # Create SQL statement to get Feedback table values
-            sql = "UPDATE Feedback SET Remarks = %s, MainTextCleaned = %s, SubjectCleaned = %s WHERE FeedbackID = %s AND CategoryID = %s AND WebAppID = %s;" 
+            sql = "UPDATE %s " % (feedback_table)
+            sql = sql + "SET Remarks = %s, MainTextCleaned = %s, SubjectCleaned = %s WHERE FeedbackID = %s AND CategoryID = %s AND WebAppID = %s;" 
 
             # Execute SQL statement
             db_cursor.execute (sql, (row ['Remarks'], row ['MainTextCleaned'], row ['SubjectCleaned'], row ['FeedbackID'], row ['CategoryID'], row ['WebAppID']))
@@ -305,15 +323,20 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
         db_cursor.close ()
         db_connection.close () # Close MySQL connection
 
-# Remove Feedback data with custom removal Remarks ("TRASH RECORD")
-try:
+        # Print debugging message
+        print (len (feedback_to_clean_df), "record(s) successfully pre-processed")
+
+# Remove trash Feedback data marked with custom removal Remarks ("TRASH RECORD")
+try: # Trash Feedback are feedback which has either its SubjectCleaned or MainTextCleaned empty after data cleaning (meaning that they contain and are made up of invalid characters)
+
+    print ("\nRemoving TRASH records from the database..")
 
     # Create MySQL connection and cursor objects to the database
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
     db_cursor = db_connection.cursor ()
 
     # Create SQL statement to delete records with the Remarks set as 'TRASH RECORD'
-    sql = "DELETE FROM Feedback WHERE Remarks = 'TRASH RECORD';" 
+    sql = "DELETE FROM %s WHERE Remarks = \'%s\';" % (feedback_table, trash_record)
 
     # Execute SQL statement
     db_cursor.execute (sql)

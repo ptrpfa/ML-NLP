@@ -207,8 +207,8 @@ combined_df.to_csv (combined_file_path, index = False, encoding = "utf-8")
 db_engine = create_engine ("mysql://{user}:{password}@{host}/{schema}".format (user = mysql_user, password = mysql_password, host = mysql_host, schema = mysql_schema)) 
 db_connection = db_engine.connect () # Establish a connection to the database
 
-# Insert combined dataframe to the database
-# combined_df.to_sql (name = feedback_table, con = db_connection, if_exists = "append", index = False, chunksize = 1000) # Insert 1000 rows into database at a time
+# Insert combined dataframe to the database (Requires SQL Setting: SET @@global.sql_mode = '';)
+combined_df.to_sql (name = feedback_table, con = db_connection, if_exists = "append", index = False, chunksize = 1000) # Insert 1000 rows into database at a time
 
 # Close connection object once Feedback has been inserted
 db_connection.close () # Close MySQL connection
