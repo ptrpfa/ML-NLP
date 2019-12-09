@@ -1,13 +1,15 @@
 # Program to combine the data from each of the four datasets used from Hamburg University and Mendeley Data respectively
+# Datasets chosen due to credibility of data source as well as QUALITY of datasets
 import pandas as pd
-import mysql.connector #MySQL
-from sqlalchemy import create_engine
+import mysql.connector # MySQL
+from sqlalchemy import create_engine # MySQL
 import datetime
 
 # Global variables
 combined_df = pd.DataFrame (columns = ["WebAppID", "CategoryID", "Subject", "MainText", "Rating", "Remarks"]) # Initialise DataFrame to contain combined feedback data
 combined_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/clean/combined.csv' # Cleaned dataset file path
 clean_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/clean/' # File path for folder containing formatted and cleaned datasets
+dataset_webapp_id = 99 # Default WebAppID for datasets obtained from Hamburg University and Mendeley Data
 
 # Datasets
 pan_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Pan_Dataset.xlsx" # Dataset file path
@@ -51,7 +53,7 @@ pan_df = pan_df.drop (['id'], axis = 1) # Drop unused ID column
 
 pan_df ['Subject'] = [cname for cname in pan_df.class_name] # Since Pan dataset does not have any Subject values, use its previous class name as the subject
 pan_df ['Rating'] = 3 # New column for rating (Default value is set to 3)
-pan_df ['WebAppID'] = 99 # New column for WebAppID (Default value is set to 99)
+pan_df ['WebAppID'] = dataset_webapp_id # New column for WebAppID (Default value is set to 99)
 
 # Re-label categories to respective IDs and change categories to the generalised categories
 pan_df.class_name = pan_df.class_name.map ({'feature request': 5, 'information giving': 4, 'information seeking': 4, 'problem discovery': 2}) 
@@ -111,7 +113,7 @@ maalej_df = maalej_df.drop (['appId', 'dataSource'], axis = 1) # Drop unused app
 
 maalej_df.task = maalej_df.task.map ({'FR': 'feature request', 'RT': "rating", 'UE': 'user experience', 'PD': 'problem discovery'}) # Re-label categories
 maalej_df.title.fillna (maalej_df ['task'], inplace = True) # Fill null values in Title with the Category (task)
-maalej_df ['WebAppID'] = 99 # New column for WebAppID (Default value is set to 99)
+maalej_df ['WebAppID'] = dataset_webapp_id # New column for WebAppID (Default value is set to 99)
 
 # Re-label categories to respective IDs and change categories to the generalised categories
 maalej_df.task = maalej_df.task.map ({'feature request': 5, 'rating': 4, 'user experience': 4, 'problem discovery': 2})
