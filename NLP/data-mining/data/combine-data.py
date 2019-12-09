@@ -5,11 +5,16 @@ import mysql.connector # MySQL
 from sqlalchemy import create_engine # MySQL
 import datetime
 
+# Pre-requisite:
+# MySQL Setting:
+# Requires SQL Setting: SET @@global.sql_mode = ''; # To allow insertion of combined dataset into the database
+
 # Global variables
 combined_df = pd.DataFrame (columns = ["WebAppID", "CategoryID", "Subject", "MainText", "Rating", "Remarks"]) # Initialise DataFrame to contain combined feedback data
 combined_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/clean/combined.csv' # Cleaned dataset file path
 clean_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/clean/' # File path for folder containing formatted and cleaned datasets
 dataset_webapp_id = 99 # Default WebAppID for datasets obtained from Hamburg University and Mendeley Data
+execute_insert = False # Boolean to trigger insertion of combined dataset to the database 
 
 # Datasets
 pan_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Pan_Dataset.xlsx" # Dataset file path
@@ -205,15 +210,21 @@ print (combined_df.dtypes, "\n")
 # Export combined dataframe
 combined_df.to_csv (combined_file_path, index = False, encoding = "utf-8") 
 
-# Create SQLAlchemy engine object [mysql://user:password@host/database]
-db_engine = create_engine ("mysql://{user}:{password}@{host}/{schema}".format (user = mysql_user, password = mysql_password, host = mysql_host, schema = mysql_schema)) 
-db_connection = db_engine.connect () # Establish a connection to the database
+# Check boolean to see whether to execute insertion of combined dataset into the database
+if (execute_insert ==  True): # Create database connection and insert combined dataset to database if boolean set to True
 
-# Insert combined dataframe to the database (Requires SQL Setting: SET @@global.sql_mode = '';)
-combined_df.to_sql (name = feedback_table, con = db_connection, if_exists = "append", index = False, chunksize = 1000) # Insert 1000 rows into database at a time
+    # Create SQLAlchemy engine object [mysql://user:password@host/database]
+    db_engine = create_engine ("mysql://{user}:{password}@{host}/{schema}".format (user = mysql_user, password = mysql_password, host = mysql_host, schema = mysql_schema)) 
+    db_connection = db_engine.connect () # Establish a connection to the database
 
-# Close connection object once Feedback has been inserted
-db_connection.close () # Close MySQL connection
+    # Insert combined dataframe to the database (Requires SQL Setting: SET @@global.sql_mode = '';)
+    combined_df.to_sql (name = feedback_table, con = db_connection, if_exists = "append", index = False, chunksize = 1000) # Insert 1000 rows into database at a time
+
+    # Close connection object once Feedback has been inserted
+    db_connection.close () # Close MySQL connection
+
+    # Print debugging statement
+    print (len (combined_df), "records inserted into %s.%s" % (mysql_schema, feedback_table))
 
 # Program end time
 program_end_time = datetime.datetime.now ()

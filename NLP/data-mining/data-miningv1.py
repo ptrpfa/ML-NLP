@@ -31,6 +31,7 @@ from warnings import simplefilter
 simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
 
 # Pre-requisite:
+# MySQL Setting:
 # SET SQL Setting SET SQL_SAFE_UPDATES = 0; # To allow for updates using non-key columns in the WHERE clause
 
 # Function to clean corpus (accepts sequence-type corpus and returns a list of all cleaned documents)
@@ -383,6 +384,7 @@ try:
     # Create SQL query to get Feedback table values
     sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `ID`, OverallScore, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s;" % (feedback_table)
     # sql_query = "SELECT * FROM %s" % (feedback_table)
+    # SHOULD SELECT FEEDBACK WHERE REMARKS ISNOT 'TRASH RECORD!'
 
     # Execute query and convert Feedback table into a pandas DataFrame
     feedback_df = pd.read_sql (sql_query, db_connection)
