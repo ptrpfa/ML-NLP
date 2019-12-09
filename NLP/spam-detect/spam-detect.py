@@ -386,8 +386,8 @@ clean_file_path = '/home/p/Desktop/csitml/NLP/spam-detect/data/clean-spam-ham.cs
 pickles_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/pickles/" # File path containing pickled objects
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/spam-detect/accuracies/" # Model accuracy results file path
 preliminary_check = False # Boolean to trigger display of preliminary dataset visualisations and presentations
-use_pickle = True # Boolean to trigger whether to use pickled objects or not
-message_check = True # Boolean to trigger prompt for user message to check whether it is spam or not
+use_pickle = False # Boolean to trigger whether to use pickled objects or not
+message_check = False # Boolean to trigger prompt for user message to check whether it is spam or not
 display_visuals = False # Boolean to trigger display of visualisations
 
 # Whitelisting

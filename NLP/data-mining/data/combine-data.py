@@ -7,14 +7,14 @@ import datetime
 
 # Pre-requisite:
 # MySQL Setting:
-# Requires SQL Setting: SET @@global.sql_mode = ''; # To allow insertion of combined dataset into the database
+# Requires SQL Setting: SET @@global.sql_mode = ''; # To allow for insertion of dataset from pandas
 
 # Global variables
 combined_df = pd.DataFrame (columns = ["WebAppID", "CategoryID", "Subject", "MainText", "Rating", "Remarks"]) # Initialise DataFrame to contain combined feedback data
 combined_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/clean/combined.csv' # Cleaned dataset file path
 clean_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/clean/' # File path for folder containing formatted and cleaned datasets
 dataset_webapp_id = 99 # Default WebAppID for datasets obtained from Hamburg University and Mendeley Data
-execute_insert = False # Boolean to trigger insertion of combined dataset to the database 
+execute_insert = True # Boolean to trigger insertion of combined dataset to the database 
 
 # Datasets
 pan_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/Datasets/Pan_Dataset.xlsx" # Dataset file path
