@@ -3,12 +3,12 @@ Id,OverallScore,Subject,MainText,SpamStatus,SubjectSpam,MainTextSpam
 2_2_3,20,sub,wgwg,0,0,0
 3_3_3,12,wf,wgwggw,0,0,0
 2_4_4,6,wgw,wehwhwrh,0,0,0
-3_5_2,8,2,wrrgw,0,0,0
+3_5_2,8,2,wrrgw,0,1,0
 3_6_3,8,dog,hseteth,0,0,0
 1_7_1,30,whwh,wwh,0,0,0
 1_8_2,4,eheh,wgwh,0,0,0
 2_9_1,18,rg,wgwg,0,0,0
-3_10_1,30,erg,1 42ggg,0,0,0
+3_10_1,30,erg,1 42ggg,0,0,1
 1_11_2,20,wgwg,wgwg,0,0,0
 2_12_4,6,erggre,wgwg,0,0,0
 99_229340_2,12,It's good to look at stuff,It's good if you want to browse but is horrible at letting me post anything It stays frozen on signing in and I have to close the app ,0,0,0
@@ -172,7 +172,7 @@ Id,OverallScore,Subject,MainText,SpamStatus,SubjectSpam,MainTextSpam
 99_229817_4,6,rating,Passt Naja,0,0,0
 99_229818_4,6,rating,Better than it used to be Still needs significant amounts of work ,0,0,0
 99_229819_4,6,rating,Yes Hoping to use for school ,0,0,0
-99_229820_4,6,rating,2 mounth Good apps for mobile,0,0,0
+99_229820_4,6,rating,2 mounth Good apps for mobile,0,0,1
 99_229821_4,6,rating,Puta Ok,0,0,0
 99_229822_4,6,rating,This is an ok app I still love it doe Not amazing but not terrible c ,0,0,0
 99_229823_4,6,rating,nice it's nice,0,0,0
@@ -306,7 +306,7 @@ Id,OverallScore,Subject,MainText,SpamStatus,SubjectSpam,MainTextSpam
 99_229983_4,8,rating,Ma,0,0,0
 99_229984_4,8,rating,Awesome Used to be sooo jelaous of ppl with cam wow and retrica but now theyre jelaous of me Thanks ,0,0,0
 99_229985_4,8,rating,Adhi Gooood,0,0,0
-99_229986_4,8,rating,i rated 4 New here i dnt knw yet how ,0,0,0
+99_229986_4,8,rating,i rated 4 New here i dnt knw yet how ,0,0,1
 99_229987_4,8,rating,So far pretty good,0,0,0
 99_229988_4,8,rating,Are you listening ,0,0,0
 99_229989_4,8,rating,Cool,0,0,0
@@ -503,7 +503,7 @@ Id,OverallScore,Subject,MainText,SpamStatus,SubjectSpam,MainTextSpam
 99_230212_4,10,Great ,A ,0,0,0
 99_230213_4,10,Excellent scanner,I have used this for over a year and have never been disappointed The sound quality is excellent on the iPhone ,0,0,0
 99_230214_4,10,Finally,This app rocks ,0,0,0
-99_230217_4,10,T PAIN,I love dis right Herre,0,0,0
+99_230217_4,10,T PAIN,I love dis right Herre,0,1,0
 99_230219_4,10,Mr,I love it,0,0,0
 99_230220_4,4,Not that good,Got this app to be able to share PPT and Word docs Does not support all of the data from those files Not happy with it at all Will try to work with it but I think it was a waste of time and money ,0,0,0
 99_230221_4,10,Great,Great ,0,0,0
@@ -1027,7 +1027,7 @@ Id,OverallScore,Subject,MainText,SpamStatus,SubjectSpam,MainTextSpam
 99_230861_4,10,It is important to have it,It is important to have it,0,0,0
 99_230862_4,10,Files with Style,This app not only looks great but also provides excellent functionality Flash Drives are a thing of the past ,0,0,0
 99_230863_4,10,Goood, mms ,0,0,0
-99_230864_4,10,Support,Full rate,0,0,0
+99_230864_4,10,Support,Full rate,0,0,1
 99_230865_4,8,Good but,Very useful app Thank you If only I could see my filled in fields of the Word forms on it it would be awesome It is a pain and a hustle not to be able to Also I miss the old app logo new one is just so so Otherwise it is great,0,0,0
 99_230866_4,10,Lego 24778990765788788,Download this app today,0,0,0
 99_230867_4,10,One of the best apps ever,This is one app that I use every day,0,0,0
@@ -1051,7 +1051,7 @@ Id,OverallScore,Subject,MainText,SpamStatus,SubjectSpam,MainTextSpam
 99_230894_4,10,My favorite app,Great app after 5 years of using it I upgraded to premium Very well done,0,0,0
 99_230898_4,10,I like evernote,Use Evernote a lot thanks,0,0,0
 99_230902_4,10,Love it,I use it all the time works great,0,0,0
-99_230905_4,10,In constant use on all platforms,Performs better than other services that I have tried,0,0,0
+99_230905_4,10,In constant use on all platforms,Performs better than other services that I have tried,0,0,1
 99_230906_4,10,I love this app,It's like carrying 40 different notebooks around in your pocket all the time And the fact that all the info and ideas you collect during the day is waiting for you on your desktop computer when you get home is invaluable,0,0,0
 99_230908_4,10,Evernote rating,No other app does what Evernote does in my experience You just have to start using it and it is very easy You cannot make a mistake or lose your material Once you start using it it will become an essential part of how you save and organize your thoughts material pictures virtually anything It is one of those 'must have' apps,0,0,0
 99_230909_4,10,Couldn't live with out it,If,0,0,0
@@ -1339,7 +1339,7 @@ Id,OverallScore,Subject,MainText,SpamStatus,SubjectSpam,MainTextSpam
 99_231257_4,8,rating,Thanks So nice application,0,0,0
 99_231258_4,10,rating,Awesome Best,0,0,0
 99_231259_4,10,rating,Superb Bus chat off ka option bhi hona chaiye,0,0,0
-99_231260_4,10,rating,Epic Its really good but when using 3g costs lods,0,0,0
+99_231260_4,10,rating,Epic Its really good but when using 3g costs lods,0,0,1
 99_231261_4,8,rating,Good Ok,0,0,0
 99_231262_4,10,rating,This is the part of my life I,0,0,0
 99_231263_4,10,rating,Nice app Good,0,0,0
@@ -1384,7 +1384,7 @@ Id,OverallScore,Subject,MainText,SpamStatus,SubjectSpam,MainTextSpam
 99_231302_4,10,rating,Like,0,0,0
 99_231303_4,10,rating,Great messenger app Excellent wouldnt have done it better myself ,0,0,0
 99_231304_4,10,rating,Whatsapp Awesome app in luv wit whatsapp,0,0,0
-99_231305_4,6,rating,G B,0,0,0
+99_231305_4,6,rating,G B,0,0,1
 99_231306_4,10,rating,3 Gud,0,0,0
 99_231307_4,8,rating,Very good Easy and very helpful,0,0,0
 99_231308_4,10,rating,Hi Good,0,0,0
@@ -1486,7 +1486,7 @@ Id,OverallScore,Subject,MainText,SpamStatus,SubjectSpam,MainTextSpam
 99_231412_4,10,rating,Xperia c Awesome,0,0,0
 99_231413_4,10,rating,Excellent The best,0,0,0
 99_231414_4,10,rating,Good Very good,0,0,0
-99_231415_4,10,rating,Great app Needs call service,0,0,0
+99_231415_4,10,rating,Great app Needs call service,0,0,1
 99_231416_4,10,rating,Nice app Grt app connect with friends,0,0,0
 99_231417_4,10,rating,Great app Very handy,0,0,0
 99_231418_4,10,rating,Wow Awesome,0,0,0
@@ -2035,8 +2035,8 @@ Id,OverallScore,Subject,MainText,SpamStatus,SubjectSpam,MainTextSpam
 99_232149_5,5,Very usefull app,Thank's for app but can you add offline mod for exmple i want save one video in my iphone and after that play it with VLC,0,0,0
 99_232151_5,3,Important,If we could create docs inside the app that would be great,0,0,0
 99_232152_5,2,No Gallery,Still no gallery in Camera Upload mode ,0,0,0
-99_232153_5,4,Video,Its amazing The only thing to make it better is to have the ability or export videos to your camara roll,0,0,0
-99_232155_5,3,Downloading ,It's super easy to copy pictures to clipboard or even save them to your phone but why can't I download my videos ,0,0,0
+99_232153_5,4,Video,Its amazing The only thing to make it better is to have the ability or export videos to your camara roll,0,1,0
+99_232155_5,3,Downloading ,It's super easy to copy pictures to clipboard or even save them to your phone but why can't I download my videos ,0,0,1
 99_232157_5,2,Larger photos,Please include the option to view thumbnail larger while viewing in the photo folder,0,0,0
 99_232158_5,5,Print,Would love to be able to print right from the app instead of having to go through the browser or open it in another app Otherwise very convenient,0,0,0
 99_232160_5,5,Bookmarks and Highlights,I love this app but I do wish I could highlight words in PDFs and create bookmarks Would this be possible at some piont ,0,0,0
@@ -2053,7 +2053,7 @@ Id,OverallScore,Subject,MainText,SpamStatus,SubjectSpam,MainTextSpam
 99_232179_5,3,Needs Offline Functionality,Great app beautiful layout But I wish saved items could be viewed offline ,0,0,0
 99_232180_5,1,Why force landscape ,Still landscape only So weird Every other app has the ability to go either direction Too bad,0,0,0
 99_232181_5,4,I agree with 4,They need to show B B small inns,0,0,0
-99_232193_5,3,Edited photos not uploaded,Dropbox is a great service However when I use the camera upload option in iOS 7 it only uploads the original photo and not the edited one Otherwise I'd rate dropbox as 5 stars,0,0,0
+99_232193_5,3,Edited photos not uploaded,Dropbox is a great service However when I use the camera upload option in iOS 7 it only uploads the original photo and not the edited one Otherwise I'd rate dropbox as 5 stars,0,0,1
 99_232197_5,1,Sharing,I can't share folders That was the only reason I made a Dropbox in the first place Ugh,0,0,0
 99_232198_5,2,Voicememo,How to add voice memo from the iPhone ,0,0,0
 99_232202_5,2,Dropbox desktop GREAT Device App NOT,When I put things into my dropbox folder on my desktop I can find files by date modified by name etc The app has an incomprehensible and un modifyable sorting function It's almost impossible to find files within the app Once you find them on your phone I believe you can 'favorite' them But the challenge is to find them,0,0,0

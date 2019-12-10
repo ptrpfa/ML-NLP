@@ -185,7 +185,7 @@ def clean_document (corpus):
         # Extract digits embedded within words
         document = re.sub (r"([a-zA-Z]+)(\d+)([a-zA-Z]+)", r"\1 \2 \3", document)
 
-        # Insert back previously extracted hyperlinks into the document (maybe don't insert back until text is lemmatised/stemmed/tokenized)
+        # Insert back previously extracted hyperlinks into the document
         for hyperlink in list_document_hyperlinks:
             
             # Hyperlink is inserted at a later stage as we don't want some REGEX transformations to be applied to it
@@ -219,20 +219,30 @@ def update_row_dataframe (series, cursor, connection): # Used over iterrows as f
     # Commit changes made
     connection.commit ()
 
-# Function to pickle object (accepts object to pickle and its filename to save as)
-def pickle_object (pickle_object, filename):
+# Function to calculate runtime of models
+def model_runtime (duration, start_time, end_time):
 
-    # Get full filepath
-    filepath = pickles_file_path + filename
+    # Difference in time
+    difference = end_time - start_time
 
-    # Create file object to store object to pickle
-    file_pickle = open (filepath, 'wb') # w = write, b = bytes (overwrite pre-existing files if any)
+    # Calculate runtime
+    duration = duration + (difference.seconds + difference.microseconds / (10**6))
 
-    # Pickle (serialise) object [store object as a file]
-    pickle.dump (pickle_object, file_pickle)
+    # Return duration to calling program
+    return duration
 
-    # Close file object
-    file_pickle.close ()
+# Custom unpickler to prevent pickle attribute errors (as pickles do not store info on how a class is constructed and needs access to the pickler class when unpickling)
+class CustomUnpickler (pickle.Unpickler):
+
+    def find_class (self, module, name):
+        
+        # Reference to tokenize function in spam_detect.py
+        if name == 'tokenize':
+
+            from spam_detect_supplement import tokenize
+            return tokenize
+            
+        return super().find_class(module, name)
 
 # Function to load pickle object (accepts filename of pickle to load and returns the de-pickled object)
 def load_pickle (filename):
@@ -243,8 +253,8 @@ def load_pickle (filename):
     # Create file object accessing the pickle file
     file_pickle = open (filepath, 'rb') # r = read, b = bytes
 
-    # Get pickled object
-    pickled_object = pickle.load (file_pickle)
+    # Custom unpickler to reference pickle object constructed previously
+    pickled_object = CustomUnpickler (file_pickle).load() 
 
     # Close file object
     file_pickle.close ()
@@ -273,7 +283,11 @@ trash_record = "TRASH RECORD"   # Custom identifier for identifying records to b
 whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitelist for identifying non-SPAM feedbacks (whitelist is in lowercase)
             'comms-tech', 'communications-tech', 'comms-technology',
             'communications-technology', 'crypto-tech', 'cryptography-tech',
-            'crypto-technology', 'cryptography-technology']
+            'crypto-technology', 'cryptography-technology', 'crash', 'information', 'giving', 'problem', 
+            'discovery', 'feature', 'request', 'bug', 'report', 'discover', 'seeking', 'general', 'ui', 
+            'ux', 'user', 'password', 'malware', 'malicious', 'vulnerable', 'vulnerability', 'lag', 'hang', 
+            'stop', 'usablility', 'usable', 'feedback', 'slow', 'long', 'memory', 'update', 'alert', 
+            'install', 'fix', 'future']
 bugcode_regex = r"(.*)(BUG\d{6}\$)(.*)" # Assume bug code is BUGXXXXXX$ ($ is delimiter)
 
 # Program starts here
@@ -284,7 +298,7 @@ print ("Start time: ", program_start_time)
 print ("\n***Preliminary preparations before data mining process***\n")
 
 # Check if there are any Feedback in the database which have not been pre-processed yet
-try:
+try: # Unprocessed Feedback are Feedbacks with Subject/MainText not cleaned yet and not labelled to be whitelisted or not
 
     # Create MySQL connection object to the database
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
@@ -324,7 +338,7 @@ finally:
     db_connection.close () # Close MySQL connection
 
 # Check boolean to see whether or not data pre-processing needs to be first carried out on the Feedbacks collected
-if (preprocess_data == True): # Pre-process feedback if there are texts that have not been cleaned
+if (preprocess_data == True): # Pre-process feedback if there are texts that have not been cleaned or labelled in the whitelist column
 
     # Print debugging message
     print ("Unprocessed feedback data detected..")
@@ -333,12 +347,15 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
     # print ("Records:")
     # print (feedback_to_clean_df)
 
-    """" Feedback WHITELISTING """ # Whitelist first before cleaning documents as sometimes some whitelisted documents may be indicated as TRASH RECORDS (ie Subject contain BUGCODE but MainText is filled with invalid characters)
+    """" Feedback WHITELISTING """ 
+    # Whitelist first before cleaning documents as sometimes some whitelisted documents may be indicated as 
+    # TRASH RECORDS (ie Subject contain BUGCODE but MainText is filled with invalid characters)
+
     # Default value of Whitelisted = 2 (to indicate absence of whitelist check) [1 =  Whitelisted, 0 = NA]
     print ("Checking unprocessed feedbacks for whitelisted strings and custom BUGCODE..")
 
     # Check for whitelisted strings
-    feedback_to_clean_df = feedback_to_clean_df.apply (whitelist_dataframe, axis = 1)
+    feedback_to_clean_df = feedback_to_clean_df.apply (whitelist_dataframe, axis = 1) # Access dataframe row by row (row-iteration)
 
     """ Feedback CLEANING """
     print ("Cleaning unprocessed feedbacks..")
@@ -450,7 +467,7 @@ try:
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
     # Create SQL query to get Feedback table values (Feature Engineering)
-    sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, OverallScore, Subject, SubjectCleaned, MainText, MainTextCleaned, Whitelisted, SpamStatus FROM %s WHERE Remarks != \'%s\' OR Remarks IS NULL;" % (feedback_table, trash_record)
+    sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, OverallScore, SubjectCleaned as `Subject`, MainTextCleaned as `MainText`, SpamStatus FROM %s WHERE (Remarks != \'%s\' OR Remarks IS NULL) AND Whitelisted != 1;" % (feedback_table, trash_record)
 
     # Execute query and convert Feedback table into a pandas DataFrame
     feedback_df = pd.read_sql (sql_query, db_connection)
@@ -458,11 +475,13 @@ try:
     """
     Selected Feedback features:
     -Id (WebAppID + FeedbackID + CategoryID) [Not ID as will cause Excel .sylk file intepretation error]
-    -Subject
     -Overall score
-    -Main text
+    -Subject (processed)
+    -Main text (processed)
     -Spam status [target1]
     -Topic [added] [target2]
+
+    --> Dataset obtained at this point contains pre-processed Feedback data that are NOT whitelisted
     """
 
 except mysql.connector.Error as error:
@@ -480,12 +499,12 @@ finally:
     # Close connection object once Feedback has been obtained
     db_connection.close () # Close MySQL connection
 
-# 2) Further feature Engineering (Data pre-processing) [FOR REDUNDANCY]
+# 2) Further feature engineering (Data pre-processing) [FOR REDUNDANCY]
 # Drop empty rows/columns
 feedback_df.dropna (how = "all", inplace = True) # Drop empty rows
 feedback_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
 
-# Remove rows containing empty texts (Don't remove empty texts in SubjectCleaned and MainTextCleaned as may potentially be whitelisted trash records [records that contain invalid characters but have whitelisted strings!])
+# Remove rows containing empty texts
 feedback_df = feedback_df [feedback_df.Subject != ""]
 feedback_df = feedback_df [feedback_df.MainText != ""]
 
@@ -510,11 +529,96 @@ if (preliminary_check == True): # Check boolean to display preliminary informati
 # 4) Apply spam-detection model
 
 # Assign target and features variables
-target = feedback_df.SpamStatus
-features = [feedback_df.SubjectCleaned, feedback_df.MainTextCleaned] # Feature is a list in this case as the spam detection model will first be applied to Subject, then to MainText, one by one
+# Target and feature variables for Subject
+target_subject = feedback_df.SubjectSpam
+feature_subject = feedback_df.Subject
 
-# Predict spam
-pass # Exclude whitelisted feedbacks when doing predictions
+# Target and feature variables for MainText
+target_main_text = feedback_df.MainTextSpam
+feature_main_text = feedback_df.MainText 
+
+# Load pickled/serialised vectorizer from spam-detection program
+vectorizer = load_pickle ("tfidf-vectorizer.pkl")
+print ("loaded vectorizer")
+
+# Fit data to vectorizer [Create DTM of dataset (features)]
+feature_subject = vectorizer.transform (feature_subject) 
+feature_main_text = vectorizer.transform (feature_main_text) 
+print ("transformed texts to DTM")
+
+# Initialise model durations
+svm_duration = 0
+lr_duration = 0
+mnb_duration = 0
+
+ # Load pickled models
+svm_start_time = datetime.datetime.now ()
+svm_model = load_pickle ("svm-model.pkl") 
+svm_end_time = datetime.datetime.now ()
+svm_duration = model_runtime (svm_duration, svm_start_time, svm_end_time)
+
+lr_start_time = datetime.datetime.now ()
+logistic_regression_model = load_pickle ("logistic-regression-model.pkl")
+lr_end_time = datetime.datetime.now ()
+lr_duration = model_runtime (lr_duration, lr_start_time, lr_end_time)
+
+mnb_start_time = datetime.datetime.now ()
+multinomialnb_model = load_pickle ("naive-bayes-model.pkl")
+mnb_end_time = datetime.datetime.now ()
+mnb_duration = model_runtime (mnb_duration, mnb_start_time, mnb_end_time)
+
+# Predict message is a spam or not
+print ("Results:")
+
+""" Subject """
+print ("Predicting whether subjects of feedback is spam..")
+
+# SVM
+start_time = datetime.datetime.now ()
+y_test_predict_svm_subject = svm_model.predict (feature_subject) # Store predicted results of model
+end_time = datetime.datetime.now ()
+print ("SVM:", y_test_predict_svm_subject, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
+
+# Logistic Regression
+start_time = datetime.datetime.now ()
+y_test_predict_lr_subject = logistic_regression_model.predict (feature_subject) # Store predicted results of model
+end_time = datetime.datetime.now ()
+print ("LR:", y_test_predict_lr_subject, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
+
+# Naive Bayes
+start_time = datetime.datetime.now ()
+y_test_predict_mnb_subject = multinomialnb_model.predict (feature_subject) # Store predicted results of model
+end_time = datetime.datetime.now ()
+print ("MNB:", y_test_predict_mnb_subject, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
+
+""" Main Text """
+print ("Predicting whether main texts of feedback is spam..")
+
+# SVM
+start_time = datetime.datetime.now ()
+y_test_predict_svm_main_text = svm_model.predict (feature_main_text) # Store predicted results of model
+end_time = datetime.datetime.now ()
+print ("SVM:", y_test_predict_svm_main_text, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
+
+# Logistic Regression
+start_time = datetime.datetime.now ()
+y_test_predict_lr_main_text = logistic_regression_model.predict (feature_main_text) # Store predicted results of model
+end_time = datetime.datetime.now ()
+print ("LR:", y_test_predict_lr_main_text, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
+
+# Naive Bayes
+start_time = datetime.datetime.now ()
+y_test_predict_mnb_main_text = multinomialnb_model.predict (feature_main_text) # Store predicted results of model
+end_time = datetime.datetime.now ()
+print ("MNB:", y_test_predict_mnb_main_text, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
+
+# Collate results of spam-detection predictions
+feedback_df.SubjectSpam = y_test_predict_svm_subject
+feedback_df.MainTextSpam = y_test_predict_svm_main_text
+# feedback_df.SpamStatus = feedback_df.SubjectSpam or feedback_df.MainTextSpam # WORK ON SPAMSTATUS COLUMN!
+
+# Save cleaned raw (prior to data mining) dataset to CSV
+feedback_df.to_csv (feedback_file_path, index = False, encoding = "utf-8")
 
 # Program end time
 program_end_time = datetime.datetime.now ()
