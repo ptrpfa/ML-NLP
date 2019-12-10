@@ -34,6 +34,52 @@ simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warni
 # MySQL Setting:
 # SET SQL Setting SET SQL_SAFE_UPDATES = 0; # To allow for updates using non-key columns in the WHERE clause
 
+# Function to whitelist Feedback (accepts a Series object of each row in DataFrame and returns a labelled Series object)
+def whitelist_dataframe (series): # Used over iterrows as faster and more efficient
+
+    # Initialise check variables
+    bugcode_match = False   # By default false
+    whitelist_match = False # By default false
+    
+    # Check for BUGCODE
+    match_subject = re.match (bugcode_regex, series ['Subject']) # Check for BUGCODE matches in Subject (uncleaned)
+    match_maintext = re.match (bugcode_regex, series ['MainText']) # Check for BUGCODE matches in MainText (uncleaned)
+
+    # Check for BUGCODE matches in Subject and MainText
+    if (match_subject != None or match_maintext != None):
+
+        # Set bugcode_match to True if either Subject or MainText contains a BUGCODE
+        bugcode_match = True
+
+    # Check for WHITELIST matches
+    for whitelisted_string in whitelist:
+
+        # Check if whitelisted string is in either the Subject or MainText of the Feedback
+        if ((whitelisted_string in series ['Subject'].lower ()) or (whitelisted_string in series ['MainText'].lower ())): # Check if whitelisted string is in UNPROCESSED text data
+            
+            # Set whitelist_match to true
+            whitelist_match = True
+
+            # Immediately break out of loop if a match is found in either Subject or MainText
+            break
+
+    # Check if a BUGCODE or whitelisted word was detected in the Subject/MainText of the Feedback
+    if (bugcode_match == True or whitelist_match == True):
+
+        # Set whitelist column as True [1] if a whitelisted string or bugcode was found in the Subject or MainText of the Feedback
+        series ['Whitelisted'] = 1
+
+        # Debugging
+        print ("Whitelisted:", series ['FeedbackID'])
+
+    else:
+
+        # Set whitelist column as False [0] if no whitelisted string or bugcode was found in the Subject or MainText of the Feedback
+        series ['Whitelisted'] = 0 # Default value of Whitelisted is 2 (to indicate that feedback has not been processed)
+
+    # Return series object
+    return series
+
 # Function to clean corpus (accepts sequence-type corpus and returns a list of all cleaned documents)
 def clean_document (corpus):
 
@@ -160,6 +206,19 @@ def clean_document (corpus):
     # Return list of cleaned documents
     return list_cleaned_documents
 
+# Function to execute SQL UPDATE for each row in the series object passed to update processed Feedback data
+def update_row_dataframe (series, cursor, connection): # Used over iterrows as faster and more efficient
+
+    # Create SQL statement to get Feedback table values
+    sql = "UPDATE %s " % (feedback_table)
+    sql = sql + "SET Remarks = %s, MainTextCleaned = %s, SubjectCleaned = %s, Whitelisted = %s WHERE FeedbackID = %s AND CategoryID = %s AND WebAppID = %s;" 
+
+    # Execute SQL statement
+    cursor.execute (sql, (series ['Remarks'], series ['MainTextCleaned'], series ['SubjectCleaned'], series ['Whitelisted'], series ['FeedbackID'], series ['CategoryID'], series ['WebAppID']))
+
+    # Commit changes made
+    connection.commit ()
+
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
 
@@ -231,7 +290,7 @@ try:
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
     # Create SQL query to get Feedback table values
-    sql_query = "SELECT * FROM %s WHERE MainTextCleaned IS NULL OR SubjectCleaned IS NULL OR Whitelisted = 2;" % (feedback_table)
+    sql_query = "SELECT * FROM %s WHERE MainTextCleaned IS NULL OR SubjectCleaned IS NULL OR Whitelisted NOT IN (0,1);" % (feedback_table)
 
     # Execute query and convert Feedback table into a pandas DataFrame
     feedback_to_clean_df = pd.read_sql (sql_query, db_connection)
@@ -275,51 +334,11 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
     # print (feedback_to_clean_df)
 
     """" Feedback WHITELISTING """ # Whitelist first before cleaning documents as sometimes some whitelisted documents may be indicated as TRASH RECORDS (ie Subject contain BUGCODE but MainText is filled with invalid characters)
+    # Default value of Whitelisted = 2 (to indicate absence of whitelist check) [1 =  Whitelisted, 0 = NA]
     print ("Checking unprocessed feedbacks for whitelisted strings and custom BUGCODE..")
 
-    # Default value of Whitelisted = 2 (to indicate absence of whitelist check) [1 =  Whitelisted, 0 = NA]
     # Check for whitelisted strings
-    for index, row in feedback_to_clean_df.iterrows (): # Loop to access each row in DataFrame
-
-        # Initialise check variables
-        bugcode_match = False   # By default false
-        whitelist_match = False # By default false
-        
-        # Check for BUGCODE
-        match_subject = re.match (bugcode_regex, row ['Subject']) # Check for BUGCODE matches in Subject (uncleaned)
-        match_maintext = re.match (bugcode_regex, row ['MainText']) # Check for BUGCODE matches in MainText (uncleaned)
-
-        # Check for BUGCODE matches in Subject and MainText
-        if (match_subject != None or match_maintext != None):
-
-            # Set bugcode_match to True if either Subject or MainText contains a BUGCODE
-            bugcode_match = True
-
-        # Check for WHITELIST matches
-        for whitelisted_string in whitelist:
-
-            # Check if whitelisted string is in either the Subject or MainText of the Feedback
-            if ((whitelisted_string in row ['Subject'].lower ()) or (whitelisted_string in row ['MainText'].lower ())): # Check if whitelisted string is in UNPROCESSED text data
-                
-                # Set whitelist_match to true
-                whitelist_match = True
-
-                # Immediately break out of loop if a match is found in either Subject or MainText
-                break
-
-        # Check if a BUGCODE or whitelisted word was detected in the Subject/MainText of the Feedback
-        if (bugcode_match == True or whitelist_match == True):
-
-            # Set whitelist column as True [1] if a whitelisted string or bugcode was found in the Subject or MainText of the Feedback
-            feedback_to_clean_df.loc [index, 'Whitelisted'] = 1
-
-            # Debugging
-            print ("Whitelisted:", row ['FeedbackID'])
-
-        else:
-
-            # Set whitelist column as False [0] if no whitelisted string or bugcode was found in the Subject or MainText of the Feedback
-            feedback_to_clean_df.loc [index, 'Whitelisted'] = 0 # Default value of Whitelisted is 2 (to indicate that feedback has not been processed)
+    feedback_to_clean_df = feedback_to_clean_df.apply (whitelist_dataframe, axis = 1)
 
     """ Feedback CLEANING """
     print ("Cleaning unprocessed feedbacks..")
@@ -334,13 +353,12 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
     
     # Set remarks of empty rows to custom trash record identifier remark for removal ("TRASH RECORD") if feedback is NOT WHITELISTED
     feedback_to_clean_df_trash.loc [feedback_to_clean_df_trash ['Whitelisted'] != 1, 'Remarks'] = trash_record
-    # feedback_to_clean_df_trash ['Remarks'] = trash_record # Set remarks of empty rows to custom trash record identifier remark for removal ("TRASH RECORD")
 
     # Remove duplicate trash feedbacks (for trash feedback with both blanks for SubjectCleaned and MainTextCleaned)[keeps first occurance of duplicated feedback]
     feedback_to_clean_df_trash.drop_duplicates (subset = "FeedbackID", keep = "first", inplace = True)
 
     # Print debugging message
-    print ("Number of trash record(s) found:", len (feedback_to_clean_df_trash ['Whitelisted'] != 1), "record(s)")
+    print ("Number of trash record(s) found:", len (feedback_to_clean_df_trash.loc [feedback_to_clean_df_trash ['Whitelisted'] != 1]), "record(s)")
 
     # Remove rows containing empty texts (remove trash records from current dataframe)
     feedback_to_clean_df = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned != ""]
@@ -357,17 +375,7 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
         db_cursor = db_connection.cursor ()
 
         # Update database table with the newly pre-processed data
-        for index, row in feedback_to_clean_df.iterrows ():
-
-            # Create SQL statement to get Feedback table values
-            sql = "UPDATE %s " % (feedback_table)
-            sql = sql + "SET Remarks = %s, MainTextCleaned = %s, SubjectCleaned = %s, Whitelisted = %s WHERE FeedbackID = %s AND CategoryID = %s AND WebAppID = %s;" 
-
-            # Execute SQL statement
-            db_cursor.execute (sql, (row ['Remarks'], row ['MainTextCleaned'], row ['SubjectCleaned'], row ['Whitelisted'], row ['FeedbackID'], row ['CategoryID'], row ['WebAppID']))
-
-            # Commit changes made
-            db_connection.commit ()
+        feedback_to_clean_df.apply (update_row_dataframe, axis = 1, args = (db_cursor, db_connection))
 
     # Catch MySQL Exception
     except mysql.connector.Error as error:
@@ -477,7 +485,7 @@ finally:
 feedback_df.dropna (how = "all", inplace = True) # Drop empty rows
 feedback_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
 
-# Remove rows containing empty texts (Don't remove empty texts in SubjectCleaned and MainTextCleaned as potentially whitelisted trash records [records that contain invalid characters but have whitelisted strings!])
+# Remove rows containing empty texts (Don't remove empty texts in SubjectCleaned and MainTextCleaned as may potentially be whitelisted trash records [records that contain invalid characters but have whitelisted strings!])
 feedback_df = feedback_df [feedback_df.Subject != ""]
 feedback_df = feedback_df [feedback_df.MainText != ""]
 
@@ -506,7 +514,7 @@ target = feedback_df.SpamStatus
 features = [feedback_df.SubjectCleaned, feedback_df.MainTextCleaned] # Feature is a list in this case as the spam detection model will first be applied to Subject, then to MainText, one by one
 
 # Predict spam
-pass
+pass # Exclude whitelisted feedbacks when doing predictions
 
 # Program end time
 program_end_time = datetime.datetime.now ()
