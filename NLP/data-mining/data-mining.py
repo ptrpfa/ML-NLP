@@ -219,6 +219,33 @@ def update_row_dataframe (series, cursor, connection): # Used over iterrows as f
     # Commit changes made
     connection.commit ()
 
+# Function to compute Spam Status of Feedback
+def spam_status_dataframe (series):
+
+    # Get current row's SubjectSpam and MainTextSpam values
+    subject_status = series ['SubjectSpam']
+    main_text_status = series ['MainTextSpam']
+
+    # Assign SpamStatus of current feedback (if either Subject or MainText is labelled as Spam, label entire Feedback as spam)
+    spam_status = bool (subject_status or main_text_status)
+
+    # Assign spam status accordingly
+    if (spam_status == True):
+
+        # Assign spam status to True if either Subject or MainText is labelled spam
+        series ['SpamStatus'] = 1
+
+        # Debugging
+        print ("Spam record:", series ['Id'])
+
+    else:
+
+        # Otherwise label feedback as not spam
+        series ['SpamStatus'] = 0    
+
+    # Return series object
+    return series
+
 # Function to calculate runtime of models
 def model_runtime (duration, start_time, end_time):
 
@@ -239,7 +266,7 @@ class CustomUnpickler (pickle.Unpickler):
         # Reference to tokenize function in spam_detect.py
         if name == 'tokenize':
 
-            from spam_detect_supplement import tokenize
+            from spam_detect_supplement import tokenize # References spam_detect_supplement.py in the same directory
             return tokenize
             
         return super().find_class(module, name)
@@ -527,98 +554,68 @@ if (preliminary_check == True): # Check boolean to display preliminary informati
     print (feedback_df.dtypes, "\n")
 
 # 4) Apply spam-detection model
-
 # Assign target and features variables
-# Target and feature variables for Subject
-target_subject = feedback_df.SubjectSpam
+target_subject = feedback_df.SubjectSpam # Target and feature variables for Subject
 feature_subject = feedback_df.Subject
 
-# Target and feature variables for MainText
-target_main_text = feedback_df.MainTextSpam
+target_main_text = feedback_df.MainTextSpam # Target and feature variables for MainText
 feature_main_text = feedback_df.MainText 
 
 # Load pickled/serialised vectorizer from spam-detection program
+start_time = datetime.datetime.now ()
 vectorizer = load_pickle ("tfidf-vectorizer.pkl")
-print ("loaded vectorizer")
+end_time = datetime.datetime.now ()
+print ("Loaded vectorizer in", model_runtime (0, start_time, end_time), "seconds")
 
 # Fit data to vectorizer [Create DTM of dataset (features)]
+start_time = datetime.datetime.now ()
 feature_subject = vectorizer.transform (feature_subject) 
+end_time = datetime.datetime.now ()
+print ("Transformed subject to DTM in", model_runtime (0, start_time, end_time), "seconds")
+
+start_time = datetime.datetime.now ()
 feature_main_text = vectorizer.transform (feature_main_text) 
-print ("transformed texts to DTM")
-
-# Initialise model durations
-svm_duration = 0
-lr_duration = 0
-mnb_duration = 0
-
- # Load pickled models
-svm_start_time = datetime.datetime.now ()
-svm_model = load_pickle ("svm-model.pkl") 
-svm_end_time = datetime.datetime.now ()
-svm_duration = model_runtime (svm_duration, svm_start_time, svm_end_time)
-
-lr_start_time = datetime.datetime.now ()
-logistic_regression_model = load_pickle ("logistic-regression-model.pkl")
-lr_end_time = datetime.datetime.now ()
-lr_duration = model_runtime (lr_duration, lr_start_time, lr_end_time)
-
-mnb_start_time = datetime.datetime.now ()
-multinomialnb_model = load_pickle ("naive-bayes-model.pkl")
-mnb_end_time = datetime.datetime.now ()
-mnb_duration = model_runtime (mnb_duration, mnb_start_time, mnb_end_time)
-
-# Predict message is a spam or not
-print ("Results:")
-
-""" Subject """
-print ("Predicting whether subjects of feedback is spam..")
-
-# SVM
-start_time = datetime.datetime.now ()
-y_test_predict_svm_subject = svm_model.predict (feature_subject) # Store predicted results of model
 end_time = datetime.datetime.now ()
-print ("SVM:", y_test_predict_svm_subject, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
+print ("Transformed main text to DTM in", model_runtime (0, start_time, end_time), "seconds")
 
-# Logistic Regression
+# Initialise model duration
+spam_model_duration = 0 
+
+ # Load pickled model
 start_time = datetime.datetime.now ()
-y_test_predict_lr_subject = logistic_regression_model.predict (feature_subject) # Store predicted results of model
+spam_model = load_pickle ("svm-model.pkl") # Used SVM Model in this case
 end_time = datetime.datetime.now ()
-print ("LR:", y_test_predict_lr_subject, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
+spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
 
-# Naive Bayes
+# Predict whether Subject is spam or not
+print ("\nPredicting whether subjects of feedback is spam..")
 start_time = datetime.datetime.now ()
-y_test_predict_mnb_subject = multinomialnb_model.predict (feature_subject) # Store predicted results of model
+model_prediction_subject = spam_model.predict (feature_subject) # Store predicted results of model
 end_time = datetime.datetime.now ()
-print ("MNB:", y_test_predict_mnb_subject, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
+spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
+print ("Predicted subject values:", model_prediction_subject)
 
-""" Main Text """
-print ("Predicting whether main texts of feedback is spam..")
-
-# SVM
+# Predict whether MainText is spam or not
+print ("\nPredicting whether main texts of feedback is spam..")
 start_time = datetime.datetime.now ()
-y_test_predict_svm_main_text = svm_model.predict (feature_main_text) # Store predicted results of model
+model_prediction_main_text = spam_model.predict (feature_main_text) # Store predicted results of model
 end_time = datetime.datetime.now ()
-print ("SVM:", y_test_predict_svm_main_text, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
+spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
+print ("Predicted main text values:", model_prediction_main_text)
 
-# Logistic Regression
-start_time = datetime.datetime.now ()
-y_test_predict_lr_main_text = logistic_regression_model.predict (feature_main_text) # Store predicted results of model
-end_time = datetime.datetime.now ()
-print ("LR:", y_test_predict_lr_main_text, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
-
-# Naive Bayes
-start_time = datetime.datetime.now ()
-y_test_predict_mnb_main_text = multinomialnb_model.predict (feature_main_text) # Store predicted results of model
-end_time = datetime.datetime.now ()
-print ("MNB:", y_test_predict_mnb_main_text, ", Runtime: ", model_runtime (0, start_time, end_time), "seconds")
+# Print spam model runtime
+print ("\nSpam model runtime: ", spam_model_duration, "seconds")
 
 # Collate results of spam-detection predictions
-feedback_df.SubjectSpam = y_test_predict_svm_subject
-feedback_df.MainTextSpam = y_test_predict_svm_main_text
-# feedback_df.SpamStatus = feedback_df.SubjectSpam or feedback_df.MainTextSpam # WORK ON SPAMSTATUS COLUMN!
+feedback_df.SubjectSpam = model_prediction_subject
+feedback_df.MainTextSpam = model_prediction_main_text
+feedback_df = feedback_df.apply (spam_status_dataframe, axis = 1) # Access dataframe row by row (row-iteration)
 
-# Save cleaned raw (prior to data mining) dataset to CSV
+# Save cleaned (after data mining) dataset to CSV
 feedback_df.to_csv (feedback_file_path, index = False, encoding = "utf-8")
+
+# Update DB
+pass
 
 # Program end time
 program_end_time = datetime.datetime.now ()
