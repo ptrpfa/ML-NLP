@@ -69,6 +69,9 @@ def whitelist_dataframe (series): # Used over iterrows as faster and more effici
         # Set whitelist column as True [1] if a whitelisted string or bugcode was found in the Subject or MainText of the Feedback
         series ['Whitelisted'] = 1
 
+        # Set SpamStatus of whitelisted column as NOT SPAM automatically
+        series ['SpamStatus'] = 0
+
         # Debugging
         print ("Whitelisted:", series ['FeedbackID'])
 
@@ -211,10 +214,10 @@ def update_row_dataframe (series, cursor, connection): # Used over iterrows as f
 
     # Create SQL statement to get Feedback table values
     sql = "UPDATE %s " % (feedback_table)
-    sql = sql + "SET Remarks = %s, MainTextCleaned = %s, SubjectCleaned = %s, Whitelisted = %s WHERE FeedbackID = %s AND CategoryID = %s AND WebAppID = %s;" 
+    sql = sql + "SET Remarks = %s, MainTextCleaned = %s, SubjectCleaned = %s, Whitelisted = %s, SpamStatus = %s WHERE FeedbackID = %s AND CategoryID = %s AND WebAppID = %s;" 
 
     # Execute SQL statement
-    cursor.execute (sql, (series ['Remarks'], series ['MainTextCleaned'], series ['SubjectCleaned'], series ['Whitelisted'], series ['FeedbackID'], series ['CategoryID'], series ['WebAppID']))
+    cursor.execute (sql, (series ['Remarks'], series ['MainTextCleaned'], series ['SubjectCleaned'], series ['Whitelisted'], series ['SpamStatus'], series ['FeedbackID'], series ['CategoryID'], series ['WebAppID']))
 
     # Commit changes made
     connection.commit ()
@@ -245,6 +248,22 @@ def spam_status_dataframe (series):
 
     # Return series object
     return series
+
+# Function to execute SQL UPDATE for each row in the series object passed to update the Spam Status of Feedback data
+def update_spam_status_dataframe (series, cursor, connection): # Used over iterrows as faster and more efficient
+
+    # Split Id (WebAppID_FeedbackID_CategoryID) into a list
+    list_id = series ['Id'].split ('_') # Each ID component is delimited by underscore
+    
+    # Create SQL statement to get Feedback table values
+    sql = "UPDATE %s " % (feedback_table)
+    sql = sql + "SET SpamStatus = %s WHERE WebAppID = %sAND FeedbackID = %s AND CategoryID = %s;" 
+
+    # Execute SQL statement
+    cursor.execute (sql, (series ['SpamStatus'], list_id [0], list_id [1], list_id [2]))
+
+    # Commit changes made
+    connection.commit ()
 
 # Function to calculate runtime of models
 def model_runtime (duration, start_time, end_time):
@@ -371,9 +390,6 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
     print ("Unprocessed feedback data detected..")
     print ("Pre-processing:", len (feedback_to_clean_df), "record(s)")
 
-    # print ("Records:")
-    # print (feedback_to_clean_df)
-
     """" Feedback WHITELISTING """ 
     # Whitelist first before cleaning documents as sometimes some whitelisted documents may be indicated as 
     # TRASH RECORDS (ie Subject contain BUGCODE but MainText is filled with invalid characters)
@@ -391,26 +407,24 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
     feedback_to_clean_df.MainTextCleaned = clean_document (feedback_to_clean_df.MainText) # Clean main text
     feedback_to_clean_df.SubjectCleaned = clean_document (feedback_to_clean_df.Subject) # Clean subject text
     
-     # Extract rows containing empty texts and combine them into a new dataframe containing trash records (records to be removed later on)
-    feedback_to_clean_df_trash = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned == ""] # Get feedback with MainTextCleaned set to blank
-    feedback_to_clean_df_trash = feedback_to_clean_df_trash.append (feedback_to_clean_df [feedback_to_clean_df.SubjectCleaned == ""], ignore_index = True) # Get feedback with SubjectCleaned set to blank
-    
+     # Extract rows containing empty empty main texts (records to be removed later on)
+    feedback_to_clean_df_trash = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned == ""].copy () # Get feedback with MainTextCleaned set to blank
+ 
     # Set remarks of empty rows to custom trash record identifier remark for removal ("TRASH RECORD") if feedback is NOT WHITELISTED
     feedback_to_clean_df_trash.loc [feedback_to_clean_df_trash ['Whitelisted'] != 1, 'Remarks'] = trash_record
 
-    # Remove duplicate trash feedbacks (for trash feedback with both blanks for SubjectCleaned and MainTextCleaned)[keeps first occurance of duplicated feedback]
-    feedback_to_clean_df_trash.drop_duplicates (subset = "FeedbackID", keep = "first", inplace = True)
+    # Set SpamStatus of trash records that are not whitelisted as 3 to mark that the feedbacks are unable to be processed as they are trash records
+    feedback_to_clean_df_trash.loc [feedback_to_clean_df_trash ['Whitelisted'] != 1, 'SpamStatus'] = 3 # see how to run this, got warning
 
     # Print debugging message
     print ("Number of trash record(s) found:", len (feedback_to_clean_df_trash.loc [feedback_to_clean_df_trash ['Whitelisted'] != 1]), "record(s)")
 
     # Remove rows containing empty texts (remove trash records from current dataframe)
     feedback_to_clean_df = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned != ""]
-    feedback_to_clean_df = feedback_to_clean_df [feedback_to_clean_df.SubjectCleaned != ""]
 
-    # Combined newly labelled empty rows into the previous dataframe (Rows with empty Subject or MainText now have the Remark 'TRASH RECORD' for later removal [except for those with WHITELISTED STRINGS])
+    # Combined newly labelled empty rows into the previous dataframe (Rows with empty MainText now have the Remark 'TRASH RECORD' for later removal [except for those with WHITELISTED STRINGS])
     feedback_to_clean_df = feedback_to_clean_df.append (feedback_to_clean_df_trash, ignore_index = True)
-
+    feedback_to_clean_df_trash.to_csv ("/home/p/Desktop/csitml/NLP/data-mining/data/trash.csv")
     # Connect to database to update values
     try:
 
@@ -494,7 +508,7 @@ try:
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
     # Create SQL query to get Feedback table values (Feature Engineering)
-    sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, OverallScore, SubjectCleaned as `Subject`, MainTextCleaned as `MainText`, SpamStatus FROM %s WHERE (Remarks != \'%s\' OR Remarks IS NULL) AND Whitelisted != 1;" % (feedback_table, trash_record)
+    sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, OverallScore, SubjectCleaned as `Subject`, MainTextCleaned as `MainText`, SpamStatus FROM %s WHERE (Remarks != \'%s\' OR Remarks IS NULL) AND Whitelisted != 1 AND SpamStatus NOT IN (0, 1, 3);" % (feedback_table, trash_record)
 
     # Execute query and convert Feedback table into a pandas DataFrame
     feedback_df = pd.read_sql (sql_query, db_connection)
@@ -508,7 +522,7 @@ try:
     -Spam status [target1]
     -Topic [added] [target2]
 
-    --> Dataset obtained at this point contains pre-processed Feedback data that are NOT whitelisted
+    --> Dataset obtained at this point contains pre-processed Feedback data that are NOT trash records, NOT whitelisted and NOT classified as spam/ham
     """
 
 except mysql.connector.Error as error:
@@ -525,15 +539,14 @@ finally:
 
     # Close connection object once Feedback has been obtained
     db_connection.close () # Close MySQL connection
-
+"""SHUOLD ADD DATAFRAME EMPTY CHECK HERE FORR SECOND PROGRAM RUN ERROR!"""
 # 2) Further feature engineering (Data pre-processing) [FOR REDUNDANCY]
 # Drop empty rows/columns
 feedback_df.dropna (how = "all", inplace = True) # Drop empty rows
 feedback_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
 
-# Remove rows containing empty texts
-feedback_df = feedback_df [feedback_df.Subject != ""]
-feedback_df = feedback_df [feedback_df.MainText != ""]
+# Remove rows containing empty main texts (trash records)
+# feedback_df = feedback_df [feedback_df.MainText != ""]
 
 # Add two extra custom columns to identify whether Subject or MainText portion of Feedback is Spam
 feedback_df ['SubjectSpam'] = 0 # Default value of 0 [HAM]
@@ -614,8 +627,36 @@ feedback_df = feedback_df.apply (spam_status_dataframe, axis = 1) # Access dataf
 # Save cleaned (after data mining) dataset to CSV
 feedback_df.to_csv (feedback_file_path, index = False, encoding = "utf-8")
 
-# Update DB
-pass
+# Connect to database to update SpamStatus values of Feedback
+try:
+
+    # Create MySQL connection and cursor objects to the database
+    db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+    db_cursor = db_connection.cursor ()
+
+    # Update database table with the newly pre-processed data
+    feedback_df.apply (update_spam_status_dataframe, axis = 1, args = (db_cursor, db_connection))
+
+# Catch MySQL Exception
+except mysql.connector.Error as error:
+
+    # Print MySQL connection error
+    print ("MySQL error:", error)
+
+# Catch other errors
+except:
+
+    # Print other errors
+    print ("Error occurred attempting to establish database connection")
+
+finally:
+
+    # Close connection objects once Feedback has been obtained
+    db_cursor.close ()
+    db_connection.close () # Close MySQL connection
+
+    # Print debugging message
+    print (len (feedback_df), "record(s) successfully classified as SPAM/HAM")
 
 # Program end time
 program_end_time = datetime.datetime.now ()
