@@ -43,6 +43,7 @@ Improvements that could be done:
 -Better and more dataset added (currently, SPAM messages are SMS SPAM, can try to find other types of SPAM and train the models accordingly)
 -Further model refinements like boosting..
 -Can implement another 'layer' for a feedback deception model (detection of false feedback)
+-Instead of using the SVC model for the SVM classifier, could have used LinearSVC instead which is much faster (current SVC SVM Model is slower)
 
 Based on overall results, concluded that LR/SVM models are the best performing models"
 -In terms of F1 score (useful for binary classfication of SPAM or HAM (not spam) and unbalanced data distribution)

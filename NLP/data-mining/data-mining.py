@@ -7,24 +7,10 @@ import string
 import html
 import unidecode
 import pickle 
-import scipy
 import datetime
-import spacy # NLP
-from sklearn.model_selection import train_test_split # 4) For splitting dataset into train/test sets
-from sklearn import linear_model # 4) Linear Regression classifier
-from sklearn.naive_bayes import MultinomialNB # 4) Naive Bayes classifier
 from sklearn import svm # 4) SVM classifier
 from sklearn.linear_model import LogisticRegression # 4) Logistic Regression classifier
-from sklearn.model_selection import GridSearchCV # 4) For model hyperparameters tuning
 from sklearn.feature_extraction.text import TfidfVectorizer # NLP Vectorizer
-import matplotlib.pyplot as plt # For visualisations
-import matplotlib # For visualisations
-from sklearn.metrics import accuracy_score # 4.5) Accuracy scorer
-from sklearn.model_selection import cross_val_score # 4.5) Cross validation scorer
-from sklearn.metrics import confusion_matrix # 4.5) For determination of model accuracy
-from sklearn.utils.multiclass import unique_labels # 4.5) For determination of model accuracy
-from sklearn.metrics import classification_report # 4.5) For determination of model accuracy
-import sklearn.metrics as metrics # 4.5) For determination of model accuracy
 
 # Suppress scikit-learn FutureWarnings
 from warnings import simplefilter
@@ -316,6 +302,7 @@ accuracy_file_path = "/home/p/Desktop/csitml/NLP/data-mining/accuracies/" # Mode
 preprocess_data = True # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
 remove_trash_data = False # Boolean to trigger deletion of trash Feedback data in the database (Default value is FALSE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
+spam_check_data = True # Boolean to trigger application of Spam Detection model on Feedback data in the database (Default value is TRUE)
 
 # Database global variables
 mysql_user = "root"             # MySQL username
@@ -435,6 +422,9 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
         # Update database table with the newly pre-processed data
         feedback_to_clean_df.apply (update_row_dataframe, axis = 1, args = (db_cursor, db_connection))
 
+        # Print debugging message
+        print (len (feedback_to_clean_df), "record(s) successfully pre-processed")
+        
     # Catch MySQL Exception
     except mysql.connector.Error as error:
 
@@ -452,9 +442,6 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
         # Close connection objects once Feedback has been obtained
         db_cursor.close ()
         db_connection.close () # Close MySQL connection
-
-        # Print debugging message
-        print (len (feedback_to_clean_df), "record(s) successfully pre-processed")
 
 # Check boolean to see whether or not to delete records (intrusive) that contain the custom TRASH RECORD identifier in Remarks
 if (remove_trash_data == True): # By default don't delete TRASH RECORDs as even though they lack quality information, they serve semantic value (metadata)
@@ -477,6 +464,9 @@ if (remove_trash_data == True): # By default don't delete TRASH RECORDs as even 
         # Commit changes made
         db_connection.commit ()
 
+        # Debugging
+        print (db_cursor.rowcount, "trash record(s) deleted")
+
     # Catch MySQL Exception
     except mysql.connector.Error as error:
 
@@ -491,9 +481,6 @@ if (remove_trash_data == True): # By default don't delete TRASH RECORDs as even 
 
     finally:
 
-        # Debugging
-        print (db_cursor.rowcount, "trash record(s) deleted")
-
         # Close connection objects once Feedback has been obtained
         db_cursor.close ()
         db_connection.close () # Close MySQL connection
@@ -501,7 +488,7 @@ if (remove_trash_data == True): # By default don't delete TRASH RECORDs as even 
 """ Start DATA MINING process """
 print ("\n\n***Data Mining***\n")
 
-# 1) Get dataset
+# 1) Get dataset for Spam Detection
 try:
 
     # Create MySQL connection object to the database
@@ -512,6 +499,17 @@ try:
 
     # Execute query and convert Feedback table into a pandas DataFrame
     feedback_df = pd.read_sql (sql_query, db_connection)
+
+    # Check if dataframe obtained is empty
+    if (feedback_df.empty == True):
+
+        # Set boolean to apply spam detection model on data to False if dataframe obtained is empty
+        spam_check_data = False
+
+    else:
+
+        # Set boolean to apply spam detection model on data to True (default value) if dataframe obtained is not empty
+        spam_check_data = True
 
     """
     Selected Feedback features:
@@ -539,124 +537,128 @@ finally:
 
     # Close connection object once Feedback has been obtained
     db_connection.close () # Close MySQL connection
-"""SHUOLD ADD DATAFRAME EMPTY CHECK HERE FORR SECOND PROGRAM RUN ERROR!"""
-# 2) Further feature engineering (Data pre-processing) [FOR REDUNDANCY]
-# Drop empty rows/columns
-feedback_df.dropna (how = "all", inplace = True) # Drop empty rows
-feedback_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
 
-# Remove rows containing empty main texts (trash records)
-# feedback_df = feedback_df [feedback_df.MainText != ""]
+# Check boolean to see whether or not to apply Spam Detectino model on Feedback data
+if (spam_check_data == True):
 
-# Add two extra custom columns to identify whether Subject or MainText portion of Feedback is Spam
-feedback_df ['SubjectSpam'] = 0 # Default value of 0 [HAM]
-feedback_df ['MainTextSpam'] = 0 # Default value of 0 [HAM]
+    # 2) Further feature engineering (Data pre-processing) [FOR REDUNDANCY]
+    # Drop empty rows/columns
+    feedback_df.dropna (how = "all", inplace = True) # Drop empty rows
+    feedback_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
 
-# Save cleaned raw (prior to data mining) dataset to CSV
-feedback_df.to_csv (raw_feedback_file_path, index = False, encoding = "utf-8")
+    # Remove rows containing empty main texts (trash records)
+    feedback_df = feedback_df [feedback_df.MainText != ""]
 
-# 3) Understand dataset
-if (preliminary_check == True): # Check boolean to display preliminary information
+    # Add two extra custom columns to identify whether Subject or MainText portion of Feedback is Spam
+    feedback_df ['SubjectSpam'] = 0 # Default value of 0 [HAM]
+    feedback_df ['MainTextSpam'] = 0 # Default value of 0 [HAM]
 
-    # Print some information of about the data
-    print ("Preliminary information about dataset:")
-    print ("Dimensions: ", feedback_df.shape, "\n")
-    print ("First few records:")
-    print (feedback_df.head (), "\n")
-    print ("Columns and data types:")
-    print (feedback_df.dtypes, "\n")
+    # Save cleaned raw (prior to data mining) dataset to CSV
+    feedback_df.to_csv (raw_feedback_file_path, index = False, encoding = "utf-8")
 
-# 4) Apply spam-detection model
-# Assign target and features variables
-target_subject = feedback_df.SubjectSpam # Target and feature variables for Subject
-feature_subject = feedback_df.Subject
+    # 3) Understand dataset
+    if (preliminary_check == True): # Check boolean to display preliminary information
 
-target_main_text = feedback_df.MainTextSpam # Target and feature variables for MainText
-feature_main_text = feedback_df.MainText 
+        # Print some information of about the data
+        print ("Preliminary information about dataset:")
+        print ("Dimensions: ", feedback_df.shape, "\n")
+        print ("First few records:")
+        print (feedback_df.head (), "\n")
+        print ("Columns and data types:")
+        print (feedback_df.dtypes, "\n")
 
-# Load pickled/serialised vectorizer from spam-detection program
-start_time = datetime.datetime.now ()
-vectorizer = load_pickle ("tfidf-vectorizer.pkl")
-end_time = datetime.datetime.now ()
-print ("Loaded vectorizer in", model_runtime (0, start_time, end_time), "seconds")
+    # 4) Apply spam-detection model
+    # Assign target and features variables
+    target_subject = feedback_df.SubjectSpam # Target and feature variables for Subject
+    feature_subject = feedback_df.Subject
 
-# Fit data to vectorizer [Create DTM of dataset (features)]
-start_time = datetime.datetime.now ()
-feature_subject = vectorizer.transform (feature_subject) 
-end_time = datetime.datetime.now ()
-print ("Transformed subject to DTM in", model_runtime (0, start_time, end_time), "seconds")
+    target_main_text = feedback_df.MainTextSpam # Target and feature variables for MainText
+    feature_main_text = feedback_df.MainText 
 
-start_time = datetime.datetime.now ()
-feature_main_text = vectorizer.transform (feature_main_text) 
-end_time = datetime.datetime.now ()
-print ("Transformed main text to DTM in", model_runtime (0, start_time, end_time), "seconds")
+    # Load pickled/serialised vectorizer from spam-detection program
+    start_time = datetime.datetime.now ()
+    vectorizer = load_pickle ("tfidf-vectorizer.pkl")
+    end_time = datetime.datetime.now ()
+    print ("Loaded vectorizer in", model_runtime (0, start_time, end_time), "seconds")
 
-# Initialise model duration
-spam_model_duration = 0 
+    # Fit data to vectorizer [Create DTM of dataset (features)]
+    start_time = datetime.datetime.now ()
+    feature_subject = vectorizer.transform (feature_subject) 
+    end_time = datetime.datetime.now ()
+    print ("Transformed subject to DTM in", model_runtime (0, start_time, end_time), "seconds")
 
- # Load pickled model
-start_time = datetime.datetime.now ()
-spam_model = load_pickle ("svm-model.pkl") # Used SVM Model in this case
-end_time = datetime.datetime.now ()
-spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
+    start_time = datetime.datetime.now ()
+    feature_main_text = vectorizer.transform (feature_main_text) 
+    end_time = datetime.datetime.now ()
+    print ("Transformed main text to DTM in", model_runtime (0, start_time, end_time), "seconds")
 
-# Predict whether Subject is spam or not
-print ("\nPredicting whether subjects of feedback is spam..")
-start_time = datetime.datetime.now ()
-model_prediction_subject = spam_model.predict (feature_subject) # Store predicted results of model
-end_time = datetime.datetime.now ()
-spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
-print ("Predicted subject values:", model_prediction_subject)
+    # Initialise model duration
+    spam_model_duration = 0 
 
-# Predict whether MainText is spam or not
-print ("\nPredicting whether main texts of feedback is spam..")
-start_time = datetime.datetime.now ()
-model_prediction_main_text = spam_model.predict (feature_main_text) # Store predicted results of model
-end_time = datetime.datetime.now ()
-spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
-print ("Predicted main text values:", model_prediction_main_text)
+    # Load pickled model
+    start_time = datetime.datetime.now ()
+    spam_model = load_pickle ("svm-model.pkl") # Used SVM Model in this case
+    # spam_model = load_pickle ("logistic-regression-model.pkl") # Used LR Model in this case
+    end_time = datetime.datetime.now ()
+    spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
 
-# Print spam model runtime
-print ("\nSpam model runtime: ", spam_model_duration, "seconds")
+    # Predict whether Subject is spam or not
+    print ("\nPredicting whether subjects of feedback is spam..")
+    start_time = datetime.datetime.now ()
+    model_prediction_subject = spam_model.predict (feature_subject) # Store predicted results of model
+    end_time = datetime.datetime.now ()
+    spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
+    print ("Predicted subject values:", model_prediction_subject)
 
-# Collate results of spam-detection predictions
-feedback_df.SubjectSpam = model_prediction_subject
-feedback_df.MainTextSpam = model_prediction_main_text
-feedback_df = feedback_df.apply (spam_status_dataframe, axis = 1) # Access dataframe row by row (row-iteration)
+    # Predict whether MainText is spam or not
+    print ("\nPredicting whether main texts of feedback is spam..")
+    start_time = datetime.datetime.now ()
+    model_prediction_main_text = spam_model.predict (feature_main_text) # Store predicted results of model
+    end_time = datetime.datetime.now ()
+    spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
+    print ("Predicted main text values:", model_prediction_main_text)
 
-# Save cleaned (after data mining) dataset to CSV
-feedback_df.to_csv (feedback_file_path, index = False, encoding = "utf-8")
+    # Print spam model runtime
+    print ("\nSpam model runtime: ", spam_model_duration, "seconds")
 
-# Connect to database to update SpamStatus values of Feedback
-try:
+    # Collate results of spam-detection predictions
+    feedback_df.SubjectSpam = model_prediction_subject
+    feedback_df.MainTextSpam = model_prediction_main_text
+    feedback_df = feedback_df.apply (spam_status_dataframe, axis = 1) # Access dataframe row by row (row-iteration)
 
-    # Create MySQL connection and cursor objects to the database
-    db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
-    db_cursor = db_connection.cursor ()
+    # Save cleaned (after data mining) dataset to CSV
+    feedback_df.to_csv (feedback_file_path, index = False, encoding = "utf-8")
 
-    # Update database table with the newly pre-processed data
-    feedback_df.apply (update_spam_status_dataframe, axis = 1, args = (db_cursor, db_connection))
+    # Connect to database to update SpamStatus values of Feedback
+    try:
 
-# Catch MySQL Exception
-except mysql.connector.Error as error:
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
 
-    # Print MySQL connection error
-    print ("MySQL error:", error)
+        # Update database table with the newly pre-processed data
+        feedback_df.apply (update_spam_status_dataframe, axis = 1, args = (db_cursor, db_connection))
 
-# Catch other errors
-except:
+        # Print debugging message
+        print (len (feedback_df), "record(s) successfully classified as SPAM/HAM")
 
-    # Print other errors
-    print ("Error occurred attempting to establish database connection")
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
 
-finally:
+        # Print MySQL connection error
+        print ("MySQL error:", error)
 
-    # Close connection objects once Feedback has been obtained
-    db_cursor.close ()
-    db_connection.close () # Close MySQL connection
+    # Catch other errors
+    except:
 
-    # Print debugging message
-    print (len (feedback_df), "record(s) successfully classified as SPAM/HAM")
+        # Print other errors
+        print ("Error occurred attempting to establish database connection")
+
+    finally:
+
+        # Close connection objects once Feedback has been obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
 
 # Program end time
 program_end_time = datetime.datetime.now ()
