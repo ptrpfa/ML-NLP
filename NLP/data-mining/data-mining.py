@@ -53,10 +53,7 @@ def whitelist_dataframe (series): # Used over iterrows as faster and more effici
     if (bugcode_match == True or whitelist_match == True):
 
         # Set whitelist column as True [1] if a whitelisted string or bugcode was found in the Subject or MainText of the Feedback
-        series ['Whitelisted'] = 1
-
-        # Set SpamStatus of whitelisted column as NOT SPAM automatically
-        series ['SpamStatus'] = 0
+        series ['Whitelist'] = 1
 
         # Debugging
         print ("Whitelisted:", series ['FeedbackID'])
@@ -64,7 +61,7 @@ def whitelist_dataframe (series): # Used over iterrows as faster and more effici
     else:
 
         # Set whitelist column as False [0] if no whitelisted string or bugcode was found in the Subject or MainText of the Feedback
-        series ['Whitelisted'] = 0 # Default value of Whitelisted is 2 (to indicate that feedback has not been processed)
+        series ['Whitelist'] = 0 # Default value of Whitelisted is 2 (to indicate that feedback has not been processed)
 
     # Return series object
     return series
@@ -203,7 +200,7 @@ def update_row_dataframe (series, cursor, connection): # Used over iterrows as f
     sql = sql + "SET Remarks = %s, MainTextCleaned = %s, SubjectCleaned = %s, Whitelisted = %s, SpamStatus = %s WHERE FeedbackID = %s AND CategoryID = %s AND WebAppID = %s;" 
 
     # Execute SQL statement
-    cursor.execute (sql, (series ['Remarks'], series ['MainTextCleaned'], series ['SubjectCleaned'], series ['Whitelisted'], series ['SpamStatus'], series ['FeedbackID'], series ['CategoryID'], series ['WebAppID']))
+    cursor.execute (sql, (series ['Remarks'], series ['MainTextCleaned'], series ['SubjectCleaned'], series ['Whitelist'], series ['SpamStatus'], series ['FeedbackID'], series ['CategoryID'], series ['WebAppID']))
 
     # Commit changes made
     connection.commit ()
@@ -301,8 +298,8 @@ pickles_file_path = "/home/p/Desktop/csitml/NLP/data-mining/pickles/" # File pat
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/data-mining/accuracies/" # Model accuracy results file path
 preprocess_data = True # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
 remove_trash_data = False # Boolean to trigger deletion of trash Feedback data in the database (Default value is FALSE)
-preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 spam_check_data = True # Boolean to trigger application of Spam Detection model on Feedback data in the database (Default value is TRUE)
+preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 
 # Database global variables
 mysql_user = "root"             # MySQL username
@@ -310,6 +307,7 @@ mysql_password = "csitroot"     # MySQL password
 mysql_host = "localhost"        # MySQL host
 mysql_schema = "csitDB"         # MySQL schema (NOTE: MySQL in Windows is case-insensitive)
 feedback_table = "Feedback"     # Name of feedback table in database
+feedback_ml_table = "FeedbackML" # Name of feedback table in database used for machine learning
 trash_record = "TRASH RECORD"   # Custom identifier for identifying records to be deleted (NOTE: MySQL is case-insensitive!)
 
 # Whitelisting
@@ -337,13 +335,13 @@ try: # Unprocessed Feedback are Feedbacks with Subject/MainText not cleaned yet 
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
     # Create SQL query to get Feedback table values
-    sql_query = "SELECT * FROM %s WHERE MainTextCleaned IS NULL OR SubjectCleaned IS NULL OR Whitelisted NOT IN (0,1);" % (feedback_table)
+    sql_query = "SELECT * FROM %s WHERE PreprocessStatus = 0;" % (feedback_table)
 
     # Execute query and convert Feedback table into a pandas DataFrame
-    feedback_to_clean_df = pd.read_sql (sql_query, db_connection)
+    feedback_df = pd.read_sql (sql_query, db_connection)
 
     # Check if dataframe obtained is empty
-    if (feedback_to_clean_df.empty == True):
+    if (feedback_df.empty == True):
 
         # Set boolean to pre-process data to False if dataframe obtained is empty
         preprocess_data = False
@@ -357,13 +355,13 @@ try: # Unprocessed Feedback are Feedbacks with Subject/MainText not cleaned yet 
 except mysql.connector.Error as error:
 
     # Print MySQL connection error
-    print ("MySQL error:", error)
+    print ("MySQL error when trying to get unprocessed feedback:", error)
 
 # Catch other errors
 except:
 
     # Print other errors
-    print ("Error occurred attempting to establish database connection")
+    print ("Error occurred attempting to establish database connection when trying to get unprocessed feedback")
 
 finally:
 
@@ -375,43 +373,51 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
 
     # Print debugging message
     print ("Unprocessed feedback data detected..")
-    print ("Pre-processing:", len (feedback_to_clean_df), "record(s)")
+    print ("Pre-processing:", len (feedback_df), "record(s)")
 
     """" Feedback WHITELISTING """ 
     # Whitelist first before cleaning documents as sometimes some whitelisted documents may be indicated as 
     # TRASH RECORDS (ie Subject contain BUGCODE but MainText is filled with invalid characters)
 
-    # Default value of Whitelisted = 2 (to indicate absence of whitelist check) [1 =  Whitelisted, 0 = NA]
+    # Default value of Whitelisted = 2 (to indicate absence of whitelist check) [0: Not whitelisted, 1: Whitelisted]
     print ("Checking unprocessed feedbacks for whitelisted strings and custom BUGCODE..")
 
     # Check for whitelisted strings
-    feedback_to_clean_df = feedback_to_clean_df.apply (whitelist_dataframe, axis = 1) # Access dataframe row by row (row-iteration)
+    feedback_df = feedback_df.apply (whitelist_dataframe, axis = 1) # Access dataframe row by row (row-iteration)
+
+    """CALCULATE OVERALL SCORE OF FEEDBACK AND UPDATE!
+    
+    CONVERT TRIGGER FUNCTIONS TO PYTHON CODE HERE!
+    """
 
     """ Feedback CLEANING """
     print ("Cleaning unprocessed feedbacks..")
 
+    # Create new dataframe for feedback database table used for machine learning
+    feedback_ml_df = pd.DataFrame (columns = ["FeedbackID", "WebAppID", "CategoryID", "SubjectCleaned", "MainTextCleaned", "SubjectSpam", "MainTextSpam", "SpamStatus"]) 
+
     # Pre-process new Feedback data that have not been pre-processed
-    feedback_to_clean_df.MainTextCleaned = clean_document (feedback_to_clean_df.MainText) # Clean main text
-    feedback_to_clean_df.SubjectCleaned = clean_document (feedback_to_clean_df.Subject) # Clean subject text
+    feedback_ml_df.MainTextCleaned = clean_document (feedback_df.MainText) # Clean main text
+    feedback_ml_df.SubjectCleaned = clean_document (feedback_df.Subject) # Clean subject text
     
-     # Extract rows containing empty empty main texts (records to be removed later on)
-    feedback_to_clean_df_trash = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned == ""].copy () # Get feedback with MainTextCleaned set to blank
+     # Extract rows containing empty main texts (invalid records to be removed later on)
+    feedback_df_trash = feedback_ml_df [feedback_ml_df.MainTextCleaned == ""].copy () # Get feedback with MainTextCleaned set to blank
  
     # Set remarks of empty rows to custom trash record identifier remark for removal ("TRASH RECORD") if feedback is NOT WHITELISTED
-    feedback_to_clean_df_trash.loc [feedback_to_clean_df_trash ['Whitelisted'] != 1, 'Remarks'] = trash_record
+    feedback_df_trash.loc [feedback_df_trash ['Whitelist'] != 1, 'Remarks'] = trash_record # NEED TO EDIT THIS FILTER! (FILTER WILL HAVE TO REFERENCE 2 TABLES!)
 
     # Set SpamStatus of trash records that are not whitelisted as 3 to mark that the feedbacks are unable to be processed as they are trash records
-    feedback_to_clean_df_trash.loc [feedback_to_clean_df_trash ['Whitelisted'] != 1, 'SpamStatus'] = 3 # see how to run this, got warning
+    feedback_df_trash.loc [feedback_df_trash ['Whitelist'] != 1, 'SpamStatus'] = 3 # see how to run this, got warning
 
     # Print debugging message
-    print ("Number of trash record(s) found:", len (feedback_to_clean_df_trash.loc [feedback_to_clean_df_trash ['Whitelisted'] != 1]), "record(s)")
+    print ("Number of trash record(s) found:", len (feedback_df_trash.loc [feedback_df_trash ['Whitelist'] != 1]), "record(s)")
 
     # Remove rows containing empty texts (remove trash records from current dataframe)
-    feedback_to_clean_df = feedback_to_clean_df [feedback_to_clean_df.MainTextCleaned != ""]
+    feedback_df = feedback_df [feedback_df.MainTextCleaned != ""]
 
     # Combined newly labelled empty rows into the previous dataframe (Rows with empty MainText now have the Remark 'TRASH RECORD' for later removal [except for those with WHITELISTED STRINGS])
-    feedback_to_clean_df = feedback_to_clean_df.append (feedback_to_clean_df_trash, ignore_index = True)
-    feedback_to_clean_df_trash.to_csv ("/home/p/Desktop/csitml/NLP/data-mining/data/trash.csv")
+    feedback_df = feedback_df.append (feedback_df_trash, ignore_index = True)
+    feedback_df_trash.to_csv ("/home/p/Desktop/csitml/NLP/data-mining/data/trash.csv")
     # Connect to database to update values
     try:
 
@@ -420,10 +426,10 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
         db_cursor = db_connection.cursor ()
 
         # Update database table with the newly pre-processed data
-        feedback_to_clean_df.apply (update_row_dataframe, axis = 1, args = (db_cursor, db_connection))
+        feedback_df.apply (update_row_dataframe, axis = 1, args = (db_cursor, db_connection))
 
         # Print debugging message
-        print (len (feedback_to_clean_df), "record(s) successfully pre-processed")
+        print (len (feedback_df), "record(s) successfully pre-processed")
         
     # Catch MySQL Exception
     except mysql.connector.Error as error:
