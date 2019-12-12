@@ -402,7 +402,8 @@ if (preprocess_data == True): # Pre-process feedback if there are texts that hav
     
      # Extract rows containing empty main texts (invalid records to be removed later on)
     feedback_df_trash = feedback_ml_df [feedback_ml_df.MainTextCleaned == ""].copy () # Get feedback with MainTextCleaned set to blank
- 
+    
+    """STOPPED HERE"""
     # Set remarks of empty rows to custom trash record identifier remark for removal ("TRASH RECORD") if feedback is NOT WHITELISTED
     feedback_df_trash.loc [feedback_df_trash ['Whitelist'] != 1, 'Remarks'] = trash_record # NEED TO EDIT THIS FILTER! (FILTER WILL HAVE TO REFERENCE 2 TABLES!)
 
