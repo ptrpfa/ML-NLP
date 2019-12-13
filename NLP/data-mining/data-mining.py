@@ -55,7 +55,7 @@ def whitelist_dataframe (series): # Used over iterrows as faster and more effici
         # Set whitelist column as True [1] if a whitelisted string or bugcode was found in the Subject or MainText of the Feedback
         series ['Whitelist'] = 1
 
-        # Set spam statuses of whitelisted column as not spam automatically
+        # Set spam statuses of whitelisted column as NOT SPAM automatically
         series ['SubjectSpam'] = 0
         series ['MainTextSpam'] = 0
         series ['SpamStatus'] = 0
@@ -262,11 +262,11 @@ def update_spam_status_dataframe (series, cursor, connection): # Used over iterr
     list_id = series ['Id'].split ('_') # Each ID component is delimited by underscore
     
     # Create SQL statement to get Feedback table values
-    sql = "UPDATE %s " % (feedback_table)
-    sql = sql + "SET SpamStatus = %s WHERE WebAppID = %sAND FeedbackID = %s AND CategoryID = %s;" 
+    sql = "UPDATE %s " % (feedback_ml_table)
+    sql = sql + "SET SubjectSpam = %s, MainTextSpam = %s, SpamStatus = %s WHERE WebAppID = %sAND FeedbackID = %s AND CategoryID = %s;" 
 
     # Execute SQL statement
-    cursor.execute (sql, (series ['SpamStatus'], list_id [0], list_id [1], list_id [2]))
+    cursor.execute (sql, (series ['SubjectSpam'], series ['MainTextSpam'], series ['SpamStatus'], list_id [0], list_id [1], list_id [2]))
 
     # Commit changes made
     connection.commit ()
@@ -321,6 +321,7 @@ pickles_file_path = "/home/p/Desktop/csitml/NLP/data-mining/pickles/" # File pat
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/data-mining/accuracies/" # Model accuracy results file path
 preprocess_data = True # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
 remove_trash_data = False # Boolean to trigger deletion of trash Feedback data in the database (Default value is FALSE)
+mine_data = True # Boolean to trigger data mining of Feedback data in the database (Default value is TRUE)
 spam_check_data = True # Boolean to trigger application of Spam Detection model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 
@@ -427,7 +428,7 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
     """ Feedback CLEANING """
     print ("Cleaning unprocessed feedbacks..")
 
-    # Pre-process new Feedback data that have not been pre-processed
+    # Clean new Feedback data that have not been pre-processed
     combined_feedback_df.MainTextCleaned = clean_document (combined_feedback_df.MainText) # Clean main text
     combined_feedback_df.SubjectCleaned = clean_document (combined_feedback_df.Subject) # Clean subject text
     
@@ -505,7 +506,7 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
         feedback_ml_df.apply (insert_feedback_ml_dataframe, axis = 1, args = (db_cursor, db_connection))
 
         # Print debugging message
-        print (len (feedback_ml_df), "record(s) successfully inserted")
+        print (len (feedback_ml_df), "record(s) successfully inserted into FeedbackML table")
         
     # Catch MySQL Exception
     except mysql.connector.Error as error:
@@ -525,12 +526,13 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
         db_cursor.close ()
         db_connection.close () # Close MySQL connection
 
+    # Export to CSV
 
 # Check boolean to see whether or not to delete records (intrusive) that contain the custom TRASH RECORD identifier in Remarks
 if (remove_trash_data == True): # By default don't delete TRASH RECORDs as even though they lack quality information, they serve semantic value (metadata)
 
     # Remove trash Feedback data marked with custom removal Remarks ("TRASH RECORD")
-    try: # Trash Feedback are feedback which has either its SubjectCleaned or MainTextCleaned empty after data cleaning (meaning that they contain and are made up of invalid characters)
+    try: # Trash Feedback are feedback which has its MainTextCleaned empty after data cleaning (meaning that they contain and are made up of invalid characters)
 
         print ("Removing TRASH records from the database..")
 
@@ -539,7 +541,7 @@ if (remove_trash_data == True): # By default don't delete TRASH RECORDs as even 
         db_cursor = db_connection.cursor ()
 
         # Create SQL statement to delete records with the Remarks set as 'TRASH RECORD'
-        sql = "DELETE FROM %s WHERE Remarks = \'%s\';" % (feedback_table, trash_record)
+        sql = "DELETE FROM %s WHERE Whitelist = 3;" % (feedback_table)
 
         # Execute SQL statement
         db_cursor.execute (sql)
@@ -554,13 +556,13 @@ if (remove_trash_data == True): # By default don't delete TRASH RECORDs as even 
     except mysql.connector.Error as error:
 
         # Print MySQL connection error
-        print ("MySQL error:", error)
+        print ("MySQL error when trying to remove trash records from the database:", error)
 
     # Catch other errors
     except:
 
         # Print other errors
-        print ("Error occurred attempting to establish database connection")
+        print ("Error occurred attempting to establish database connection to remove trash records from the database")
 
     finally:
 
@@ -570,15 +572,15 @@ if (remove_trash_data == True): # By default don't delete TRASH RECORDs as even 
 
 """ Start DATA MINING process """
 print ("\n\n***Data Mining***\n")
-exit ()
-# 1) Get dataset for Spam Detection
-try:
+
+# Check if there are any Feedback in the database which have not been data-mined yet
+try: 
 
     # Create MySQL connection object to the database
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
-    # Create SQL query to get Feedback table values (Feature Engineering)
-    sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, OverallScore, SubjectCleaned as `Subject`, MainTextCleaned as `MainText`, SpamStatus FROM %s WHERE (Remarks != \'%s\' OR Remarks IS NULL) AND Whitelisted != 1 AND SpamStatus NOT IN (0, 1, 3);" % (feedback_table, trash_record)
+    # Create SQL query to get Feedback table values
+    sql_query = "SELECT * FROM %s WHERE MineStatus = 0;" % (feedback_table)
 
     # Execute query and convert Feedback table into a pandas DataFrame
     feedback_df = pd.read_sql (sql_query, db_connection)
@@ -586,156 +588,236 @@ try:
     # Check if dataframe obtained is empty
     if (feedback_df.empty == True):
 
-        # Set boolean to apply spam detection model on data to False if dataframe obtained is empty
-        spam_check_data = False
+        # Set boolean to mine data to False if dataframe obtained is empty
+        mine_data = False
 
     else:
 
-        # Set boolean to apply spam detection model on data to True (default value) if dataframe obtained is not empty
-        spam_check_data = True
+        # Set boolean to mine data to True (default value) if dataframe obtained is not empty
+        mine_data = True
 
-    """
-    Selected Feedback features:
-    -Id (WebAppID + FeedbackID + CategoryID) [Not ID as will cause Excel .sylk file intepretation error]
-    -Overall score
-    -Subject (processed)
-    -Main text (processed)
-    -Spam status [target1]
-    -Topic [added] [target2]
-
-    --> Dataset obtained at this point contains pre-processed Feedback data that are NOT trash records, NOT whitelisted and NOT classified as spam/ham
-    """
-
+# Catch MySQL Exception
 except mysql.connector.Error as error:
 
     # Print MySQL connection error
-    print ("MySQL error:", error)
+    print ("MySQL error when trying to get unmined feedback:", error)
 
+# Catch other errors
 except:
 
     # Print other errors
-    print ("Error occurred attempting to establish database connection")
+    print ("Error occurred attempting to establish database connection when trying to get unmined feedback")
 
 finally:
 
     # Close connection object once Feedback has been obtained
     db_connection.close () # Close MySQL connection
 
-# Check boolean to see whether or not to apply Spam Detectino model on Feedback data
-if (spam_check_data == True):
+# Check boolean to see whether or not to data mine feedback
+if (mine_data == True):
 
-    # 2) Further feature engineering (Data pre-processing) [FOR REDUNDANCY]
-    # Drop empty rows/columns
-    feedback_df.dropna (how = "all", inplace = True) # Drop empty rows
-    feedback_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
-
-    # Remove rows containing empty main texts (trash records)
-    feedback_df = feedback_df [feedback_df.MainText != ""]
-
-    # Add two extra custom columns to identify whether Subject or MainText portion of Feedback is Spam
-    feedback_df ['SubjectSpam'] = 0 # Default value of 0 [HAM]
-    feedback_df ['MainTextSpam'] = 0 # Default value of 0 [HAM]
-
-    # Save cleaned raw (prior to data mining) dataset to CSV
-    feedback_df.to_csv (raw_feedback_file_path, index = False, encoding = "utf-8")
-
-    # 3) Understand dataset
-    if (preliminary_check == True): # Check boolean to display preliminary information
-
-        # Print some information of about the data
-        print ("Preliminary information about dataset:")
-        print ("Dimensions: ", feedback_df.shape, "\n")
-        print ("First few records:")
-        print (feedback_df.head (), "\n")
-        print ("Columns and data types:")
-        print (feedback_df.dtypes, "\n")
-
-    # 4) Apply spam-detection model
-    # Assign target and features variables
-    target_subject = feedback_df.SubjectSpam # Target and feature variables for Subject
-    feature_subject = feedback_df.Subject
-
-    target_main_text = feedback_df.MainTextSpam # Target and feature variables for MainText
-    feature_main_text = feedback_df.MainText 
-
-    # Load pickled/serialised vectorizer from spam-detection program
-    start_time = datetime.datetime.now ()
-    vectorizer = load_pickle ("tfidf-vectorizer.pkl")
-    end_time = datetime.datetime.now ()
-    print ("Loaded vectorizer in", model_runtime (0, start_time, end_time), "seconds")
-
-    # Fit data to vectorizer [Create DTM of dataset (features)]
-    start_time = datetime.datetime.now ()
-    feature_subject = vectorizer.transform (feature_subject) 
-    end_time = datetime.datetime.now ()
-    print ("Transformed subject to DTM in", model_runtime (0, start_time, end_time), "seconds")
-
-    start_time = datetime.datetime.now ()
-    feature_main_text = vectorizer.transform (feature_main_text) 
-    end_time = datetime.datetime.now ()
-    print ("Transformed main text to DTM in", model_runtime (0, start_time, end_time), "seconds")
-
-    # Initialise model duration
-    spam_model_duration = 0 
-
-    # Load pickled model
-    start_time = datetime.datetime.now ()
-    spam_model = load_pickle ("svm-model.pkl") # Used SVM Model in this case
-    # spam_model = load_pickle ("logistic-regression-model.pkl") # Used LR Model in this case
-    end_time = datetime.datetime.now ()
-    spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
-
-    # Predict whether Subject is spam or not
-    print ("\nPredicting whether subjects of feedback is spam..")
-    start_time = datetime.datetime.now ()
-    model_prediction_subject = spam_model.predict (feature_subject) # Store predicted results of model
-    end_time = datetime.datetime.now ()
-    spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
-    print ("Predicted subject values:", model_prediction_subject)
-
-    # Predict whether MainText is spam or not
-    print ("\nPredicting whether main texts of feedback is spam..")
-    start_time = datetime.datetime.now ()
-    model_prediction_main_text = spam_model.predict (feature_main_text) # Store predicted results of model
-    end_time = datetime.datetime.now ()
-    spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
-    print ("Predicted main text values:", model_prediction_main_text)
-
-    # Print spam model runtime
-    print ("\nSpam model runtime: ", spam_model_duration, "seconds")
-
-    # Collate results of spam-detection predictions
-    feedback_df.SubjectSpam = model_prediction_subject
-    feedback_df.MainTextSpam = model_prediction_main_text
-    feedback_df = feedback_df.apply (spam_status_dataframe, axis = 1) # Access dataframe row by row (row-iteration)
-
-    # Save cleaned (after data mining) dataset to CSV
-    feedback_df.to_csv (feedback_file_path, index = False, encoding = "utf-8")
-
-    # Connect to database to update SpamStatus values of Feedback
+    # 1) Get dataset for Spam Detection
     try:
+
+        # Create MySQL connection object to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+
+        # Create SQL query to get Feedback table values (Feature Engineering)
+        sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText`, SubjectSpam, MainTextSpam, SpamStatus FROM %s WHERE SpamStatus = 2;" % (feedback_ml_table)
+
+        # Execute query and convert Feedback table into a pandas DataFrame
+        feedback_ml_df = pd.read_sql (sql_query, db_connection)
+
+        # Check if dataframe obtained is empty
+        if (feedback_ml_df.empty == True):
+
+            # Set boolean to apply spam detection model on data to False if dataframe obtained is empty
+            spam_check_data = False
+
+        else:
+
+            # Set boolean to apply spam detection model on data to True (default value) if dataframe obtained is not empty
+            spam_check_data = True
+
+        """
+        Selected Feedback features:
+        -Id (WebAppID + FeedbackID + CategoryID) [Not ID as will cause Excel .sylk file intepretation error]
+        -SubjectCleaned (processed)
+        -MainTextCleaned (processed)
+        -Spam status [target1]
+        -Topic [added] [target2]
+
+        --> Dataset obtained at this point contains pre-processed Feedback data that are NOT trash records, NOT whitelisted and NOT classified as spam/ham
+        """
+
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error when trying to get unmined records from the FeedbackML table:", error)
+
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to get unmined records from the FeedbackML table")
+
+    finally:
+
+        # Close connection object once Feedback has been obtained
+        db_connection.close () # Close MySQL connection
+
+    # Check boolean to see whether or not to apply Spam Detection model on Feedback data
+    if (spam_check_data == True):
+
+        # 2) Further feature engineering (Data pre-processing) [FOR REDUNDANCY]
+        # Drop empty rows/columns
+        feedback_ml_df.dropna (how = "all", inplace = True) # Drop empty rows
+        feedback_ml_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
+
+        # Remove rows containing empty main texts (trash records)
+        feedback_ml_df = feedback_ml_df [feedback_ml_df.MainText != ""]
+
+        # Save cleaned raw (prior to data mining) dataset to CSV
+        feedback_ml_df.to_csv (raw_feedback_file_path, index = False, encoding = "utf-8")
+
+        # 3) Understand dataset
+        if (preliminary_check == True): # Check boolean to display preliminary information
+
+            # Print some information of about the data
+            print ("Preliminary information about dataset:")
+            print ("Dimensions: ", feedback_ml_df.shape, "\n")
+            print ("First few records:")
+            print (feedback_ml_df.head (), "\n")
+            print ("Columns and data types:")
+            print (feedback_ml_df.dtypes, "\n")
+
+        # 4) Apply spam-detection model
+        # Assign target and features variables
+        target_subject = feedback_ml_df.SubjectSpam # Target and feature variables for Subject
+        feature_subject = feedback_ml_df.Subject
+
+        target_main_text = feedback_ml_df.MainTextSpam # Target and feature variables for MainText
+        feature_main_text = feedback_ml_df.MainText 
+
+        # Load pickled/serialised vectorizer from spam-detection program
+        start_time = datetime.datetime.now ()
+        vectorizer = load_pickle ("tfidf-vectorizer.pkl")
+        end_time = datetime.datetime.now ()
+        print ("Loaded vectorizer in", model_runtime (0, start_time, end_time), "seconds")
+
+        # Fit data to vectorizer [Create DTM of dataset (features)]
+        start_time = datetime.datetime.now ()
+        feature_subject = vectorizer.transform (feature_subject) 
+        end_time = datetime.datetime.now ()
+        print ("Transformed subject to DTM in", model_runtime (0, start_time, end_time), "seconds")
+
+        start_time = datetime.datetime.now ()
+        feature_main_text = vectorizer.transform (feature_main_text) 
+        end_time = datetime.datetime.now ()
+        print ("Transformed main text to DTM in", model_runtime (0, start_time, end_time), "seconds")
+
+        # Initialise model duration
+        spam_model_duration = 0 
+
+        # Load pickled model
+        start_time = datetime.datetime.now ()
+        spam_model = load_pickle ("svm-model.pkl") # Used SVM Model in this case
+        # spam_model = load_pickle ("logistic-regression-model.pkl") # Used LR Model in this case
+        end_time = datetime.datetime.now ()
+        spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
+
+        # Predict whether Subject is spam or not
+        print ("\nPredicting whether subjects of feedback is spam..")
+        start_time = datetime.datetime.now ()
+        model_prediction_subject = spam_model.predict (feature_subject) # Store predicted results of model
+        end_time = datetime.datetime.now ()
+        spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
+        print ("Predicted subject values:", model_prediction_subject)
+
+        # Predict whether MainText is spam or not
+        print ("\nPredicting whether main texts of feedback is spam..")
+        start_time = datetime.datetime.now ()
+        model_prediction_main_text = spam_model.predict (feature_main_text) # Store predicted results of model
+        end_time = datetime.datetime.now ()
+        spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
+        print ("Predicted main text values:", model_prediction_main_text)
+
+        # Print spam model runtime
+        print ("\nSpam model runtime: ", spam_model_duration, "seconds")
+
+        # Collate results of spam-detection predictions
+        feedback_ml_df.SubjectSpam = model_prediction_subject
+        feedback_ml_df.MainTextSpam = model_prediction_main_text
+        feedback_ml_df = feedback_ml_df.apply (spam_status_dataframe, axis = 1) # Get overall SpamStatus of each record
+
+        # Save cleaned (after data mining) dataset to CSV
+        feedback_ml_df.to_csv (feedback_file_path, index = False, encoding = "utf-8")
+
+        # Connect to database to update SpamStatus values of Feedback
+        try:
+
+            # Create MySQL connection and cursor objects to the database
+            db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+            db_cursor = db_connection.cursor ()
+
+            # Update database table with the newly pre-processed data
+            feedback_ml_df.apply (update_spam_status_dataframe, axis = 1, args = (db_cursor, db_connection))
+
+            # Print debugging message
+            print (len (feedback_ml_df), "record(s) successfully classified as SPAM/HAM")
+
+        # Catch MySQL Exception
+        except mysql.connector.Error as error:
+
+            # Print MySQL connection error
+            print ("MySQL error when trying to update spam statuses of FeedbackML records:", error)
+
+        # Catch other errors
+        except:
+
+            # Print other errors
+            print ("Error occurred attempting to establish database connection to update the spam statuses of FeedbackML records")
+
+        finally:
+
+            # Close connection objects once Feedback has been obtained
+            db_cursor.close ()
+            db_connection.close () # Close MySQL connection
+
+    # Apply TOPIC MODELLING model
+    pass
+
+    # Connect to database to update MineStatus of Feedback 
+    try: 
+
+        print ("Updating data-mined status of feedback..")
 
         # Create MySQL connection and cursor objects to the database
         db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
         db_cursor = db_connection.cursor ()
 
-        # Update database table with the newly pre-processed data
-        feedback_df.apply (update_spam_status_dataframe, axis = 1, args = (db_cursor, db_connection))
+        # Create SQL statement to delete records with the Remarks set as 'TRASH RECORD'
+        sql = "UPDATE %s SET MineStatus = 1;" % (feedback_table)
 
-        # Print debugging message
-        print (len (feedback_df), "record(s) successfully classified as SPAM/HAM")
+        # Execute SQL statement
+        db_cursor.execute (sql)
+
+        # Commit changes made
+        db_connection.commit ()
+
+        # Debugging
+        print (db_cursor.rowcount, "record(s) mined")
 
     # Catch MySQL Exception
     except mysql.connector.Error as error:
 
         # Print MySQL connection error
-        print ("MySQL error:", error)
+        print ("MySQL error when trying to update mine status of Feedback:", error)
 
     # Catch other errors
     except:
 
         # Print other errors
-        print ("Error occurred attempting to establish database connection")
+        print ("Error occurred attempting to establish database connection to update mine status of feedback")
 
     finally:
 
