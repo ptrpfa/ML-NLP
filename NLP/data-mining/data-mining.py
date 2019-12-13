@@ -315,10 +315,14 @@ def load_pickle (filename):
     return pickled_object
 
 # Global variables
-raw_feedback_file_path = '/home/p/Desktop/csitml/NLP/data-mining/data/raw-feedback.csv' # Raw dataset file path (dataset PRIOR to data mining) [Features for ML]
-feedback_file_path = "/home/p/Desktop/csitml/NLP/data-mining/data/feedback.csv" # Dataset file path (dataset AFTER data mining) [Full dataset in MySQL table]
+feedback_file_path_p = '/home/p/Desktop/csitml/NLP/data-mining/data/pre-processing/feedback.csv' # Dataset file path 
+feedback_ml_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/pre-processing/feedback-ml.csv" # Dataset file path 
+combined_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/pre-processing/combined-feedback.csv" # Dataset file path 
+trash_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/pre-processing/trash-feedback.csv" # Dataset file path 
+feedback_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/data-mining/feedback.csv' # Raw dataset file path (dataset PRIOR to data mining) [Features for ML]
+feedback_ml_file_path_dm = "/home/p/Desktop/csitml/NLP/data-mining/data/data-mining/feedback-ml.csv" # Dataset file path (dataset AFTER data mining)
 pickles_file_path = "/home/p/Desktop/csitml/NLP/data-mining/pickles/" # File path containing pickled objects
-accuracy_file_path = "/home/p/Desktop/csitml/NLP/data-mining/accuracies/" # Model accuracy results file path
+
 preprocess_data = True # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
 remove_trash_data = False # Boolean to trigger deletion of trash Feedback data in the database (Default value is FALSE)
 mine_data = True # Boolean to trigger data mining of Feedback data in the database (Default value is TRUE)
@@ -526,7 +530,17 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
         db_cursor.close ()
         db_connection.close () # Close MySQL connection
 
-    # Export to CSV
+    # Export dataframes to CSV
+    combined_feedback_df.to_csv (combined_feedback_file_path_p, index = False, encoding = "utf-8")
+    combined_feedback_df_trash.to_csv (trash_feedback_file_path_p, index = False, encoding = "utf-8")
+    feedback_df.to_csv (feedback_file_path_p, index = False, encoding = "utf-8")
+    feedback_ml_df.to_csv (feedback_ml_file_path_p, index = False, encoding = "utf-8")
+
+
+# Print debugging message if no data pre-processing is carried out
+else:
+
+    print ("Data pre-processing not carried out")
 
 # Check boolean to see whether or not to delete records (intrusive) that contain the custom TRASH RECORD identifier in Remarks
 if (remove_trash_data == True): # By default don't delete TRASH RECORDs as even though they lack quality information, they serve semantic value (metadata)
@@ -677,7 +691,7 @@ if (mine_data == True):
         feedback_ml_df = feedback_ml_df [feedback_ml_df.MainText != ""]
 
         # Save cleaned raw (prior to data mining) dataset to CSV
-        feedback_ml_df.to_csv (raw_feedback_file_path, index = False, encoding = "utf-8")
+        feedback_ml_df.to_csv (feedback_file_path_dm, index = False, encoding = "utf-8")
 
         # 3) Understand dataset
         if (preliminary_check == True): # Check boolean to display preliminary information
@@ -749,8 +763,8 @@ if (mine_data == True):
         feedback_ml_df.MainTextSpam = model_prediction_main_text
         feedback_ml_df = feedback_ml_df.apply (spam_status_dataframe, axis = 1) # Get overall SpamStatus of each record
 
-        # Save cleaned (after data mining) dataset to CSV
-        feedback_ml_df.to_csv (feedback_file_path, index = False, encoding = "utf-8")
+        # Save  spam-mined dataset to CSV
+        feedback_ml_df.to_csv (feedback_ml_file_path_dm, index = False, encoding = "utf-8")
 
         # Connect to database to update SpamStatus values of Feedback
         try:
@@ -824,6 +838,11 @@ if (mine_data == True):
         # Close connection objects once Feedback has been obtained
         db_cursor.close ()
         db_connection.close () # Close MySQL connection
+
+# Print debugging message if data mining is not carried out
+else:
+
+    print ("Data mining not carried out")
 
 # Program end time
 program_end_time = datetime.datetime.now ()
