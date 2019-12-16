@@ -8,6 +8,7 @@ import html
 import unidecode
 import pickle 
 import datetime
+import os
 from sklearn import svm # 4) SVM classifier
 from sklearn.linear_model import LogisticRegression # 4) Logistic Regression classifier
 from sklearn.feature_extraction.text import TfidfVectorizer # NLP Vectorizer
@@ -20,7 +21,67 @@ simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warni
 # MySQL Setting:
 # SET SQL Setting SET SQL_SAFE_UPDATES = 0; # To allow for updates using non-key columns in the WHERE clause
 
-# Function to whitelist Feedback (accepts a Series object of each row in DataFrame and returns a labelled Series object)
+"""
+NOTE: Since the database is only accessed by the database administrator/programs, 
+it is assumed that the records inserted will be CORRECT and validated
+--> Calculation of OverallScore of each Feedback is only done on INSERTs into the Feedback table ONCE. 
+UPDATEs to the Feedback table will not re-calculate the OverallScore of each Feedback
+
+--> Calculation of PriorityScore of each Topic is only done on INSERTs into the FeedbackTopic table ONCE. 
+UPDATEs to the FeedbackTopic table will not re-calculate the OverallScore of each Topic.
+--> For this need to add in code that will automatically run upon changes within the FeedbackTopic table!
+"""
+
+# Function to get the factor of each category from the database for computing the overall scores of feedbacks
+def get_category_factor (): 
+
+    # Connect to database to get the factor value of each feedback's category
+    try:
+
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
+
+        # SQL query to get factor of category
+        sql = "SELECT CategoryID, Factor FROM Category"
+
+        # Execute query
+        db_cursor.execute (sql)
+
+        # Edit global dicitionary variable
+        global category_factor
+        
+        # Assign category-factor values obtained to global dictionary variable
+        category_factor = dict (db_cursor.fetchall ())
+
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error occurred when trying to get feedback's category factors:", error)
+
+    # Catch other errors
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to get feedback's category factors")
+
+    finally:
+
+        # Close connection objects once factor is obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
+
+# Function to compute each feedback's overall score (accepts a Series object of each row in the feedback Dataframe and returns a Series object with the computed values)
+def overall_score_dataframe (series):
+
+	# Compute overall score of feedback
+    series ['OverallScore'] = series ['Rating'] * category_factor [series ['CategoryID']]
+
+	# Return series with computed overall score
+    return series
+
+# Function to whitelist Feedback (accepts a Series object of each row in the feedback DataFrame and returns a labelled Series object)
 def whitelist_dataframe (series): # Used over iterrows as faster and more efficient
 
     # Initialise check variables
@@ -61,7 +122,7 @@ def whitelist_dataframe (series): # Used over iterrows as faster and more effici
         series ['SpamStatus'] = 0
 
         # Debugging
-        print ("Whitelisted:", series ['FeedbackID'])
+        # print ("Whitelisted:", series ['FeedbackID'])
 
     else:
 
@@ -203,7 +264,7 @@ def clean_document (corpus):
     return list_cleaned_documents
 
 # Function to execute SQL UPDATE for each row in the series object passed to update processed Feedback data
-def update_feedback_dataframe (series, cursor, connection): # Used over iterrows as faster and more efficient
+def update_feedback_dataframe (series, cursor, connection): 
 
     # Create SQL statement to update Feedback table values
     sql = "UPDATE %s " % (feedback_table)
@@ -216,7 +277,7 @@ def update_feedback_dataframe (series, cursor, connection): # Used over iterrows
     connection.commit ()
 
 # Function to insert each row in the series object passed to the FeedbackML table
-def insert_feedback_ml_dataframe (series, cursor, connection): # Used over iterrows as faster and more efficient
+def insert_feedback_ml_dataframe (series, cursor, connection): 
 
     # Create SQL statement to update Feedback table values
     sql = "INSERT INTO %s (FeedbackID, CategoryID, WebAppID, SubjectCleaned, MainTextCleaned, SubjectSpam, MainTextSpam, SpamStatus) " % (feedback_ml_table)
@@ -245,7 +306,7 @@ def spam_status_dataframe (series):
         series ['SpamStatus'] = 1
 
         # Debugging
-        print ("Spam record:", series ['Id'])
+        # print ("Spam record:", series ['Id'])
 
     else:
 
@@ -255,8 +316,8 @@ def spam_status_dataframe (series):
     # Return series object
     return series
 
-# Function to execute SQL UPDATE for each row in the series object passed to update the Spam Status of Feedback data
-def update_spam_status_dataframe (series, cursor, connection): # Used over iterrows as faster and more efficient
+# Function to execute SQL UPDATE for each row in the series object passed to update the SpamStatus of Feedback data
+def update_spam_status_dataframe (series, cursor, connection): 
 
     # Split Id (WebAppID_FeedbackID_CategoryID) into a list
     list_id = series ['Id'].split ('_') # Each ID component is delimited by underscore
@@ -315,16 +376,19 @@ def load_pickle (filename):
     return pickled_object
 
 # Global variables
-feedback_file_path_p = '/home/p/Desktop/csitml/NLP/data-mining/data/pre-processing/feedback.csv' # Dataset file path 
-feedback_ml_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/pre-processing/feedback-ml.csv" # Dataset file path 
-combined_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/pre-processing/combined-feedback.csv" # Dataset file path 
-trash_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/pre-processing/trash-feedback.csv" # Dataset file path 
-feedback_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/data-mining/feedback.csv' # Raw dataset file path (dataset PRIOR to data mining) [Features for ML]
-feedback_ml_file_path_dm = "/home/p/Desktop/csitml/NLP/data-mining/data/data-mining/feedback-ml.csv" # Dataset file path (dataset AFTER data mining)
+# File paths to store data pre-processing and data mining feedback
+folder = "%s-%s:%s" % (str (datetime.date.today ()), str (datetime.datetime.now ().hour), str (datetime.datetime.now ().minute)) # Folder file name (yyyy-mm-dd:hh:mm)
+feedback_file_path_p = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/feedback.csv' % folder # Dataset file path 
+feedback_ml_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/feedback-ml.csv" % folder # Dataset file path 
+combined_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/combined-feedback.csv" % folder # Dataset file path 
+trash_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/trash-feedback.csv" % folder # Dataset file path 
+feedback_ml_prior_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-before.csv' % folder # Raw dataset file path (dataset PRIOR to data mining) [Features for ML]
+feedback_ml_file_path_dm = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml.csv" % folder # Dataset file path (dataset AFTER data mining)
 pickles_file_path = "/home/p/Desktop/csitml/NLP/data-mining/pickles/" # File path containing pickled objects
 
+# Boolean triggers global variables
 preprocess_data = True # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
-remove_trash_data = False # Boolean to trigger deletion of trash Feedback data in the database (Default value is FALSE)
+remove_trash_data = False # Boolean to trigger deletion of trash Feedback data in the database (Default value is FALSE) [INTRUSIVE]
 mine_data = True # Boolean to trigger data mining of Feedback data in the database (Default value is TRUE)
 spam_check_data = True # Boolean to trigger application of Spam Detection model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
@@ -336,16 +400,17 @@ mysql_host = "localhost"            # MySQL host
 mysql_schema = "csitDB"             # MySQL schema (NOTE: MySQL in Windows is case-insensitive)
 feedback_table = "Feedback"         # Name of feedback table in database
 feedback_ml_table = "FeedbackML"    # Name of feedback table in database used for machine learning
+category_factor = {}                # Initialise empty dictionary to contain mapping of category-factor values for computing overall score of feedback
 
 # Whitelisting
-whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitelist for identifying non-SPAM feedbacks (whitelist is in lowercase)
+whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitelist for identifying non-SPAM feedbacks (whitelist words are in lowercase)
             'comms-tech', 'communications-tech', 'comms-technology',
             'communications-technology', 'crypto-tech', 'cryptography-tech',
             'crypto-technology', 'cryptography-technology', 'crash', 'information', 'giving', 'problem', 
             'discovery', 'feature', 'request', 'bug', 'report', 'discover', 'seeking', 'general', 'ui', 
             'ux', 'user', 'password', 'malware', 'malicious', 'vulnerable', 'vulnerability', 'lag', 'hang', 
             'stop', 'usablility', 'usable', 'feedback', 'slow', 'long', 'memory', 'update', 'alert', 
-            'install', 'fix', 'future']
+            'install', 'fix', 'future', 'experience']
 bugcode_regex = r"(.*)(BUG\d{6}\$)(.*)" # Assume bug code is BUGXXXXXX$ ($ is delimiter)
 
 # Program starts here
@@ -356,7 +421,7 @@ print ("Start time: ", program_start_time)
 print ("\n***Preliminary preparations before data mining process***\n")
 
 # Check if there are any Feedback in the database which have not been pre-processed yet
-try: # Unprocessed Feedback are Feedbacks with Subject/MainText not cleaned yet and not labelled to be whitelisted or not
+try: # Unprocessed Feedback are Feedbacks with PreprocessStatus = 0 and Whitelist = 2
 
     # Create MySQL connection object to the database
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
@@ -396,40 +461,37 @@ finally:
     db_connection.close () # Close MySQL connection
 
 # Check boolean to see whether or not data pre-processing needs to be first carried out on the Feedbacks collected
-if (preprocess_data == True): # Pre-process feedback if there are unpre-processed texts
+if (preprocess_data == True): # Pre-process feedback if there are unpre-processed feedback
+
+    # Get start time
+    start_time = datetime.datetime.now ()
 
     # Print debugging message
-    print ("Unprocessed feedback data detected..")
+    print ("Unprocessed feedback data detected!")
     print ("Pre-processing:", len (feedback_df), "record(s)")
 
-    # Create new dataframe for feedback database table used for machine learning
+    # Create new empty dataframe for feedback database table used for machine learning
     feedback_ml_df = pd.DataFrame (columns = ["FeedbackID", "WebAppID", "CategoryID", "SubjectCleaned", "MainTextCleaned", "SubjectSpam", "MainTextSpam", "SpamStatus"]) 
 
-    # Set values in FeedbackML
+    # Set index values in FeedbackML (NOTE: Other columns in feedback_ml_df are empty as data mining have not been carried out here)
     feedback_ml_df.FeedbackID = feedback_df.FeedbackID # Set FeedbackID
     feedback_ml_df.CategoryID = feedback_df.CategoryID # Set CategoryID
     feedback_ml_df.WebAppID = feedback_df.WebAppID     # Set WebAppID
 
-    # Create temporary dataframe that combines both Feedback and FeedbackML tables
+    # Create temporary dataframe that combines both Feedback and FeedbackML tables (combine dataframes just to get new columns from FeedbackML)
     combined_feedback_df = feedback_df.merge (feedback_ml_df, on = ['FeedbackID', 'CategoryID', 'WebAppID']) # Inner join based on common IDs
 
-    """" Feedback WHITELISTING """ 
-    # Whitelist first before cleaning documents as sometimes some whitelisted documents may be indicated as 
-    # TRASH RECORDS (ie Subject contain BUGCODE but MainText is filled with invalid characters)
-    print ("Checking unprocessed feedbacks for whitelisted strings and custom BUGCODE..")
+    """Preliminary processings """
+    # Get category factors to compute feedback overall scores
+    get_category_factor ()
 
-    # Check for whitelisted strings
+    # Compute feedback overall scores 
+    combined_feedback_df = combined_feedback_df.apply (overall_score_dataframe, axis = 1) # Access dataframe row by row
+
+    # Check for whitelisted feedbacks (whitelist first before cleaning documents as sometimes some whitelisted documents may be indicated as trash records ie subject contain bugcode but maintext is filled with invalid characters)
     combined_feedback_df = combined_feedback_df.apply (whitelist_dataframe, axis = 1) # Access dataframe row by row (row-iteration)
 
-
-    """CALCULATE OVERALL SCORE OF FEEDBACK AND UPDATE!
-    
-    CONVERT TRIGGER FUNCTIONS TO PYTHON CODE HERE!
-    """
-    pass
-
-
-    """ Feedback CLEANING """
+    """ Clean feedback data """
     print ("Cleaning unprocessed feedbacks..")
 
     # Clean new Feedback data that have not been pre-processed
@@ -451,24 +513,26 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
     # Remove rows containing empty texts (remove trash records from current dataframe)
     combined_feedback_df = combined_feedback_df [combined_feedback_df.MainTextCleaned != ""]
 
-    # Combined newly labelled empty rows into the previous dataframe (Rows with empty MainText now have the Remark 'TRASH RECORD' for later removal [except for those with WHITELISTED STRINGS])
+    # Combined newly labelled empty rows into the previous dataframe
     combined_feedback_df = combined_feedback_df.append (combined_feedback_df_trash) # Take note of index here! (no change)
 
     # Update preprocessed status of preprocessed feedback
-    combined_feedback_df ['PreprocessStatus'] = 1 # 1 to indicate that the feedbacks have been pre-processed
+    combined_feedback_df ['PreprocessStatus'] = 1 # Change to 1 to indicate that the feedbacks have been pre-processed
 
     # Assign column values in combined dataframe to Feedback and FeedbackML dataframes
-    feedback_df.OverallScore = combined_feedback_df.OverallScore # NEED TO ADD SUPPORT FOR THIS
+    # Feedback table
+    feedback_df.OverallScore = combined_feedback_df.OverallScore 
     feedback_df.Whitelist = combined_feedback_df.Whitelist
     feedback_df.PreprocessStatus = combined_feedback_df.PreprocessStatus
 
+    # FeedbackML table
     feedback_ml_df.SubjectCleaned = combined_feedback_df.SubjectCleaned
     feedback_ml_df.MainTextCleaned = combined_feedback_df.MainTextCleaned
     feedback_ml_df.SubjectSpam = combined_feedback_df.SubjectSpam
     feedback_ml_df.MainTextSpam = combined_feedback_df.MainTextSpam
     feedback_ml_df.SpamStatus = combined_feedback_df.SpamStatus
 
-    # Connect to database to update Feedback table
+    # Connect to database to UPDATE Feedback table
     try:
 
         # Create MySQL connection and cursor objects to the database
@@ -499,7 +563,7 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
         db_cursor.close ()
         db_connection.close () # Close MySQL connection
 
-    # Connect to database to insert values into FeedbackML table
+    # Connect to database to INSERT values into FeedbackML table
     try:
 
         # Create MySQL connection and cursor objects to the database
@@ -530,23 +594,40 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
         db_cursor.close ()
         db_connection.close () # Close MySQL connection
 
+    # Check if folder to store pre-processed feedback exists
+    if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder)):
+
+        # Create folder if it doesn't exist
+        os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder) 
+    
+    # Check if sub-folder for prep-processed feedback exists
+    if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/" % folder)):
+
+        # Create sub-folder if it doesn't exist
+        os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/" % folder) 
+    
     # Export dataframes to CSV
     combined_feedback_df.to_csv (combined_feedback_file_path_p, index = False, encoding = "utf-8")
     combined_feedback_df_trash.to_csv (trash_feedback_file_path_p, index = False, encoding = "utf-8")
     feedback_df.to_csv (feedback_file_path_p, index = False, encoding = "utf-8")
     feedback_ml_df.to_csv (feedback_ml_file_path_p, index = False, encoding = "utf-8")
 
+    # Get data pre-processing end time
+    end_time = datetime.datetime.now ()
+
+    # Print data pre-processing duration
+    print ("\nData pre-processing completed in", model_runtime (0, start_time, end_time), "seconds")
 
 # Print debugging message if no data pre-processing is carried out
 else:
 
     print ("Data pre-processing not carried out")
 
-# Check boolean to see whether or not to delete records (intrusive) that contain the custom TRASH RECORD identifier in Remarks
+# Check boolean to see whether or not to delete trash records (intrusive)
 if (remove_trash_data == True): # By default don't delete TRASH RECORDs as even though they lack quality information, they serve semantic value (metadata)
 
     # Remove trash Feedback data marked with custom removal Remarks ("TRASH RECORD")
-    try: # Trash Feedback are feedback which has its MainTextCleaned empty after data cleaning (meaning that they contain and are made up of invalid characters)
+    try: # Trash Feedback are feedback which has its MainTextCleaned empty after data cleaning (meaning that they contain and are made up of all invalid characters)
 
         print ("Removing TRASH records from the database..")
 
@@ -554,7 +635,7 @@ if (remove_trash_data == True): # By default don't delete TRASH RECORDs as even 
         db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
         db_cursor = db_connection.cursor ()
 
-        # Create SQL statement to delete records with the Remarks set as 'TRASH RECORD'
+        # Create SQL statement to delete records (blacklisted records)
         sql = "DELETE FROM %s WHERE Whitelist = 3;" % (feedback_table)
 
         # Execute SQL statement
@@ -630,16 +711,21 @@ finally:
 # Check boolean to see whether or not to data mine feedback
 if (mine_data == True):
 
+    # Print debugging message
+    print ("Unmined feedback data detected!")
+    print ("Mining:", len (feedback_df), "record(s)")
+
+    """ Spam detection (Detect if Feedback data is spam or ham (not spam)) """
     # 1) Get dataset for Spam Detection
     try:
 
         # Create MySQL connection object to the database
         db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
-        # Create SQL query to get Feedback table values (Feature Engineering)
+        # Create SQL query to get FeedbackML table values (Feature Engineering)
         sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText`, SubjectSpam, MainTextSpam, SpamStatus FROM %s WHERE SpamStatus = 2;" % (feedback_ml_table)
 
-        # Execute query and convert Feedback table into a pandas DataFrame
+        # Execute query and convert FeedbackML table into a pandas DataFrame
         feedback_ml_df = pd.read_sql (sql_query, db_connection)
 
         # Check if dataframe obtained is empty
@@ -679,7 +765,7 @@ if (mine_data == True):
         # Close connection object once Feedback has been obtained
         db_connection.close () # Close MySQL connection
 
-    # Check boolean to see whether or not to apply Spam Detection model on Feedback data
+    # Check boolean variable to see whether or not to apply Spam Detection model on Feedback data
     if (spam_check_data == True):
 
         # 2) Further feature engineering (Data pre-processing) [FOR REDUNDANCY]
@@ -690,14 +776,26 @@ if (mine_data == True):
         # Remove rows containing empty main texts (trash records)
         feedback_ml_df = feedback_ml_df [feedback_ml_df.MainText != ""]
 
+        # Check if folder to store data-mined feedback exists
+        if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder)):
+
+            # Create folder if it doesn't exist
+            os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder) 
+
+        # Check if sub-folder for data-mined feedback exists
+        if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/" % folder)):
+
+            # Create sub-folder if it doesn't exist
+            os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/" % folder) 
+
         # Save cleaned raw (prior to data mining) dataset to CSV
-        feedback_ml_df.to_csv (feedback_file_path_dm, index = False, encoding = "utf-8")
+        feedback_ml_df.to_csv (feedback_ml_prior_file_path_dm, index = False, encoding = "utf-8")
 
         # 3) Understand dataset
         if (preliminary_check == True): # Check boolean to display preliminary information
 
             # Print some information of about the data
-            print ("Preliminary information about dataset:")
+            print ("\nPreliminary information about SPAM/HAM dataset:")
             print ("Dimensions: ", feedback_ml_df.shape, "\n")
             print ("First few records:")
             print (feedback_ml_df.head (), "\n")
@@ -756,17 +854,19 @@ if (mine_data == True):
         print ("Predicted main text values:", model_prediction_main_text)
 
         # Print spam model runtime
-        print ("\nSpam model runtime: ", spam_model_duration, "seconds")
+        print ("\nSpam model runtime: ", spam_model_duration, "seconds\n")
 
         # Collate results of spam-detection predictions
         feedback_ml_df.SubjectSpam = model_prediction_subject
         feedback_ml_df.MainTextSpam = model_prediction_main_text
-        feedback_ml_df = feedback_ml_df.apply (spam_status_dataframe, axis = 1) # Get overall SpamStatus of each record
 
-        # Save  spam-mined dataset to CSV
+        # Get overall SpamStatus of each feedback record
+        feedback_ml_df = feedback_ml_df.apply (spam_status_dataframe, axis = 1) 
+
+        # Save spam-mined dataset to CSV
         feedback_ml_df.to_csv (feedback_ml_file_path_dm, index = False, encoding = "utf-8")
 
-        # Connect to database to update SpamStatus values of Feedback
+        # Connect to database to UPDATE SpamStatus values of Feedback
         try:
 
             # Create MySQL connection and cursor objects to the database
@@ -797,10 +897,19 @@ if (mine_data == True):
             db_cursor.close ()
             db_connection.close () # Close MySQL connection
 
+    """ Topic Modelling on Feedback data to group similar feedback together for ease of prioritisation to developers in the developer's platform """
+
     # Apply TOPIC MODELLING model
     pass
 
-    # Connect to database to update MineStatus of Feedback 
+    # Insert Feedback-Topic mappings to the FeedbackTopic table in the database
+    pass
+
+    # Update each topic's PriorityScore in the Topic table in the database (compute average OverallScore of all Feedback in the same topic)
+    pass
+
+    """ Post-data-mining preparations """
+    # Connect to database to UPDATE MineStatus of Feedback 
     try: 
 
         print ("Updating data-mined status of feedback..")
@@ -809,8 +918,8 @@ if (mine_data == True):
         db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
         db_cursor = db_connection.cursor ()
 
-        # Create SQL statement to delete records with the Remarks set as 'TRASH RECORD'
-        sql = "UPDATE %s SET MineStatus = 1;" % (feedback_table)
+        # Create SQL statement to update MineStatus of feedback
+        sql = "UPDATE %s SET MineStatus = 1 WHERE MineStatus = 0;" % (feedback_table)
 
         # Execute SQL statement
         db_cursor.execute (sql)
@@ -819,7 +928,7 @@ if (mine_data == True):
         db_connection.commit ()
 
         # Debugging
-        print (db_cursor.rowcount, "record(s) mined")
+        print (db_cursor.rowcount, "record(s) successfully mined")
 
     # Catch MySQL Exception
     except mysql.connector.Error as error:
