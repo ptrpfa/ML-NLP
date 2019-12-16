@@ -4,10 +4,6 @@ import pandas as pd
 import numpy as np
 import re # REGEX
 import spacy # NLP
-from sklearn.naive_bayes import MultinomialNB # 4) Naive Bayes classifier
-from sklearn import svm # 4) SVM classifier
-from sklearn.linear_model import LogisticRegression # 4) Logistic Regression classifier
-from sklearn.feature_extraction.text import TfidfVectorizer # NLP Vectorizer
 
 # Suppress scikit-learn FutureWarnings
 from warnings import simplefilter

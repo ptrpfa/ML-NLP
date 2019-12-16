@@ -600,7 +600,7 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
         # Create folder if it doesn't exist
         os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder) 
     
-    # Check if sub-folder for prep-processed feedback exists
+    # Check if sub-folder for pre-processed feedback exists
     if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/" % folder)):
 
         # Create sub-folder if it doesn't exist
@@ -912,7 +912,7 @@ if (mine_data == True):
     # Connect to database to UPDATE MineStatus of Feedback 
     try: 
 
-        print ("Updating data-mined status of feedback..")
+        print ("\nUpdating data-mined status of feedback..")
 
         # Create MySQL connection and cursor objects to the database
         db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
