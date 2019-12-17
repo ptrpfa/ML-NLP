@@ -3,6 +3,7 @@ import mysql.connector # MySQL
 from sqlalchemy import create_engine # MySQL
 import numpy as np
 import re # REGEX
+import json
 import string
 import html
 import unidecode
@@ -35,13 +36,16 @@ simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warni
 # File paths
 train_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml.csv" # Dataset file path
 topic_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml-topics.csv' # Topic modelled dataset file path
+manual_tagging_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/manual-tagging.txt' # Manually tagged topic-tokens file path
 pickles_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/pickles/" # File path containing pickled objects
 accuracy_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/accuracies/" # Model accuracy results file path
 
 # Boolean triggers global variables
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
+use_manual_tag = True # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
 use_pickle = False # Boolean to trigger whether to use pickled objects or not
+display_visuals = True # Boolean to trigger display of visualisations
 
 # Database global variables
 mysql_user = "root"                 # MySQL username
@@ -146,10 +150,29 @@ if (topic_model_data == True):
         print (feedback_ml_df.dtypes, "\n")
 
     # 4) Apply topic modelling transformations and models
-    # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
-
     # Convert corpus to DTM
     pass
+
+    # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
+    # Check boolean to see whether or not to label feedbacks with manually tagged tokens
+    if (use_manual_tag == True):
+
+        # Manually tagged topic-tokens file format:
+        # { topic_name: ['token1', 'token2'], topic_2: ['token3'] } 
+
+        # Initialise dictionary containing manually-tagged topic-word mappings
+        dictionary_manual_tag = json.load (open (manual_tagging_file_path))
+
+        print ("Manual tagging [INCOMPLETE!]")
+
+        # Loop through each topic in the manually-tagged topic-word mapping
+        for topic in dictionary_manual_tag:
+
+            # See if tokens in DTM match any token in list of tokens in each topic in dictionary_manual_tag
+            # dictionary_manual_tag [topic] # List of tokens
+            print (dictionary_manual_tag [topic])
+
+
 
     # Create topics in Topic table
     pass
