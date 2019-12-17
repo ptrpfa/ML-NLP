@@ -31,6 +31,59 @@ import sklearn.metrics as metrics # 4.5) For determination of model accuracy
 from warnings import simplefilter
 simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
 
+# Function to tokenize documents
+def tokenize (document):
+
+    # Convert document into a spaCy tokens document
+    document = nlp (document)
+
+    # Initialise list to contain tokens
+    list_tokens = []
+
+    # Loop to tokenize text
+    for token in document:
+
+        # Check if token is a stop word
+        if (token.is_stop):
+
+            # Skip current for-loop iteration if token is a stop word
+            continue
+        
+        # Get lemmatised form of token
+        lemmatised = token.lemma_
+
+        # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
+        if (lemmatised == "-PRON-"):
+
+            # Skip current for-loop iteration
+            continue
+
+        # Check if lemmatised token is a single non-word character
+        if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+
+            # Skip current for-loop iteration
+            continue
+
+        # Add lemmatised token into list of tokens
+        list_tokens.append (lemmatised)
+    
+    # Return list of tokens to calling program
+    return (list_tokens)
+
+# Function to tokenize each feedback's subject and main text (accepts a Series object of each row in the FeedbackML DataFrame and returns a tokenized Series object)
+def tokenize_dataframe (series):
+
+    # Tokenize feedback's subject
+    series ['SubjectTokens'] = str (tokenize (series ['Subject']))
+
+    # Tokenize feedback's main text
+    series ['MainTextTokens'] = str (tokenize (series ['MainText']))
+
+    # Debugging
+    # print (series ['Id'], ": SubjectTokens:", series ['SubjectTokens'], ": MainTextTokens:", series ['MainTextTokens'])
+
+    # Return tokenized series object
+    return series
 
 # Global variables
 # File paths
@@ -130,6 +183,8 @@ if (topic_model_data == True):
     feedback_ml_df = feedback_ml_df [feedback_ml_df.MainText != ""] # For REDUNDANCY
 
     # Add columns to assign topic to each feedback's subject and main text
+    feedback_ml_df ['SubjectTokens'] = ""
+    feedback_ml_df ['MainTextTokens'] = ""
     feedback_ml_df ['SubjectTopics'] = ""
     feedback_ml_df ['MainTextTopics'] = ""
 
@@ -150,6 +205,15 @@ if (topic_model_data == True):
         print (feedback_ml_df.dtypes, "\n")
 
     # 4) Apply topic modelling transformations and models
+
+    print ("Tokenizing subject and main text of feedback..")
+    # Tokenize subject and main text
+    feedback_ml_df.apply (tokenize_dataframe, axis = 1) # Access row by row
+
+    # Save file
+    feedback_ml_df.to_csv (topic_file_path, index = False, encoding = "utf-8")
+    
+
     # Convert corpus to DTM
     pass
 
@@ -171,8 +235,6 @@ if (topic_model_data == True):
             # See if tokens in DTM match any token in list of tokens in each topic in dictionary_manual_tag
             # dictionary_manual_tag [topic] # List of tokens
             print (dictionary_manual_tag [topic])
-
-
 
     # Create topics in Topic table
     pass
