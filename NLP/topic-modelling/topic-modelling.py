@@ -51,19 +51,30 @@ mysql_schema = "csitDB"             # MySQL schema (NOTE: MySQL in Windows is ca
 feedback_table = "Feedback"         # Name of feedback table in database
 feedback_ml_table = "FeedbackML"    # Name of feedback table in database used for machine learning
 
+# Create spaCy NLP object
+nlp = spacy.load ("en_core_web_sm")
+
+# Custom list of stop words to add to spaCy's existing stop word list
+list_custom_stopwords = ["I", "i",  "yer", "ya", "yar", "u", "loh", "lor", "lah", "leh", "lei", "lar", "liao", "hmm", "hmmm", "mmm", "mmmmmm", "wah", "eh"] 
+
+# Add custom stop words to spaCy's stop word list
+for word in list_custom_stopwords:
+
+    # Add custom word to stopword word list
+    nlp.vocab [word].is_stop = True
 
 # Program starts here
 program_start_time = datetime.datetime.now ()
 print ("Start time: ", program_start_time)
 
-# 1) Get dataset
+# 1) Get dataset (GENERAL FEEDBACK FIRST!)
 try:
 
     # Create MySQL connection object to the database
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
     # Create SQL query to get FeedbackML table values (Feature Engineering)
-    sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE SpamStatus = 0;" % (feedback_ml_table)
+    sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE SpamStatus = 0 AND CategoryID = 4;" % (feedback_ml_table)
 
     # Execute query and convert FeedbackML table into a pandas DataFrame
     feedback_ml_df = pd.read_sql (sql_query, db_connection)
@@ -78,9 +89,6 @@ try:
 
         # Set boolean to apply topic modelling model on data to True (default value) if dataframe obtained is not empty
         topic_model_data = True
-
-    # Save topic modelling dataset to CSV
-    feedback_ml_df.to_csv (train_file_path, index = False, encoding = "utf-8")
 
     """
     Selected Feedback features:
@@ -109,7 +117,24 @@ finally:
 # Check boolean variable to see whether or not to apply Topic Modelling model on Feedback dataset
 if (topic_model_data == True):
 
-    # 2) Understand dataset
+    # 2) Further feature engineering
+    # Drop empty rows/columns
+    feedback_ml_df.dropna (how = "all", inplace = True) # Drop empty rows
+    feedback_ml_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
+
+    # Remove rows containing empty main texts (trash records)
+    feedback_ml_df = feedback_ml_df [feedback_ml_df.MainText != ""] # For REDUNDANCY
+
+    # Add columns to assign topic to each feedback's subject and main text
+    feedback_ml_df ['SubjectTopics'] = ""
+    feedback_ml_df ['MainTextTopics'] = ""
+
+    # Some Subject may be BLANK after cleaning (need to accomodate for this!)
+
+    # Save topic modelling dataset to CSV
+    feedback_ml_df.to_csv (train_file_path, index = False, encoding = "utf-8")
+
+    # 3) Understand dataset
     if (preliminary_check == True): # Check boolean to display preliminary information
 
         # Print some information of about the data
@@ -120,12 +145,16 @@ if (topic_model_data == True):
         print ("Columns and data types:")
         print (feedback_ml_df.dtypes, "\n")
 
-    # 3) Further feature engineering
-    # Add columns to assign topic to each feedback (need to see how to assign topic to subject and maintext [maybe have a separate column for each])
-
-    # Some Subject may be BLANK after cleaning (need to accomodate for this!)
+    # 4) Apply topic modelling transformations and models
+    # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
 
     # Convert corpus to DTM
+    pass
+
+    # Create topics in Topic table
+    pass
+
+    # Insert Feedback-Topic mappings in FeedbackTopic table
     pass
 
 # Print debugging message if topic modelling not carried out
