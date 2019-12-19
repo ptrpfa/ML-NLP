@@ -74,16 +74,44 @@ def tokenize (document):
 def tokenize_dataframe (series):
 
     # Tokenize feedback's subject
-    series ['SubjectTokens'] = str (tokenize (series ['Subject']))
-
-    # Tokenize feedback's main text
-    series ['MainTextTokens'] = str (tokenize (series ['MainText']))
-
-    # Debugging
-    # print (series ['Id'], ": SubjectTokens:", series ['SubjectTokens'], ": MainTextTokens:", series ['MainTextTokens'])
+    series ['TextTokens'] = str (tokenize (series ['Text']))
 
     # Return tokenized series object
     return series
+
+    
+# Function to pickle object (accepts object to pickle and its filename to save as)
+def pickle_object (pickle_object, filename):
+
+    # Get full filepath
+    filepath = pickles_file_path + filename
+
+    # Create file object to store object to pickle
+    file_pickle = open (filepath, 'wb') # w = write, b = bytes (overwrite pre-existing files if any)
+
+    # Pickle (serialise) object [store object as a file]
+    pickle.dump (pickle_object, file_pickle)
+
+    # Close file object
+    file_pickle.close ()
+
+# Function to load pickle object (accepts filename of pickle to load and returns the de-pickled object)
+def load_pickle (filename):
+
+     # Get full filepath
+    filepath = pickles_file_path + filename
+
+    # Create file object accessing the pickle file
+    file_pickle = open (filepath, 'rb') # r = read, b = bytes
+
+    # Get pickled object
+    pickled_object = pickle.load (file_pickle)
+
+    # Close file object
+    file_pickle.close ()
+
+    # Return pickle object
+    return pickled_object
 
 # Global variables
 # File paths
@@ -181,14 +209,13 @@ if (topic_model_data == True):
 
     # Remove rows containing empty main texts (trash records)
     feedback_ml_df = feedback_ml_df [feedback_ml_df.MainText != ""] # For REDUNDANCY
-
-    # Add columns to assign topic to each feedback's subject and main text
-    feedback_ml_df ['SubjectTokens'] = ""
-    feedback_ml_df ['MainTextTokens'] = ""
-    feedback_ml_df ['SubjectTopics'] = ""
-    feedback_ml_df ['MainTextTopics'] = ""
-
-    # Some Subject may be BLANK after cleaning (need to accomodate for this!)
+    
+    # Combine subject and main text into one column [Applied topic modelling on combined texts of subject together with main text as topic modelling uses the DTM, in which order of words does not matter]
+    feedback_ml_df ['Text'] = feedback_ml_df ['Subject'] + " " + feedback_ml_df ['MainText'] # Some Subject may be BLANK after cleaning (need to accomodate for this!)
+    
+    # Create new column for feedback's topics
+    feedback_ml_df ['TextTokens'] = ""
+    feedback_ml_df ['TextTopics'] = ""
 
     # Save topic modelling dataset to CSV
     feedback_ml_df.to_csv (train_file_path, index = False, encoding = "utf-8")
@@ -208,11 +235,27 @@ if (topic_model_data == True):
 
     print ("Tokenizing subject and main text of feedback..")
     # Tokenize subject and main text
-    feedback_ml_df.apply (tokenize_dataframe, axis = 1) # Access row by row
+    # feedback_ml_df.apply (tokenize_dataframe, axis = 1) # Access row by row
+
+    # Assign target and features variables
+    target = feedback_ml_df.TextTopics
+    feature = feedback_ml_df.Text
+
+    # Create vectorizer object
+    vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95) 
+    
+    # Fit data to vectorizer (Create DTM of dataset (features))
+    feature = vectorizer.fit_transform (feature) # Returns a sparse matrix
+    
+    print ("Tokens:")
+    print (vectorizer.get_feature_names()) # Get features (words)
+    data_dtm = pd.DataFrame(feature.toarray(), columns=vectorizer.get_feature_names()) # Convert DTM to DataFrame
+    data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/topic-modelling/data/large/dtm.csv", index = False, encoding="utf-8") # Save DTM
 
     # Save file
     feedback_ml_df.to_csv (topic_file_path, index = False, encoding = "utf-8")
     
+    pickle_object (vectorizer, "tfidf-vectorizer.pkl") # TF-IDF Vectorizer
 
     # Convert corpus to DTM
     pass
