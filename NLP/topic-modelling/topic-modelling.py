@@ -11,6 +11,9 @@ import pickle
 import scipy
 import datetime
 import spacy # NLP
+from gensim import matutils, models # 4) Gensim topic modelling
+import scipy.sparse # 4) Gensim topic modelling
+import logging # 4) Gensim topic modelling logging
 from sklearn.model_selection import train_test_split # 4) For splitting dataset into train/test sets
 from sklearn import linear_model # 4) Linear Regression classifier
 from sklearn.naive_bayes import MultinomialNB # 4) Naive Bayes classifier
@@ -30,6 +33,18 @@ import sklearn.metrics as metrics # 4.5) For determination of model accuracy
 # Suppress scikit-learn FutureWarnings
 from warnings import simplefilter
 simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
+
+# Logging configurations
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+
+# Function to strip heading and trailing whitespaces in the Text of Feedback (accepts a Series object of each row in the FeedbackML DataFrame and returns a cleaned Series object)
+def strip_dataframe (series):
+
+    # Remove heading and trailing whitespaces in Text
+    series ['Text'] = series ['Text'].strip ()
+
+    # Return cleaned series object
+    return series
 
 # Function to tokenize documents
 def tokenize (document):
@@ -79,7 +94,6 @@ def tokenize_dataframe (series):
     # Return tokenized series object
     return series
 
-    
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
 
@@ -119,13 +133,12 @@ train_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml.c
 topic_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml-topics.csv' # Topic modelled dataset file path
 manual_tagging_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/manual-tagging.txt' # Manually tagged topic-tokens file path
 pickles_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/pickles/" # File path containing pickled objects
-accuracy_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/accuracies/" # Model accuracy results file path
 
 # Boolean triggers global variables
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_manual_tag = True # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = False # Boolean to trigger whether to use pickled objects or not
+use_pickle = True # Boolean to trigger whether to use pickled objects or not
 display_visuals = True # Boolean to trigger display of visualisations
 
 # Database global variables
@@ -202,7 +215,7 @@ finally:
 # Check boolean variable to see whether or not to apply Topic Modelling model on Feedback dataset
 if (topic_model_data == True):
 
-    # 2) Further feature engineering
+    # 2) Further feature engineering and data pre-processings
     # Drop empty rows/columns
     feedback_ml_df.dropna (how = "all", inplace = True) # Drop empty rows
     feedback_ml_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
@@ -210,15 +223,55 @@ if (topic_model_data == True):
     # Remove rows containing empty main texts (trash records)
     feedback_ml_df = feedback_ml_df [feedback_ml_df.MainText != ""] # For REDUNDANCY
     
-    # Combine subject and main text into one column [Applied topic modelling on combined texts of subject together with main text as topic modelling uses the DTM, in which order of words does not matter]
-    feedback_ml_df ['Text'] = feedback_ml_df ['Subject'] + " " + feedback_ml_df ['MainText'] # Some Subject may be BLANK after cleaning (need to accomodate for this!)
+    # Combine subject and main text into one column [Will apply topic modelling on combined texts of subject together with main text instead of both separately as topic modelling uses the DTM, in which the order of words does not matter]
+    feedback_ml_df ['Text'] = feedback_ml_df ['Subject'] + " " + feedback_ml_df ['MainText'] 
     
-    # Create new column for feedback's topics
+    # Remove heading and trailing whitespaces in Text (to accomodate cases of blank Subjects in header)
+    feedback_ml_df.apply (strip_dataframe, axis = 1) # Access row by row
+
+    # Create new columns for dataframe
     feedback_ml_df ['TextTokens'] = ""
     feedback_ml_df ['TextTopics'] = ""
 
-    # Save topic modelling dataset to CSV
+    # Convert dataframe prior to topic modelling to CSV
     feedback_ml_df.to_csv (train_file_path, index = False, encoding = "utf-8")
+
+    # Assign target and features variables
+    target = feedback_ml_df.TextTopics
+    feature = feedback_ml_df.Text
+
+    # Create new vectorizers if not using pickled objects
+    if (not use_pickle):
+        
+        # Create vectorizer object
+        vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95) 
+        
+        # Fit data to vectorizer (Create DTM of dataset (features))
+        feature = vectorizer.fit_transform (feature) # Returns a sparse matrix
+        
+        print ("Tokens:")
+        print (vectorizer.get_feature_names ()) # Get features (words)
+
+        # Convert DTM to DataFrame
+        data_dtm = pd.DataFrame (feature.toarray (), columns = vectorizer.get_feature_names ())
+
+        # Save DTM (pickle and convert to CSV)
+        data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/topic-modelling/data/large/dtm.csv", index = False, encoding="utf-8") 
+        pickle_object (data_dtm, "/large/dtm.pkl") 
+
+    # Using pickled objects
+    else:
+
+        # Load serialised vectorizer
+        vectorizer = load_pickle ("tfidf-vectorizer.pkl")
+
+        # Load serialised objects
+        feature = load_pickle ("features.pkl") # Get serialised features
+        data_dtm = load_pickle ("/large/dtm.pkl") # Get serialised document-term matrix
+
+        # Print information on vectorised words
+        print ("Tokens:")
+        print (vectorizer.get_feature_names ()) # Get feature (words)
 
     # 3) Understand dataset
     if (preliminary_check == True): # Check boolean to display preliminary information
@@ -233,33 +286,17 @@ if (topic_model_data == True):
 
     # 4) Apply topic modelling transformations and models
 
-    print ("Tokenizing subject and main text of feedback..")
-    # Tokenize subject and main text
-    # feedback_ml_df.apply (tokenize_dataframe, axis = 1) # Access row by row
+    # Convert DTM into Gensim corpus
+    data_tdm = data_dtm.transpose () # Convert document-term matrix into a term-document matrix (transpose DTM)
+    data_tdm_sparse_matrix = scipy.sparse.csr_matrix (data_tdm) # Convert TDM into a sparse matrix
+    gensim_corpus = matutils.Sparse2Corpus (data_tdm_sparse_matrix) # Convert sparse matrix into a Gensim corpus
 
-    # Assign target and features variables
-    target = feedback_ml_df.TextTopics
-    feature = feedback_ml_df.Text
+    # Get a dictionary of the locations of each term in the DTM in the format {location: 'term'}
+    id2word = dict ((location, term) for term, location in vectorizer.vocabulary_.items ()) # vectorizer.vocabulary_.items() returns a list of tuples in the format ('term', location) ie ('awesome pics', 8153)
 
-    # Create vectorizer object
-    vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95) 
-    
-    # Fit data to vectorizer (Create DTM of dataset (features))
-    feature = vectorizer.fit_transform (feature) # Returns a sparse matrix
-    
-    print ("Tokens:")
-    print (vectorizer.get_feature_names()) # Get features (words)
-    data_dtm = pd.DataFrame(feature.toarray(), columns=vectorizer.get_feature_names()) # Convert DTM to DataFrame
-    data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/topic-modelling/data/large/dtm.csv", index = False, encoding="utf-8") # Save DTM
-
-    # Save file
-    feedback_ml_df.to_csv (topic_file_path, index = False, encoding = "utf-8")
-    
-    pickle_object (vectorizer, "tfidf-vectorizer.pkl") # TF-IDF Vectorizer
-
-    # Convert corpus to DTM
-    pass
-
+    # Create Topic Modelling models
+    lda_model = models.LdaModel(corpus=gensim_corpus, id2word=id2word, num_topics=20, passes=10)
+    lda_model.print_topics()
     # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
     # Check boolean to see whether or not to label feedbacks with manually tagged tokens
     if (use_manual_tag == True):
@@ -282,8 +319,20 @@ if (topic_model_data == True):
     # Create topics in Topic table
     pass
 
+    # Need to accomodate Feedbacks that are not assigned a Topic (maybe after tokenization is blank [], topic is itself)
+
     # Insert Feedback-Topic mappings in FeedbackTopic table
     pass
+
+    # Save file
+    feedback_ml_df.to_csv (topic_file_path, index = False, encoding = "utf-8")
+    
+    # Save models (pickling/serialization)
+    pickle_object (feature, "features.pkl") # Sparse Matrix of features
+    pickle_object (vectorizer, "tfidf-vectorizer.pkl") # TF-IDF Vectorizer
+    pickle_object (gensim_corpus, "gensim-corpus.pkl") # Gensim corpus
+    pickle_object (gensim_corpus, "lda-model.pkl") # LDA Model
+
 
 # Print debugging message if topic modelling not carried out
 else:

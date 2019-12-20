@@ -474,7 +474,7 @@ else:
 
     # Load serialised features (sparse matrix)
     # Load DTM and convert it into a sparse matrix
-    # features_dtm = pd.read_csv ("/home/p/Desktop/csitml/NLP/spam-detect/data/dtm.csv") # Not used as DTM file is very large
+    # features_dtm = pd.read_csv ("/home/p/Desktop/csitml/NLP/spam-detect/data/large/dtm.csv") # Not used as DTM file is very large
     # features = scipy.sparse.csr_matrix (features_dtm.values)
 
     # OR 
