@@ -14,6 +14,7 @@ import spacy # NLP
 from gensim import matutils, models # 4) Gensim topic modelling
 import scipy.sparse # 4) Gensim topic modelling
 import logging # 4) Gensim topic modelling logging
+from pprint import pprint # 4) Pretty print to print out topics
 from sklearn.model_selection import train_test_split # 4) For splitting dataset into train/test sets
 from sklearn import linear_model # 4) Linear Regression classifier
 from sklearn.naive_bayes import MultinomialNB # 4) Naive Bayes classifier
@@ -35,7 +36,7 @@ from warnings import simplefilter
 simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
 
 # Logging configurations
-logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+# logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 # Function to strip heading and trailing whitespaces in the Text of Feedback (accepts a Series object of each row in the FeedbackML DataFrame and returns a cleaned Series object)
 def strip_dataframe (series):
@@ -45,6 +46,54 @@ def strip_dataframe (series):
 
     # Return cleaned series object
     return series
+
+# Function to tokenize documents (POS: Nouns and Adjectives)
+def tokenize_pos_nouns_adj (document):
+
+    # Convert document into a spaCy tokens document
+    document = nlp (document)
+
+    # Initialise list to contain tokens
+    list_tokens = []
+
+    # Loop to tokenize text
+    for token in document:
+
+        # Check if token is a stop word
+        if (token.is_stop):
+
+            # Skip current for-loop iteration if token is a stop word
+            continue
+        
+        # Get lemmatised form of token
+        lemmatised = token.lemma_
+
+        # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
+        if (lemmatised == "-PRON-"):
+
+            # Skip current for-loop iteration
+            continue
+
+        # Check if lemmatised token is a single non-word character
+        if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+
+            # Skip current for-loop iteration
+            continue
+        
+        # Get Part-of-Speech of token
+        token_pos = token.pos_
+
+        # Check if token's POS is not a NOUN or ADJECTIVE
+        if (token_pos != "NOUN" and token_pos != "ADJ"):
+
+            # Skip current for-loop iteration
+            continue
+
+        # Add lemmatised token into list of tokens
+        list_tokens.append (lemmatised)
+    
+    # Return list of tokens to calling program
+    return (list_tokens)
 
 # Function to tokenize documents
 def tokenize (document):
@@ -84,15 +133,6 @@ def tokenize (document):
     
     # Return list of tokens to calling program
     return (list_tokens)
-
-# Function to tokenize each feedback's subject and main text (accepts a Series object of each row in the FeedbackML DataFrame and returns a tokenized Series object)
-def tokenize_dataframe (series):
-
-    # Tokenize feedback's subject
-    series ['TextTokens'] = str (tokenize (series ['Text']))
-
-    # Return tokenized series object
-    return series
 
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
@@ -138,7 +178,7 @@ pickles_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/pickles/" # File
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_manual_tag = True # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = False# Boolean to trigger whether to use pickled objects or not
+use_pickle = True # Boolean to trigger whether to use pickled objects or not
 display_visuals = True # Boolean to trigger display of visualisations
 
 # Database global variables
@@ -246,6 +286,7 @@ if (topic_model_data == True):
         
         # Create vectorizer object
         vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,3), max_df = 0.95) 
+        # vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize_pos_nouns_adj, ngram_range = (1,3), max_df = 0.95) 
         
         # Fit data to vectorizer (Create DTM of dataset (features))
         feature = vectorizer.fit_transform (feature) # Returns a sparse matrix
@@ -296,10 +337,13 @@ if (topic_model_data == True):
     id2word = dict ((location, term) for term, location in vectorizer.vocabulary_.items ()) # vectorizer.vocabulary_.items() returns a list of tuples in the format ('term', location) ie ('awesome pics', 8153)
 
     # Create Topic Modelling models
-    lda_model = models.LdaModel(corpus=gensim_corpus, id2word=id2word, num_topics=50, passes=30, chunksize = 3500)
-    lda_model.print_topics()
+    lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 50, passes = 30, chunksize = 3500 , alpha = 'auto', eta = 'auto')
 
-    # print (list(zip([a for [(a,b)] in lda_model [gensim_corpus]], data_dtm.index)))
+    # Get topics
+    lda_topics = lda_model.show_topics (formatted= True, num_words = 20)
+
+    print ("Topics:")
+    print (lda_topics)
 
     # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
     # Check boolean to see whether or not to label feedbacks with manually tagged tokens
@@ -311,7 +355,7 @@ if (topic_model_data == True):
         # Initialise dictionary containing manually-tagged topic-word mappings
         dictionary_manual_tag = json.load (open (manual_tagging_file_path))
 
-        print ("Manual tagging [INCOMPLETE!]")
+        print ("\nManual tagging [INCOMPLETE!]")
 
         # Loop through each topic in the manually-tagged topic-word mapping
         for topic in dictionary_manual_tag:
