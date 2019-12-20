@@ -138,7 +138,7 @@ pickles_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/pickles/" # File
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_manual_tag = True # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = True # Boolean to trigger whether to use pickled objects or not
+use_pickle = False# Boolean to trigger whether to use pickled objects or not
 display_visuals = True # Boolean to trigger display of visualisations
 
 # Database global variables
@@ -153,7 +153,8 @@ feedback_ml_table = "FeedbackML"    # Name of feedback table in database used fo
 nlp = spacy.load ("en_core_web_sm")
 
 # Custom list of stop words to add to spaCy's existing stop word list
-list_custom_stopwords = ["I", "i",  "yer", "ya", "yar", "u", "loh", "lor", "lah", "leh", "lei", "lar", "liao", "hmm", "hmmm", "mmm", "mmmmmm", "wah", "eh"] 
+list_custom_stopwords = ["I", "i",  "yer", "ya", "yar", "u", "loh", "lor", "lah", "leh", "lei", "lar", "liao", "hmm", "hmmm", "mmm", "information", 
+                         "giving", "discovery", "seek", "seeking", "rating", "my", "very", "mmmmmm", "wah", "eh"] 
 
 # Add custom stop words to spaCy's stop word list
 for word in list_custom_stopwords:
@@ -244,7 +245,7 @@ if (topic_model_data == True):
     if (not use_pickle):
         
         # Create vectorizer object
-        vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,2), max_df = 0.95) 
+        vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,3), max_df = 0.95) 
         
         # Fit data to vectorizer (Create DTM of dataset (features))
         feature = vectorizer.fit_transform (feature) # Returns a sparse matrix
@@ -286,7 +287,7 @@ if (topic_model_data == True):
 
     # 4) Apply topic modelling transformations and models
 
-    # Convert DTM into Gensim corpus
+    # Convert Document-Term Matrix into Gensim corpus
     data_tdm = data_dtm.transpose () # Convert document-term matrix into a term-document matrix (transpose DTM)
     data_tdm_sparse_matrix = scipy.sparse.csr_matrix (data_tdm) # Convert TDM into a sparse matrix
     gensim_corpus = matutils.Sparse2Corpus (data_tdm_sparse_matrix) # Convert sparse matrix into a Gensim corpus
@@ -295,8 +296,11 @@ if (topic_model_data == True):
     id2word = dict ((location, term) for term, location in vectorizer.vocabulary_.items ()) # vectorizer.vocabulary_.items() returns a list of tuples in the format ('term', location) ie ('awesome pics', 8153)
 
     # Create Topic Modelling models
-    lda_model = models.LdaModel(corpus=gensim_corpus, id2word=id2word, num_topics=20, passes=10)
+    lda_model = models.LdaModel(corpus=gensim_corpus, id2word=id2word, num_topics=50, passes=30, chunksize = 3500)
     lda_model.print_topics()
+
+    # print (list(zip([a for [(a,b)] in lda_model [gensim_corpus]], data_dtm.index)))
+
     # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
     # Check boolean to see whether or not to label feedbacks with manually tagged tokens
     if (use_manual_tag == True):
