@@ -12,6 +12,7 @@ import os
 from sklearn import svm # 4) SVM classifier
 from sklearn.linear_model import LogisticRegression # 4) Logistic Regression classifier
 from sklearn.feature_extraction.text import TfidfVectorizer # NLP Vectorizer
+from textblob import TextBlob # 4) Naive sentiment analysis
 
 # Suppress scikit-learn FutureWarnings
 from warnings import simplefilter
