@@ -348,7 +348,7 @@ def update_sentiment_values_dataframe (series, cursor, connection):
 
     # Commit changes made
     connection.commit ()
-    
+
 # Function to calculate runtime of models
 def model_runtime (duration, start_time, end_time):
 
@@ -411,6 +411,7 @@ remove_trash_data = False # Boolean to trigger deletion of trash Feedback data i
 mine_data = True # Boolean to trigger data mining of Feedback data in the database (Default value is TRUE)
 spam_check_data = True # Boolean to trigger application of Spam Detection model on Feedback data in the database (Default value is TRUE)
 sentiment_check_data = True # Boolean to trigger application of Naive Sentiment Analysis on Feedback data in the database (Default value is TRUE)
+topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 
 # Database global variables
@@ -423,7 +424,7 @@ feedback_ml_table = "FeedbackML"    # Name of feedback table in database used fo
 category_factor = {}                # Initialise empty dictionary to contain mapping of category-factor values for computing overall score of feedback
 
 # Whitelisting
-whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitelist for identifying non-SPAM feedbacks (whitelist words are in lowercase)
+whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitelist for identifying non-SPAM feedbacks (NOTE: whitelisted words are in lowercase)
             'comms-tech', 'communications-tech', 'comms-technology',
             'communications-technology', 'crypto-tech', 'cryptography-tech',
             'crypto-technology', 'cryptography-technology', 'crash', 'information', 'giving', 'problem', 
@@ -441,7 +442,7 @@ print ("Start time: ", program_start_time)
 print ("\n***Preliminary preparations before data mining process***\n")
 
 # Check if there are any Feedback in the database which have not been pre-processed yet
-try: # Unprocessed Feedback are Feedbacks with PreprocessStatus = 0 and Whitelist = 2
+try: # Unprocessed Feedback are Feedbacks with PreprocessStatus = 0 and Whitelist = 2 (implicit, assumed that if PreprocessStatus = 0, Whitelist will be = 2)
 
     # Create MySQL connection object to the database
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
@@ -493,14 +494,14 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
     # Create new empty dataframe for feedback database table used for machine learning
     feedback_ml_df = pd.DataFrame (columns = ["FeedbackID", "WebAppID", "CategoryID", "SubjectCleaned", "MainTextCleaned", "SubjectSpam", "MainTextSpam", "SpamStatus", "Subjectivity", "Polarity"]) 
 
-    # Set index values in FeedbackML (NOTE: Other columns in feedback_ml_df are empty as data mining have not been carried out here)
+    # Set index values in FeedbackML (NOTE: Other columns in feedback_ml_df are empty as data mining have not been carried out yet)
     feedback_ml_df.FeedbackID = feedback_df.FeedbackID # Set FeedbackID
     feedback_ml_df.CategoryID = feedback_df.CategoryID # Set CategoryID
     feedback_ml_df.WebAppID = feedback_df.WebAppID     # Set WebAppID
 
     # Set default values in FeedbackML
-    feedback_ml_df ['Subjectivity'] = 2 # Set default Subjectivity value (Value of 2 indicates that record is UNPROCESSED)
-    feedback_ml_df ['Polarity'] = 2     # Set default Polarity value (Value of 2 indicates that record is UNPROCESSED)
+    feedback_ml_df ['Subjectivity'] = 2 # Set default Subjectivity value (Value of 2 indicates that the record is UNPROCESSED)
+    feedback_ml_df ['Polarity'] = 2     # Set default Polarity value (Value of 2 indicates that the record is UNPROCESSED)
 
     # Create temporary dataframe that combines both Feedback and FeedbackML tables (combine dataframes just to get new columns from FeedbackML)
     combined_feedback_df = feedback_df.merge (feedback_ml_df, on = ['FeedbackID', 'CategoryID', 'WebAppID']) # Inner join based on common IDs
@@ -1014,8 +1015,8 @@ if (mine_data == True):
 
         # 3) Apply TextBlob Naive Sentiment Analysis on Feedback data
         # Create lambda functions for getting the polarity and subjectivity values of each Feedback
-        get_polarity = lambda x: TextBlob (x).sentiment.polarity
-        get_subjectivity = lambda x: TextBlob (x).sentiment.subjectivity
+        get_polarity = lambda x: TextBlob (x).sentiment.polarity         # Value from -1 (negative) to 1 (positive)
+        get_subjectivity = lambda x: TextBlob (x).sentiment.subjectivity # Value from 0 (objective) to 1 (subjective)
 
         # Apply functions to obtain the naive subjectivity and polarity sentiment values of each Feedback
         feedback_ml_df ['Polarity'] = feedback_ml_df ['MainText'].apply (get_polarity) # Apply lambda function on MainText portion of Feedback
