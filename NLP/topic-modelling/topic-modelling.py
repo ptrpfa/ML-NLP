@@ -261,7 +261,7 @@ if (topic_model_data == True):
     feedback_ml_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
 
     # Remove rows containing empty main texts (trash records)
-    feedback_ml_df = feedback_ml_df [feedback_ml_df.MainText != ""] # For REDUNDANCY
+    # feedback_ml_df = feedback_ml_df [feedback_ml_df.MainText != ""] # For REDUNDANCY
     
     # Combine subject and main text into one column [Will apply topic modelling on combined texts of subject together with main text instead of both separately as topic modelling uses the DTM, in which the order of words does not matter]
     feedback_ml_df ['Text'] = feedback_ml_df ['Subject'] + " " + feedback_ml_df ['MainText'] 
