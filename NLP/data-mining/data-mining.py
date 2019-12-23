@@ -281,11 +281,11 @@ def update_feedback_dataframe (series, cursor, connection):
 def insert_feedback_ml_dataframe (series, cursor, connection): 
 
     # Create SQL statement to update Feedback table values
-    sql = "INSERT INTO %s (FeedbackID, CategoryID, WebAppID, SubjectCleaned, MainTextCleaned, SubjectSpam, MainTextSpam, SpamStatus) " % (feedback_ml_table)
-    sql = sql + "VALUES (%s, %s, %s, %s, %s, %s, %s, %s);" 
+    sql = "INSERT INTO %s (FeedbackID, CategoryID, WebAppID, SubjectCleaned, MainTextCleaned, SubjectSpam, MainTextSpam, SpamStatus, Subjectivity, Polarity) " % (feedback_ml_table)
+    sql = sql + "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);" 
 
     # Execute SQL statement
-    cursor.execute (sql, (series ['FeedbackID'], series ['CategoryID'], series ['WebAppID'], series ['SubjectCleaned'], series ['MainTextCleaned'], series ['SubjectSpam'], series ['MainTextSpam'], series ['SpamStatus']))
+    cursor.execute (sql, (series ['FeedbackID'], series ['CategoryID'], series ['WebAppID'], series ['SubjectCleaned'], series ['MainTextCleaned'], series ['SubjectSpam'], series ['MainTextSpam'], series ['SpamStatus'], series ['Subjectivity'], series ['Polarity']))
 
     # Commit changes made
     connection.commit ()
@@ -323,16 +323,32 @@ def update_spam_status_dataframe (series, cursor, connection):
     # Split Id (WebAppID_FeedbackID_CategoryID) into a list
     list_id = series ['Id'].split ('_') # Each ID component is delimited by underscore
     
-    # Create SQL statement to get Feedback table values
+    # Create SQL statement to update FeedbackML table values
     sql = "UPDATE %s " % (feedback_ml_table)
-    sql = sql + "SET SubjectSpam = %s, MainTextSpam = %s, SpamStatus = %s WHERE WebAppID = %sAND FeedbackID = %s AND CategoryID = %s;" 
+    sql = sql + "SET SubjectSpam = %s, MainTextSpam = %s, SpamStatus = %s, Subjectivity = %s, Polarity = %s WHERE WebAppID = %sAND FeedbackID = %s AND CategoryID = %s;" 
 
     # Execute SQL statement
-    cursor.execute (sql, (series ['SubjectSpam'], series ['MainTextSpam'], series ['SpamStatus'], list_id [0], list_id [1], list_id [2]))
+    cursor.execute (sql, (series ['SubjectSpam'], series ['MainTextSpam'], series ['SpamStatus'], series ['Subjectivity'], series ['Polarity'], list_id [0], list_id [1], list_id [2]))
 
     # Commit changes made
     connection.commit ()
 
+# Function to execute SQL UPDATE for each row in the series object passed to update the sentiment values (Subjectivity & Polarity) of Feedback data
+def update_sentiment_values_dataframe (series, cursor, connection):
+
+    # Split Id (WebAppID_FeedbackID_CategoryID) into a list
+    list_id = series ['Id'].split ('_') # Each ID component is delimited by underscore
+    
+    # Create SQL statement to update FeedbackML table values
+    sql = "UPDATE %s " % (feedback_ml_table)
+    sql = sql + "SET Subjectivity = %s, Polarity = %s WHERE WebAppID = %sAND FeedbackID = %s AND CategoryID = %s;" 
+
+    # Execute SQL statement
+    cursor.execute (sql, (series ['Subjectivity'], series ['Polarity'], list_id [0], list_id [1], list_id [2]))
+
+    # Commit changes made
+    connection.commit ()
+    
 # Function to calculate runtime of models
 def model_runtime (duration, start_time, end_time):
 
@@ -383,8 +399,10 @@ feedback_file_path_p = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-proce
 feedback_ml_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/feedback-ml.csv" % folder # Dataset file path 
 combined_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/combined-feedback.csv" % folder # Dataset file path 
 trash_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/trash-feedback.csv" % folder # Dataset file path 
-feedback_ml_prior_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-before.csv' % folder # Raw dataset file path (dataset PRIOR to data mining) [Features for ML]
-feedback_ml_file_path_dm = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml.csv" % folder # Dataset file path (dataset AFTER data mining)
+feedback_ml_prior_file_path_spam_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-spam-before.csv' % folder # Raw dataset file path (dataset PRIOR to spam detection) 
+feedback_ml_file_path_spam_dm = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-spam.csv" % folder # Dataset file path (dataset AFTER spam detection)
+feedback_ml_prior_file_path_sa_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-sentiment-before.csv' % folder # Raw dataset file path (dataset PRIOR to sentiment analysis)
+feedback_ml_file_path_sa_dm = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-sentiment.csv" % folder # Dataset file path (dataset AFTER sentiment analysis)
 pickles_file_path = "/home/p/Desktop/csitml/NLP/data-mining/pickles/" # File path containing pickled objects
 
 # Boolean triggers global variables
@@ -392,6 +410,7 @@ preprocess_data = True # Boolean to trigger pre-processing of Feedback data in t
 remove_trash_data = False # Boolean to trigger deletion of trash Feedback data in the database (Default value is FALSE) [INTRUSIVE]
 mine_data = True # Boolean to trigger data mining of Feedback data in the database (Default value is TRUE)
 spam_check_data = True # Boolean to trigger application of Spam Detection model on Feedback data in the database (Default value is TRUE)
+sentiment_check_data = True # Boolean to trigger application of Naive Sentiment Analysis on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 
 # Database global variables
@@ -472,12 +491,16 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
     print ("Pre-processing:", len (feedback_df), "record(s)")
 
     # Create new empty dataframe for feedback database table used for machine learning
-    feedback_ml_df = pd.DataFrame (columns = ["FeedbackID", "WebAppID", "CategoryID", "SubjectCleaned", "MainTextCleaned", "SubjectSpam", "MainTextSpam", "SpamStatus"]) 
+    feedback_ml_df = pd.DataFrame (columns = ["FeedbackID", "WebAppID", "CategoryID", "SubjectCleaned", "MainTextCleaned", "SubjectSpam", "MainTextSpam", "SpamStatus", "Subjectivity", "Polarity"]) 
 
     # Set index values in FeedbackML (NOTE: Other columns in feedback_ml_df are empty as data mining have not been carried out here)
     feedback_ml_df.FeedbackID = feedback_df.FeedbackID # Set FeedbackID
     feedback_ml_df.CategoryID = feedback_df.CategoryID # Set CategoryID
     feedback_ml_df.WebAppID = feedback_df.WebAppID     # Set WebAppID
+
+    # Set default values in FeedbackML
+    feedback_ml_df ['Subjectivity'] = 2 # Set default Subjectivity value (Value of 2 indicates that record is UNPROCESSED)
+    feedback_ml_df ['Polarity'] = 2     # Set default Polarity value (Value of 2 indicates that record is UNPROCESSED)
 
     # Create temporary dataframe that combines both Feedback and FeedbackML tables (combine dataframes just to get new columns from FeedbackML)
     combined_feedback_df = feedback_df.merge (feedback_ml_df, on = ['FeedbackID', 'CategoryID', 'WebAppID']) # Inner join based on common IDs
@@ -500,12 +523,14 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
     combined_feedback_df.SubjectCleaned = clean_document (combined_feedback_df.Subject) # Clean subject text
     
     # Create new dataframe to contain cleaned rows containing empty main texts (invalid trash records to be removed later on)
-    combined_feedback_df_trash = combined_feedback_df [combined_feedback_df.MainTextCleaned == ""].copy () # Get feedback with MainTextCleaned set to blan
+    combined_feedback_df_trash = combined_feedback_df [combined_feedback_df.MainTextCleaned == ""].copy () # Get feedback with MainTextCleaned set to blank first to work on trash records
 
     # Update columns accordingly to mark invalid rows as blacklisted invalid trash records
     combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'SubjectSpam'] = 3  # Set SubjectSpam status to unable to process (3) [for UNWHITELISTED records]
     combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'MainTextSpam'] = 3  # Set MainTextSpam status to unable to process (3) [for UNWHITELISTED records]
     combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'SpamStatus'] = 3  # Set SpamStatus to unable to process (3) [for UNWHITELISTED records]
+    combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'Subjectivity'] = 3  # Set Subjectivity to unable to process (3) [for UNWHITELISTED records] {Note for this, whitelisted trash records will have sentiment value of UNPROCESSED (2)}
+    combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'Polarity'] = 3  # Set Polarity to unable to process (3) [for UNWHITELISTED records] {Note for this, whitelisted trash records will have sentiment value of UNPROCESSED (2)}
     combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'Whitelist'] = 3  # Set whitelisted status to blacklisted (3) [for UNWHITELISTED records]
 
     # Print debugging message
@@ -515,7 +540,7 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
     combined_feedback_df = combined_feedback_df [combined_feedback_df.MainTextCleaned != ""]
 
     # Combined newly labelled empty rows into the previous dataframe
-    combined_feedback_df = combined_feedback_df.append (combined_feedback_df_trash) # Take note of index here! (no change)
+    combined_feedback_df = combined_feedback_df.append (combined_feedback_df_trash) # Take note of index here! (no changes required)
 
     # Update preprocessed status of preprocessed feedback
     combined_feedback_df ['PreprocessStatus'] = 1 # Change to 1 to indicate that the feedbacks have been pre-processed
@@ -532,6 +557,8 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
     feedback_ml_df.SubjectSpam = combined_feedback_df.SubjectSpam
     feedback_ml_df.MainTextSpam = combined_feedback_df.MainTextSpam
     feedback_ml_df.SpamStatus = combined_feedback_df.SpamStatus
+    feedback_ml_df.Subjectivity = combined_feedback_df.Subjectivity
+    feedback_ml_df.Polarity = combined_feedback_df.Polarity
 
     # Connect to database to UPDATE Feedback table
     try:
@@ -724,7 +751,7 @@ if (mine_data == True):
         db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
         # Create SQL query to get FeedbackML table values (Feature Engineering)
-        sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText`, SubjectSpam, MainTextSpam, SpamStatus FROM %s WHERE SpamStatus = 2;" % (feedback_ml_table)
+        sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText`, SubjectSpam, MainTextSpam, SpamStatus, Subjectivity, Polarity FROM %s WHERE SpamStatus = 2;" % (feedback_ml_table)
 
         # Execute query and convert FeedbackML table into a pandas DataFrame
         feedback_ml_df = pd.read_sql (sql_query, db_connection)
@@ -754,12 +781,12 @@ if (mine_data == True):
     except mysql.connector.Error as error:
 
         # Print MySQL connection error
-        print ("MySQL error when trying to get unmined records from the FeedbackML table:", error)
+        print ("MySQL error when trying to get unmined records from the FeedbackML table for spam detection:", error)
 
     except:
 
         # Print other errors
-        print ("Error occurred attempting to establish database connection to get unmined records from the FeedbackML table")
+        print ("Error occurred attempting to establish database connection to get unmined records from the FeedbackML table for spam detection")
 
     finally:
 
@@ -789,8 +816,8 @@ if (mine_data == True):
             # Create sub-folder if it doesn't exist
             os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/" % folder) 
 
-        # Save cleaned raw (prior to data mining) dataset to CSV
-        feedback_ml_df.to_csv (feedback_ml_prior_file_path_dm, index = False, encoding = "utf-8")
+        # Save cleaned raw (prior to spam detection data mining) dataset to CSV
+        feedback_ml_df.to_csv (feedback_ml_prior_file_path_spam_dm, index = False, encoding = "utf-8")
 
         # 3) Understand dataset
         if (preliminary_check == True): # Check boolean to display preliminary information
@@ -864,8 +891,12 @@ if (mine_data == True):
         # Get overall SpamStatus of each feedback record
         feedback_ml_df = feedback_ml_df.apply (spam_status_dataframe, axis = 1) 
 
+        # Update Sentiment Analysis Subjectivity and Polarity values of records labelled as SPAM
+        feedback_ml_df.loc [feedback_ml_df ['SpamStatus'] == 1, 'Subjectivity'] = 3  # Set Subjectivity value of SPAM records as UNABLE TO PROCESS (3)
+        feedback_ml_df.loc [feedback_ml_df ['SpamStatus'] == 1, 'Polarity'] = 3      # Set Polarity value of SPAM records as UNABLE TO PROCESS (3)
+
         # Save spam-mined dataset to CSV
-        feedback_ml_df.to_csv (feedback_ml_file_path_dm, index = False, encoding = "utf-8")
+        feedback_ml_df.to_csv (feedback_ml_file_path_spam_dm, index = False, encoding = "utf-8")
 
         # Connect to database to UPDATE SpamStatus values of Feedback
         try:
@@ -891,6 +922,132 @@ if (mine_data == True):
 
             # Print other errors
             print ("Error occurred attempting to establish database connection to update the spam statuses of FeedbackML records")
+
+        finally:
+
+            # Close connection objects once Feedback has been obtained
+            db_cursor.close ()
+            db_connection.close () # Close MySQL connection
+
+    """ NOTE: Sentiment Analysis and Topic Modelling will only be carried out AFTER Spam Detection is carried out and they will only be applied to NON-SPAM records! """
+
+    """ Naive Sentiment Analysis on Feedback data using TextBlob """
+    # 1) Get dataset for naive Sentiment Analysis
+    try:
+
+        # Create MySQL connection object to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+
+        # Create SQL query to get FeedbackML table values (Feature Engineering) [SpamStatus = 0, Subjectivity = 2 & Polarity = 2 (implicit, not included in query as it is assumed if Subjectivity = 2, Polarity will also be = 2. This is also done for speed)]
+        sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, MainTextCleaned as `MainText`, Subjectivity, Polarity FROM %s WHERE SpamStatus = 0 AND Subjectivity = 2;" % (feedback_ml_table)
+
+        # Execute query and convert FeedbackML table into a pandas DataFrame
+        feedback_ml_df = pd.read_sql (sql_query, db_connection)
+
+        # Check if dataframe obtained is empty
+        if (feedback_ml_df.empty == True):
+
+            # Set boolean to apply naive sentiment analysis on data to False if dataframe obtained is empty
+            sentiment_check_data = False
+
+        else:
+
+            # Set boolean to apply naive sentiment analysis on data to True (default value) if dataframe obtained is not empty
+            sentiment_check_data = True
+
+        """
+        Selected Feedback features:
+        -Id (WebAppID + FeedbackID + CategoryID) [Not ID as will cause Excel .sylk file intepretation error]
+        -MainTextCleaned (processed)
+        -Subjectivity [target1]
+        -Polarity [target2]
+
+        --> Dataset obtained at this point contains pre-processed Feedback data that are NOT trash records, NOT whitelisted, NOT SPAM and NOT sentiment analysed
+
+        NOTE: Subject of Feedback is omitted from sentiment analysis instead of combining it together with MainText to get a longer text because 1) Sentiment analysis
+        takes into account the order of words and 2) Practically, Subject should be a summary or subset of MainText, with MainText giving the real value of the Feedback
+        --> Alternatives to include Subject with MainText would be to compute the Subject of each individual Feedback's subjectivity and polarity scores separately and
+        combining it with the values of the Feedback's MainText to some degree/factor (ie Subjectivity = (0.3 * SubjectivityScore of Subject) + (0.7 * SubjectivityScore of MainText))
+
+        """
+
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error when trying to get unmined records from the FeedbackML table for naive sentiment analysis:", error)
+
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to get unmined records from the FeedbackML table for naive sentiment analysis")
+
+    finally:
+
+        # Close connection object once Feedback has been obtained
+        db_connection.close () # Close MySQL connection
+
+    # Check boolean variable to see whether or not to apply Naive Sentiment Analysis on Feedback data
+    if (sentiment_check_data == True):
+
+        # 2) Further feature engineering (Data pre-processing) [FOR REDUNDANCY]
+        # Drop empty rows/columns
+        feedback_ml_df.dropna (how = "all", inplace = True) # Drop empty rows
+        feedback_ml_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
+
+        # Remove rows containing empty main texts (trash records)
+        feedback_ml_df = feedback_ml_df [feedback_ml_df.MainText != ""]
+
+        # Check if folder to store data-mined feedback exists
+        if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder)):
+
+            # Create folder if it doesn't exist
+            os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder) 
+
+        # Check if sub-folder for data-mined feedback exists
+        if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/" % folder)):
+
+            # Create sub-folder if it doesn't exist
+            os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/" % folder) 
+
+        # Save cleaned raw (prior to sentiment analysis data mining) dataset to CSV
+        feedback_ml_df.to_csv (feedback_ml_prior_file_path_sa_dm, index = False, encoding = "utf-8")
+
+        # 3) Apply TextBlob Naive Sentiment Analysis on Feedback data
+        # Create lambda functions for getting the polarity and subjectivity values of each Feedback
+        get_polarity = lambda x: TextBlob (x).sentiment.polarity
+        get_subjectivity = lambda x: TextBlob (x).sentiment.subjectivity
+
+        # Apply functions to obtain the naive subjectivity and polarity sentiment values of each Feedback
+        feedback_ml_df ['Polarity'] = feedback_ml_df ['MainText'].apply (get_polarity) # Apply lambda function on MainText portion of Feedback
+        feedback_ml_df ['Subjectivity'] = feedback_ml_df['MainText'].apply (get_subjectivity) # Apply lambda function on MainText portion of Feedback
+
+        # Save sentiment-analysed-mined dataset to CSV
+        feedback_ml_df.to_csv (feedback_ml_file_path_sa_dm, index = False, encoding = "utf-8")
+
+        # Connect to database to UPDATE sentiment analysis values of Feedback
+        try:
+
+            # Create MySQL connection and cursor objects to the database
+            db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+            db_cursor = db_connection.cursor ()
+
+            # Update database table with the newly pre-processed data
+            feedback_ml_df.apply (update_sentiment_values_dataframe, axis = 1, args = (db_cursor, db_connection))
+
+            # Print debugging message
+            print (len (feedback_ml_df), "record(s)' sentiment subjectivity and polarity values analysed")
+
+        # Catch MySQL Exception
+        except mysql.connector.Error as error:
+
+            # Print MySQL connection error
+            print ("MySQL error when trying to update the sentiment values of FeedbackML records:", error)
+
+        # Catch other errors
+        except:
+
+            # Print other errors
+            print ("Error occurred attempting to establish database connection to update the sentiment values of FeedbackML records")
 
         finally:
 
