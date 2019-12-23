@@ -95,7 +95,7 @@ def tokenize_pos_nouns_adj (document):
     # Return list of tokens to calling program
     return (list_tokens)
 
-# Function to tokenize documents
+# Function to tokenize documents [BASE]
 def tokenize (document):
 
     # Convert document into a spaCy tokens document
@@ -177,7 +177,7 @@ pickles_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/pickles/" # File
 # Boolean triggers global variables
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
-use_manual_tag = True # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
+use_manual_tag = False # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
 use_pickle = True # Boolean to trigger whether to use pickled objects or not
 display_visuals = True # Boolean to trigger display of visualisations
 
@@ -232,8 +232,7 @@ try:
     """
     Selected Feedback features:
     -Id (WebAppID + FeedbackID + CategoryID) [Not ID as will cause Excel .sylk file intepretation error]
-    -SubjectCleaned (processed)
-    -MainTextCleaned (processed)
+    -Text [SubjectCleaned (processed) + MainTextCleaned (processed)]
 
     --> Dataset obtained at this point contains pre-processed Feedback data that are NOT trash records, NOT whitelisted and classified as ham (NOT SPAM)
     """
@@ -241,12 +240,12 @@ try:
 except mysql.connector.Error as error:
 
     # Print MySQL connection error
-    print ("MySQL error when trying to get unmined records from the FeedbackML table:", error)
+    print ("MySQL error when trying to get General HAM records from the FeedbackML table:", error)
 
 except:
 
     # Print other errors
-    print ("Error occurred attempting to establish database connection to get unmined records from the FeedbackML table")
+    print ("Error occurred attempting to establish database connection to get General HAM records from the FeedbackML table")
 
 finally:
 
@@ -268,7 +267,7 @@ if (topic_model_data == True):
     feedback_ml_df ['Text'] = feedback_ml_df ['Subject'] + " " + feedback_ml_df ['MainText'] 
     
     # Remove heading and trailing whitespaces in Text (to accomodate cases of blank Subjects in header)
-    feedback_ml_df.apply (strip_dataframe, axis = 1) # Access row by row
+    feedback_ml_df.apply (strip_dataframe, axis = 1) # Access row by row [NEED TO ACCOMODATE TOPIC MODELLING ON BLANK TEXTS!]
 
     # Create new columns for dataframe
     feedback_ml_df ['TextTokens'] = ""
@@ -285,14 +284,15 @@ if (topic_model_data == True):
     if (not use_pickle):
         
         # Create vectorizer object
-        vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,3), max_df = 0.95) 
-        # vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize_pos_nouns_adj, ngram_range = (1,3), max_df = 0.95) 
+        # vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,3), max_df = 0.95) 
+        vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize_pos_nouns_adj, ngram_range = (1,3), max_df = 0.95) 
         
         # Fit data to vectorizer (Create DTM of dataset (features))
         feature = vectorizer.fit_transform (feature) # Returns a sparse matrix
         
-        print ("Tokens:")
-        print (vectorizer.get_feature_names ()) # Get features (words)
+        # Print token information
+        # print ("Tokens:")
+        # print (vectorizer.get_feature_names ()) # Get features (words)
 
         # Convert DTM to DataFrame
         data_dtm = pd.DataFrame (feature.toarray (), columns = vectorizer.get_feature_names ())
@@ -312,8 +312,8 @@ if (topic_model_data == True):
         data_dtm = load_pickle ("/large/dtm.pkl") # Get serialised document-term matrix
 
         # Print information on vectorised words
-        print ("Tokens:")
-        print (vectorizer.get_feature_names ()) # Get feature (words)
+        # print ("Tokens:")
+        # print (vectorizer.get_feature_names ()) # Get feature (words)
 
     # 3) Understand dataset
     if (preliminary_check == True): # Check boolean to display preliminary information
@@ -336,18 +336,31 @@ if (topic_model_data == True):
     # Get a dictionary of the locations of each term in the DTM in the format {location: 'term'}
     id2word = dict ((location, term) for term, location in vectorizer.vocabulary_.items ()) # vectorizer.vocabulary_.items() returns a list of tuples in the format ('term', location) ie ('awesome pics', 8153)
 
-    # Create Topic Modelling models
-    lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 50, passes = 30, chunksize = 3500 , alpha = 'auto', eta = 'auto')
+    # Create new models if not using serialised models
+    if (not use_pickle):
+
+        # Create Topic Modelling models
+        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 50, passes = 30, chunksize = 3500 , alpha = 'auto', eta = 'auto') # Need to hypertune!
+    
+    # Using pickled objects
+    else:
+
+        # Load serialised models
+        lda_model = load_pickle ("lda-model.pkl")
 
     # Get topics
-    lda_topics = lda_model.show_topics (formatted= True, num_words = 20)
+    lda_topics = lda_model.show_topics (formatted= True, num_topics = 20, num_words = 20)
 
     print ("Topics:")
     print (lda_topics)
 
-    # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
-    # Check boolean to see whether or not to label feedbacks with manually tagged tokens
-    if (use_manual_tag == True):
+    #  list_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
+
+    # See which feedback is assigned to which topic
+    pass
+
+    # Check boolean to see whether or not to assign manually labelled topics to feedbacks with manually tagged tokens
+    if (use_manual_tag == True): # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
 
         # Manually tagged topic-tokens file format:
         # { topic_name: ['token1', 'token2'], topic_2: ['token3'] } 
@@ -364,6 +377,7 @@ if (topic_model_data == True):
             # dictionary_manual_tag [topic] # List of tokens
             print (dictionary_manual_tag [topic])
 
+
     # Create topics in Topic table
     pass
 
@@ -378,8 +392,7 @@ if (topic_model_data == True):
     # Save models (pickling/serialization)
     pickle_object (feature, "features.pkl") # Sparse Matrix of features
     pickle_object (vectorizer, "tfidf-vectorizer.pkl") # TF-IDF Vectorizer
-    pickle_object (gensim_corpus, "gensim-corpus.pkl") # Gensim corpus
-    pickle_object (gensim_corpus, "lda-model.pkl") # LDA Model
+    pickle_object (lda_model, "lda-model.pkl") # LDA Model
 
 
 # Print debugging message if topic modelling not carried out
