@@ -773,8 +773,11 @@ if (mine_data == True):
         -Id (WebAppID + FeedbackID + CategoryID) [Not ID as will cause Excel .sylk file intepretation error]
         -SubjectCleaned (processed)
         -MainTextCleaned (processed)
-        -Spam status [target1]
-        -Topic [added] [target2]
+        -SubjectSpam [target1]
+        -MainTextSpam [target2]
+        -SpamStatus [target]
+        -Subjectivity
+        -Polarity
 
         --> Dataset obtained at this point contains pre-processed Feedback data that are NOT trash records, NOT whitelisted and NOT classified as spam/ham
         """
@@ -969,7 +972,6 @@ if (mine_data == True):
         takes into account the order of words and 2) Practically, Subject should be a summary or subset of MainText, with MainText giving the real value of the Feedback
         --> Alternatives to include Subject with MainText would be to compute the Subject of each individual Feedback's subjectivity and polarity scores separately and
         combining it with the values of the Feedback's MainText to some degree/factor (ie Subjectivity = (0.3 * SubjectivityScore of Subject) + (0.7 * SubjectivityScore of MainText))
-
         """
 
     except mysql.connector.Error as error:
@@ -995,9 +997,6 @@ if (mine_data == True):
         feedback_ml_df.dropna (how = "all", inplace = True) # Drop empty rows
         feedback_ml_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
 
-        # Remove rows containing empty main texts (trash records)
-        feedback_ml_df = feedback_ml_df [feedback_ml_df.MainText != ""]
-
         # Check if folder to store data-mined feedback exists
         if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder)):
 
@@ -1019,7 +1018,7 @@ if (mine_data == True):
         get_subjectivity = lambda x: TextBlob (x).sentiment.subjectivity # Value from 0 (objective) to 1 (subjective)
 
         # Apply functions to obtain the naive subjectivity and polarity sentiment values of each Feedback
-        feedback_ml_df ['Polarity'] = feedback_ml_df ['MainText'].apply (get_polarity) # Apply lambda function on MainText portion of Feedback
+        feedback_ml_df ['Polarity'] = feedback_ml_df ['MainText'].apply (get_polarity) # Apply lambda function on MainText portion of Feedback [NOTE: Blank records will be given a Subjectivity and Polarity score of 0]
         feedback_ml_df ['Subjectivity'] = feedback_ml_df['MainText'].apply (get_subjectivity) # Apply lambda function on MainText portion of Feedback
 
         # Save sentiment-analysed-mined dataset to CSV
