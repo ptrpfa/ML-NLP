@@ -251,7 +251,7 @@ if (topic_model_data == True):
     feedback_ml_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
     
     # Combine subject and main text into one column [Will apply topic modelling on combined texts of subject together with main text instead of both separately as topic modelling uses the DTM/Bag of Words format, in which the order of words does not matter]
-    feedback_ml_df ['Text'] = feedback_ml_df ['Subject'] + " " + feedback_ml_df ['MainText'] 
+    feedback_ml_df ['Text'] = feedback_ml_df ['Subject'] + " " + feedback_ml_df ['MainText'] # Need to cater when both subject and main text are blank, what topics they are assigned
     
     # Remove heading and trailing whitespaces in Text (to accomodate cases of blank Subjects in header)
     feedback_ml_df.apply (strip_dataframe, axis = 1) # Access row by row [NEED TO ACCOMODATE TOPIC MODELLING ON BLANK TEXTS!]
@@ -327,7 +327,7 @@ if (topic_model_data == True):
     if (not use_pickle):
 
         # Create Topic Modelling models
-        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 50, passes = 100, 
+        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 30, passes = 100, 
                                      chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) # Need to hypertune!
     
     # Using pickled objects
@@ -337,7 +337,7 @@ if (topic_model_data == True):
         lda_model = load_pickle ("lda-model.pkl")
 
     # Get topics
-    list_lda_topics = lda_model.show_topics (formatted= True, num_topics = 50, num_words = 20)
+    list_lda_topics = lda_model.show_topics (formatted= True, num_topics = 30, num_words = 20)
     list_lda_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
     print ("Topics:")
@@ -358,29 +358,45 @@ if (topic_model_data == True):
     # Close file object
     topics_file.close ()
 
-    # See which feedback is assigned to which topic
-    corpus_transformed = lda_model.get_document_topics (gensim_corpus, per_word_topics=True) # Get object containing the feedback-topic mappings
-    # corpus_transformed = lda_model [gensim_corpus] # Get object containing the feedback-topic mappings
-    print (corpus_transformed, type (corpus_transformed))
-    print (len (corpus_transformed))
-    # print (corpus_transformed [0])
-    for a in corpus_transformed:
-        print (a, type (a))
-        pass
-    # topic_mapping = list(zip([a for [(a,b)] in corpus_transformed], data_dtm.index))
-    # print (topic_mapping)
+    # Get Gensim TransformedCorpus object containing feedback-topic mappings (Document-Topic mapping, Word-Topic mapping and Phi values)
+    transformed_gensim_corpus = lda_model.get_document_topics (gensim_corpus, per_word_topics = True, minimum_probability = 0.01) 
+    
+    # Initialise list containing feedback-topic mappings
+    feedback_topic_mapping = []
 
-    # Test
-    # all_topics = lda_model.get_document_topics (gensim_corpus, per_word_topics=True)
-    # print (len (all_topics), type (all_topics))
-    # print (all_topics [0])
-    # for doc_topics, word_topics, phi_values in all_topics:
-    #     print('New Document \n')
-    #     print('Document topics:', doc_topics)
-    #     print('Word topics:', word_topics)
-    #     print('Phi values:', phi_values)
-    #     print(" ")
-    #     print('-------------- \n')
+    # Loop to access mappings in the gensim transformed corpus (made of tuples of lists)
+    for tuple_feedback_mapping in transformed_gensim_corpus: # Access document by document
+
+        # Tuple contains three lists
+        list_document_topic = tuple_feedback_mapping [0] # List containing tuples of document/feedback - topic mapping
+        list_word_topic = tuple_feedback_mapping [1]     # List containing tuples of word - topic mapping
+        list_phi_value = tuple_feedback_mapping [2]      # List containing tuples of word phi values (probability of a word in the document belonging to a particular topic)
+
+        # Initialise topic(s) of current feedback/document
+        list_topics = []
+
+        # Check length of document-topic mapping
+        if (len (list_document_topic) > 0):
+
+            # Loop to access list of tuples containing document-topic mappings
+            for feedback_topic in list_document_topic:
+                
+                # Add topic to list containing the topics assigned to the current document/feedback
+                list_topics.append (feedback_topic [0]) 
+    
+        else:
+
+            # Add empty list of topics to the list containing the topics assigned to the current document/feedback if the feedback is not assigned any topic
+            list_topics.append ([]) 
+
+        # Add list of topics assigned to the current feedback/document to the list containing the document-topic mappings
+        feedback_topic_mapping.append (list_topics) 
+    
+        # Save other information in topics file (information regarding word-topic mapping and word phi values for each document)
+        pass
+    
+    # Assign topics to feedbacks in the DataFrame
+    feedback_ml_df ['TextTopics'] = feedback_topic_mapping
 
     # Check boolean to see whether or not to assign manually labelled topics to feedbacks with manually tagged tokens
     if (use_manual_tag == True): # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
@@ -404,14 +420,21 @@ if (topic_model_data == True):
     # Create topics in Topic table
     pass
 
+    # Create topic-feedback mappings in FeedbackTopic table
+    pass
+
+    # Calculate priorityscore of topic
+    pass
+
     # Need to accomodate Feedbacks that are not assigned a Topic (maybe after tokenization is blank [], topic is itself)
+    pass
 
     # Insert Feedback-Topic mappings in FeedbackTopic table
     pass
 
     # Save file
     feedback_ml_df.to_csv (topic_file_path, index = False, encoding = "utf-8")
-    
+
     # Save models (pickling/serialization)
     pickle_object (feature, "features.pkl") # Sparse Matrix of features
     pickle_object (vectorizer, "tfidf-vectorizer.pkl") # TF-IDF Vectorizer
