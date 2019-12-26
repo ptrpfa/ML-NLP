@@ -272,7 +272,8 @@ if (topic_model_data == True):
         
         # Create vectorizer object
         # vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tm_tokenize, ngram_range = (1,3), max_df = 0.95) 
-        vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tm_tokenize_pos_nouns_adj, ngram_range = (1,3), max_df = 0.95) 
+        # vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tm_tokenize_pos_nouns_adj, ngram_range = (1,3), max_df = 0.95) 
+        vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tm_tokenize_pos_nouns_adj, ngram_range = (1,1), max_df = 0.95) 
         
         # Fit data to vectorizer (Create DTM of dataset (features))
         feature = vectorizer.fit_transform (feature) # Returns a sparse matrix
@@ -395,6 +396,18 @@ if (topic_model_data == True):
         # Save other information in topics file (information regarding word-topic mapping and word phi values for each document)
         pass
     
+    # Get model performance metrics
+    # Compute Perplexity
+    # print('\nPerplexity: ', lda_model.log_perplexity(gensim_corpus))  # a measure of how good the model is. lower the better.
+
+    # # Compute Coherence Score
+    # coherence_model_lda = CoherenceModel(model=lda_model, texts=data_lemmatized, dictionary=id2word, coherence='c_v')
+    # coherence_lda = coherence_model_lda.get_coherence()
+    # print('\nCoherence Score: ', coherence_lda)
+
+    # Add topic-word makeup in Remarks of Topic
+    pass
+
     # Assign topics to feedbacks in the DataFrame
     feedback_ml_df ['TextTopics'] = feedback_topic_mapping
 
