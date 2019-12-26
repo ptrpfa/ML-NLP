@@ -14,21 +14,10 @@ import spacy # NLP
 from gensim import matutils, models # 4) Gensim topic modelling
 import scipy.sparse # 4) Gensim topic modelling
 import logging # 4) Gensim topic modelling logging
-from pprint import pprint # 4) Pretty print to print out topics
-from sklearn.model_selection import train_test_split # 4) For splitting dataset into train/test sets
-from sklearn import linear_model # 4) Linear Regression classifier
-from sklearn.naive_bayes import MultinomialNB # 4) Naive Bayes classifier
-from sklearn import svm # 4) SVM classifier
-from sklearn.linear_model import LogisticRegression # 4) Logistic Regression classifier
 from sklearn.model_selection import GridSearchCV # 4) For model hyperparameters tuning
 from sklearn.feature_extraction.text import TfidfVectorizer # NLP Vectorizer
 import matplotlib.pyplot as plt # For visualisations
 import matplotlib # For visualisations
-from sklearn.metrics import accuracy_score # 4.5) Accuracy scorer
-from sklearn.model_selection import cross_val_score # 4.5) Cross validation scorer
-from sklearn.metrics import confusion_matrix # 4.5) For determination of model accuracy
-from sklearn.utils.multiclass import unique_labels # 4.5) For determination of model accuracy
-from sklearn.metrics import classification_report # 4.5) For determination of model accuracy
 import sklearn.metrics as metrics # 4.5) For determination of model accuracy
 
 # Suppress scikit-learn FutureWarnings
@@ -47,8 +36,8 @@ def strip_dataframe (series):
     # Return cleaned series object
     return series
 
-# Function to tokenize documents (POS: Nouns and Adjectives)
-def tokenize_pos_nouns_adj (document):
+# Function to tokenize documents (Only accepts POS: Nouns and Adjectives)
+def tm_tokenize_pos_nouns_adj (document):
 
     # Convert document into a spaCy tokens document
     document = nlp (document)
@@ -95,8 +84,8 @@ def tokenize_pos_nouns_adj (document):
     # Return list of tokens to calling program
     return (list_tokens)
 
-# Function to tokenize documents [BASE]
-def tokenize (document):
+# Function to tokenize documents (Normal tokenizer function without any POS tagging)
+def tm_tokenize (document):
 
     # Convert document into a spaCy tokens document
     document = nlp (document)
@@ -259,11 +248,8 @@ if (topic_model_data == True):
     # Drop empty rows/columns
     feedback_ml_df.dropna (how = "all", inplace = True) # Drop empty rows
     feedback_ml_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
-
-    # Remove rows containing empty main texts (trash records)
-    # feedback_ml_df = feedback_ml_df [feedback_ml_df.MainText != ""] # For REDUNDANCY
     
-    # Combine subject and main text into one column [Will apply topic modelling on combined texts of subject together with main text instead of both separately as topic modelling uses the DTM, in which the order of words does not matter]
+    # Combine subject and main text into one column [Will apply topic modelling on combined texts of subject together with main text instead of both separately as topic modelling uses the DTM/Bag of Words format, in which the order of words does not matter]
     feedback_ml_df ['Text'] = feedback_ml_df ['Subject'] + " " + feedback_ml_df ['MainText'] 
     
     # Remove heading and trailing whitespaces in Text (to accomodate cases of blank Subjects in header)
@@ -284,8 +270,8 @@ if (topic_model_data == True):
     if (not use_pickle):
         
         # Create vectorizer object
-        # vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize, ngram_range = (1,3), max_df = 0.95) 
-        vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tokenize_pos_nouns_adj, ngram_range = (1,3), max_df = 0.95) 
+        # vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tm_tokenize, ngram_range = (1,3), max_df = 0.95) 
+        vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tm_tokenize_pos_nouns_adj, ngram_range = (1,3), max_df = 0.95) 
         
         # Fit data to vectorizer (Create DTM of dataset (features))
         feature = vectorizer.fit_transform (feature) # Returns a sparse matrix
@@ -349,12 +335,11 @@ if (topic_model_data == True):
         lda_model = load_pickle ("lda-model.pkl")
 
     # Get topics
-    lda_topics = lda_model.show_topics (formatted= True, num_topics = 20, num_words = 20)
+    list_lda_topics = lda_model.show_topics (formatted= True, num_topics = 20, num_words = 20)
+    list_lda_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
     print ("Topics:")
-    print (lda_topics)
-
-    #  list_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
+    print (list_lda_topics)
 
     # See which feedback is assigned to which topic
     pass
