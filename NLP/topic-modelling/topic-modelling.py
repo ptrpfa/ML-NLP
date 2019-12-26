@@ -160,6 +160,7 @@ def load_pickle (filename):
 # File paths
 train_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml.csv" # Dataset file path
 topic_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml-topics.csv' # Topic modelled dataset file path
+topics_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/topics.txt' # File path of topic details
 manual_tagging_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/manual-tagging.txt' # Manually tagged topic-tokens file path
 pickles_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/pickles/" # File path containing pickled objects
 
@@ -326,7 +327,8 @@ if (topic_model_data == True):
     if (not use_pickle):
 
         # Create Topic Modelling models
-        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 50, passes = 30, chunksize = 3500 , alpha = 'auto', eta = 'auto') # Need to hypertune!
+        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 50, passes = 100, 
+                                     chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) # Need to hypertune!
     
     # Using pickled objects
     else:
@@ -335,14 +337,50 @@ if (topic_model_data == True):
         lda_model = load_pickle ("lda-model.pkl")
 
     # Get topics
-    list_lda_topics = lda_model.show_topics (formatted= True, num_topics = 20, num_words = 20)
+    list_lda_topics = lda_model.show_topics (formatted= True, num_topics = 50, num_words = 20)
     list_lda_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
     print ("Topics:")
     print (list_lda_topics)
 
+    # Store topic information in topics file
+    topics_file = open (topics_file_path, "w") # Create file object (w = write)
+
+    # Write header information in topics file
+    topics_file.write ("LDA Model:\n\n")
+
+    # Loop to store each topic in the topics file
+    for topic in list_lda_topics:
+
+        print ("Topic", topic [0], ":\n", file = topics_file)
+        print (topic [1], "\n", file = topics_file)
+
+    # Close file object
+    topics_file.close ()
+
     # See which feedback is assigned to which topic
-    pass
+    corpus_transformed = lda_model.get_document_topics (gensim_corpus, per_word_topics=True) # Get object containing the feedback-topic mappings
+    # corpus_transformed = lda_model [gensim_corpus] # Get object containing the feedback-topic mappings
+    print (corpus_transformed, type (corpus_transformed))
+    print (len (corpus_transformed))
+    # print (corpus_transformed [0])
+    for a in corpus_transformed:
+        print (a, type (a))
+        pass
+    # topic_mapping = list(zip([a for [(a,b)] in corpus_transformed], data_dtm.index))
+    # print (topic_mapping)
+
+    # Test
+    # all_topics = lda_model.get_document_topics (gensim_corpus, per_word_topics=True)
+    # print (len (all_topics), type (all_topics))
+    # print (all_topics [0])
+    # for doc_topics, word_topics, phi_values in all_topics:
+    #     print('New Document \n')
+    #     print('Document topics:', doc_topics)
+    #     print('Word topics:', word_topics)
+    #     print('Phi values:', phi_values)
+    #     print(" ")
+    #     print('-------------- \n')
 
     # Check boolean to see whether or not to assign manually labelled topics to feedbacks with manually tagged tokens
     if (use_manual_tag == True): # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)

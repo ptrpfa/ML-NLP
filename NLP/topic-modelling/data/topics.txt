@@ -1,0 +1,202 @@
+LDA Model:
+
+Topic 0 :
+
+0.027*"amazing" + 0.014*"note" + 0.012*"application" + 0.008*"funny" + 0.008*"improvement" + 0.006*"craft" + 0.005*"family" + 0.005*"editing" + 0.005*"reminder" + 0.004*"note app" + 0.004*"work" + 0.004*"great work" + 0.004*"great" + 0.003*"device" + 0.003*"touch" + 0.003*"smooth" + 0.003*"personal" + 0.002*"app" + 0.002*"document" + 0.002*"good bad" 
+
+Topic 1 :
+
+0.008*"creativity" + 0.006*"aap" + 0.004*"limit" + 0.004*"excellent good" + 0.002*"good aap" + 0.002*"travel" + 0.001*"travel plan" + 0.001*"jump" + 0.001*"plan" + 0.001*"calculator" + 0.001*"web" + 0.001*"funny" + 0.001*"bandwidth" + 0.001*"min" + 0.001*"aap nice creativity" + 0.001*"creativity good photo" + 0.001*"aap nice" + 0.001*"nice creativity" + 0.001*"nice creativity good" + 0.001*"excellent good aap" 
+
+Topic 2 :
+
+0.012*"app awesome" + 0.003*"awesome idea" + 0.003*"future" + 0.002*"idea thing" + 0.002*"awesome" + 0.002*"game star" + 0.002*"idea" + 0.001*"game" + 0.001*"wife" + 0.001*"app awesome idea" + 0.001*"idea thing afford" + 0.001*"thing afford head" + 0.001*"head debt" + 0.001*"awesome idea thing" + 0.001*"thing afford" + 0.001*"afford head debt" + 0.001*"afford head" + 0.001*"afford" + 0.001*"great app awesome" + 0.001*"debt" 
+
+Topic 3 :
+
+0.033*"useful" + 0.017*"perfect" + 0.012*"problem app" + 0.009*"problem" + 0.007*"useful app" + 0.007*"app" + 0.007*"app useful" + 0.005*"travel" + 0.004*"map" + 0.003*"traveler" + 0.002*"g" + 0.002*"thing" + 0.002*"great" + 0.002*"travel app" + 0.002*"couple" + 0.002*"app vacation" + 0.002*"fun thing" + 0.002*"fun" + 0.001*"thing good" + 0.001*"vacation" 
+
+Topic 4 :
+
+0.015*"app time" + 0.010*"time" + 0.006*"effect" + 0.005*"space" + 0.004*"memory" + 0.004*"great app time" + 0.003*"app" + 0.002*"week" + 0.001*"week great" + 0.001*"easy photo" + 0.001*"great" + 0.001*"free" + 0.001*"impressive" + 0.001*"good review" + 0.001*"trail" + 0.001*"land" + 0.001*"time shipping" + 0.001*"land water" + 0.001*"app time shipping" + 0.001*"time shipping activity" 
+
+Topic 5 :
+
+0.173*"app" + 0.019*"app app" + 0.006*"area" + 0.004*"aps" + 0.004*"website" + 0.004*"bug" + 0.004*"great easy" + 0.003*"quick" + 0.003*"neat" + 0.002*"great" + 0.002*"interface" + 0.002*"owner" + 0.002*"app website" + 0.002*"addition" + 0.002*"box" + 0.002*"recipe" + 0.002*"good" + 0.002*"app quick" + 0.002*"beautiful app" + 0.002*"great app lot" 
+
+Topic 6 :
+
+0.010*"version" + 0.008*"restaurant" + 0.007*"need" + 0.007*"hotel" + 0.006*"super" + 0.005*"video" + 0.004*"screen" + 0.004*"new" + 0.003*"update" + 0.003*"free app" + 0.003*"smart" + 0.003*"local" + 0.002*"cheap" + 0.002*"great" + 0.002*"current" + 0.002*"step" + 0.002*"great fun" + 0.002*"hand" + 0.002*"app" + 0.002*"hotel restaurant" 
+
+Topic 7 :
+
+0.018*"star" + 0.006*"music" + 0.005*"song" + 0.004*"app star" + 0.003*"reference" + 0.003*"day" + 0.003*"day app" + 0.003*"open" + 0.003*"lover" + 0.002*"functionality" + 0.002*"server" + 0.002*"star good" + 0.002*"app music" + 0.001*"multiplayer" + 0.001*"great" + 0.001*"song song" + 0.001*"open table" + 0.001*"music lover" + 0.001*"source" + 0.001*"good" 
+
+Topic 8 :
+
+0.033*"idea" + 0.013*"lot" + 0.012*"recipe" + 0.012*"great app app" + 0.010*"app" + 0.009*"app app" + 0.007*"great app" + 0.007*"great" + 0.007*"app lot" + 0.005*"store" + 0.004*"fun" + 0.004*"nice nice" + 0.003*"party" + 0.003*"time" + 0.003*"upgrade" + 0.003*"image" + 0.002*"garden" + 0.002*"idea home" + 0.002*"direction" + 0.002*"enhancement" 
+
+Topic 9 :
+
+0.038*"nice" + 0.028*"cool" + 0.023*"app" + 0.020*"helpful" + 0.018*"user" + 0.018*"good" + 0.016*"experience" + 0.014*"user experience" + 0.014*"phone" + 0.014*"place" + 0.012*"photo" + 0.012*"great" + 0.011*"people" + 0.008*"good app" + 0.008*"thing" + 0.006*"easy" + 0.006*"great app" + 0.006*"app good" + 0.006*"real" + 0.006*"way" 
+
+Topic 10 :
+
+0.017*"friend" + 0.017*"amazing" + 0.015*"amazing app" + 0.011*"m" + 0.008*"app" + 0.008*"app amazing" + 0.007*"feature" + 0.006*"help" + 0.005*"idea" + 0.004*"fast" + 0.004*"way idea" + 0.003*"follower" + 0.003*"new" + 0.003*"new update" + 0.003*"great thank" + 0.003*"way" + 0.002*"easy way idea" + 0.001*"easy way" + 0.001*"bread" + 0.001*"user good" 
+
+Topic 11 :
+
+0.003*"online" + 0.002*"amazing app good" + 0.002*"way touch" + 0.002*"keyboard" + 0.001*"bright" + 0.001*"group" + 0.001*"touch" + 0.001*"day thing" + 0.001*"good way touch" + 0.001*"flashlight" + 0.001*"evaluation memory" + 0.001*"note medical evaluation" + 0.001*"evaluation" + 0.001*"note medical" + 0.001*"daily note medical" + 0.001*"medical evaluation memory" + 0.001*"medical evaluation" + 0.001*"great app daily" + 0.001*"app daily note" + 0.001*"daily note" 
+
+Topic 12 :
+
+0.003*"movie" + 0.002*"drink" + 0.002*"great" + 0.002*"decision" + 0.002*"fun stuff" + 0.002*"great picture" + 0.002*"great daily" + 0.001*"value" + 0.001*"exciting" + 0.001*"exciting app" + 0.001*"great trip tool" + 0.001*"trip tool" + 0.001*"great trip" + 0.001*"educational" + 0.001*"app new" + 0.001*"tool" + 0.001*"trip" + 0.001*"fun photo" + 0.001*"app new way" + 0.001*"experience exciting app" 
+
+Topic 13 :
+
+0.004*"news" + 0.004*"browser" + 0.003*"work great" + 0.003*"demand" + 0.003*"button" + 0.002*"unreliable" + 0.001*"review real people" + 0.001*"review real" + 0.001*"review site review" + 0.001*"awesome room" + 0.001*"room review" + 0.001*"room review site" + 0.001*"review site" + 0.001*"people marketing" + 0.001*"real people marketing" + 0.001*"site review real" + 0.001*"awesome room review" + 0.001*"app news demand" + 0.001*"great app news" + 0.001*"news demand" 
+
+Topic 14 :
+
+0.045*"good app" + 0.033*"good" + 0.024*"board" + 0.023*"app" + 0.023*"bad" + 0.022*"pin" + 0.006*"pics" + 0.005*"page" + 0.005*"cover" + 0.004*"android" + 0.003*"good photo" + 0.003*"photo" + 0.003*"planning" + 0.002*"fashion" + 0.002*"overall" + 0.002*"cooking" + 0.002*"good photo editor" + 0.002*"point" + 0.002*"difficult" + 0.002*"update" 
+
+Topic 15 :
+
+0.004*"messenger" + 0.004*"possible" + 0.003*"apple" + 0.003*"quote" + 0.003*"kumar" + 0.002*"sense" + 0.002*"app" + 0.002*"great weather" + 0.002*"dream" + 0.002*"run" + 0.002*"forecast" + 0.001*"tool app" + 0.001*"realy" + 0.001*"apple app" + 0.001*"weather" + 0.001*"great" + 0.001*"mobile site" + 0.001*"perspective" + 0.001*"tool" + 0.001*"later time" 
+
+Topic 16 :
+
+0.008*"whatsapp" + 0.007*"business" + 0.006*"project" + 0.005*"hard" + 0.004*"today" + 0.003*"safe" + 0.003*"dependable" + 0.003*"forum" + 0.002*"road" + 0.002*"app" + 0.002*"project recipe" + 0.002*"instance" + 0.002*"easy problem" + 0.001*"adviser" + 0.001*"trip adviser" + 0.001*"amazing website" + 0.001*"week" + 0.001*"thinking" + 0.001*"program" + 0.001*"podcast" 
+
+Topic 17 :
+
+0.034*"pinterest" + 0.013*"hour" + 0.009*"addictive" + 0.006*"wedding" + 0.006*"day" + 0.005*"weather" + 0.004*"intuitive" + 0.003*"post" + 0.003*"time day" + 0.002*"visual" + 0.002*"picture app" + 0.002*"picture" + 0.002*"app experience" + 0.002*"year good" + 0.002*"cloud" + 0.002*"joke" + 0.002*"material" + 0.002*"app time day" + 0.001*"app" + 0.001*"experience easy" 
+
+Topic 18 :
+
+0.004*"beautiful" + 0.004*"food" + 0.004*"addiction" + 0.003*"tab" + 0.003*"class" + 0.003*"guy" + 0.003*"life app" + 0.003*"annoying" + 0.002*"head" + 0.002*"app beautiful" + 0.002*"wonderful application" + 0.002*"great app useful" + 0.002*"able" + 0.002*"wonderful" + 0.002*"app class" + 0.002*"great app class" + 0.002*"charm" + 0.001*"application" + 0.001*"food app" + 0.001*"good opinion" 
+
+Topic 19 :
+
+0.019*"game" + 0.006*"tool" + 0.005*"interesting" + 0.005*"ability" + 0.004*"program" + 0.004*"great tool" + 0.003*"number" + 0.003*"wrong" + 0.002*"concept" + 0.002*"play" + 0.002*"game game" + 0.002*"great" + 0.002*"update" + 0.002*"user great" + 0.002*"stuff" + 0.002*"goal" + 0.001*"mobile game" + 0.001*"pleased" + 0.001*"update ability" + 0.001*"stunning" 
+
+Topic 20 :
+
+0.009*"product" + 0.007*"different" + 0.006*"great product" + 0.005*"great application" + 0.005*"application" + 0.004*"great" + 0.003*"thought" + 0.003*"different thing" + 0.003*"decent" + 0.003*"p" + 0.003*"productivity" + 0.003*"workout" + 0.002*"globe" + 0.002*"thing" + 0.002*"application great" + 0.002*"app thought" + 0.001*"great application great" + 0.001*"application great application" + 0.001*"productivity app" + 0.001*"x" 
+
+Topic 21 :
+
+0.021*"love" + 0.010*"love app" + 0.005*"access" + 0.005*"app life" + 0.005*"great place" + 0.004*"minute" + 0.004*"app" + 0.003*"stop" + 0.003*"life" + 0.002*"good star" + 0.002*"worm" + 0.001*"trip easy" + 0.001*"trip" + 0.001*"life saver" + 0.001*"pick" + 0.001*"app great place" + 0.001*"saver" + 0.001*"variety" + 0.001*"love love" + 0.001*"lot variety place" 
+
+Topic 22 :
+
+0.006*"line" + 0.004*"support" + 0.001*"word document" + 0.001*"certain" + 0.001*"invaluable" + 0.001*"certain place trip" + 0.001*"review dozen" + 0.001*"certain place" + 0.001*"dozen neighbor" + 0.001*"dozen neighbor certain" + 0.001*"review dozen neighbor" + 0.001*"neighbor" + 0.001*"neighbor certain" + 0.001*"neighbor certain place" + 0.001*"checking review dozen" + 0.001*"checking review" + 0.001*"place trip planning" + 0.001*"checking" + 0.001*"restaurant" + 0.001*"place trip" 
+
+Topic 23 :
+
+0.030*"excellent" + 0.014*"inspiration" + 0.006*"handy" + 0.006*"excellent app" + 0.005*"life easy" + 0.004*"life" + 0.004*"reading" + 0.003*"daily" + 0.003*"kid" + 0.003*"easy" + 0.003*"crafty" + 0.002*"color" + 0.002*"idea inspiration" + 0.001*"road trip" + 0.001*"fantastic idea" + 0.001*"road" + 0.001*"app" + 0.001*"app daily" + 0.001*"search feature" + 0.001*"year" 
+
+Topic 24 :
+
+0.006*"search" + 0.005*"important" + 0.005*"awesomeness" + 0.004*"easy good" + 0.003*"wonderful thing" + 0.002*"trouble" + 0.002*"enjoyable" + 0.002*"girl" + 0.002*"productive" + 0.001*"function" + 0.001*"middle" + 0.001*"day new" + 0.001*"search function" + 0.001*"communication app" + 0.001*"communication" + 0.001*"app" + 0.001*"wonderful" + 0.001*"disappointment" + 0.001*"time" + 0.001*"way" 
+
+Topic 25 :
+
+0.006*"fine" + 0.005*"clear" + 0.004*"old" + 0.004*"old version" + 0.003*"battery" + 0.002*"version" + 0.002*"collection" + 0.002*"wine" + 0.002*"menu" + 0.002*"app" + 0.001*"battery life" + 0.001*"fine app" + 0.001*"note" + 0.001*"way" + 0.001*"money" + 0.001*"scripture" + 0.001*"note app" + 0.001*"golf money" + 0.001*"good golf money" + 0.001*"good golf" 
+
+Topic 26 :
+
+0.030*"t" + 0.005*"fact" + 0.004*"small" + 0.004*"multiple" + 0.003*"way time" + 0.003*"effective" + 0.003*"v" + 0.003*"app fact" + 0.002*"time" + 0.002*"c" + 0.002*"day life" + 0.001*"app" + 0.001*"deal breaker" + 0.001*"breaker" + 0.001*"life" + 0.001*"day" + 0.001*"app small" + 0.001*"backup" + 0.001*"life effective great" + 0.001*"day life effective" 
+
+Topic 27 :
+
+0.008*"glad" + 0.004*"contact" + 0.003*"order" + 0.002*"way pin" + 0.002*"iphone" + 0.002*"good program" + 0.001*"program" + 0.001*"phone good" + 0.001*"app phone good" + 0.001*"signature" + 0.001*"board alpha" + 0.001*"aren personal board" + 0.001*"alpha" + 0.001*"aren" + 0.001*"board alpha order" + 0.001*"alpha order" + 0.001*"alpha order way" + 0.001*"order way pin" + 0.001*"aren personal" + 0.001*"order way" 
+
+Topic 28 :
+
+0.004*"sync" + 0.003*"awesome app app" + 0.003*"problem update" + 0.001*"pics pic" + 0.001*"printer" + 0.001*"usual web interface" + 0.001*"intuitive fast great" + 0.001*"usual web" + 0.001*"web interface intuitive" + 0.001*"intuitive fast" + 0.001*"app usual" + 0.001*"app usual web" + 0.001*"interface intuitive fast" + 0.001*"app app usual" + 0.001*"fast great graphic" + 0.001*"interface intuitive" + 0.001*"web interface" + 0.001*"great graphic" + 0.001*"fast great" + 0.001*"usual" 
+
+Topic 29 :
+
+0.025*"thank" + 0.016*"nice app" + 0.012*"available" + 0.011*"nice" + 0.009*"app" + 0.005*"long" + 0.005*"time" + 0.004*"app thank" + 0.004*"long time" + 0.004*"feature" + 0.004*"app feature" + 0.004*"look" + 0.004*"outstanding" + 0.003*"resource" + 0.003*"wise" + 0.003*"handy app" + 0.002*"good place" + 0.002*"idea" + 0.002*"plan" + 0.002*"great" 
+
+Topic 30 :
+
+0.018*"app great" + 0.013*"app" + 0.013*"trip" + 0.012*"great" + 0.010*"pic" + 0.009*"computer" + 0.009*"great app" + 0.008*"d" + 0.008*"app great app" + 0.008*"great app great" + 0.007*"trip advisor" + 0.007*"advisor" + 0.007*"review" + 0.005*"update app" + 0.005*"update" + 0.003*"info" + 0.003*"vacation" + 0.003*"time" + 0.002*"app wonderful" + 0.002*"entire" 
+
+Topic 31 :
+
+0.016*"life" + 0.010*"little" + 0.008*"slow" + 0.007*"superb" + 0.004*"user experience good" + 0.004*"experience good" + 0.004*"person" + 0.004*"app nice" + 0.003*"good easy" + 0.003*"little slow" + 0.003*"right" + 0.002*"able" + 0.002*"tablet" + 0.002*"game" + 0.002*"message" + 0.002*"app" + 0.001*"superb app" + 0.001*"term" + 0.001*"console" + 0.001*"awesome able" 
+
+Topic 32 :
+
+0.035*"time" + 0.010*"creative" + 0.007*"editor" + 0.005*"photo editor" + 0.005*"app" + 0.004*"app people" + 0.004*"busy" + 0.004*"crash" + 0.004*"time app" + 0.004*"great job" + 0.004*"photo" + 0.004*"people" + 0.003*"great" + 0.003*"job" + 0.002*"sharing" + 0.002*"app handy" + 0.002*"single" + 0.002*"handy" + 0.002*"people great" + 0.002*"edit" 
+
+Topic 33 :
+
+0.019*"site" + 0.014*"worth" + 0.013*"money" + 0.011*"love" + 0.006*"love love" + 0.004*"app favorite" + 0.004*"app cool" + 0.004*"great new" + 0.003*"great site" + 0.003*"fan" + 0.003*"lot" + 0.003*"info" + 0.002*"app" + 0.002*"spot" + 0.002*"country" + 0.002*"review" + 0.002*"great" + 0.002*"hotel" + 0.002*"fantastic great" + 0.002*"good info" 
+
+Topic 34 :
+
+0.152*"good" + 0.021*"update" + 0.009*"simple" + 0.009*"job" + 0.008*"day" + 0.008*"complaint" + 0.008*"good job" + 0.005*"great" + 0.004*"level" + 0.004*"good idea" + 0.003*"late update" + 0.003*"app" + 0.003*"late" + 0.003*"content" + 0.003*"great useful" + 0.003*"app simple" + 0.002*"new" + 0.002*"helpfull" + 0.002*"design" + 0.002*"review helpful" 
+
+Topic 35 :
+
+0.048*"problem" + 0.012*"free" + 0.012*"option" + 0.004*"informative" + 0.003*"sad" + 0.003*"heart" + 0.003*"finger" + 0.002*"easy easy" + 0.002*"purpose" + 0.002*"brilliant" + 0.002*"app option" + 0.002*"brilliant app" + 0.002*"app easy easy" + 0.002*"time" + 0.002*"tourist" + 0.001*"easy thing" + 0.001*"thing" + 0.001*"great" + 0.001*"limited" + 0.001*"app" 
+
+Topic 36 :
+
+0.010*"cool app" + 0.002*"layout" + 0.002*"ready" + 0.002*"horrible" + 0.001*"new" + 0.001*"campaign" + 0.001*"wind" + 0.001*"campaign mode" + 0.001*"annoying wind" + 0.001*"franchise campaign" + 0.001*"franchise campaign mode" + 0.001*"tradition" + 0.001*"horrible tradition" + 0.001*"horrible tradition franchise" + 0.001*"mode annoying" + 0.001*"franchise" + 0.001*"tradition franchise campaign" + 0.001*"tradition franchise" + 0.001*"mode annoying wind" + 0.001*"campaign mode annoying" 
+
+Topic 37 :
+
+0.077*"awesome" + 0.030*"awesome app" + 0.019*"app" + 0.013*"fun" + 0.008*"friendly" + 0.008*"user friendly" + 0.006*"user" + 0.005*"app day" + 0.005*"app fun" + 0.004*"day" + 0.004*"story" + 0.003*"thing" + 0.003*"great" + 0.003*"huge" + 0.003*"comment" + 0.002*"feed" + 0.002*"awesome app great" + 0.002*"yesterday" + 0.002*"reliable" + 0.002*"review" 
+
+Topic 38 :
+
+0.022*"good good" + 0.009*"item" + 0.006*"use" + 0.005*"platform" + 0.003*"hole" + 0.002*"little app" + 0.001*"easy item" + 0.001*"spur moment" + 0.001*"spur" + 0.001*"great little app" + 0.001*"great little" + 0.001*"little" + 0.001*"moment" + 0.001*"map" + 0.001*"terrain map" + 0.001*"terrain" + 0.001*"value hotel" + 0.001*"hotel tour" + 0.001*"tour restaurant area" + 0.001*"value hotel tour" 
+
+Topic 39 :
+
+0.017*"work" + 0.014*"fantastic" + 0.007*"good work" + 0.007*"bit" + 0.006*"category" + 0.004*"app available" + 0.004*"available" + 0.004*"good" + 0.004*"track" + 0.003*"picture" + 0.003*"app picture" + 0.003*"app" + 0.003*"quality" + 0.003*"flight" + 0.002*"perfect" + 0.002*"style" + 0.002*"feature app" + 0.002*"feature" + 0.002*"convenient app" + 0.002*"perfect app" 
+
+Topic 40 :
+
+0.014*"pinter" + 0.006*"photo" + 0.005*"function" + 0.004*"mobile" + 0.003*"photo photo" + 0.003*"account" + 0.003*"vital" + 0.003*"medium" + 0.003*"brain" + 0.003*"error" + 0.002*"gift" + 0.002*"tag" + 0.002*"awesome brain" + 0.002*"device" + 0.002*"app function" + 0.001*"app device" + 0.001*"social medium" + 0.001*"target" + 0.001*"simple" + 0.001*"version" 
+
+Topic 41 :
+
+0.005*"ton" + 0.004*"hair" + 0.004*"folder" + 0.003*"great thing" + 0.002*"thing way" + 0.002*"great app user" + 0.001*"folder app" + 0.001*"tool type" + 0.001*"app cool" + 0.001*"document" + 0.001*"tool" + 0.001*"low score" + 0.001*"low score great" + 0.001*"score great thing" + 0.001*"thing discouraged" + 0.001*"thing discouraged advertisement" + 0.001*"discouraged" + 0.001*"discouraged advertisement" + 0.001*"score great" + 0.001*"discouraged advertisement ton" 
+
+Topic 42 :
+
+0.043*"great app" + 0.034*"great" + 0.026*"app" + 0.009*"convenient" + 0.006*"file" + 0.005*"magazine" + 0.005*"notification" + 0.004*"tip" + 0.004*"app worth" + 0.003*"rule" + 0.003*"card" + 0.003*"guide" + 0.003*"past" + 0.002*"app convenient" + 0.002*"helpful" + 0.002*"great great app" + 0.002*"trip helpful" + 0.002*"work" + 0.002*"awesome app awesome" + 0.002*"dual" 
+
+Topic 43 :
+
+0.023*"issue" + 0.008*"list" + 0.005*"meeting" + 0.004*"text" + 0.004*"note" + 0.004*"issue app" + 0.004*"app" + 0.004*"paper" + 0.004*"web" + 0.003*"notebook" + 0.003*"student" + 0.003*"month" + 0.003*"baby" + 0.003*"power" + 0.003*"pc" + 0.002*"college" + 0.002*"evernote" + 0.002*"high" + 0.002*"wish" + 0.002*"time" 
+
+Topic 44 :
+
+0.019*"app good" + 0.016*"good" + 0.009*"app" + 0.006*"great app good" + 0.005*"good good app" + 0.005*"thumb" + 0.004*"ease" + 0.004*"good good" + 0.004*"datum" + 0.004*"good app" + 0.004*"essential" + 0.003*"helpful great" + 0.003*"dropbox" + 0.003*"good app great" + 0.003*"user experience great" + 0.003*"experience great" + 0.002*"experience great app" + 0.002*"editor" + 0.002*"good friend" + 0.002*"great review" 
+
+Topic 45 :
+
+0.008*"happy" + 0.007*"old" + 0.007*"word" + 0.004*"scanner" + 0.003*"everyday" + 0.003*"picsart" + 0.003*"waste" + 0.002*"app able" + 0.002*"dinner" + 0.002*"waste time" + 0.002*"able" + 0.002*"ringtone" + 0.002*"year old" + 0.001*"time" + 0.001*"file" + 0.001*"app" + 0.001*"fav" + 0.001*"fav app" + 0.001*"amazing new" + 0.001*"album" 
+
+Topic 46 :
+
+0.019*"way" + 0.012*"wonderful" + 0.009*"great way" + 0.007*"date" + 0.007*"wonderful app" + 0.006*"app thing" + 0.004*"fun" + 0.004*"thing" + 0.003*"easy way" + 0.003*"rate" + 0.003*"great" + 0.003*"school" + 0.003*"app" + 0.002*"fun easy" + 0.002*"game fun" + 0.002*"easy" + 0.001*"variety" + 0.001*"game" + 0.001*"plenty" + 0.001*"pronunciation" 
+
+Topic 47 :
+
+0.054*"great" + 0.018*"thing" + 0.017*"favorite" + 0.013*"stuff" + 0.011*"favorite app" + 0.011*"sure" + 0.011*"great great" + 0.011*"great idea" + 0.010*"year" + 0.010*"idea" + 0.009*"app" + 0.008*"game" + 0.007*"good" + 0.006*"good game" + 0.004*"team" + 0.004*"time" + 0.004*"great app" + 0.003*"kind" + 0.003*"info" + 0.003*"easy" 
+
+Topic 48 :
+
+0.047*"easy" + 0.015*"app easy" + 0.011*"great" + 0.008*"app" + 0.008*"good application" + 0.006*"deal" + 0.006*"great game" + 0.006*"application" + 0.005*"good" + 0.005*"great app" + 0.005*"game" + 0.004*"software" + 0.004*"good great" + 0.004*"great deal" + 0.003*"type" + 0.003*"new idea" + 0.003*"able" + 0.003*"accessible" + 0.003*"great app easy" + 0.003*"suite" 
+
+Topic 49 :
+
+0.008*"accurate" + 0.008*"world" + 0.002*"good note" + 0.001*"traveler" + 0.001*"portable" + 0.001*"easy accurate" + 0.001*"tech" + 0.001*"time track" + 0.001*"app time track" + 0.001*"track" + 0.001*"able" + 0.001*"useful" + 0.001*"opinion" + 0.001*"review" + 0.001*"device simple" + 0.001*"niche device" + 0.001*"niche device simple" + 0.001*"simple photo" + 0.001*"device simple photo" + 0.001*"photo function" 
+
