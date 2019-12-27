@@ -175,14 +175,15 @@ def tm_tokenize (document):
 def tokenize_dataframe (series):
     
     # Tokenize text and assign list of tokens to row column value
-    series ['TextTokens'] = tm_tokenize (series ['Text'])
+    series ['TextTokens'] = tm_tokenize (series ['Text']) # Returns a list object
     # series ['TextTokens'] = tm_tokenize_pos_nouns_adj_verb_adv (series ['Text'])
 
     # Edit global list containing corpus tokens
     global list_corpus_tokens
 
     # Add new tokens to global list
-    list_corpus_tokens = list_corpus_tokens + series ['TextTokens']
+    # list_corpus_tokens = list_corpus_tokens + series ['TextTokens']
+    list_corpus_tokens.append (series ['TextTokens'])
 
     # Implement gensim bigrams
     pass
@@ -195,6 +196,15 @@ def tokenize_bigram_dataframe (series):
 
     # Tokenize text and assign list of tokens to row column value
     series ['TextTokens'] = bigram_model [series ['TextTokens']]
+    
+    # Return tokenized series object
+    return series
+
+# Function to fill TextTokens columns in DataFrame with tokenized TRI-GRAM values (accepts a Series object of each row in the FeedbackML DataFrame and returns a tokenized Series object)
+def tokenize_trigram_dataframe (series):
+
+    # Tokenize text and assign list of tokens to row column value
+    series ['TextTokens'] = trigram_model [series ['TextTokens']]
     
     # Return tokenized series object
     return series
@@ -256,7 +266,7 @@ feedback_table = "Feedback"         # Name of feedback table in database
 feedback_ml_table = "FeedbackML"    # Name of feedback table in database used for machine learning
 
 # Tokens
-list_corpus_tokens = [] # List containing all the tokens in the corpus for training Gensim Bigram and Trigram models
+list_corpus_tokens = [] # List containing lists of document tokens in the corpus for training Gensim Bigram and Trigram models
 
 # Create spaCy NLP object
 nlp = spacy.load ("en_core_web_sm")
@@ -264,7 +274,7 @@ nlp = spacy.load ("en_core_web_sm")
 # Custom list of stop words to add to spaCy's existing stop word list
 list_custom_stopwords = ["I", "i",  "yer", "ya", "yar", "u", "loh", "lor", "lah", "leh", "lei", "lar", "liao", "hmm", "hmmm", "mmm", "information", "ok",
                          "man", "giving", "discovery", "seek", "seeking", "rating", "my", "very", "mmmmmm", "wah", "eh", "h", "lol", "guy", "lot", "t", "d",
-                         "w", "p", "ve", "y", "s", "m", "app", "aps", "n", "1"]  
+                         "w", "p", "ve", "y", "s", "m", "aps", "n"]  
 
 # Add custom stop words to spaCy's stop word list
 for word in list_custom_stopwords:
@@ -391,11 +401,15 @@ if (topic_model_data == True):
     print ("tokenised")
 
     # Create bigram and trigram models
-    bigram = models.Phrases (list_corpus_tokens, min_count = 5, threshold = 50) # Bigrams must be above threshold in order to be formed
+    bigram = models.Phrases (list_corpus_tokens, min_count = 5, threshold = 100) # Bigrams must be above threshold in order to be formed
     bigram_model = models.phrases.Phraser (bigram) # Create bigram model
 
-    # Create bigram tokens in DataFrame
+    trigram = models.Phrases (bigram [list_corpus_tokens], threshold = 100) # Threshold should be higher (for trigrams to be formed, need to have higher frequency of occurance)
+    trigram_model = models.phrases.Phraser (trigram)
+
+    # Create bigram and trigram tokens in DataFrame
     feedback_ml_df.apply (tokenize_bigram_dataframe, axis = 1) 
+    feedback_ml_df.apply (tokenize_trigram_dataframe, axis = 1) 
 
     # 3) Understand dataset
     if (preliminary_check == True): # Check boolean to display preliminary information
@@ -410,6 +424,7 @@ if (topic_model_data == True):
     
     """TEMP"""
     print (len (list_corpus_tokens))
+    print (list_corpus_tokens)
     # Save file
     feedback_ml_df.to_csv (topic_file_path, index = False, encoding = "utf-8")
     program_end_time = datetime.datetime.now ()
