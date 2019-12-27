@@ -1,82 +1,82 @@
-LDA Model:
+HDP Model:
 
 Topic 0 :
 
-0.091*"problem" + 0.024*"perfect" + 0.015*"luv" + 0.012*"great" + 0.011*"work" + 0.011*"editing" + 0.010*"love" + 0.009*"good" + 0.008*"photo" + 0.008*"crash" + 0.008*"whatsapp" + 0.007*"music" + 0.006*"phone" + 0.006*"year" + 0.005*"realy" + 0.005*"disappoint" + 0.005*"hang" + 0.004*"faster" + 0.004*"store" + 0.004*"check" 
+0.003*interested + 0.003*document + 0.003*zoom + 0.002*human + 0.002*numerous + 0.002*consistent + 0.002*finance + 0.002*shoe + 0.002*grader + 0.002*franchise + 0.002*communication + 0.002*regional + 0.002*10min + 0.002*essencial + 0.002*picsbt + 0.002*particularly + 0.002*commonly + 0.002*make + 0.002*highness + 0.002*bad 
 
 Topic 1 :
 
-0.049*"addict" + 0.038*"day" + 0.029*"absolutely" + 0.028*"update" + 0.024*"hour" + 0.015*"spend" + 0.014*"love" + 0.014*"free" + 0.008*"time" + 0.008*"excellent" + 0.008*"understand" + 0.008*"messenger" + 0.007*"use" + 0.007*"setting" + 0.006*"bring" + 0.006*"change" + 0.006*"addiction" + 0.006*"amazing" + 0.006*"new" + 0.005*"help" 
+0.002*start + 0.002*suck + 0.002*everytime + 0.002*wok + 0.002*venue + 0.002*iphone + 0.002*diff + 0.002*thorough + 0.002*increase + 0.002*rid + 0.002*wid + 0.002*happy + 0.002*upthe + 0.002*perfomance + 0.002*hit + 0.002*main + 0.002*e + 0.002*public + 0.002*interested + 0.002*click 
 
 Topic 2 :
 
-0.016*"gud" + 0.014*"star" + 0.012*"add" + 0.012*"clear" + 0.009*"fine" + 0.008*"secret" + 0.008*"great" + 0.008*"line" + 0.008*"update" + 0.008*"convenient" + 0.007*"nice" + 0.006*"help" + 0.005*"alot" + 0.005*"tv" + 0.005*"addicted" + 0.005*"way" + 0.005*"business" + 0.005*"high" + 0.005*"work" + 0.005*"thank" 
+0.002*selection + 0.002*fast + 0.002*cellar + 0.002*ride + 0.002*friend + 0.002*filter + 0.002*access + 0.002*evaluate + 0.002*spam + 0.002*pack + 0.002*vacation + 0.002*perfection + 0.002*artistic + 0.002*editor + 0.002*miss + 0.002*lyric + 0.002*astronomer + 0.002*extreme + 0.002*graphing + 0.002*express 
 
 Topic 3 :
 
-0.016*"feature" + 0.013*"product" + 0.011*"work" + 0.011*"great" + 0.011*"device" + 0.011*"improvement" + 0.010*"program" + 0.010*"good" + 0.009*"update" + 0.008*"love" + 0.007*"available" + 0.007*"touch" + 0.007*"bug" + 0.007*"awesome" + 0.007*"use" + 0.007*"game" + 0.006*"need" + 0.006*"note" + 0.006*"new" + 0.006*"live" 
+0.003*superb + 0.002*pixel + 0.002*pdf + 0.002*opposite + 0.002*tailor + 0.002*hotel + 0.002*e + 0.002*evening + 0.002*lotwhen + 0.002*loom + 0.002*flooring + 0.002*volunteer + 0.002*plug + 0.002*sixsome + 0.002*check + 0.002*pace + 0.002*slightly + 0.001*tree + 0.001*power + 0.001*chill 
 
 Topic 4 :
 
-0.043*"application" + 0.019*"great" + 0.016*"friendly" + 0.013*"user" + 0.011*"provide" + 0.011*"wedding" + 0.011*"good" + 0.008*"easy" + 0.008*"deal" + 0.008*"use" + 0.008*"list" + 0.008*"haven" + 0.007*"support" + 0.007*"excellent" + 0.007*"access" + 0.006*"help" + 0.006*"watch" + 0.006*"idea" + 0.006*"sign" + 0.006*"tool" 
+0.003*ion + 0.003*breakdown + 0.002*holy + 0.002*strong + 0.002*praise + 0.002*decent + 0.002*swear + 0.002*nightstand + 0.002*budgeting + 0.002*thesis + 0.002*grad + 0.002*rip + 0.002*kill + 0.002*gathering + 0.002*consistent + 0.002*secret + 0.002*tree + 0.002*smartly + 0.002*notification + 0.002*flake 
 
 Topic 5 :
 
-0.026*"issue" + 0.024*"download" + 0.013*"worth" + 0.013*"slow" + 0.012*"great" + 0.009*"sure" + 0.008*"make" + 0.008*"work" + 0.008*"vacation" + 0.007*"purchase" + 0.007*"note" + 0.007*"year" + 0.007*"use" + 0.007*"food" + 0.006*"little" + 0.006*"bit" + 0.006*"money" + 0.006*"notebook" + 0.005*"scanner" + 0.005*"tool" 
+0.002*perrfect + 0.002*collaborate + 0.002*cancel + 0.002*smoother + 0.002*professional + 0.002*pick + 0.002*luuuuuuuurrrrrve + 0.002*money + 0.002*freeand + 0.002*personally + 0.002*tricky + 0.002*efficient + 0.002*yellow + 0.002*snow + 0.002*butterfly + 0.002*skype + 0.002*dark + 0.002*rise + 0.002*lotwhen + 0.002*hair 
 
 Topic 6 :
 
-0.027*"stop" + 0.017*"pinter" + 0.014*"thank" + 0.013*"miss" + 0.012*"start" + 0.011*"play" + 0.011*"old" + 0.009*"love" + 0.008*"website" + 0.008*"update" + 0.008*"need" + 0.007*"listen" + 0.007*"follow" + 0.007*"game" + 0.006*"good" + 0.006*"right" + 0.006*"version" + 0.006*"pin" + 0.005*"helpfull" + 0.005*"great" 
+0.002*yelp + 0.002*compare + 0.002*inevitable + 0.002*mention + 0.002*toggle + 0.002*simple + 0.002*sophomore + 0.002*butterfly + 0.002*misleading + 0.002*separate + 0.002*kuttyfish + 0.002*remarkable + 0.002*hate + 0.002*pdf + 0.002*tat + 0.002*room + 0.002*membership + 0.002*frequently + 0.002*print + 0.002*complaint 
 
 Topic 7 :
 
-0.114*"awesome" + 0.017*"game" + 0.016*"great" + 0.015*"fix" + 0.012*"easy" + 0.011*"love" + 0.011*"life" + 0.010*"search" + 0.008*"graphic" + 0.008*"fact" + 0.008*"use" + 0.008*"fun" + 0.007*"way" + 0.007*"star" + 0.006*"neat" + 0.006*"don" + 0.006*"make" + 0.006*"break" + 0.005*"gr8" + 0.005*"option" 
+0.003*display + 0.003*bravo + 0.002*5th + 0.002*slowly + 0.002*killer + 0.002*flip + 0.002*category + 0.002*land + 0.002*av + 0.002*itinerary + 0.002*ideas + 0.002*notch + 0.002*instagram + 0.002*frustrated + 0.002*tombstone + 0.002*wade + 0.002*invoice + 0.002*font + 0.002*ibook + 0.002*lingo 
 
 Topic 8 :
 
-0.016*"don" + 0.016*"simple" + 0.011*"expect" + 0.010*"glad" + 0.010*"beautiful" + 0.007*"look" + 0.007*"cook" + 0.007*"need" + 0.007*"idea" + 0.007*"intuitive" + 0.006*"page" + 0.006*"work" + 0.006*"today" + 0.006*"magazine" + 0.005*"swipe" + 0.005*"didn" + 0.005*"crash" + 0.005*"killer" + 0.005*"design" + 0.004*"create" 
+0.003*best + 0.002*candor + 0.002*reticle + 0.002*ago + 0.002*baby + 0.002*vocabulary + 0.002*quid + 0.002*coooool + 0.002*upload + 0.002*account + 0.002*credit + 0.002*effort + 0.002*disappoint + 0.002*server + 0.002*storing + 0.002*resolution + 0.002*step + 0.002*aid + 0.002*charming + 0.002*awesomeness 
 
 Topic 9 :
 
-0.051*"need" + 0.045*"idea" + 0.032*"pinterest" + 0.025*"great" + 0.024*"love" + 0.022*"thing" + 0.020*"recipe" + 0.015*"fun" + 0.015*"site" + 0.014*"want" + 0.014*"live" + 0.014*"experience" + 0.014*"save" + 0.014*"help" + 0.013*"change" + 0.013*"place" + 0.012*"user" + 0.012*"pin" + 0.011*"new" + 0.010*"good" 
+0.003*incredible + 0.002*palm + 0.002*msngrz + 0.002*mp3 + 0.002*facilityrestaurant + 0.002*gameplay + 0.002*dozen + 0.002*fx + 0.002*point + 0.002*surprise + 0.002*classmate + 0.002*secret + 0.002*bc + 0.002*obvious + 0.002*manual + 0.002*buy + 0.002*vacation + 0.002*area + 0.002*snake + 0.002*burst 
 
 Topic 10 :
 
-0.108*"great" + 0.030*"love" + 0.025*"work" + 0.023*"excellent" + 0.014*"creative" + 0.012*"handy" + 0.011*"complaint" + 0.009*"thank" + 0.009*"good" + 0.008*"endless" + 0.007*"tool" + 0.007*"weather" + 0.007*"update" + 0.007*"use" + 0.007*"nice" + 0.007*"idea" + 0.007*"evernote" + 0.006*"pinning" + 0.005*"software" + 0.005*"perfect" 
+0.003*map + 0.003*pow + 0.002*slideshow + 0.002*freebie + 0.002*eatery + 0.002*approx + 0.002*fabulous + 0.002*gift + 0.002*presentation + 0.002*rarely + 0.002*shop + 0.002*cover + 0.002*bouquet + 0.002*website + 0.002*rent + 0.002*devs + 0.002*perception + 0.002*papa + 0.002*observation + 0.002*country 
 
 Topic 11 :
 
-0.015*"file" + 0.013*"sync" + 0.013*"info" + 0.010*"great" + 0.010*"use" + 0.010*"photo" + 0.009*"daily" + 0.009*"love" + 0.009*"review" + 0.009*"work" + 0.009*"come" + 0.008*"word" + 0.008*"hope" + 0.008*"good" + 0.008*"accurate" + 0.007*"write" + 0.007*"share" + 0.007*"useful" + 0.007*"reading" + 0.006*"folder" 
+0.003*iq + 0.002*convenient + 0.002*skin + 0.002*basically + 0.002*bonus + 0.002*city + 0.002*fantastico + 0.002*domestically + 0.002*24th + 0.002*sachin + 0.002*coffee + 0.002*remote + 0.002*pdf + 0.002*possibly + 0.002*airplane + 0.002*insure + 0.002*instant + 0.002*wring + 0.002*reallyy + 0.002*touchy 
 
 Topic 12 :
 
-0.022*"definitely" + 0.015*"funny" + 0.014*"enjoy" + 0.013*"use" + 0.013*"pretty" + 0.012*"inspiration" + 0.011*"wait" + 0.011*"friend" + 0.011*"love" + 0.010*"cover" + 0.009*"contact" + 0.009*"great" + 0.008*"change" + 0.008*"board" + 0.008*"way" + 0.008*"awesomeness" + 0.007*"need" + 0.007*"time" + 0.007*"forget" + 0.007*"pass" 
+0.002*ARRRRRRRGGG + 0.002*boredom + 0.002*pta + 0.002*upside + 0.002*craigslist + 0.002*site + 0.002*que + 0.002*balance + 0.002*exciting + 0.002*obviously + 0.002*lyric + 0.002*war + 0.002*shame + 0.002*content + 0.002*companion + 0.002*tattoos + 0.002*receive + 0.002*namesunfortunately + 0.002*exotic + 0.002*tweak 
 
 Topic 13 :
 
-0.028*"try" + 0.027*"know" + 0.022*"crash" + 0.020*"let" + 0.018*"note" + 0.010*"thing" + 0.010*"fail" + 0.009*"update" + 0.008*"love" + 0.008*"want" + 0.007*"pin" + 0.007*"apple" + 0.007*"meeting" + 0.006*"wish" + 0.006*"anymore" + 0.006*"good" + 0.005*"second" + 0.005*"fix" + 0.005*"need" + 0.005*"check" 
+0.003*fullbut + 0.002*chore + 0.002*unusable + 0.002*discuss + 0.002*make + 0.002*exotic + 0.002*solution + 0.002*lack + 0.002*unburden + 0.002*online + 0.002*tremendous + 0.002*yummy + 0.002*cop + 0.002*compose + 0.002*jerky + 0.002*mature + 0.002*perfomance + 0.002*disappointment + 0.002*purchase + 0.002*keek 
 
 Topic 14 :
 
-0.038*"helpful" + 0.034*"useful" + 0.017*"edit" + 0.016*"great" + 0.014*"love" + 0.013*"trip" + 0.012*"travel" + 0.012*"simply" + 0.011*"easy" + 0.011*"use" + 0.010*"user" + 0.009*"navigate" + 0.009*"awesome" + 0.009*"plan" + 0.008*"experience" + 0.008*"restaurant" + 0.007*"best" + 0.007*"help" + 0.007*"need" + 0.006*"pics" 
+0.002*kuttyfish + 0.002*lapse + 0.002*new + 0.002*decive + 0.002*common + 0.002*source + 0.002*agency + 0.002*nail + 0.002*spreadsheet + 0.002*crafty + 0.002*cab + 0.002*day + 0.002*directly + 0.002*godsend + 0.002*tetszett + 0.002*open + 0.002*motel + 0.002*push + 0.002*shine + 0.002*landscape 
 
 Topic 15 :
 
-0.046*"app" + 0.031*"favorite" + 0.021*"editor" + 0.021*"good" + 0.017*"photo" + 0.013*"happy" + 0.010*"use" + 0.009*"great" + 0.009*"love" + 0.009*"awesome" + 0.009*"experience" + 0.008*"user" + 0.007*"important" + 0.007*"note" + 0.007*"content" + 0.007*"easy" + 0.007*"date" + 0.006*"suck" + 0.006*"probably" + 0.006*"remember" 
+0.003*brouse + 0.003*smooth + 0.002*backward + 0.002*login + 0.002*corner + 0.002*v + 0.002*notation + 0.002*easily + 0.002*rearrange + 0.002*station + 0.002*network + 0.002*lose + 0.002*basic + 0.002*fanatic + 0.002*track + 0.002*kewl + 0.002*thesis + 0.002*different + 0.002*diff + 0.002*achievement 
 
 Topic 16 :
 
-0.168*"good" + 0.095*"love" + 0.022*"great" + 0.019*"time" + 0.019*"use" + 0.015*"game" + 0.014*"far" + 0.013*"job" + 0.013*"review" + 0.012*"work" + 0.009*"travel" + 0.009*"better" + 0.008*"trip" + 0.007*"advisor" + 0.007*"easy" + 0.007*"thank" + 0.007*"d" + 0.006*"computer" + 0.006*"hotel" + 0.005*"traveler" 
+0.003*cough + 0.003*orbit + 0.002*spend + 0.002*wok + 0.002*sharing + 0.002*jerky + 0.002*accessibility + 0.002*multiple + 0.002*appproduct + 0.002*income + 0.002*spam + 0.002*shroom + 0.002*1oo + 0.002*wise + 0.002*project + 0.002*sweep + 0.002*direction + 0.002*quote + 0.002*tab + 0.002*xperia 
 
 Topic 17 :
 
-0.066*"cool" + 0.020*"addictive" + 0.013*"think" + 0.013*"great" + 0.009*"app" + 0.008*"love" + 0.008*"good" + 0.008*"buy" + 0.008*"effect" + 0.008*"forever" + 0.007*"ease" + 0.006*"frame" + 0.006*"web" + 0.006*"use" + 0.005*"owner" + 0.005*"look" + 0.005*"time" + 0.005*"idea" + 0.005*"forum" + 0.005*"link" 
+0.002*entertaining + 0.002*backpack + 0.002*useability + 0.002*abbreviation + 0.002*onboard + 0.002*useful + 0.002*accessibility + 0.002*renovate + 0.002*People + 0.002*gooood + 0.002*dead + 0.002*unusable + 0.002*fave + 0.002*prove + 0.002*accessible + 0.002*retrieving + 0.002*decency + 0.002*smoother + 0.002*mejorar + 0.002*calling 
 
 Topic 18 :
 
-0.072*"nice" + 0.045*"like" + 0.033*"use" + 0.027*"easy" + 0.026*"pin" + 0.023*"bad" + 0.021*"good" + 0.018*"board" + 0.016*"best" + 0.014*"say" + 0.013*"post" + 0.013*"love" + 0.012*"look" + 0.010*"wonderful" + 0.009*"great" + 0.008*"phone" + 0.008*"create" + 0.007*"fast" + 0.007*"need" + 0.006*"read" 
+0.002*pull + 0.002*main + 0.002*ball + 0.002*guess + 0.002*great + 0.002*chrome + 0.002*fave + 0.002*flex + 0.002*golly + 0.002*factory + 0.002*description + 0.002*slightly + 0.002*marriage + 0.002*consumer + 0.002*brilliance + 0.002*dam + 0.002*rent + 0.002*hawk + 0.002*double + 0.002*tricky 
 
 Topic 19 :
 
-0.056*"recommend" + 0.040*"amazing" + 0.028*"highly" + 0.018*"fantastic" + 0.014*"great" + 0.013*"stuff" + 0.012*"love" + 0.010*"pin" + 0.008*"item" + 0.008*"world" + 0.008*"way" + 0.007*"send" + 0.007*"interesting" + 0.007*"improve" + 0.007*"good" + 0.006*"totally" + 0.006*"fun" + 0.006*"picture" + 0.006*"work" + 0.006*"time" 
+0.003*promise + 0.002*recipe + 0.002*program + 0.002*hoard + 0.002*compass + 0.002*block + 0.002*minimum + 0.002*disparity + 0.002*fanatic + 0.002*win + 0.002*practice + 0.002*inform + 0.002*watch + 0.002*network + 0.002*fantasy + 0.002*alive + 0.002*tree + 0.002*personally + 0.002*customizable + 0.002*smoothly 
 
