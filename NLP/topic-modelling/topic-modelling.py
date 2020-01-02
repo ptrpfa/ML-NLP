@@ -16,7 +16,6 @@ import gensim.corpora as corpora # 4) Gensim topic modelling
 import scipy.sparse # 4) Gensim topic modelling
 import logging # 4) Gensim topic modelling logging
 from sklearn.model_selection import GridSearchCV # 4) For model hyperparameters tuning
-from sklearn.feature_extraction.text import TfidfVectorizer # NLP Vectorizer
 import matplotlib.pyplot as plt # For visualisations
 import matplotlib # For visualisations
 import sklearn.metrics as metrics # 4.5) For determination of model accuracy
@@ -37,157 +36,168 @@ def strip_dataframe (series):
     # Return cleaned series object
     return series
 
-# Function to tokenize documents (Only accepts POS: Nouns and Adjectives)
-def tm_tokenize_pos_nouns_adj (document):
+# Function to tokenize documents (Normal tokenizer function without any POS tagging)
+def tm_tokenize_corpus (corpus):
 
-    # Convert document into a spaCy tokens document
-    document = nlp (document)
+    # Initialise list containing tokenized documents (list of lists)
+    list_tokenized_documents = []
 
-    # Initialise list to contain tokens
-    list_tokens = []
+    # Loop to tokenize documents in the sequence object
+    for document in corpus:
 
-    # Loop to tokenize text
-    for token in document:
+        # Convert document into a spaCy tokens document
+        document = nlp (document)
 
-        # Check if token is a stop word
-        if (token.is_stop):
+        # Initialise list to contain tokens of current document being tokenized
+        list_tokens = []
 
-            # Skip current for-loop iteration if token is a stop word
-            continue
+        # Loop to tokenize text in document
+        for token in document:
+
+            # Check if token is a stop word
+            if (token.is_stop):
+
+                # Skip current for-loop iteration if token is a stop word
+                continue
+            
+            # Get lemmatised form of token
+            lemmatised = token.lemma_
+
+            # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
+            if (lemmatised == "-PRON-"):
+
+                # Skip current for-loop iteration
+                continue
+
+            # Check if lemmatised token is a single non-word character
+            if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+
+                # Skip current for-loop iteration
+                continue
+
+            # Add lemmatised token into list of tokens
+            list_tokens.append (lemmatised)
         
-        # Get lemmatised form of token
-        lemmatised = token.lemma_
-
-        # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
-        if (lemmatised == "-PRON-"):
-
-            # Skip current for-loop iteration
-            continue
-
-        # Check if lemmatised token is a single non-word character
-        if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
-
-            # Skip current for-loop iteration
-            continue
-        
-        # Get Part-of-Speech of token
-        token_pos = token.pos_
-
-        # Check if token's POS is not a NOUN or ADJECTIVE
-        if (token_pos != "NOUN" and token_pos != "ADJ"):
-
-            # Skip current for-loop iteration
-            continue
-
-        # Add lemmatised token into list of tokens
-        list_tokens.append (lemmatised)
+        # Append list of tokens of current document to list containing tokenized documents
+        list_tokenized_documents.append (list_tokens)
     
-    # Return list of tokens to calling program
-    return (list_tokens)
+    # Return list of tokenized documents to calling program
+    return (list_tokenized_documents)
+
+# Function to tokenize documents (Only accepts POS: Nouns and Adjectives)
+def tm_tokenize_corpus_pos_nouns_adj (corpus):
+
+
+    # Initialise list containing tokenized documents (list of lists)
+    list_tokenized_documents = []
+
+    # Loop to tokenize documents in the sequence object
+    for document in corpus:
+
+        # Convert document into a spaCy tokens document
+        document = nlp (document)
+
+        # Initialise list to contain tokens of current document being tokenized
+        list_tokens = []
+
+        # Loop to tokenize text in document
+        for token in document:
+
+             # Check if token is a stop word
+            if (token.is_stop):
+
+                # Skip current for-loop iteration if token is a stop word
+                continue
+            
+            # Get lemmatised form of token
+            lemmatised = token.lemma_
+
+            # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
+            if (lemmatised == "-PRON-"):
+
+                # Skip current for-loop iteration
+                continue
+
+            # Check if lemmatised token is a single non-word character
+            if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+
+                # Skip current for-loop iteration
+                continue
+            
+            # Get Part-of-Speech of token
+            token_pos = token.pos_
+
+            # Check if token's POS is not a NOUN or ADJECTIVE
+            if (token_pos != "NOUN" and token_pos != "ADJ"):
+
+                # Skip current for-loop iteration
+                continue
+
+            # Add lemmatised token into list of tokens
+            list_tokens.append (lemmatised)
+        
+        # Append list of tokens of current document to list containing tokenized documents
+        list_tokenized_documents.append (list_tokens)
+    
+    # Return list of tokenized documents to calling program
+    return (list_tokenized_documents)
 
 # Function to tokenize documents (Only accepts POS: Nouns, Adjectives, Verbs and Adverbs)
-def tm_tokenize_pos_nouns_adj_verb_adv (document):
+def tm_tokenize_corpus_pos_nouns_adj_verb_adv (corpus):
 
-    # Convert document into a spaCy tokens document
-    document = nlp (document)
+    # Initialise list containing tokenized documents (list of lists)
+    list_tokenized_documents = []
 
-    # Initialise list to contain tokens
-    list_tokens = []
+    # Loop to tokenize documents in the sequence object
+    for document in corpus:
 
-    # Loop to tokenize text
-    for token in document:
+        # Convert document into a spaCy tokens document
+        document = nlp (document)
 
-        # Check if token is a stop word
-        if (token.is_stop):
+        # Initialise list to contain tokens of current document being tokenized
+        list_tokens = []
 
-            # Skip current for-loop iteration if token is a stop word
-            continue
+        # Loop to tokenize text in document
+        for token in document:
+
+            # Check if token is a stop word
+            if (token.is_stop):
+
+                # Skip current for-loop iteration if token is a stop word
+                continue
+            
+            # Get lemmatised form of token
+            lemmatised = token.lemma_
+
+            # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
+            if (lemmatised == "-PRON-"):
+
+                # Skip current for-loop iteration
+                continue
+
+            # Check if lemmatised token is a single non-word character
+            if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+
+                # Skip current for-loop iteration
+                continue
+            
+            # Get Part-of-Speech of token
+            token_pos = token.pos_
+
+            # Check if token's POS is not a NOUN or ADJECTIVE or VERB or ADVERB
+            if (token_pos != "NOUN" and token_pos != "ADJ" and token_pos != "VERB" and token_pos != "ADV"):
+
+                # Skip current for-loop iteration
+                continue
+
+            # Add lemmatised token into list of tokens
+            list_tokens.append (lemmatised)
         
-        # Get lemmatised form of token
-        lemmatised = token.lemma_
-
-        # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
-        if (lemmatised == "-PRON-"):
-
-            # Skip current for-loop iteration
-            continue
-
-        # Check if lemmatised token is a single non-word character
-        if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
-
-            # Skip current for-loop iteration
-            continue
-        
-        # Get Part-of-Speech of token
-        token_pos = token.pos_
-
-        # Check if token's POS is not a NOUN or ADJECTIVE or VERB or ADVERB
-        if (token_pos != "NOUN" and token_pos != "ADJ" and token_pos != "VERB" and token_pos != "ADV"):
-
-            # Skip current for-loop iteration
-            continue
-
-        # Add lemmatised token into list of tokens
-        list_tokens.append (lemmatised)
+        # Append list of tokens of current document to list containing tokenized documents
+        list_tokenized_documents.append (list_tokens)
     
-    # Return list of tokens to calling program
-    return (list_tokens)
-
-# Function to tokenize documents (Normal tokenizer function without any POS tagging)
-def tm_tokenize (document):
-
-    # Convert document into a spaCy tokens document
-    document = nlp (document)
-
-    # Initialise list to contain tokens
-    list_tokens = []
-
-    # Loop to tokenize text
-    for token in document:
-
-        # Check if token is a stop word
-        if (token.is_stop):
-
-            # Skip current for-loop iteration if token is a stop word
-            continue
-        
-        # Get lemmatised form of token
-        lemmatised = token.lemma_
-
-        # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
-        if (lemmatised == "-PRON-"):
-
-            # Skip current for-loop iteration
-            continue
-
-        # Check if lemmatised token is a single non-word character
-        if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
-
-            # Skip current for-loop iteration
-            continue
-
-        # Add lemmatised token into list of tokens
-        list_tokens.append (lemmatised)
-    
-    # Return list of tokens to calling program
-    return (list_tokens)
-
-# Function to fill TextTokens columns in DataFrame with tokenized values (accepts a Series object of each row in the FeedbackML DataFrame and returns a tokenized Series object)
-def tokenize_dataframe (series):
-    
-    # Tokenize text and assign list of tokens to row column value
-    series ['TextTokens'] = tm_tokenize (series ['Text']) # Returns a list object
-    # series ['TextTokens'] = tm_tokenize_pos_nouns_adj_verb_adv (series ['Text'])
-
-    # Edit global list containing corpus tokens
-    global list_corpus_tokens
-
-    # Add new tokens to global list
-    # list_corpus_tokens = list_corpus_tokens + series ['TextTokens']
-    list_corpus_tokens.append (series ['TextTokens'])
-
-    # Return tokenized series object
-    return series
+    # Return list of tokenized documents to calling program
+    return (list_tokenized_documents)
 
 # Function to fill TextTokens columns in DataFrame with tokenized BI-GRAM values (accepts a Series object of each row in the FeedbackML DataFrame and returns a tokenized Series object)
 def tokenize_bigram_dataframe (series):
@@ -264,7 +274,7 @@ feedback_table = "Feedback"         # Name of feedback table in database
 feedback_ml_table = "FeedbackML"    # Name of feedback table in database used for machine learning
 
 # Tokens
-list_corpus_tokens = [] # List containing lists of document tokens in the corpus for training Gensim Bigram and Trigram models
+list_corpus_tokens = [] # List containing lists of document tokens in the corpus for training Gensim Bigram and Trigram models and for Topic Modelling
 
 # Create spaCy NLP object
 nlp = spacy.load ("en_core_web_sm")
@@ -355,63 +365,25 @@ if (topic_model_data == True):
     target = feedback_ml_df.TextTopics
     feature = feedback_ml_df.Text
 
-    """
-    # Create new vectorizers if not using pickled objects
-    if (not use_pickle):
-        
-        # Create vectorizer object
-        # vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tm_tokenize, ngram_range = (1,3), max_df = 0.95) 
-        # vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tm_tokenize_pos_nouns_adj, ngram_range = (1,3), max_df = 0.95) 
-        # vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tm_tokenize_pos_nouns_adj, ngram_range = (1,1), max_df = 0.95) 
-        vectorizer = TfidfVectorizer (encoding = "utf-8", lowercase = False, strip_accents = 'unicode', stop_words = 'english', tokenizer = tm_tokenize_pos_nouns_adj_verb_adv, ngram_range = (1,1), max_df = 0.95) 
-        
-        # Fit data to vectorizer (Create DTM of dataset (features))
-        feature = vectorizer.fit_transform (feature) # Returns a sparse matrix
-        
-        # Print token information
-        # print ("Tokens:")
-        # print (vectorizer.get_feature_names ()) # Get features (words)
-
-        # Convert DTM to DataFrame
-        data_dtm = pd.DataFrame (feature.toarray (), columns = vectorizer.get_feature_names ())
-
-        # Save DTM (pickle and convert to CSV)
-        data_dtm.to_csv ("/home/p/Desktop/csitml/NLP/topic-modelling/data/large/dtm.csv", index = False, encoding="utf-8") 
-        pickle_object (data_dtm, "/large/dtm.pkl") 
-
-    # Using pickled objects
-    else:
-
-        # Load serialised vectorizer
-        vectorizer = load_pickle ("tfidf-vectorizer.pkl")
-
-        # Load serialised objects
-        feature = load_pickle ("features.pkl") # Get serialised features
-        data_dtm = load_pickle ("/large/dtm.pkl") # Get serialised document-term matrix
-
-        # Print information on vectorised words
-        # print ("Tokens:")
-        # print (vectorizer.get_feature_names ()) # Get feature (words)
-    """
-    print (len (list_corpus_tokens))
     # Tokenize texts and assign text tokens to column in DataFrame
-    feedback_ml_df.apply (tokenize_dataframe, axis = 1) # TextTokens datatype is now a list object
-    print (len(list_corpus_tokens))
-    print (list_corpus_tokens [0])
-    print (list_corpus_tokens [3285])
+    feedback_ml_df.TextTokens = tm_tokenize_corpus (feedback_ml_df.Text) # TextTokens is now a list of tokens for each document
+    # feedback_ml_df.TextTokens = tm_tokenize_corpus_pos_nouns_adj (feedback_ml_df.Text) # Only tokenize NOUNS and ADJECTIVES (will result in many empty token lists)
+    # feedback_ml_df.TextTokens = tm_tokenize_corpus_pos_nouns_adj_verb_adv (feedback_ml_df.Text) # Only tokenize NOUNS, ADJECTIVES, VERBS and ADVERBS (will result in many empty token lists)
+
+    # Assign document tokens in DataFrame to list containing all corpus tokens
+    list_corpus_tokens = list (feedback_ml_df.TextTokens)
+
     # Create bigram and trigram models
     bigram = models.Phrases (list_corpus_tokens, min_count = 5, threshold = 100) # Bigrams must be above threshold in order to be formed
     bigram_model = models.phrases.Phraser (bigram) # Create bigram model
-    print (len(list_corpus_tokens))
+    
     trigram = models.Phrases (bigram [list_corpus_tokens], threshold = 100) # Threshold should be higher (for trigrams to be formed, need to have higher frequency of occurance)
-    trigram_model = models.phrases.Phraser (trigram)
+    trigram_model = models.phrases.Phraser (trigram) # Create trigram model
 
     # Create bigram and trigram tokens in DataFrame
     feedback_ml_df.apply (tokenize_bigram_dataframe, axis = 1) 
     feedback_ml_df.apply (tokenize_trigram_dataframe, axis = 1) 
 
-    print (len(list_corpus_tokens))
-    exit()
     # 3) Understand dataset
     if (preliminary_check == True): # Check boolean to display preliminary information
 
@@ -428,20 +400,11 @@ if (topic_model_data == True):
     # Convert list of corpus document-tokens into a dictionary of the locations of each token in the format {location: 'term'}
     id2word = corpora.Dictionary (list_corpus_tokens)
 
+    # # Human readable format of corpus (term-frequency)
+    # [[(id2word[id], freq) for id, freq in cp] for cp in corpus[:1]]
+
     # Get Term-Document Frequency
     gensim_corpus = [id2word.doc2bow (document_tokens) for document_tokens in list_corpus_tokens]
-
-    # print (gensim_corpus, type (gensim_corpus))
-
-    """
-    # Convert Document-Term Matrix into Gensim corpus
-    data_tdm = data_dtm.transpose () # Convert document-term matrix into a term-document matrix (transpose DTM)
-    data_tdm_sparse_matrix = scipy.sparse.csr_matrix (data_tdm) # Convert TDM into a sparse matrix
-    gensim_corpus = matutils.Sparse2Corpus (data_tdm_sparse_matrix) # Convert sparse matrix into a Gensim corpus
-
-    # Get a dictionary of the locations of each term in the DTM in the format {location: 'term'}
-    id2word = dict ((location, term) for term, location in vectorizer.vocabulary_.items ()) # vectorizer.vocabulary_.items() returns a list of tuples in the format ('term', location) ie ('awesome pics', 8153)
-    """
 
     # Create new models if not using serialised models
     if (not use_pickle):
@@ -460,10 +423,10 @@ if (topic_model_data == True):
         hdp_model = load_pickle ("hdp-model.pkl")
 
     # Get topics
-    list_lda_topics = lda_model.show_topics (formatted= True, num_topics = 20, num_words = 20)
+    list_lda_topics = lda_model.show_topics (formatted = True, num_topics = 20, num_words = 20)
     list_lda_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
-    list_hdp_topics = hdp_model.show_topics (formatted= True, num_topics = 20, num_words = 20)
+    list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = 20, num_words = 20)
     list_hdp_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
     print ("Topics:")
@@ -535,8 +498,6 @@ if (topic_model_data == True):
     
         # Save other information in topics file (information regarding word-topic mapping and word phi values for each document)
         pass
-    
-    print (feedback_topic_mapping, len (feedback_topic_mapping))
 
     # Add topic-word makeup in Remarks of Topic
     pass
@@ -544,9 +505,10 @@ if (topic_model_data == True):
     # Assign topics to feedbacks in the DataFrame
     feedback_ml_df ['TextTopics'] = feedback_topic_mapping
 
-    # Filter to assign no topics to Feedback with empty TextTokens (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
-    feedback_ml_df.loc [combined_feedback_df_trash ['TextTokens'] == [], 'TextTopics'] = []  # Set TextTopics of feedbacks
+    # print ("texttopics", len (feedback_ml_df ['TextTopics']))
 
+    # # Filter to assign no topics to Feedback with empty TextTokens (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
+    # feedback_ml_df.loc [feedback_ml_df ['TextTokens'] == [], 'TextTopics'] = 0  # Set TextTopics of feedbacks
 
     # Get model performance metrics
     # Compute Perplexity
@@ -595,10 +557,8 @@ if (topic_model_data == True):
     feedback_ml_df.to_csv (topic_file_path, index = False, encoding = "utf-8")
 
     # Save models (pickling/serialization)
-    pickle_object (feature, "features.pkl") # Sparse Matrix of features
-    # pickle_object (vectorizer, "tfidf-vectorizer.pkl") # TF-IDF Vectorizer
-    # pickle_object (lda_model, "lda-model.pkl") # LDA Model
-    pickle_object (hdp_model, "hdp-model.pkl") # LDA Model
+    pickle_object (lda_model, "lda-model.pkl") # LDA Model
+    pickle_object (hdp_model, "hdp-model.pkl") # HDP Model
 
 
 # Print debugging message if topic modelling not carried out
