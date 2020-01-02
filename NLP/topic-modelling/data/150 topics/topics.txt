@@ -1,0 +1,1206 @@
+LDA Model:
+
+Topic 0 :
+
+0.073*"touch" + 0.063*"Fun" + 0.036*"Editing" + 0.036*"waste" + 0.027*"control" + 0.027*"AI" + 0.027*"campaign" + 0.027*"wind" + 0.027*"necessary" + 0.018*"15" + 0.018*"complete" + 0.018*"earth" + 0.018*"bucket" + 0.018*"virtual" + 0.018*"total" + 0.018*"abysmal" + 0.018*"decor" + 0.018*"pad" + 0.018*"crafting" + 0.010*"idea" 
+
+Topic 1 :
+
+0.218*"variety" + 0.097*"collage" + 0.057*"app" + 0.049*"wide" + 0.049*"expectation" + 0.044*"great" + 0.024*"interface" + 0.000*"easy" + 0.000*"nice" + 0.000*"dollar" + 0.000*"line" + 0.000*"family" + 0.000*"car" + 0.000*"rental" + 0.000*"tonight" + 0.000*"hour" + 0.000*"holiday" + 0.000*"place" + 0.000*"customer" + 0.000*"rude" 
+
+Topic 2 :
+
+0.047*"app" + 0.040*"time" + 0.040*"addiction" + 0.031*"touch" + 0.024*"available" + 0.024*"correct" + 0.016*"thing" + 0.016*"drive" + 0.016*"convenient" + 0.016*"affordable" + 0.016*"file" + 0.016*"perfect" + 0.016*"access" + 0.016*"location" + 0.016*"folder" + 0.016*"name" + 0.016*"smartphone" + 0.016*"cheer" + 0.016*"group" + 0.009*"application" 
+
+Topic 3 :
+
+0.172*"happy" + 0.143*"page" + 0.086*"app" + 0.043*"datum" + 0.029*"clean" + 0.019*"cell" + 0.019*"trouble" + 0.019*"concerned" + 0.019*"hell" + 0.019*"thorough" + 0.010*"pic" + 0.010*"house" + 0.010*"remote" + 0.010*"overhead" + 0.010*"amazed" + 0.010*"Time" + 0.010*"clearance" + 0.010*"situation" + 0.010*"worried" + 0.010*"look" 
+
+Topic 4 :
+
+0.128*"hand" + 0.062*"app" + 0.053*"note" + 0.032*"notebook" + 0.032*"medical" + 0.032*"current" + 0.030*"daily" + 0.018*"version" + 0.018*"5" + 0.017*"info" + 0.016*"med" + 0.016*"favorite" + 0.016*"able" + 0.016*"1" + 0.016*"recipe" + 0.016*"useful" + 0.016*"option" + 0.016*"organization" + 0.016*"content" + 0.016*"star" 
+
+Topic 5 :
+
+0.166*"book" + 0.119*"tip" + 0.109*"great" + 0.048*"reader" + 0.048*"decent" + 0.036*"selection" + 0.036*"frequent" + 0.024*"traveler" + 0.024*"husband" + 0.024*"sign" + 0.012*"quick" + 0.012*"loading" + 0.012*"interface" + 0.012*"semi" + 0.012*"limited" + 0.012*"local" + 0.012*"critic" + 0.012*"parent" + 0.012*"gem" + 0.012*"job" 
+
+Topic 6 :
+
+0.368*"travel" + 0.045*"fix" + 0.034*"folk" + 0.034*"receipt" + 0.028*"app" + 0.025*"map" + 0.025*"info" + 0.022*"family" + 0.022*"paper" + 0.022*"reinstall" + 0.013*"home" + 0.012*"hotel" + 0.012*"phone" + 0.012*"easy" + 0.011*"work" + 0.011*"trouble" + 0.011*"Rome" + 0.011*"issue" + 0.011*"version" + 0.011*"preparation" 
+
+Topic 7 :
+
+0.436*"trip" + 0.207*"3" + 0.175*"advisor" + 0.013*"gb" + 0.011*"great" + 0.007*"unable" + 0.007*"EXTREMELY" + 0.007*"honeymoon" + 0.007*"ittt" + 0.007*"54" + 0.001*"access" + 0.001*"video" + 0.000*"useful" + 0.000*"d" + 0.000*"experience" + 0.000*"memory" + 0.000*"space" + 0.000*"phone" + 0.000*"time" + 0.000*"excellent" 
+
+Topic 8 :
+
+0.303*"tool" + 0.104*"great" + 0.063*"intuitive" + 0.049*"app" + 0.046*"simple" + 0.038*"type" + 0.038*"fan" + 0.038*"clear" + 0.032*"specific" + 0.028*"purpose" + 0.019*"interface" + 0.019*"limited" + 0.013*"Snapseed" + 0.013*"adjustment" + 0.008*"datum" + 0.006*"sensor" + 0.006*"meaningful" + 0.006*"iPhone" + 0.006*"sample" + 0.006*"screen" 
+
+Topic 9 :
+
+0.124*"fine" + 0.042*"detail" + 0.028*"efficient" + 0.028*"taking" + 0.028*"field" + 0.028*"compatibility" + 0.028*"pub" + 0.028*"wireless" + 0.028*"pain" + 0.023*"good" + 0.019*"app" + 0.015*"old" + 0.014*"note" + 0.014*"key" + 0.014*"boldunderliningitalic" + 0.014*"keyboard" + 0.014*"concise" + 0.014*"screen" + 0.014*"quick" + 0.014*"fantastic" 
+
+Topic 10 :
+
+0.158*"need" + 0.068*"overall" + 0.057*"app" + 0.057*"workout" + 0.057*"filter" + 0.034*"90" + 0.034*"x" + 0.026*"great" + 0.023*"p" + 0.023*"bit" + 0.023*"20" + 0.023*"50" + 0.012*"current" + 0.012*"update" + 0.012*"day" + 0.011*"user" + 0.011*"tripadvisor" + 0.011*"journal" + 0.011*"track" + 0.011*"nutrition" 
+
+Topic 11 :
+
+0.200*"old" + 0.135*"function" + 0.127*"bug" + 0.121*"camera" + 0.053*"UI" + 0.041*"main" + 0.032*"album" + 0.021*"draft" + 0.012*"version" + 0.011*"recent" + 0.011*"improvement" + 0.011*"fact" + 0.011*"IFTTT" + 0.011*"hideous" + 0.001*"app" + 0.000*"new" + 0.000*"photo" + 0.000*"Evernote" + 0.000*"sport" + 0.000*"flow" 
+
+Topic 12 :
+
+0.095*"app" + 0.044*"battery" + 0.036*"half" + 0.027*"GPS" + 0.027*"money" + 0.027*"dream" + 0.027*"sky" + 0.027*"decision" + 0.019*"life" + 0.018*"golf" + 0.018*"second" + 0.018*"obsolete" + 0.018*"recommendation" + 0.018*"annual" + 0.018*"education" + 0.018*"copy" + 0.010*"touch" + 0.009*"turn" + 0.009*"due" + 0.009*"hour" 
+
+Topic 13 :
+
+0.123*"ability" + 0.056*"Mac" + 0.045*"color" + 0.040*"note" + 0.034*"organized" + 0.024*"list" + 0.024*"thing" + 0.023*"place" + 0.023*"Evernote" + 0.023*"sub" + 0.023*"organizing" + 0.023*"technique" + 0.023*"organizational" + 0.012*"3" + 0.011*"order" + 0.011*"hunting" + 0.011*"love" + 0.011*"book" + 0.011*"1" + 0.011*"notebook" 
+
+Topic 14 :
+
+0.065*"Update" + 0.065*"TripAdvisor" + 0.039*"loss" + 0.038*"app" + 0.026*"travel" + 0.026*"helpful" + 0.026*"weight" + 0.026*"ui" + 0.026*"bad" + 0.026*"soo" + 0.026*"delete" + 0.025*"inside" + 0.024*"apple" + 0.020*"key" + 0.014*"star" + 0.013*"year" + 0.013*"note" + 0.013*"hotel" + 0.013*"iPhone" + 0.013*"plan" 
+
+Topic 15 :
+
+0.060*"app" + 0.056*"neat" + 0.046*"saver" + 0.045*"addition" + 0.041*"great" + 0.028*"OMG" + 0.028*"innovative" + 0.028*"tripadvisor" + 0.023*"good" + 0.020*"hour" + 0.019*"thing" + 0.019*"worth" + 0.019*"Texas" + 0.019*"major" + 0.019*"plenty" + 0.010*"money" + 0.010*"free" + 0.009*"ubiquitous" + 0.009*"restaurant" + 0.009*"flight" 
+
+Topic 16 :
+
+0.531*"awesome" + 0.276*"app" + 0.023*"brain" + 0.007*"kid" + 0.004*"old" + 0.003*"room" + 0.003*"business" + 0.003*"card" + 0.003*"flooring" + 0.003*"invoice" + 0.003*"magazine" + 0.003*"manual" + 0.003*"management" + 0.003*"skill" + 0.003*"paint" + 0.003*"school" + 0.003*"dishwasher" + 0.003*"reference" + 0.003*"newspaper" + 0.003*"living" 
+
+Topic 17 :
+
+0.086*"great" + 0.037*"map" + 0.030*"owner" + 0.022*"suggestion" + 0.022*"company" + 0.022*"spending" + 0.022*"productive" + 0.020*"area" + 0.015*"cache" + 0.015*"high" + 0.015*"fact" + 0.015*"hot" + 0.015*"Super" + 0.015*"new" + 0.015*"stack" + 0.015*"bike" + 0.015*"speed" + 0.015*"dad" + 0.014*"service" + 0.008*"track" 
+
+Topic 18 :
+
+0.496*"love" + 0.369*"fun" + 0.019*"extra" + 0.014*"convenience" + 0.005*"reward" + 0.005*"bonus" + 0.002*"free" + 0.000*"able" + 0.000*"book" + 0.000*"iPad" + 0.000*"phone" + 0.000*"computer" + 0.000*"keek" + 0.000*"domino" + 0.000*"flow" + 0.000*"period" + 0.000*"categorization" + 0.000*"papa" + 0.000*"tracker" + 0.000*"graphing" 
+
+Topic 19 :
+
+0.000*"flow" + 0.000*"better" + 0.000*"Keek" + 0.000*"freebie" + 0.000*"capability" + 0.000*"categorization" + 0.000*"biggie" + 0.000*"keek" + 0.000*"unicorn" + 0.000*"papa" + 0.000*"domino" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"bujet" + 0.000*"Definetley" + 0.000*"multi" + 0.000*"period" + 0.000*"tracker" + 0.000*"international" 
+
+Topic 20 :
+
+0.090*"price" + 0.065*"control" + 0.040*"great" + 0.039*"terrible" + 0.026*"game" + 0.026*"movement" + 0.026*"system" + 0.026*"worm" + 0.026*"classic" + 0.016*"dollar" + 0.014*"worth" + 0.013*"idea" + 0.013*"unresponsive" + 0.013*"extra" + 0.013*"developer" + 0.013*"sale" + 0.013*"fine" + 0.013*"reticle" + 0.013*"touch" + 0.013*"tap" 
+
+Topic 21 :
+
+0.283*"day" + 0.114*"hour" + 0.086*"app" + 0.070*"weather" + 0.040*"guide" + 0.035*"visual" + 0.030*"informative" + 0.020*"network" + 0.020*"interest" + 0.016*"hotel" + 0.015*"driver" + 0.010*"destination" + 0.010*"4" + 0.010*"extra" + 0.010*"printer" + 0.005*"hard" + 0.005*"home" + 0.005*"accurate" + 0.005*"opinion" + 0.005*"trip" 
+
+Topic 22 :
+
+0.093*"app" + 0.079*"image" + 0.076*"Samsung" + 0.068*"Tripadvisor" + 0.045*"brilliant" + 0.034*"note" + 0.033*"2" + 0.029*"great" + 0.023*"Instagram" + 0.011*"like" + 0.011*"article" + 0.011*"package" + 0.011*"report" + 0.011*"news" + 0.011*"word" + 0.011*"blissful" + 0.011*"sticky" + 0.011*"clipping" + 0.011*"page" + 0.011*"daily" 
+
+Topic 23 :
+
+0.000*"flow" + 0.000*"better" + 0.000*"Keek" + 0.000*"freebie" + 0.000*"capability" + 0.000*"categorization" + 0.000*"biggie" + 0.000*"keek" + 0.000*"unicorn" + 0.000*"papa" + 0.000*"domino" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"bujet" + 0.000*"Definetley" + 0.000*"multi" + 0.000*"period" + 0.000*"tracker" + 0.000*"international" 
+
+Topic 24 :
+
+0.243*"improvement" + 0.049*"country" + 0.049*"european" + 0.024*"home" + 0.024*"invaluable" + 0.024*"unseen" + 0.024*"story" + 0.024*"90" + 0.024*"memorable" + 0.024*"risk" + 0.024*"sight" + 0.000*"huge" + 0.000*"review" + 0.000*"app" + 0.000*"hotel" + 0.000*"restaurant" + 0.000*"click" + 0.000*"Definetley" + 0.000*"bujet" + 0.000*"Refer" 
+
+Topic 25 :
+
+0.185*"Dropbox" + 0.113*"app" + 0.072*"link" + 0.050*"possible" + 0.050*"browser" + 0.043*"file" + 0.029*"sad" + 0.029*"bunch" + 0.029*"developer" + 0.019*"video" + 0.014*"enhancement" + 0.014*"presentation" + 0.012*"system" + 0.008*"pdf" + 0.008*"web" + 0.007*"code" + 0.007*"use" + 0.007*"large" + 0.007*"content" + 0.007*"email" 
+
+Topic 26 :
+
+0.000*"one" + 0.000*"good" + 0.000*"review" + 0.000*"app" + 0.000*"time" + 0.000*"detail" + 0.000*"bad" + 0.000*"category" + 0.000*"stay" + 0.000*"work" + 0.000*"transaction" + 0.000*"main" + 0.000*"month" + 0.000*"opinion" + 0.000*"financial" + 0.000*"feature" + 0.000*"recurring" + 0.000*"checkbook" + 0.000*"forgetting" + 0.000*"confidence" 
+
+Topic 27 :
+
+0.619*"review" + 0.072*"resource" + 0.057*"class" + 0.036*"cooking" + 0.022*"invaluable" + 0.014*"Italy" + 0.014*"tremendous" + 0.007*"friend" + 0.007*"value" + 0.007*"Cortona" + 0.007*"Venice" + 0.000*"trip" + 0.000*"advisor" + 0.000*"good" + 0.000*"domino" + 0.000*"keek" + 0.000*"bujet" + 0.000*"click" + 0.000*"Refer" + 0.000*"thx" 
+
+Topic 28 :
+
+0.308*"wedding" + 0.054*"gift" + 0.054*"grocery" + 0.036*"shopping" + 0.019*"pinterest" + 0.019*"list" + 0.019*"App" + 0.018*"organizational" + 0.018*"random" + 0.018*"humor" + 0.018*"intervention" + 0.018*"itmaybe" + 0.018*"dozen" + 0.018*"2nd" + 0.018*"brain" + 0.000*"Love" + 0.000*"day" + 0.000*"excellent" + 0.000*"great" + 0.000*"work" 
+
+Topic 29 :
+
+0.288*"editor" + 0.152*"store" + 0.061*"basic" + 0.046*"share" + 0.030*"hundred" + 0.021*"app" + 0.015*"dissatisfied" + 0.015*"quality" + 0.015*"rip" + 0.015*"hit" + 0.015*"filter" + 0.015*"decent" + 0.015*"play" + 0.007*"phone" + 0.000*"ward" + 0.000*"keek" + 0.000*"categorization" + 0.000*"capability" + 0.000*"graphing" + 0.000*"fab" 
+
+Topic 30 :
+
+0.000*"flow" + 0.000*"better" + 0.000*"Keek" + 0.000*"freebie" + 0.000*"capability" + 0.000*"categorization" + 0.000*"biggie" + 0.000*"keek" + 0.000*"unicorn" + 0.000*"papa" + 0.000*"domino" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"bujet" + 0.000*"Definetley" + 0.000*"multi" + 0.000*"period" + 0.000*"tracker" + 0.000*"international" 
+
+Topic 31 :
+
+0.212*"site" + 0.103*"app" + 0.098*"great" + 0.065*"space" + 0.059*"memory" + 0.053*"music" + 0.047*"song" + 0.035*"mind" + 0.024*"lover" + 0.018*"teacher" + 0.018*"opinion" + 0.012*"elementary" + 0.012*"traveler" + 0.007*"daily" + 0.006*"week" + 0.006*"point" + 0.006*"GENIUS" + 0.006*"news" + 0.006*"Worst" + 0.006*"world" 
+
+Topic 32 :
+
+0.168*"4" + 0.090*"effect" + 0.067*"head" + 0.062*"app" + 0.034*"DIY" + 0.025*"star" + 0.022*"document" + 0.022*"xperia" + 0.022*"classroom" + 0.022*"like" + 0.013*"home" + 0.012*"idea" + 0.012*"editing" + 0.011*"computer" + 0.011*"tool" + 0.011*"convenient" + 0.011*"need" + 0.011*"writerdaydreamer" + 0.011*"errorsglitche" + 0.011*"essay" 
+
+Topic 33 :
+
+0.302*"convenient" + 0.150*"7" + 0.054*"favourite" + 0.041*"design" + 0.014*"paper" + 0.014*"book" + 0.014*"ad" + 0.014*"chapter" + 0.014*"author" + 0.014*"binder" + 0.014*"notebook" + 0.014*"mesh" + 0.014*"fluid" + 0.014*"intuitive" + 0.014*"control" + 0.014*"social" + 0.014*"networking" + 0.014*"lovely" + 0.000*"site" + 0.000*"day" 
+
+Topic 34 :
+
+0.205*"whatsapp" + 0.123*"big" + 0.103*"ad" + 0.076*"app" + 0.062*"c" + 0.021*"wuld" + 0.021*"2" + 0.000*"good" + 0.000*"capability" + 0.000*"categorization" + 0.000*"biggie" + 0.000*"tracker" + 0.000*"period" + 0.000*"flow" + 0.000*"papa" + 0.000*"domino" + 0.000*"thx" + 0.000*"Refer" + 0.000*"graphing" + 0.000*"export" 
+
+Topic 35 :
+
+0.091*"100" + 0.076*"medium" + 0.061*"social" + 0.045*"foodie" + 0.045*"close" + 0.045*"town" + 0.030*"wrong" + 0.030*"accurate" + 0.030*"dog" + 0.030*"rest" + 0.030*"sun" + 0.016*"restaurant" + 0.015*"forecaster" + 0.015*"scientific" + 0.015*"umbrella" + 0.015*"bad" + 0.015*"input" + 0.015*"money" + 0.015*"weather" + 0.015*"dollar" 
+
+Topic 36 :
+
+0.051*"ton" + 0.036*"photo" + 0.029*"app" + 0.025*"file" + 0.025*"roll" + 0.020*"thing" + 0.019*"automatic" + 0.019*"Yelp" + 0.019*"GB" + 0.019*"pack" + 0.019*"TA" + 0.016*"good" + 0.015*"website" + 0.013*"Philippines" + 0.013*"eatery" + 0.013*"money" + 0.013*"huge" + 0.013*"advantage" + 0.013*"air" + 0.013*"technology" 
+
+Topic 37 :
+
+0.000*"flow" + 0.000*"better" + 0.000*"Keek" + 0.000*"freebie" + 0.000*"capability" + 0.000*"categorization" + 0.000*"biggie" + 0.000*"keek" + 0.000*"unicorn" + 0.000*"papa" + 0.000*"domino" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"bujet" + 0.000*"Definetley" + 0.000*"multi" + 0.000*"period" + 0.000*"tracker" + 0.000*"international" 
+
+Topic 38 :
+
+0.365*"issue" + 0.075*"contact" + 0.074*"app" + 0.065*"Super" + 0.043*"reason" + 0.032*"view" + 0.032*"bad" + 0.022*"Handy" + 0.020*"sync" + 0.011*"card" + 0.011*"announcement" + 0.011*"breath" + 0.011*"deep" + 0.011*"support" + 0.011*"folk" + 0.001*"note" + 0.000*"new" + 0.000*"version" + 0.000*"easy" + 0.000*"idea" 
+
+Topic 39 :
+
+0.253*"perfect" + 0.069*"hard" + 0.061*"level" + 0.054*"service" + 0.031*"magazine" + 0.026*"app" + 0.023*"worm" + 0.023*"pick" + 0.023*"1st" + 0.023*"ons" + 0.023*"awful" + 0.015*"design" + 0.015*"ready" + 0.015*"confusing" + 0.015*"advertising" + 0.015*"tiny" + 0.015*"8" + 0.008*"turn" + 0.008*"space" + 0.008*"19" 
+
+Topic 40 :
+
+0.210*"inspiration" + 0.166*"food" + 0.087*"month" + 0.066*"hair" + 0.033*"Lose" + 0.033*"makeup" + 0.022*"fast" + 0.022*"fee" + 0.021*"house" + 0.019*"app" + 0.011*"free" + 0.011*"well" + 0.011*"membership" + 0.011*"lose" + 0.011*"54" + 0.011*"progress" + 0.011*"seemless" + 0.011*"transition" + 0.011*"room" + 0.011*"Amazing" 
+
+Topic 41 :
+
+0.000*"flow" + 0.000*"better" + 0.000*"Keek" + 0.000*"freebie" + 0.000*"capability" + 0.000*"categorization" + 0.000*"biggie" + 0.000*"keek" + 0.000*"unicorn" + 0.000*"papa" + 0.000*"domino" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"bujet" + 0.000*"Definetley" + 0.000*"multi" + 0.000*"period" + 0.000*"tracker" + 0.000*"international" 
+
+Topic 42 :
+
+0.071*"email" + 0.040*"internet" + 0.032*"dependable" + 0.024*"road" + 0.024*"bill" + 0.024*"vital" + 0.023*"app" + 0.020*"good" + 0.017*"simple" + 0.016*"time" + 0.016*"real" + 0.016*"contact" + 0.016*"signature" + 0.016*"capture" + 0.016*"card" + 0.016*"week" + 0.016*"4" + 0.016*"beast" + 0.016*"later" + 0.016*"sound" 
+
+Topic 43 :
+
+0.000*"flow" + 0.000*"better" + 0.000*"Keek" + 0.000*"freebie" + 0.000*"capability" + 0.000*"categorization" + 0.000*"biggie" + 0.000*"keek" + 0.000*"unicorn" + 0.000*"papa" + 0.000*"domino" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"bujet" + 0.000*"Definetley" + 0.000*"multi" + 0.000*"period" + 0.000*"tracker" + 0.000*"international" 
+
+Topic 44 :
+
+0.299*"little" + 0.097*"2" + 0.070*"great" + 0.067*"note" + 0.039*"device" + 0.029*"password" + 0.029*"notebook" + 0.024*"datum" + 0.022*"star" + 0.020*"fact" + 0.020*"lag" + 0.020*"1" + 0.020*"secure" + 0.010*"reason" + 0.010*"surface" + 0.010*"capability" + 0.010*"tab" + 0.010*"high" + 0.010*"space" + 0.000*"good" 
+
+Topic 45 :
+
+0.283*"application" + 0.096*"pic" + 0.075*"great" + 0.068*"app" + 0.051*"suite" + 0.046*"forum" + 0.034*"solution" + 0.028*"direction" + 0.017*"office" + 0.017*"accurate" + 0.017*"fast" + 0.011*"necessity" + 0.011*"common" + 0.010*"flash" + 0.006*"improvement" + 0.006*"Tacoma" + 0.006*"Miniusa" + 0.006*"search" + 0.006*"desktop" + 0.006*"Wish" 
+
+Topic 46 :
+
+0.559*"recipe" + 0.075*"great" + 0.062*"box" + 0.043*"app" + 0.021*"able" + 0.010*"wing" + 0.010*"fried" + 0.010*"deep" + 0.010*"chicken" + 0.000*"work" + 0.000*"bunch" + 0.000*"link" + 0.000*"web" + 0.000*"presentation" + 0.000*"Dropbox" + 0.000*"email" + 0.000*"file" + 0.000*"design" + 0.000*"useful" + 0.000*"breeze" 
+
+Topic 47 :
+
+0.504*"helpful" + 0.061*"past" + 0.055*"hotel" + 0.043*"app" + 0.031*"difficult" + 0.023*"landscape" + 0.023*"search" + 0.023*"related" + 0.015*"ridiculous" + 0.008*"rating" + 0.008*"website" + 0.008*"result" + 0.008*"notification" + 0.008*"type" + 0.008*"mode" + 0.008*"essay" + 0.008*"guest" + 0.008*"country" + 0.007*"one" + 0.000*"review" 
+
+Topic 48 :
+
+0.156*"web" + 0.089*"app" + 0.061*"note" + 0.049*"powerful" + 0.049*"companion" + 0.030*"killer" + 0.020*"Yojimbo" + 0.020*"notebook" + 0.020*"scanning" + 0.020*"disappointed" + 0.020*"impressive" + 0.020*"unfamiliar" + 0.020*"meeting" + 0.013*"personal" + 0.010*"device" + 0.010*"desktop" + 0.010*"mobile" + 0.010*"month" + 0.010*"solution" + 0.010*"productivity" 
+
+Topic 49 :
+
+0.353*"thing" + 0.159*"star" + 0.156*"cool" + 0.131*"5" + 0.084*"app" + 0.012*"feed" + 0.012*"ugly" + 0.006*"minded" + 0.003*"personal" + 0.003*"functionality" + 0.003*"opinion" + 0.003*"reason" + 0.003*"overall" + 0.003*"inconvenient" + 0.003*"confusing" + 0.003*"fresh" + 0.003*"coolness" + 0.003*"interface" + 0.003*"layout" + 0.000*"good" 
+
+Topic 50 :
+
+0.276*"d" + 0.055*"m" + 0.037*"concise" + 0.037*"reference" + 0.037*"remarkable" + 0.021*"good" + 0.019*"program" + 0.019*"medication" + 0.019*"access" + 0.019*"thank" + 0.019*"illness" + 0.019*"treatment" + 0.019*"complete" + 0.019*"ease" + 0.019*"entity" + 0.019*"retired" + 0.000*"categorization" + 0.000*"capability" + 0.000*"thx" + 0.000*"papa" 
+
+Topic 51 :
+
+0.468*"feature" + 0.132*"app" + 0.103*"great" + 0.026*"video" + 0.017*"continuous" + 0.017*"sec" + 0.017*"self" + 0.017*"shot" + 0.009*"5" + 0.009*"tweek" + 0.009*"countdown" + 0.009*"timer" + 0.000*"good" + 0.000*"international" + 0.000*"click" + 0.000*"keek" + 0.000*"Keek" + 0.000*"biggie" + 0.000*"better" + 0.000*"tracker" 
+
+Topic 52 :
+
+0.321*"info" + 0.196*"device" + 0.074*"pc" + 0.066*"document" + 0.033*"fact" + 0.033*"office" + 0.017*"ticket" + 0.009*"computer" + 0.009*"wonderful" + 0.009*"web" + 0.008*"developer" + 0.008*"itinerary" + 0.008*"bonus" + 0.008*"resource" + 0.008*"convenience" + 0.008*"platform" + 0.008*"terrific" + 0.008*"airline" + 0.008*"real" + 0.000*"Evernote" 
+
+Topic 53 :
+
+0.134*"team" + 0.052*"little" + 0.049*"icon" + 0.049*"1" + 0.045*"app" + 0.036*"picsart" + 0.036*"tough" + 0.036*"golf" + 0.024*"club" + 0.024*"button" + 0.024*"fav" + 0.016*"great" + 0.013*"work" + 0.012*"thing" + 0.012*"easy" + 0.012*"chart" + 0.012*"round" + 0.012*"UI" + 0.012*"aspect" + 0.012*"distance" 
+
+Topic 54 :
+
+0.079*"app" + 0.052*"indispensable" + 0.037*"account" + 0.030*"version" + 0.030*"scripture" + 0.030*"way" + 0.022*"nice" + 0.022*"day" + 0.022*"cover" + 0.022*"ODB" + 0.022*"choice" + 0.015*"issue" + 0.015*"Bible" + 0.015*"iPhone" + 0.015*"function" + 0.015*"error" + 0.015*"channel" + 0.015*"score" + 0.008*"simple" + 0.008*"bad" 
+
+Topic 55 :
+
+0.113*"family" + 0.072*"line" + 0.045*"dollar" + 0.036*"car" + 0.036*"holiday" + 0.036*"mom" + 0.027*"rental" + 0.027*"shame" + 0.018*"hour" + 0.018*"tonight" + 0.018*"customer" + 0.018*"rapid" + 0.018*"early" + 0.018*"Xmas" + 0.018*"pm" + 0.009*"place" + 0.009*"dinner" + 0.009*"season" + 0.009*"service" + 0.009*"complete" 
+
+Topic 56 :
+
+0.304*"list" + 0.098*"screen" + 0.061*"keyboard" + 0.037*"check" + 0.037*"release" + 0.032*"app" + 0.026*"grocery" + 0.025*"mark" + 0.025*"unusable" + 0.013*"people" + 0.012*"today" + 0.012*"second" + 0.012*"program" + 0.012*"reason" + 0.012*"yesterday" + 0.012*"cursor" + 0.012*"perfect" + 0.012*"attempt" + 0.012*"gesture" + 0.000*"Evernote" 
+
+Topic 57 :
+
+0.107*"funny" + 0.060*"PDF" + 0.033*"hole" + 0.030*"app" + 0.027*"buck" + 0.020*"Dropbox" + 0.020*"viewer" + 0.020*"e" + 0.020*"thousand" + 0.020*"subscription" + 0.015*"friend" + 0.014*"new" + 0.013*"ability" + 0.013*"countless" + 0.013*"speech" + 0.013*"reader" + 0.013*"pdf" + 0.013*"occasion" + 0.013*"ios7" + 0.013*"recognition" 
+
+Topic 58 :
+
+0.256*"year" + 0.184*"app" + 0.155*"editing" + 0.095*"handy" + 0.086*"great" + 0.054*"pics" + 0.012*"wife" + 0.008*"sync" + 0.006*"cool" + 0.006*"collage" + 0.006*"Instagram" + 0.006*"fx" + 0.006*"budge" + 0.006*"price" + 0.000*"awesome" + 0.000*"user" + 0.000*"desktop" + 0.000*"experience" + 0.000*"version" + 0.000*"option" 
+
+Topic 59 :
+
+0.315*"version" + 0.049*"desktop" + 0.045*"Evernote" + 0.034*"note" + 0.031*"tag" + 0.029*"new" + 0.024*"ios" + 0.018*"doctor" + 0.013*"7" + 0.012*"love" + 0.012*"folder" + 0.012*"Search" + 0.012*"buggy" + 0.012*"med" + 0.012*"mad" + 0.012*"service" + 0.012*"fault" + 0.012*"generous" + 0.008*"interface" + 0.007*"thing" 
+
+Topic 60 :
+
+0.000*"flow" + 0.000*"better" + 0.000*"Keek" + 0.000*"freebie" + 0.000*"capability" + 0.000*"categorization" + 0.000*"biggie" + 0.000*"keek" + 0.000*"unicorn" + 0.000*"papa" + 0.000*"domino" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"bujet" + 0.000*"Definetley" + 0.000*"multi" + 0.000*"period" + 0.000*"tracker" + 0.000*"international" 
+
+Topic 61 :
+
+0.622*"people" + 0.059*"fact" + 0.023*"reply" + 0.023*"human" + 0.023*"realistic" + 0.013*"real" + 0.011*"5" + 0.011*"AI" + 0.000*"click" + 0.000*"Refer" + 0.000*"thx" + 0.000*"keek" + 0.000*"flow" + 0.000*"domino" + 0.000*"multi" + 0.000*"Keek" + 0.000*"better" + 0.000*"capability" + 0.000*"bujet" + 0.000*"papa" 
+
+Topic 62 :
+
+0.105*"upgrade" + 0.105*"recent" + 0.083*"week" + 0.073*"great" + 0.063*"tweak" + 0.046*"app" + 0.023*"update" + 0.021*"problem" + 0.021*"Syncs" + 0.021*"viewable" + 0.021*"photo" + 0.019*"easy" + 0.000*"papa" + 0.000*"tracker" + 0.000*"Refer" + 0.000*"thx" + 0.000*"export" + 0.000*"categorization" + 0.000*"domino" + 0.000*"Keek" 
+
+Topic 63 :
+
+0.457*"computer" + 0.098*"today" + 0.048*"pdf" + 0.035*"Dropbox" + 0.033*"sync" + 0.016*"daily" + 0.000*"home" + 0.000*"update" + 0.000*"Keek" + 0.000*"keek" + 0.000*"better" + 0.000*"papa" + 0.000*"flow" + 0.000*"categorization" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"bujet" + 0.000*"domino" + 0.000*"capability" 
+
+Topic 64 :
+
+0.230*"superb" + 0.101*"mode" + 0.077*"dead" + 0.026*"syndrome" + 0.026*"thing" + 0.026*"Zombies" + 0.026*"cheat" + 0.001*"app" + 0.000*"game" + 0.000*"great" + 0.000*"good" + 0.000*"review" + 0.000*"program" + 0.000*"thank" + 0.000*"big" + 0.000*"screen" + 0.000*"usefulness" + 0.000*"road" + 0.000*"time" + 0.000*"advisor" 
+
+Topic 65 :
+
+0.289*"beautiful" + 0.193*"addictive" + 0.137*"art" + 0.037*"app" + 0.014*"arrangement" + 0.014*"bouquet" + 0.014*"nPinterest" + 0.014*"celebrity" + 0.014*"inspired" + 0.014*"crafter" + 0.000*"useful" + 0.000*"idea" + 0.000*"photo" + 0.000*"helpful" + 0.000*"experience" + 0.000*"user" + 0.000*"time" + 0.000*"love" + 0.000*"Love" + 0.000*"domino" 
+
+Topic 66 :
+
+0.181*"content" + 0.158*"thought" + 0.126*"plan" + 0.023*"travel" + 0.023*"extreme" + 0.023*"whim" + 0.023*"device" + 0.012*"user" + 0.000*"great" + 0.000*"way" + 0.000*"game" + 0.000*"payment" + 0.000*"5" + 0.000*"time" + 0.000*"gameplay" + 0.000*"money" + 0.000*"4" + 0.000*"option" + 0.000*"free" + 0.000*"cute" 
+
+Topic 67 :
+
+0.389*"life" + 0.123*"app" + 0.078*"glad" + 0.069*"reference" + 0.043*"glitch" + 0.035*"lab" + 0.035*"iphone" + 0.017*"daily" + 0.017*"nursing" + 0.010*"student" + 0.009*"evernote" + 0.009*"late" + 0.000*"good" + 0.000*"program" + 0.000*"phone" + 0.000*"flow" + 0.000*"papa" + 0.000*"tracker" + 0.000*"period" + 0.000*"better" 
+
+Topic 68 :
+
+0.665*"easy" + 0.049*"search" + 0.034*"app" + 0.034*"great" + 0.016*"excited" + 0.010*"notebook" + 0.010*"client" + 0.010*"specific" + 0.010*"possibility" + 0.010*"interested" + 0.010*"special" + 0.007*"prospect" + 0.007*"entry" + 0.004*"calendar" + 0.003*"model" + 0.003*"business" + 0.003*"friendly" + 0.003*"tag" + 0.003*"program" + 0.003*"important" 
+
+Topic 69 :
+
+0.060*"app" + 0.048*"entire" + 0.041*"essential" + 0.034*"best" + 0.027*"80" + 0.027*"material" + 0.021*"new" + 0.021*"game" + 0.021*"stat" + 0.021*"round" + 0.021*"sleep" + 0.021*"cheap" + 0.021*"enjoyment" + 0.014*"phone" + 0.014*"ball" + 0.014*"iPhone" + 0.014*"confused" + 0.014*"pattern" + 0.014*"awsome" + 0.014*"engine" 
+
+Topic 70 :
+
+0.610*"nice" + 0.137*"app" + 0.039*"Nice" + 0.011*"car" + 0.011*"compatible" + 0.006*"help" + 0.006*"low" + 0.006*"class" + 0.006*"pics" + 0.006*"picsart" + 0.006*"firmware" + 0.006*"padfone" + 0.006*"control" + 0.006*"racing" + 0.006*"El" + 0.006*"tetszett" + 0.006*"tuning" + 0.006*"upgraded" + 0.006*"2009" + 0.006*"corner" 
+
+Topic 71 :
+
+0.424*"home" + 0.073*"night" + 0.025*"rhubarb" + 0.025*"bed" + 0.025*"pleasure" + 0.025*"bottle" + 0.012*"charming" + 0.012*"breakfast" + 0.012*"delightful" + 0.012*"tel" + 0.012*"honeymoon" + 0.012*"host" + 0.012*"jar" + 0.012*"jam" + 0.012*"bocage" + 0.012*"liquor" + 0.012*"orange" + 0.012*"pie" + 0.012*"hostess" + 0.012*"location" 
+
+Topic 72 :
+
+0.247*"product" + 0.242*"area" + 0.033*"America" + 0.033*"subject" + 0.017*"excellent" + 0.017*"guidance" + 0.017*"development" + 0.017*"program" + 0.017*"science" + 0.017*"history" + 0.017*"similar" + 0.017*"instance" + 0.000*"min" + 0.000*"Keek" + 0.000*"flow" + 0.000*"period" + 0.000*"tracker" + 0.000*"international" + 0.000*"notch" + 0.000*"better" 
+
+Topic 73 :
+
+0.281*"pinterest" + 0.101*"slow" + 0.080*"room" + 0.070*"kind" + 0.067*"party" + 0.050*"g" + 0.040*"kid" + 0.030*"girl" + 0.030*"feedback" + 0.010*"crafty" + 0.010*"celebration" + 0.010*"gathering" + 0.010*"wife" + 0.010*"heavy" + 0.009*"screen" + 0.000*"able" + 0.000*"idea" + 0.000*"3" + 0.000*"new" + 0.000*"word" 
+
+Topic 74 :
+
+0.055*"great" + 0.048*"app" + 0.045*"surprised" + 0.034*"ipad" + 0.023*"desktop" + 0.023*"photo" + 0.023*"easy" + 0.023*"print" + 0.023*"planner" + 0.012*"wedding" + 0.012*"thing" + 0.011*"info" + 0.011*"available" + 0.011*"layer" + 0.011*"notebook" + 0.011*"dressing" + 0.011*"itinerary" + 0.011*"bold" + 0.011*"Expedia" + 0.011*"multi" 
+
+Topic 75 :
+
+0.443*"picture" + 0.042*"folder" + 0.042*"sync" + 0.034*"event" + 0.034*"different" + 0.025*"cloud" + 0.018*"phone" + 0.017*"NAS" + 0.011*"great" + 0.009*"music" + 0.009*"account" + 0.009*"card" + 0.009*"5" + 0.009*"work" + 0.009*"new" + 0.009*"useful" + 0.008*"program" + 0.008*"pair" + 0.008*"occasional" + 0.008*"mp3" 
+
+Topic 76 :
+
+0.142*"tablet" + 0.114*"Pretty" + 0.057*"console" + 0.031*"able" + 0.030*"awesome" + 0.029*"Xbox" + 0.029*"playstation" + 0.029*"feeling" + 0.000*"game" + 0.000*"period" + 0.000*"login" + 0.000*"international" + 0.000*"unicorn" + 0.000*"bujet" + 0.000*"biggie" + 0.000*"Keek" + 0.000*"Refer" + 0.000*"multi" + 0.000*"better" + 0.000*"domino" 
+
+Topic 77 :
+
+0.312*"available" + 0.074*"android" + 0.061*"platform" + 0.037*"performance" + 0.028*"target" + 0.028*"original" + 0.028*"mini" + 0.018*"stupid" + 0.018*"PDF" + 0.018*"money" + 0.018*"significant" + 0.018*"end" + 0.010*"pc" + 0.010*"version" + 0.009*"marker" + 0.009*"drop" + 0.009*"status" + 0.009*"well" + 0.009*"brave" + 0.009*"graphic" 
+
+Topic 78 :
+
+0.178*"item" + 0.089*"multiple" + 0.089*"quality" + 0.078*"online" + 0.056*"server" + 0.044*"frustrating" + 0.044*"purchase" + 0.033*"multiplayer" + 0.022*"buy" + 0.022*"hurry" + 0.022*"description" + 0.012*"stuff" + 0.011*"little" + 0.011*"money" + 0.011*"FAB" + 0.011*"criticism" + 0.011*"unique" + 0.011*"offering" + 0.011*"satisfied" + 0.011*"view" 
+
+Topic 79 :
+
+0.496*"useful" + 0.130*"app" + 0.086*"great" + 0.025*"activity" + 0.015*"weekly" + 0.010*"brush" + 0.010*"function" + 0.010*"portable" + 0.009*"able" + 0.005*"ability" + 0.005*"education" + 0.005*"capability" + 0.005*"purpose" + 0.005*"collaboration" + 0.005*"world" + 0.005*"material" + 0.005*"city" + 0.005*"deal" + 0.005*"gas" + 0.005*"basis" 
+
+Topic 80 :
+
+0.000*"flow" + 0.000*"better" + 0.000*"Keek" + 0.000*"freebie" + 0.000*"capability" + 0.000*"categorization" + 0.000*"biggie" + 0.000*"keek" + 0.000*"unicorn" + 0.000*"papa" + 0.000*"domino" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"bujet" + 0.000*"Definetley" + 0.000*"multi" + 0.000*"period" + 0.000*"tracker" + 0.000*"international" 
+
+Topic 81 :
+
+0.707*"Evernote" + 0.065*"change" + 0.022*"baby" + 0.022*"paper" + 0.008*"family" + 0.007*"shopping" + 0.007*"marriage" + 0.007*"feeding" + 0.007*"research" + 0.007*"diaper" + 0.000*"list" + 0.000*"thank" + 0.000*"little" + 0.000*"time" + 0.000*"device" + 0.000*"music" + 0.000*"picture" + 0.000*"second" + 0.000*"file" + 0.000*"apple" 
+
+Topic 82 :
+
+0.446*"excellent" + 0.194*"friend" + 0.120*"app" + 0.062*"different" + 0.017*"family" + 0.007*"thought" + 0.007*"feeling" + 0.007*"stranger" + 0.007*"relative" + 0.000*"thing" + 0.000*"way" + 0.000*"idea" + 0.000*"click" + 0.000*"flow" + 0.000*"thx" + 0.000*"domino" + 0.000*"period" + 0.000*"Refer" + 0.000*"papa" + 0.000*"Keek" 
+
+Topic 83 :
+
+0.141*"track" + 0.095*"quote" + 0.064*"load" + 0.064*"style" + 0.048*"app" + 0.032*"closet" + 0.032*"status" + 0.032*"mean" + 0.032*"piece" + 0.016*"available" + 0.016*"wassup" + 0.016*"random" + 0.016*"suggestion" + 0.016*"5" + 0.016*"star" + 0.016*"new" + 0.016*"feature" + 0.016*"Fashionista" + 0.016*"clothe" + 0.000*"picture" 
+
+Topic 84 :
+
+0.574*"thank" + 0.056*"apple" + 0.033*"iTunes" + 0.022*"podcast" + 0.022*"native" + 0.012*"2" + 0.011*"well" + 0.011*"downcast" + 0.011*"player" + 0.011*"catch" + 0.011*"cord" + 0.011*"disappointment" + 0.011*"iCloud" + 0.000*"update" + 0.000*"keek" + 0.000*"Keek" + 0.000*"export" + 0.000*"categorization" + 0.000*"capability" + 0.000*"better" 
+
+Topic 85 :
+
+0.369*"well" + 0.143*"app" + 0.054*"guy" + 0.049*"note" + 0.030*"college" + 0.024*"evernote" + 0.018*"BEST" + 0.013*"Evernote" + 0.012*"datum" + 0.009*"key" + 0.006*"website" + 0.006*"different" + 0.006*"3" + 0.006*"simple" + 0.006*"use" + 0.006*"fantastic" + 0.006*"apple" + 0.006*"original" + 0.006*"writer" + 0.006*"product" 
+
+Topic 86 :
+
+0.211*"App" + 0.085*"video" + 0.063*"annoying" + 0.051*"great" + 0.033*"app" + 0.031*"minor" + 0.024*"usual" + 0.024*"normal" + 0.024*"library" + 0.024*"save" + 0.016*"battery" + 0.016*"separate" + 0.016*"service" + 0.016*"music" + 0.013*"background" + 0.008*"issue" + 0.008*"review" + 0.008*"mode" + 0.008*"fantastic" + 0.008*"star" 
+
+Topic 87 :
+
+0.497*"photo" + 0.069*"app" + 0.028*"smart" + 0.017*"note" + 0.017*"notebook" + 0.017*"sick" + 0.017*"contact" + 0.012*"clipping" + 0.011*"pen" + 0.011*"magazine" + 0.007*"phone" + 0.006*"great" + 0.006*"simple" + 0.006*"addition" + 0.006*"future" + 0.006*"document" + 0.006*"version" + 0.006*"new" + 0.006*"business" + 0.006*"useful" 
+
+Topic 88 :
+
+0.059*"text" + 0.049*"EverNote" + 0.049*"messenger" + 0.040*"spot" + 0.040*"low" + 0.030*"confidence" + 0.020*"note" + 0.020*"work" + 0.020*"kumar" + 0.020*"realy" + 0.020*"hair" + 0.020*"obvious" + 0.020*"quick" + 0.011*"lot" + 0.010*"app" + 0.010*"picture" + 0.010*"interface" + 0.010*"font" + 0.010*"list" + 0.010*"today" 
+
+Topic 89 :
+
+0.554*"way" + 0.082*"great" + 0.056*"category" + 0.026*"open" + 0.015*"iq" + 0.015*"hope" + 0.015*"average" + 0.015*"port" + 0.011*"office" + 0.010*"datum" + 0.010*"heck" + 0.010*"set" + 0.008*"app" + 0.005*"professional" + 0.005*"college" + 0.005*"copy" + 0.005*"clunky" + 0.005*"jackpot" + 0.005*"tablet" + 0.005*"high" 
+
+Topic 90 :
+
+0.122*"student" + 0.114*"app" + 0.098*"look" + 0.055*"great" + 0.049*"poor" + 0.037*"paper" + 0.037*"term" + 0.025*"k" + 0.025*"marketing" + 0.012*"price" + 0.012*"PDF" + 0.012*"article" + 0.012*"PowerPoint" + 0.012*"school" + 0.012*"spreadsheet" + 0.012*"day" + 0.012*"doc" + 0.012*"quality" + 0.012*"basic" + 0.012*"loan" 
+
+Topic 91 :
+
+0.160*"creative" + 0.055*"app" + 0.037*"accurate" + 0.028*"navigation" + 0.028*"audio" + 0.028*"dull" + 0.028*"muscle" + 0.028*"tech" + 0.028*"beat" + 0.028*"cent" + 0.019*"turn" + 0.019*"AVG" + 0.019*"traffic" + 0.019*"difference" + 0.019*"functional" + 0.011*"dollar" + 0.010*"time" + 0.009*"half" + 0.009*"life" + 0.009*"favorite" 
+
+Topic 92 :
+
+0.236*"real" + 0.063*"person" + 0.063*"limit" + 0.045*"app" + 0.038*"15" + 0.027*"thing" + 0.025*"bandwidth" + 0.025*"file" + 0.025*"min" + 0.025*"reason" + 0.025*"source" + 0.014*"bad" + 0.013*"datum" + 0.013*"streaming" + 0.013*"logic" + 0.013*"cap" + 0.013*"reviewer" + 0.013*"propel" + 0.013*"candor" + 0.013*"place" 
+
+Topic 93 :
+
+0.679*"update" + 0.039*"aap" + 0.020*"suck" + 0.013*"deck" + 0.013*"core" + 0.013*"star" + 0.007*"single" + 0.007*"level" + 0.007*"msg" + 0.007*"compulsory" + 0.007*"server" + 0.007*"alsop" + 0.007*"ill" + 0.007*"1" + 0.007*"7th" + 0.007*"quizlet" + 0.007*"CM" + 0.007*"piano" + 0.007*"8" + 0.007*"exam" 
+
+Topic 94 :
+
+0.135*"long" + 0.086*"productivity" + 0.074*"design" + 0.061*"Galaxy" + 0.061*"crash" + 0.061*"task" + 0.049*"tab" + 0.026*"3" + 0.024*"note" + 0.014*"great" + 0.013*"star" + 0.013*"device" + 0.013*"day" + 0.012*"file" + 0.012*"indespensible" + 0.012*"sync" + 0.012*"handy" + 0.012*"complaint" + 0.012*"2" + 0.012*"zoom" 
+
+Topic 95 :
+
+0.087*"wrong" + 0.053*"goal" + 0.053*"sale" + 0.035*"premium" + 0.035*"attachment" + 0.035*"advertisement" + 0.035*"valuable" + 0.019*"stuff" + 0.018*"user" + 0.018*"feature" + 0.018*"bug" + 0.018*"quit" + 0.018*"useless" + 0.018*"version" + 0.018*"pic" + 0.018*"ad" + 0.018*"September" + 0.018*"marketplace" + 0.018*"image" + 0.018*"pitch" 
+
+Topic 96 :
+
+0.000*"flow" + 0.000*"better" + 0.000*"Keek" + 0.000*"freebie" + 0.000*"capability" + 0.000*"categorization" + 0.000*"biggie" + 0.000*"keek" + 0.000*"unicorn" + 0.000*"papa" + 0.000*"domino" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"bujet" + 0.000*"Definetley" + 0.000*"multi" + 0.000*"period" + 0.000*"tracker" + 0.000*"international" 
+
+Topic 97 :
+
+0.060*"app" + 0.029*"fact" + 0.021*"old" + 0.021*"year" + 0.021*"2" + 0.021*"story" + 0.021*"fantastic" + 0.021*"restaurant" + 0.021*"phone" + 0.021*"reservation" + 0.021*"general" + 0.021*"breaker" + 0.021*"deal" + 0.021*"communication" + 0.021*"enjoyable" + 0.021*"puzzle" + 0.020*"calendar" + 0.011*"excellent" + 0.010*"Mickey" + 0.010*"young" 
+
+Topic 98 :
+
+0.091*"help" + 0.061*"galaxy" + 0.051*"helpfull" + 0.051*"vacation" + 0.050*"second" + 0.050*"garden" + 0.033*"Samsung" + 0.031*"pic" + 0.031*"FB" + 0.021*"friend" + 0.021*"time" + 0.020*"pure" + 0.020*"joy" + 0.020*"plan" + 0.020*"tab" + 0.020*"mode" + 0.020*"adventure" + 0.020*"12" + 0.020*"fabulous" + 0.020*"expensive" 
+
+Topic 99 :
+
+0.123*"date" + 0.085*"laptop" + 0.078*"note" + 0.074*"meeting" + 0.074*"couple" + 0.025*"paper" + 0.025*"dozen" + 0.013*"photo" + 0.012*"later" + 0.012*"additionally" + 0.012*"iPad" + 0.012*"retrieval" + 0.012*"binder" + 0.012*"ring" + 0.012*"week" + 0.012*"different" + 0.012*"dimension" + 0.012*"yhu" + 0.012*"twitter" + 0.012*"share" 
+
+Topic 100 :
+
+0.434*"Love" + 0.280*"place" + 0.104*"app" + 0.021*"daughter" + 0.009*"house" + 0.009*"picsart" + 0.004*"pics" + 0.004*"pic" + 0.004*"abomination" + 0.004*"turn" + 0.004*"craptastic" + 0.004*"disappointed" + 0.004*"case" + 0.004*"premium" + 0.004*"study" + 0.004*"mother" + 0.004*"persone" + 0.004*"teenage" + 0.004*"aspect" + 0.004*"GTD" 
+
+Topic 101 :
+
+0.107*"great" + 0.078*"super" + 0.070*"app" + 0.068*"flight" + 0.068*"button" + 0.049*"brother" + 0.049*"age" + 0.029*"pronunciation" + 0.029*"true" + 0.029*"progress" + 0.020*"able" + 0.019*"word" + 0.010*"bit" + 0.010*"tool" + 0.010*"multiple" + 0.010*"proper" + 0.010*"unsure" + 0.010*"definition" + 0.010*"context" + 0.010*"close" 
+
+Topic 102 :
+
+0.163*"business" + 0.111*"access" + 0.102*"planning" + 0.092*"app" + 0.063*"great" + 0.061*"future" + 0.060*"ease" + 0.051*"safe" + 0.041*"stay" + 0.031*"stop" + 0.010*"visit" + 0.010*"wife" + 0.010*"reference" + 0.000*"place" + 0.000*"restaurant" + 0.000*"trip" + 0.000*"tool" + 0.000*"easy" + 0.000*"love" + 0.000*"period" 
+
+Topic 103 :
+
+0.038*"sport" + 0.038*"delicious" + 0.026*"appliance" + 0.026*"part" + 0.026*"card" + 0.026*"Jennifer" + 0.026*"dining" + 0.026*"maintenance" + 0.026*"manager" + 0.026*"schedule" + 0.014*"star" + 0.013*"great" + 0.013*"recipe" + 0.013*"work" + 0.013*"experience" + 0.013*"article" + 0.013*"journal" + 0.013*"time" + 0.013*"easy" + 0.013*"friend" 
+
+Topic 104 :
+
+0.073*"cloud" + 0.072*"capability" + 0.058*"power" + 0.044*"huge" + 0.036*"app" + 0.031*"file" + 0.029*"platform" + 0.029*"cross" + 0.029*"essential" + 0.029*"clip" + 0.015*"time" + 0.015*"web" + 0.015*"mobile" + 0.015*"note" + 0.015*"access" + 0.015*"text" + 0.015*"versatile" + 0.015*"saver" + 0.015*"keyboard" + 0.015*"brilliant" 
+
+Topic 105 :
+
+0.559*"great" + 0.383*"app" + 0.011*"vacation" + 0.005*"upload" + 0.005*"question" + 0.002*"auto" + 0.002*"operation" + 0.002*"effortless" + 0.000*"second" + 0.000*"addition" + 0.000*"video" + 0.000*"support" + 0.000*"customer" + 0.000*"stay" + 0.000*"hour" + 0.000*"review" + 0.000*"new" + 0.000*"food" + 0.000*"useful" + 0.000*"photo" 
+
+Topic 106 :
+
+0.089*"one" + 0.089*"impressed" + 0.054*"time" + 0.054*"weekend" + 0.036*"product" + 0.036*"setlist" + 0.036*"song" + 0.036*"bad" + 0.018*"option" + 0.018*"able" + 0.018*"easy" + 0.018*"favorite" + 0.018*"form" + 0.018*"amazing" + 0.018*"different" + 0.018*"informative" + 0.018*"stay" + 0.018*"short" + 0.018*"detail" + 0.018*"outlier" 
+
+Topic 107 :
+
+0.178*"cover" + 0.056*"app" + 0.051*"daily" + 0.051*"ui" + 0.026*"Goto" + 0.026*"clunky" + 0.026*"folder" + 0.026*"action" + 0.026*"do" + 0.026*"file" + 0.026*"Evernote" + 0.000*"simple" + 0.000*"Pinterest" + 0.000*"great" + 0.000*"experience" + 0.000*"new" + 0.000*"time" + 0.000*"people" + 0.000*"user" + 0.000*"pattern" 
+
+Topic 108 :
+
+0.411*"pin" + 0.062*"small" + 0.031*"house" + 0.031*"organization" + 0.023*"paper" + 0.023*"mod" + 0.019*"app" + 0.016*"MCPE" + 0.016*"map" + 0.016*"clutter" + 0.016*"internet" + 0.012*"great" + 0.008*"picture" + 0.008*"website" + 0.008*"money" + 0.008*"iexplorer" + 0.008*"fake" + 0.008*"access" + 0.008*"worried" + 0.008*"kid" 
+
+Topic 109 :
+
+0.066*"daily" + 0.066*"reading" + 0.049*"awesomeness" + 0.041*"table" + 0.033*"start" + 0.028*"great" + 0.026*"app" + 0.025*"line" + 0.025*"station" + 0.017*"time" + 0.016*"thing" + 0.016*"aid" + 0.016*"value" + 0.016*"basis" + 0.016*"tape" + 0.016*"flexibility" + 0.016*"help" + 0.009*"free" + 0.009*"day" + 0.008*"well" 
+
+Topic 110 :
+
+0.114*"local" + 0.082*"wish" + 0.060*"great" + 0.049*"mistake" + 0.038*"app" + 0.033*"exploring" + 0.033*"regular" + 0.033*"aware" + 0.018*"info" + 0.017*"fun" + 0.016*"thing" + 0.016*"mate" + 0.016*"gossip" + 0.016*"friend" + 0.016*"bbm" + 0.016*"android" + 0.016*"website" + 0.016*"planning" + 0.016*"tripping" + 0.016*"day" 
+
+Topic 111 :
+
+0.081*"app" + 0.076*"setting" + 0.076*"quick" + 0.043*"trail" + 0.043*"com" + 0.032*"ride" + 0.032*"penny" + 0.032*"offline" + 0.032*"buddy" + 0.022*"GPS" + 0.022*"epic" + 0.022*"pocket" + 0.022*"mapping" + 0.012*"time" + 0.011*"year" + 0.011*"battery" + 0.011*"power" + 0.011*"text" + 0.011*"long" + 0.011*"fly" 
+
+Topic 112 :
+
+0.365*"wonderful" + 0.250*"app" + 0.154*"website" + 0.026*"TripAdvisor" + 0.017*"booking" + 0.009*"internet" + 0.009*"majority" + 0.009*"short" + 0.000*"job" + 0.000*"great" + 0.000*"well" + 0.000*"way" + 0.000*"time" + 0.000*"graphing" + 0.000*"better" + 0.000*"flow" + 0.000*"papa" + 0.000*"tracker" + 0.000*"period" + 0.000*"categorization" 
+
+Topic 113 :
+
+0.156*"app" + 0.086*"road" + 0.073*"minute" + 0.061*"functionality" + 0.049*"sharing" + 0.049*"single" + 0.027*"file" + 0.016*"video" + 0.016*"background" + 0.013*"excellent" + 0.013*"able" + 0.013*"available" + 0.012*"outliner" + 0.012*"GTD" + 0.012*"sync" + 0.012*"note" + 0.012*"trail" + 0.012*"use" + 0.012*"GPS" + 0.012*"datum" 
+
+Topic 114 :
+
+0.548*"idea" + 0.110*"great" + 0.101*"bad" + 0.062*"app" + 0.017*"certain" + 0.014*"People" + 0.014*"verse" + 0.005*"party" + 0.004*"category" + 0.004*"respect" + 0.004*"garden" + 0.003*"shock" + 0.003*"german" + 0.003*"buggy" + 0.003*"gmail" + 0.003*"prettier" + 0.003*"Germans" + 0.003*"poor" + 0.003*"engineering" + 0.003*"pop" 
+
+Topic 115 :
+
+0.484*"work" + 0.104*"great" + 0.041*"moment" + 0.023*"calculator" + 0.018*"learning" + 0.013*"day" + 0.012*"spur" + 0.012*"drink" + 0.012*"Scan" + 0.012*"curve" + 0.007*"personal" + 0.006*"shopping" + 0.006*"handheld" + 0.006*"multipurpose" + 0.006*"repeat" + 0.006*"template" + 0.006*"library" + 0.006*"steep" + 0.006*"value" + 0.006*"customer" 
+
+Topic 116 :
+
+0.238*"lot" + 0.129*"interesting" + 0.079*"Facebook" + 0.030*"enjoy" + 0.027*"great" + 0.020*"nice" + 0.020*"performance" + 0.020*"long" + 0.020*"programme" + 0.020*"chat" + 0.020*"scrolling" + 0.020*"saving" + 0.016*"app" + 0.011*"change" + 0.011*"favourite" + 0.011*"day" + 0.010*"free" + 0.010*"gmail" + 0.010*"upgrade" + 0.010*"whatsap" 
+
+Topic 117 :
+
+0.510*"problem" + 0.136*"file" + 0.051*"iPhone" + 0.044*"endless" + 0.017*"iPad" + 0.015*"folder" + 0.015*"loop" + 0.008*"laptop" + 0.008*"handy" + 0.008*"useful" + 0.007*"Apple" + 0.007*"tool" + 0.007*"complete" + 0.007*"erase" + 0.007*"iTunes" + 0.007*"DropBox" + 0.007*"desktop" + 0.000*"time" + 0.000*"love" + 0.000*"crafter" 
+
+Topic 118 :
+
+0.168*"job" + 0.134*"money" + 0.132*"great" + 0.067*"deal" + 0.028*"order" + 0.028*"busy" + 0.027*"app" + 0.022*"thumb" + 0.017*"payment" + 0.017*"gameplay" + 0.017*"cute" + 0.015*"dollar" + 0.011*"system" + 0.011*"guy" + 0.011*"customer" + 0.011*"bubble" + 0.011*"hobby" + 0.011*"character" + 0.011*"boo" + 0.007*"free" 
+
+Topic 119 :
+
+0.480*"user" + 0.341*"experience" + 0.056*"app" + 0.019*"edit" + 0.004*"value" + 0.004*"newbie" + 0.004*"desktop" + 0.004*"iPhone" + 0.004*"lifesaver" + 0.004*"guide" + 0.004*"emulator" + 0.004*"toolbar" + 0.000*"good" + 0.000*"issue" + 0.000*"easy" + 0.000*"word" + 0.000*"Dropbox" + 0.000*"sure" + 0.000*"website" + 0.000*"Evernote" 
+
+Topic 120 :
+
+0.102*"use" + 0.065*"personal" + 0.058*"reminder" + 0.033*"note" + 0.032*"app" + 0.029*"effective" + 0.029*"sync" + 0.022*"effort" + 0.022*"code" + 0.022*"hat" + 0.022*"multi" + 0.015*"thought" + 0.015*"sticky" + 0.015*"fantastic" + 0.015*"professional" + 0.015*"drop" + 0.015*"organizer" + 0.015*"adviser" + 0.011*"purpose" + 0.010*"simple" 
+
+Topic 121 :
+
+0.741*"time" + 0.116*"app" + 0.024*"fashion" + 0.016*"solid" + 0.008*"culture" + 0.004*"zone" + 0.004*"auto" + 0.004*"historical" + 0.004*"designer" + 0.004*"era" + 0.000*"good" + 0.000*"different" + 0.000*"Pinterest" + 0.000*"info" + 0.000*"inspiration" + 0.000*"tool" + 0.000*"period" + 0.000*"better" + 0.000*"international" + 0.000*"biggie" 
+
+Topic 122 :
+
+0.000*"flow" + 0.000*"better" + 0.000*"Keek" + 0.000*"freebie" + 0.000*"capability" + 0.000*"categorization" + 0.000*"biggie" + 0.000*"keek" + 0.000*"unicorn" + 0.000*"papa" + 0.000*"domino" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"bujet" + 0.000*"Definetley" + 0.000*"multi" + 0.000*"period" + 0.000*"tracker" + 0.000*"international" 
+
+Topic 123 :
+
+0.256*"word" + 0.096*"title" + 0.096*"10" + 0.048*"everyday" + 0.032*"entertaining" + 0.032*"rating" + 0.020*"app" + 0.017*"review" + 0.017*"game" + 0.016*"day" + 0.016*"star" + 0.016*"segment" + 0.016*"cheer" + 0.016*"meaning" + 0.000*"flow" + 0.000*"notch" + 0.000*"sport" + 0.000*"min" + 0.000*"tracker" + 0.000*"papa" 
+
+Topic 124 :
+
+0.266*"sure" + 0.058*"sense" + 0.057*"great" + 0.046*"result" + 0.035*"honest" + 0.023*"condition" + 0.023*"matter" + 0.023*"traveller" + 0.023*"cost" + 0.023*"staff" + 0.014*"service" + 0.013*"place" + 0.012*"cool" + 0.012*"critical" + 0.012*"traveler" + 0.012*"facilityrestaurant" + 0.012*"Tripadvisor" + 0.012*"fingertip" + 0.012*"actual" + 0.012*"common" 
+
+Topic 125 :
+
+0.423*"phone" + 0.102*"app" + 0.093*"world" + 0.043*"reliable" + 0.024*"message" + 0.019*"archive" + 0.019*"credit" + 0.018*"text" + 0.012*"security" + 0.012*"permission" + 0.012*"right" + 0.012*"grocery" + 0.007*"project" + 0.007*"idiot" + 0.007*"video" + 0.006*"application" + 0.006*"call" + 0.006*"report" + 0.006*"deleted" + 0.006*"edit" 
+
+Topic 126 :
+
+0.000*"flow" + 0.000*"better" + 0.000*"Keek" + 0.000*"freebie" + 0.000*"capability" + 0.000*"categorization" + 0.000*"biggie" + 0.000*"keek" + 0.000*"unicorn" + 0.000*"papa" + 0.000*"domino" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"bujet" + 0.000*"Definetley" + 0.000*"multi" + 0.000*"period" + 0.000*"tracker" + 0.000*"international" 
+
+Topic 127 :
+
+0.084*"city" + 0.041*"great" + 0.037*"run" + 0.036*"app" + 0.028*"project" + 0.028*"wise" + 0.028*"pinner" + 0.020*"hotel" + 0.020*"new" + 0.019*"search" + 0.019*"slow" + 0.019*"version" + 0.019*"nexus" + 0.019*"bank" + 0.019*"incomplete" + 0.019*"dictionary" + 0.018*"notebook" + 0.010*"photo" + 0.009*"problem" + 0.009*"facility" 
+
+Topic 128 :
+
+0.226*"friendly" + 0.148*"app" + 0.060*"school" + 0.059*"layout" + 0.036*"quick" + 0.024*"instruction" + 0.024*"daily" + 0.024*"journal" + 0.024*"versatile" + 0.017*"great" + 0.012*"year" + 0.012*"system" + 0.012*"sure" + 0.012*"iPhone" + 0.012*"list" + 0.012*"kind" + 0.012*"processing" + 0.012*"track" + 0.012*"past" + 0.012*"word" 
+
+Topic 129 :
+
+0.213*"worth" + 0.129*"app" + 0.057*"story" + 0.049*"comment" + 0.032*"dinner" + 0.024*"App" + 0.024*"yesterday" + 0.016*"list" + 0.016*"health" + 0.016*"nurse" + 0.016*"difficulty" + 0.009*"simple" + 0.008*"book" + 0.008*"ghost" + 0.008*"superstitious" + 0.008*"kind" + 0.008*"person" + 0.008*"short" + 0.008*"doctor" + 0.008*"area" 
+
+Topic 130 :
+
+0.048*"opinion" + 0.024*"iPhone" + 0.024*"sorry" + 0.024*"note" + 0.024*"attention" + 0.024*"negative" + 0.024*"summer" + 0.024*"sort" + 0.024*"limitation" + 0.024*"additional" + 0.024*"positive" + 0.013*"great" + 0.012*"new" + 0.012*"idea" + 0.012*"update" + 0.012*"robust" + 0.012*"workaround" + 0.012*"unfair" + 0.012*"consistency" + 0.012*"work" 
+
+Topic 131 :
+
+0.000*"flow" + 0.000*"better" + 0.000*"Keek" + 0.000*"freebie" + 0.000*"capability" + 0.000*"categorization" + 0.000*"biggie" + 0.000*"keek" + 0.000*"unicorn" + 0.000*"papa" + 0.000*"domino" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"bujet" + 0.000*"Definetley" + 0.000*"multi" + 0.000*"period" + 0.000*"tracker" + 0.000*"international" 
+
+Topic 132 :
+
+0.146*"bit" + 0.065*"high" + 0.046*"scanner" + 0.046*"news" + 0.037*"white" + 0.028*"option" + 0.019*"1" + 0.019*"scan" + 0.019*"rest" + 0.019*"black" + 0.011*"great" + 0.011*"expensive" + 0.011*"space" + 0.010*"fine" + 0.010*"star" + 0.009*"job" + 0.009*"way" + 0.009*"save" + 0.009*"text" + 0.009*"money" 
+
+Topic 133 :
+
+0.581*"Pinterest" + 0.058*"app" + 0.034*"point" + 0.020*"meal" + 0.015*"eye" + 0.010*"iPad" + 0.010*"careful" + 0.010*"lifesaver" + 0.010*"recall" + 0.010*"instant" + 0.010*"surprising" + 0.010*"treasure" + 0.005*"site" + 0.005*"kick" + 0.005*"short" + 0.005*"down" + 0.005*"reason" + 0.005*"regularity" + 0.005*"nYour" + 0.005*"shutdown" 
+
+Topic 134 :
+
+0.095*"accurate" + 0.063*"map" + 0.063*"support" + 0.040*"Google" + 0.040*"traveler" + 0.037*"app" + 0.032*"temp" + 0.024*"terrain" + 0.024*"response" + 0.024*"mail" + 0.023*"current" + 0.016*"feature" + 0.016*"24th" + 0.016*"quick" + 0.016*"hunting" + 0.016*"customer" + 0.016*"opinion" + 0.011*"great" + 0.008*"purchase" + 0.008*"nice" 
+
+Topic 135 :
+
+0.434*"option" + 0.114*"important" + 0.039*"app" + 0.034*"alert" + 0.023*"ringtone" + 0.023*"slide" + 0.023*"pop" + 0.012*"whatsapp" + 0.012*"notification" + 0.012*"bein" + 0.012*"bcz" + 0.012*"role" + 0.012*"jst" + 0.012*"communicational" + 0.012*"avenue" + 0.000*"different" + 0.000*"excellent" + 0.000*"picture" + 0.000*"easy" + 0.000*"user" 
+
+Topic 136 :
+
+0.274*"restaurant" + 0.180*"hotel" + 0.057*"app" + 0.042*"review" + 0.037*"attraction" + 0.027*"area" + 0.022*"huge" + 0.022*"value" + 0.015*"challenge" + 0.015*"flashlight" + 0.015*"animal" + 0.015*"boss" + 0.015*"bright" + 0.009*"advisor" + 0.008*"year" + 0.008*"travel" + 0.008*"10" + 0.007*"focus" + 0.007*"round" + 0.007*"base" 
+
+Topic 137 :
+
+0.747*"good" + 0.222*"app" + 0.002*"coffee" + 0.001*"gem" + 0.001*"notebook" + 0.001*"Starbucks" + 0.001*"brand" + 0.001*"mug" + 0.000*"available" + 0.000*"right" + 0.000*"city" + 0.000*"work" + 0.000*"trip" + 0.000*"advisor" + 0.000*"papa" + 0.000*"thx" + 0.000*"Refer" + 0.000*"click" + 0.000*"domino" + 0.000*"Definetley" 
+
+Topic 138 :
+
+0.232*"able" + 0.068*"app" + 0.050*"number" + 0.049*"card" + 0.025*"dual" + 0.025*"voice" + 0.022*"good" + 0.020*"sim" + 0.020*"plz" + 0.015*"Quizlet" + 0.015*"size" + 0.015*"water" + 0.015*"robust" + 0.011*"flash" + 0.011*"thing" + 0.011*"phone" + 0.010*"mobile" + 0.010*"category" + 0.010*"backup" + 0.010*"city" 
+
+Topic 139 :
+
+0.103*"heart" + 0.103*"rate" + 0.078*"finger" + 0.065*"location" + 0.026*"dial" + 0.026*"comparison" + 0.026*"85" + 0.016*"app" + 0.013*"able" + 0.013*"good" + 0.013*"possible" + 0.013*"instruction" + 0.013*"attempt" + 0.013*"website" + 0.013*"time" + 0.013*"technique" + 0.013*"iPad" + 0.013*"spot" + 0.013*"icon" + 0.013*"theirs" 
+
+Topic 140 :
+
+0.163*"fingertip" + 0.093*"collection" + 0.093*"wine" + 0.070*"storage" + 0.024*"love" + 0.023*"consumer" + 0.023*"note" + 0.023*"drinking" + 0.023*"magnificent" + 0.017*"great" + 0.000*"app" + 0.000*"helpful" + 0.000*"easy" + 0.000*"photo" + 0.000*"wonderful" + 0.000*"recipe" + 0.000*"user" + 0.000*"experience" + 0.000*"website" + 0.000*"tracker" 
+
+Topic 141 :
+
+0.519*"new" + 0.065*"late" + 0.033*"v" + 0.026*"r" + 0.023*"app" + 0.013*"o" + 0.013*"c" + 0.013*"unreliable" + 0.008*"layout" + 0.008*"month" + 0.007*"screen" + 0.007*"purchase" + 0.007*"reliable" + 0.007*"tap" + 0.007*"pic" + 0.007*"ready" + 0.007*"collage" + 0.007*"competition" + 0.007*"extra" + 0.007*"desktop" 
+
+Topic 142 :
+
+0.681*"game" + 0.070*"graphic" + 0.039*"post" + 0.039*"play" + 0.016*"stunning" + 0.008*"jog" + 0.000*"good" + 0.000*"mobile" + 0.000*"love" + 0.000*"app" + 0.000*"amazing" + 0.000*"note" + 0.000*"picture" + 0.000*"space" + 0.000*"memory" + 0.000*"experience" + 0.000*"user" + 0.000*"international" + 0.000*"period" + 0.000*"flow" 
+
+Topic 143 :
+
+0.281*"mobile" + 0.117*"accessible" + 0.097*"great" + 0.033*"Retina" + 0.019*"simple" + 0.017*"summary" + 0.017*"thesis" + 0.017*"journal" + 0.017*"4" + 0.017*"support" + 0.017*"content" + 0.017*"iPad" + 0.016*"note" + 0.000*"year" + 0.000*"app" + 0.000*"home" + 0.000*"work" + 0.000*"Evernote" + 0.000*"love" + 0.000*"excellent" 
+
+Topic 144 :
+
+0.532*"amazing" + 0.220*"app" + 0.051*"fast" + 0.019*"thinking" + 0.006*"typing" + 0.006*"subsection" + 0.006*"header" + 0.006*"Paragraph" + 0.006*"infinity" + 0.006*"quick" + 0.006*"short" + 0.006*"tired" + 0.006*"blade" + 0.000*"great" + 0.000*"sure" + 0.000*"iPad" + 0.000*"version" + 0.000*"old" + 0.000*"option" + 0.000*"feature" 
+
+Topic 145 :
+
+0.244*"iPad" + 0.124*"complaint" + 0.079*"app" + 0.079*"notification" + 0.068*"great" + 0.034*"integration" + 0.033*"Apple" + 0.023*"system" + 0.011*"cough" + 0.011*"worthwhile" + 0.011*"productivity" + 0.011*"notebookmultiple" + 0.011*"tag" + 0.011*"GTD" + 0.011*"search" + 0.011*"graphic" + 0.011*"pleased" + 0.000*"new" + 0.000*"thank" + 0.000*"Evernote" 
+
+Topic 146 :
+
+0.287*"program" + 0.106*"software" + 0.076*"pleased" + 0.030*"satisfied" + 0.029*"iPhone" + 0.016*"year" + 0.015*"glad" + 0.015*"bonus" + 0.015*"quiz" + 0.015*"price" + 0.015*"system" + 0.015*"interface" + 0.015*"graphic" + 0.015*"big" + 0.015*"screen" + 0.015*"usefulness" + 0.015*"road" + 0.000*"thank" + 0.000*"video" + 0.000*"option" 
+
+Topic 147 :
+
+0.439*"board" + 0.146*"fantastic" + 0.130*"simple" + 0.114*"project" + 0.023*"crafty" + 0.000*"idea" + 0.000*"easy" + 0.000*"inspiration" + 0.000*"user" + 0.000*"experience" + 0.000*"love" + 0.000*"capability" + 0.000*"domino" + 0.000*"flow" + 0.000*"tracker" + 0.000*"period" + 0.000*"export" + 0.000*"papa" + 0.000*"international" + 0.000*"fab" 
+
+Topic 148 :
+
+0.315*"note" + 0.233*"stuff" + 0.084*"interface" + 0.070*"great" + 0.035*"right" + 0.023*"platform" + 0.014*"international" + 0.008*"different" + 0.008*"bit" + 0.007*"free" + 0.007*"date" + 0.007*"one" + 0.007*"promo" + 0.007*"rival" + 0.007*"Camera" + 0.007*"advanced" + 0.007*"splurge" + 0.007*"yelp" + 0.007*"advice" + 0.003*"website" 
+
+Topic 149 :
+
+0.600*"app" + 0.099*"favorite" + 0.096*"free" + 0.050*"great" + 0.015*"smooth" + 0.012*"chart" + 0.006*"monthly" + 0.006*"PicsArt" + 0.003*"lover" + 0.003*"material" + 0.003*"selection" + 0.003*"semi" + 0.003*"plenty" + 0.003*"viewer" + 0.003*"section" + 0.003*"comicbook" + 0.003*"store" + 0.003*"release" + 0.003*"huge" + 0.003*"title" 
+
+
+
+HDP Model:
+
+Topic 0 :
+
+0.003*record + 0.002*thumb + 0.002*pin + 0.002*timestamp + 0.002*brave + 0.002*lathy + 0.002*iPads + 0.002*x + 0.002*laugh + 0.002*ubiquitous + 0.002*ancient + 0.002*complicated + 0.002*project + 0.002*cinco + 0.002*AWSOME + 0.002*hit + 0.002*Tacoma + 0.002*box + 0.002*forecast + 0.002*purpose 
+
+Topic 1 :
+
+0.003*disappointed + 0.002*radius + 0.002*Teamspeaks + 0.002*comeback + 0.002*networking + 0.002*concern + 0.002*journal + 0.002*alarm + 0.002*travel + 0.002*coach + 0.002*useful + 0.002*omgg + 0.002*milla + 0.002*navigation + 0.002*error + 0.002*duos + 0.002*plain + 0.002*iOS7 + 0.002*ikililu + 0.002*goodness 
+
+Topic 2 :
+
+0.003*generation + 0.003*tap + 0.003*158 + 0.003*nLove + 0.002*help + 0.002*iphone + 0.002*dimension + 0.002*beter + 0.002*setup + 0.002*breaker + 0.002*USAA + 0.002*decision + 0.002*NFL + 0.002*ice + 0.002*team + 0.002*link + 0.002*Luvvvvvv + 0.002*gym + 0.002*wood + 0.002*nice 
+
+Topic 3 :
+
+0.003*love + 0.003*review + 0.002*nail + 0.002*heart + 0.002*breakdown + 0.002*Picsart + 0.002*early + 0.002*GPS + 0.002*tumor + 0.002*CM + 0.002*clipper + 0.002*filter + 0.002*summer + 0.002*important + 0.002*photoshop + 0.002*shroom + 0.002*measure + 0.002*creative + 0.002*LuV + 0.002*comicbook 
+
+Topic 4 :
+
+0.002*mouse + 0.002*gs4 + 0.002*poor + 0.002*trustworthy + 0.002*paint + 0.002*ton + 0.002*limited + 0.002*love + 0.002*Avg + 0.002*infomercial + 0.002*thesis + 0.002*flow + 0.002*account + 0.002*sticker + 0.002*attractive + 0.002*functionality + 0.002*v7 + 0.002*antiphon + 0.002*Italy + 0.002*paper 
+
+Topic 5 :
+
+0.003*separate + 0.002*airplane + 0.002*summary + 0.002*license + 0.002*wasn + 0.002*bread + 0.002*Yelp + 0.002*today + 0.002*snapshot + 0.002*technique + 0.002*Mickey + 0.002*Yojimbo + 0.002*position + 0.002*atrocious + 0.002*good + 0.002*fault + 0.002*milla + 0.002*Whoa + 0.002*user + 0.002*pervious 
+
+Topic 6 :
+
+0.002*inspiring + 0.002*fellow + 0.002*3113 + 0.002*Superb + 0.002*freeze + 0.002*extensive + 0.002*cloud + 0.002*software + 0.002*mentality + 0.002*helper + 0.002*traveling + 0.002*sentence + 0.002*Afterr + 0.002*desktop + 0.002*bouquet + 0.002*landscape + 0.002*artwork + 0.002*solid + 0.002*Jennifer + 0.002*glitch 
+
+Topic 7 :
+
+0.003*Catholics + 0.002*inspired + 0.002*action + 0.002*representation + 0.002*notification + 0.002*mistake + 0.002*Starbucks + 0.002*little + 0.002*treasure + 0.002*seamstress + 0.002*infinity + 0.002*Yay + 0.002*eye + 0.002*ustream + 0.002*pc + 0.002*daughter + 0.002*bold + 0.002*convenient + 0.002*useful + 0.002*doctor 
+
+Topic 8 :
+
+0.002*Amazonia + 0.002*Lexus + 0.002*willnot + 0.002*pick + 0.002*counterintuitive + 0.002*ditch + 0.002*group + 0.002*usable + 0.002*bst + 0.002*cap + 0.002*reader + 0.002*night + 0.002*pancake + 0.002*bogland + 0.002*cloud + 0.002*wid + 0.002*marvrlous + 0.002*math + 0.002*hot + 0.002*intervention 
+
+Topic 9 :
+
+0.004*on + 0.003*saver + 0.002*suite + 0.002*Craigslist + 0.002*surgical + 0.002*efficient + 0.002*pro + 0.002*meesenger + 0.002*option + 0.002*skritter + 0.002*d + 0.002*plant + 0.002*budge + 0.002*classic + 0.002*impossible + 0.002*brain + 0.002*pixel + 0.002*bandwagon + 0.002*dishwasher + 0.002*kumar 
+
+Topic 10 :
+
+0.003*player + 0.003*namdeo + 0.003*secret + 0.002*yellow + 0.002*compatibility + 0.002*cook + 0.002*effortless + 0.002*uncool + 0.002*devs + 0.002*technology + 0.002*pasta + 0.002*goodness + 0.002*datpiff + 0.002*1yr + 0.002*Keepas + 0.002*work + 0.002*ramp + 0.002*checking + 0.002*choice + 0.002*glass 
+
+Topic 11 :
+
+0.003*device + 0.003*capital + 0.003*pocket + 0.003*restyling + 0.002*ldont + 0.002*ilife + 0.002*handy + 0.002*mundane + 0.002*limitless + 0.002*sophomore + 0.002*occasion + 0.002*plz + 0.002*friendly + 0.002*active + 0.002*Wish + 0.002*superb + 0.002*apk + 0.002*7th + 0.002*fluid + 0.002*stability 
+
+Topic 12 :
+
+0.003*website + 0.003*jewish + 0.003*news + 0.003*everyday + 0.002*big + 0.002*nas + 0.002*loop + 0.002*favorite + 0.002*Lack + 0.002*talent + 0.002*computer + 0.002*entrance + 0.002*layout + 0.002*plz + 0.002*praise + 0.002*plenty + 0.002*role + 0.002*uose + 0.002*app + 0.002*marriage 
+
+Topic 13 :
+
+0.003*couple + 0.003*dissertation + 0.002*Definetley + 0.002*thig + 0.002*flow + 0.002*file + 0.002*double + 0.002*pervious + 0.002*AVG + 0.002*Chinese + 0.002*strange + 0.002*basis + 0.002*chef + 0.002*fella + 0.002*difficulty + 0.002*finger + 0.002*yay + 0.002*Reviews + 0.002*multiplayer + 0.002*dad 
+
+Topic 14 :
+
+0.003*particular + 0.003*ignorant + 0.003*price + 0.003*pronunciation + 0.002*snag + 0.002*available + 0.002*print + 0.002*seemless + 0.002*sync + 0.002*fat + 0.002*promo + 0.002*lock + 0.002*phrase + 0.002*entire + 0.002*bill + 0.002*event + 0.002*apps + 0.002*contract + 0.002*postcard + 0.002*butterfly 
+
+Topic 15 :
+
+0.003*Office + 0.003*thesis + 0.003*t + 0.003*compression + 0.003*measurement + 0.002*group + 0.002*wardrobe + 0.002*60 + 0.002*changeralmost + 0.002*bottomless + 0.002*disarray + 0.002*marvellous + 0.002*Ramlalupadhyay1010 + 0.002*MCPE + 0.002*definite + 0.002*certain + 0.002*rest + 0.002*pix + 0.002*tax + 0.002*aren 
+
+Topic 16 :
+
+0.003*flashcard + 0.003*productivity + 0.003*wowd + 0.003*weary + 0.002*storage + 0.002*thesis + 0.002*instagram + 0.002*ordinary + 0.002*program + 0.002*weird + 0.002*notebook + 0.002*excited + 0.002*proper + 0.002*9666685851 + 0.002*color + 0.002*changeralmost + 0.002*doc + 0.002*thig + 0.002*downcast + 0.002*start 
+
+Topic 17 :
+
+0.003*airplane + 0.002*tricky + 0.002*shock + 0.002*bt + 0.002*relevant + 0.002*fine + 0.002*reviewer + 0.002*Noah + 0.002*south + 0.002*control + 0.002*thank + 0.002*waste + 0.002*Avg + 0.002*guidance + 0.002*update + 0.002*marker + 0.002*ditch + 0.002*GENIUS + 0.002*scrapbook + 0.002*consistency 
+
+Topic 18 :
+
+0.003*volunteer + 0.003*dog + 0.003*amount + 0.002*practical + 0.002*boo + 0.002*EXTREMELY + 0.002*perfect + 0.002*idevice + 0.002*school + 0.002*mint + 0.002*obsession + 0.002*grear + 0.002*track + 0.002*rom + 0.002*jog + 0.002*engineering + 0.002*Chinese + 0.002*difficulty + 0.002*yay + 0.002*enjoyment 
+
+Topic 19 :
+
+0.003*thiz + 0.003*header + 0.002*data + 0.002*inspiration + 0.002*creazy + 0.002*appit + 0.002*functionality + 0.002*highlight + 0.002*circle + 0.002*brand + 0.002*Camera + 0.002*31 + 0.002*devs + 0.002*concise + 0.002*tin + 0.002*test + 0.002*drink + 0.002*forgetting + 0.002*Additive + 0.002*problem 
+
+Topic 20 :
+
+0.003*url + 0.003*rental + 0.002*Lose + 0.002*beauty + 0.002*fair + 0.002*awful + 0.002*radius + 0.002*static + 0.002*alsop + 0.002*essential + 0.002*41 + 0.002*purpose + 0.002*program + 0.002*designer + 0.002*scene + 0.002*Wouldn + 0.002*addiction + 0.002*Whoa + 0.002*Shawn + 0.002*binder 
+
+Topic 21 :
+
+0.003*family + 0.003*space + 0.003*inside + 0.003*itranslator + 0.002*communion + 0.002*editior + 0.002*new + 0.002*visit + 0.002*sad + 0.002*demand + 0.002*viewable + 0.002*part + 0.002*PINTEREST + 0.002*Scan + 0.002*guy + 0.002*worth + 0.002*scatter + 0.002*planning + 0.002*inline + 0.002*1 
+
+Topic 22 :
+
+0.003*minecraft + 0.002*lifeawesome + 0.002*NSA + 0.002*station + 0.002*tablet + 0.002*frustrating + 0.002*creativity + 0.002*screensaver + 0.002*classic + 0.002*pay + 0.002*Instapaper + 0.002*galore + 0.002*hourly + 0.002*example + 0.002*green + 0.002*u + 0.002*travel + 0.002*Notebooks + 0.002*business + 0.002*networking 
+
+Topic 23 :
+
+0.003*app + 0.003*standard + 0.002*priority + 0.002*engine + 0.002*hurry + 0.002*creazy + 0.002*album + 0.002*checklist + 0.002*clothing + 0.002*bookmark + 0.002*headphone + 0.002*appliance + 0.002*trending + 0.002*5 + 0.002*french + 0.002*tat + 0.002*quote + 0.002*change + 0.002*ghost + 0.002*criticism 
+
+Topic 24 :
+
+0.003*desert + 0.002*font + 0.002*junk + 0.002*twist + 0.002*writer + 0.002*idevice + 0.002*inevitable + 0.002*25 + 0.002*antivirus + 0.002*avairy + 0.002*ios + 0.002*gb + 0.002*potential + 0.002*w3 + 0.002*value + 0.002*MediaFire + 0.002*hat + 0.002*tour + 0.002*Lose + 0.002*feedback 
+
+Topic 25 :
+
+0.004*haha + 0.003*phone + 0.002*paragraph + 0.002*travelling + 0.002*device + 0.002*story + 0.002*evaluation + 0.002*satellite + 0.002*clean + 0.002*camper + 0.002*bang + 0.002*molasse + 0.002*gooood + 0.002*exelent + 0.002*speaker + 0.002*NASCAR + 0.002*ui + 0.002*restyling + 0.002*thank + 0.002*rude 
+
+Topic 26 :
+
+0.003*ebook + 0.002*Additive + 0.002*newspaper + 0.002*planner + 0.002*site + 0.002*editior + 0.002*adjustment + 0.002*supper + 0.002*picture + 0.002*stupid + 0.002*smsng + 0.002*voice + 0.002*selection + 0.002*MTBikeAZ + 0.002*decent + 0.002*astronomy + 0.002*central + 0.002*deck + 0.002*addicted + 0.002*initiative 
+
+Topic 27 :
+
+0.003*attractive + 0.003*Adobe + 0.003*wisdom + 0.002*lingo + 0.002*roaming + 0.002*website + 0.002*excellent + 0.002*teamspeak + 0.002*crashing + 0.002*2005 + 0.002*market + 0.002*lotwhen + 0.002*web + 0.002*data + 0.002*adviser + 0.002*calendar + 0.002*circle + 0.002*molasse + 0.002*organized + 0.002*journal 
+
+Topic 28 :
+
+0.003*landscape + 0.002*criticism + 0.002*double + 0.002*drawing + 0.002*solid + 0.002*specific + 0.002*lead + 0.002*tour + 0.002*addict + 0.002*sight + 0.002*reader + 0.002*meal + 0.002*preference + 0.002*ultimate + 0.002*suck + 0.002*concise + 0.002*treatment + 0.002*maker + 0.002*40 + 0.002*w3 
+
+Topic 29 :
+
+0.003*ability + 0.003*disappointment + 0.003*extended + 0.002*DropBox + 0.002*version + 0.002*Dis + 0.002*ACLS + 0.002*bravo + 0.002*agreement + 0.002*good + 0.002*sluggish + 0.002*whatsapp + 0.002*Don + 0.002*twitter + 0.002*saint + 0.002*monster + 0.002*edition + 0.002*sword + 0.002*subscription + 0.002*GTD 
+
+Topic 30 :
+
+0.003*invoice + 0.003*devotional + 0.002*maze + 0.002*heavy + 0.002*Fun + 0.002*Palm + 0.002*import + 0.002*valuable + 0.002*user + 0.002*drug + 0.002*orginal + 0.002*countless + 0.002*54 + 0.002*limited + 0.002*celebrity + 0.002*entertaining + 0.002*beautiful + 0.002*collector + 0.002*keyboard + 0.002*illness 
+
+Topic 31 :
+
+0.003*aren + 0.003*cure + 0.003*membership + 0.002*iteedoe + 0.002*frequency + 0.002*note + 0.002*diner + 0.002*course + 0.002*environment + 0.002*mah + 0.002*versatility + 0.002*o + 0.002*maker + 0.002*gem + 0.002*writerdaydreamer + 0.002*consumer + 0.002*penny + 0.002*seamstress + 0.002*invention + 0.002*cooked 
+
+Topic 32 :
+
+0.003*ancient + 0.002*priority + 0.002*Mac + 0.002*minimum + 0.002*Yay + 0.002*MCPE + 0.002*worldwide + 0.002*worm + 0.002*fill + 0.002*awsm + 0.002*organizational + 0.002*aplikasi + 0.002*dragon + 0.002*perk + 0.002*lab + 0.002*GOOD + 0.002*focus + 0.002*Directv + 0.002*hospital + 0.002*drawback 
+
+Topic 33 :
+
+0.003*20 + 0.003*work + 0.003*cross + 0.002*superb + 0.002*repeat + 0.002*doc + 0.002*knitting + 0.002*keyboard + 0.002*trust + 0.002*mechanism + 0.002*entry + 0.002*score + 0.002*job + 0.002*picart + 0.002*year + 0.002*portable + 0.002*help + 0.002*Whoa + 0.002*style + 0.002*GTD 
+
+Topic 34 :
+
+0.002*luuuuuuuurrrrrve + 0.002*line + 0.002*gadget + 0.002*dishwasher + 0.002*brave + 0.002*stat + 0.002*context + 0.002*compass + 0.002*glee + 0.002*spending + 0.002*Mapper + 0.002*achievement + 0.002*unequivocal + 0.002*Miniusa + 0.002*crane + 0.002*concise + 0.002*collaboration + 0.002*household + 0.002*concern + 0.002*Mast 
+
+Topic 35 :
+
+0.003*surgery + 0.003*Mailbox + 0.002*kind + 0.002*stack + 0.002*tonite + 0.002*copy + 0.002*automatic + 0.002*strange + 0.002*additional + 0.002*counterintuitive + 0.002*single + 0.002*language + 0.002*Alabama + 0.002*Chrome + 0.002*initiative + 0.002*compass + 0.002*USAA + 0.002*control + 0.002*complicated + 0.002*verry 
+
+Topic 36 :
+
+0.003*opener + 0.003*clearance + 0.003*agency + 0.002*instruction + 0.002*war + 0.002*feedback + 0.002*HTC + 0.002*home + 0.002*massive + 0.002*maze + 0.002*aplikasi + 0.002*orginal + 0.002*absolute + 0.002*informacion + 0.002*popup + 0.002*AVG + 0.002*postcard + 0.002*weak + 0.002*translator + 0.002*25 
+
+Topic 37 :
+
+0.003*sync + 0.003*student + 0.002*unlimited + 0.002*ccitt + 0.002*outlier + 0.002*globe + 0.002*fx + 0.002*funny + 0.002*landscape + 0.002*use + 0.002*powerful + 0.002*font + 0.002*radio + 0.002*original + 0.002*friendly + 0.002*organization + 0.002*replacement + 0.002*value + 0.002*semester + 0.002*edditng 
+
+Topic 38 :
+
+0.004*Saturday + 0.003*draft + 0.002*pronunciation + 0.002*traveller + 0.002*standpoint + 0.002*reference + 0.002*opinion + 0.002*awe + 0.002*motel + 0.002*wedding + 0.002*prayer + 0.002*beauty + 0.002*defined + 0.002*rewritten + 0.002*perfect + 0.002*app + 0.002*confusing + 0.002*garble + 0.002*green + 0.002*grateful 
+
+Topic 39 :
+
+0.003*drool + 0.002*Ramlalupadhyay1010 + 0.002*Palm + 0.002*comprehensive + 0.002*loan + 0.002*coolness + 0.002*judge + 0.002*active + 0.002*annoyed + 0.002*iMovie + 0.002*Pintrest + 0.002*omg + 0.002*travel + 0.002*teamspeak + 0.002*child + 0.002*logo + 0.002*parking + 0.002*gesture + 0.002*yesterday + 0.002*ride 
+
+Topic 40 :
+
+0.003*section + 0.003*unfair + 0.003*Instagram + 0.002*universal + 0.002*lauderdale + 0.002*scrub + 0.002*skritter + 0.002*Notes + 0.002*refresh + 0.002*521 + 0.002*lunch + 0.002*credit + 0.002*recommendation + 0.002*useability + 0.002*weak + 0.002*scale + 0.002*contract + 0.002*saint + 0.002*era + 0.002*sorry 
+
+Topic 41 :
+
+0.003*functional + 0.002*wonderful + 0.002*beauty + 0.002*Zombies + 0.002*cursor + 0.002*fan + 0.002*mileage + 0.002*plain + 0.002*Maricela + 0.002*substitute + 0.002*magazine + 0.002*country + 0.002*content + 0.002*entrance + 0.002*wife + 0.002*pinning + 0.002*european + 0.002*export + 0.002*tv + 0.002*Shriyansh 
+
+Topic 42 :
+
+0.003*wht + 0.003*board + 0.002*forgetting + 0.002*chef + 0.002*yo + 0.002*datausageon + 0.002*aid + 0.002*aim + 0.002*Evania + 0.002*access + 0.002*date + 0.002*7th + 0.002*datpiff + 0.002*manager + 0.002*aop + 0.002*HomelessDragon + 0.002*95 + 0.002*communication + 0.002*new + 0.002*middle 
+
+Topic 43 :
+
+0.003*term + 0.003*critical + 0.003*name + 0.002*Catholics + 0.002*appwebsite + 0.002*glue + 0.002*hefty + 0.002*gd + 0.002*daytime + 0.002*app + 0.002*piece + 0.002*bah + 0.002*day + 0.002*love + 0.002*backyard + 0.002*tat + 0.002*scratch + 0.002*Italy + 0.002*tree + 0.002*worm 
+
+Topic 44 :
+
+0.003*report + 0.003*browser + 0.002*overwhelmed + 0.002*aa + 0.002*style + 0.002*use + 0.002*cop + 0.002*tricky + 0.002*good + 0.002*gathering + 0.002*correct + 0.002*parity + 0.002*golf + 0.002*limit + 0.002*functional + 0.002*anatomy + 0.002*6 + 0.002*guess + 0.002*tv + 0.002*usage 
+
+Topic 45 :
+
+0.003*portable + 0.003*MCPE + 0.003*coffee + 0.002*restyling + 0.002*dhis + 0.002*mejorar + 0.002*flashlight + 0.002*swing + 0.002*8 + 0.002*equipment + 0.002*thx + 0.002*penny + 0.002*ustream + 0.002*evening + 0.002*suite + 0.002*program + 0.002*butterfly + 0.002*cheer + 0.002*core + 0.002*sensor 
+
+Topic 46 :
+
+0.003*feadback + 0.003*criticism + 0.003*convientent + 0.003*mechanism + 0.002*ipadiphone + 0.002*percent + 0.002*app + 0.002*mature + 0.002*listen + 0.002*reflection + 0.002*omgg + 0.002*Blahh + 0.002*consistent + 0.002*cord + 0.002*wassup + 0.002*Gameloft + 0.002*crashing + 0.002*gaming + 0.002*trustful + 0.002*alert 
+
+Topic 47 :
+
+0.002*alpha + 0.002*pleasing + 0.002*humbug + 0.002*45 + 0.002*clipper + 0.002*lotwhen + 0.002*buddy + 0.002*bandwagon + 0.002*watsapp + 0.002*evernote + 0.002*cap + 0.002*rude + 0.002*Mailbox + 0.002*scripture + 0.002*virtual + 0.002*MacBook + 0.002*notification + 0.002*multifunctionality + 0.002*versatility + 0.002*guD 
+
+Topic 48 :
+
+0.002*annual + 0.002*pinterest + 0.002*extra + 0.002*ACLS + 0.002*foursome + 0.002*comparison + 0.002*airline + 0.002*Donzii + 0.002*impact + 0.002*Tacoma + 0.002*quid + 0.002*excelent + 0.002*Xbox + 0.002*limitation + 0.002*short + 0.002*shut + 0.002*90 + 0.002*Online + 0.002*roaming + 0.002*alright 
+
+Topic 49 :
+
+0.003*add + 0.003*random + 0.002*mate + 0.002*mejorar + 0.002*prettier + 0.002*Luis + 0.002*announcement + 0.002*dependable + 0.002*excelent + 0.002*fav + 0.002*face + 0.002*tired + 0.002*anytime + 0.002*web + 0.002*godsend + 0.002*evernote + 0.002*retired + 0.002*trade + 0.002*window + 0.002*Randomly 
+
+Topic 50 :
+
+0.004*offering + 0.003*charm + 0.003*architect + 0.003*August + 0.002*grad + 0.002*mejorar + 0.002*multi + 0.002*secure + 0.002*shocked + 0.002*Ganesh + 0.002*counterintuitive + 0.002*backyard + 0.002*goodthank + 0.002*rom + 0.002*helpful + 0.002*tag + 0.002*17 + 0.002*result + 0.002*Ghh + 0.002*apk 
+
+Topic 51 :
+
+0.002*eye + 0.002*palm + 0.002*statement + 0.002*checklist + 0.002*good + 0.002*occasional + 0.002*sincere + 0.002*Works + 0.002*tumor + 0.002*app + 0.002*thesaurus + 0.002*chunk + 0.002*restaurant + 0.002*sliced + 0.002*airline + 0.002*open + 0.002*consistent + 0.002*limousine + 0.002*omg + 0.002*college 
+
+Topic 52 :
+
+0.003*cent + 0.003*decency + 0.003*24th + 0.003*pinner + 0.002*application + 0.002*PowerPoint + 0.002*appwebsite + 0.002*September + 0.002*hundred + 0.002*land + 0.002*dependable + 0.002*member + 0.002*caveman + 0.002*playstation + 0.002*crash + 0.002*tombstone + 0.002*Travelocity + 0.002*uproarious + 0.002*wardrobe + 0.002*operation 
+
+Topic 53 :
+
+0.003*rhubarb + 0.003*Super + 0.002*Handy + 0.002*minecraft + 0.002*country + 0.002*programme + 0.002*eazy + 0.002*tip + 0.002*folder + 0.002*LuV + 0.002*android + 0.002*classic + 0.002*swipe + 0.002*terrible + 0.002*rugg31 + 0.002*o + 0.002*audio + 0.002*operation + 0.002*overseas + 0.002*console 
+
+Topic 54 :
+
+0.003*exotic + 0.003*new + 0.003*inconsistent + 0.003*possibility + 0.002*artistic + 0.002*program + 0.002*Pleaseee + 0.002*core + 0.002*professional + 0.002*particular + 0.002*war + 0.002*reference + 0.002*photography + 0.002*green + 0.002*size + 0.002*scatter + 0.002*expectation + 0.002*productivity + 0.002*invention + 0.002*excited 
+
+Topic 55 :
+
+0.003*device + 0.003*financial + 0.002*unlimited + 0.002*nature + 0.002*active + 0.002*science + 0.002*sms + 0.002*eazy + 0.002*compassion + 0.002*app + 0.002*networking + 0.002*America + 0.002*anti + 0.002*coolness + 0.002*theirs + 0.002*language + 0.002*inducing + 0.002*unique + 0.002*Randomly + 0.002*shroom 
+
+Topic 56 :
+
+0.003*restaurant + 0.002*piture + 0.002*massage + 0.002*fantastic + 0.002*rip + 0.002*historical + 0.002*messy + 0.002*belt + 0.002*droid + 0.002*Yay + 0.002*othman + 0.002*single + 0.002*touchy + 0.002*Mailbox + 0.002*boldunderliningitalic + 0.002*time + 0.002*app + 0.002*day + 0.002*inspiring + 0.002*multipurpose 
+
+Topic 57 :
+
+0.003*ticket + 0.003*aspect + 0.003*app + 0.002*countless + 0.002*firmware + 0.002*zoom + 0.002*flex + 0.002*stellar + 0.002*happy + 0.002*description + 0.002*pair + 0.002*skill + 0.002*term + 0.002*measure + 0.002*pain + 0.002*cursor + 0.002*surface + 0.002*lot + 0.002*aren + 0.002*porn 
+
+Topic 58 :
+
+0.003*sensor + 0.003*bored + 0.003*978 + 0.003*fashion + 0.003*gmail + 0.002*major + 0.002*extra + 0.002*Apple + 0.002*pop + 0.002*drawback + 0.002*19 + 0.002*sky + 0.002*nice + 0.002*field + 0.002*didn + 0.002*assessment + 0.002*transaction + 0.002*thrilled + 0.002*unsure + 0.002*sequel 
+
+Topic 59 :
+
+0.003*resource + 0.002*button + 0.002*lovely + 0.002*usb + 0.002*Houston + 0.002*lso + 0.002*save + 0.002*regularity + 0.002*season + 0.002*header + 0.002*Camera + 0.002*mud + 0.002*knowledgable + 0.002*franchise + 0.002*order + 0.002*efficient + 0.002*best + 0.002*angry + 0.002*doc + 0.002*thrill 
+
+Topic 60 :
+
+0.003*rest + 0.003*balanced + 0.003*ultimate + 0.002*speed + 0.002*art + 0.002*circle + 0.002*near + 0.002*program + 0.002*Miami + 0.002*necessity + 0.002*prblm + 0.002*skull + 0.002*ACLS + 0.002*kewl + 0.002*scripture + 0.002*Uu + 0.002*trust + 0.002*invoice + 0.002*thinking + 0.002*dining 
+
+Topic 61 :
+
+0.003*Keek + 0.003*culture + 0.002*evolve + 0.002*bah + 0.002*evening + 0.002*counterintuitive + 0.002*live + 0.002*save + 0.002*gossip + 0.002*patience + 0.002*abundance + 0.002*slow + 0.002*warfare + 0.002*inevitable + 0.002*link + 0.002*nic + 0.002*Pretty + 0.002*People + 0.002*low + 0.002*toy 
+
+Topic 62 :
+
+0.003*Miniusa + 0.002*iPhoto + 0.002*topic + 0.002*El + 0.002*Whaaaataappp + 0.002*sleep + 0.002*mom + 0.002*logic + 0.002*coin + 0.002*workout + 0.002*worrier + 0.002*like + 0.002*out + 0.002*detail + 0.002*dependable + 0.002*facial + 0.002*etcis + 0.002*clarity + 0.002*merci + 0.002*hurry 
+
+Topic 63 :
+
+0.004*thrilled + 0.003*Yojimbo + 0.003*brouse + 0.003*inspiration + 0.002*historical + 0.002*series + 0.002*couple + 0.002*Instapaper + 0.002*misleading + 0.002*dull + 0.002*thought + 0.002*library + 0.002*dependable + 0.002*idea + 0.002*grail + 0.002*fifth + 0.002*forum + 0.002*Starbucks + 0.002*concept + 0.002*celebration 
+
+Topic 64 :
+
+0.003*zen + 0.003*awaome + 0.002*pretty + 0.002*flight + 0.002*wife + 0.002*ice + 0.002*happy + 0.002*wrong + 0.002*code + 0.002*collection + 0.002*worm + 0.002*parking + 0.002*gertst + 0.002*challenge + 0.002*mx880 + 0.002*willnot + 0.002*flashcard + 0.002*print + 0.002*pirate + 0.002*woman 
+
+Topic 65 :
+
+0.003*ful + 0.003*downcast + 0.002*versatile + 0.002*son + 0.002*tetszett + 0.002*plaquenil + 0.002*newbie + 0.002*Japanese + 0.002*doctor + 0.002*motorcycle + 0.002*complaint + 0.002*essential + 0.002*Facebook + 0.002*nici + 0.002*countdown + 0.002*perfection + 0.002*puppet + 0.002*speed + 0.002*greedy + 0.002*clipping 
+
+Topic 66 :
+
+0.002*little + 0.002*super + 0.002*London + 0.002*awaome + 0.002*twitter + 0.002*ecard + 0.002*hourly + 0.002*complex + 0.002*Awesom + 0.002*globe + 0.002*orange + 0.002*upper + 0.002*Craigslist + 0.002*developer + 0.002*client + 0.002*advantage + 0.002*wth + 0.002*recall + 0.002*firmware + 0.002*521 
+
+Topic 67 :
+
+0.003*wifi + 0.002*person + 0.002*iexplorer + 0.002*language + 0.002*os + 0.002*pricy + 0.002*genration + 0.002*architect + 0.002*atrocious + 0.002*outliner + 0.002*posterity + 0.002*cursor + 0.002*experiencedday + 0.002*renovation + 0.002*prepared + 0.002*skeletal + 0.002*Blahh + 0.002*hectic + 0.002*track + 0.002*1010 
+
+Topic 68 :
+
+0.004*tracing + 0.003*nurse + 0.002*Avg + 0.002*thig + 0.002*floor + 0.002*priceless + 0.002*generic + 0.002*mundo + 0.002*tour + 0.002*buy + 0.002*tonight + 0.002*franchise + 0.002*multipurpose + 0.002*functionality + 0.002*merci + 0.002*beauty + 0.002*notation + 0.002*devs + 0.002*app + 0.002*pirate 
+
+Topic 69 :
+
+0.003*devoloper + 0.003*bonus + 0.003*sad + 0.003*category + 0.002*gertst + 0.002*app + 0.002*cell + 0.002*emulator + 0.002*site + 0.002*connection + 0.002*conversion + 0.002*subscription + 0.002*weird + 0.002*day + 0.002*convience + 0.002*min + 0.002*App + 0.002*yardage + 0.002*willnot + 0.002*positive 
+
+Topic 70 :
+
+0.002*knowledgable + 0.002*unlimited + 0.002*zone + 0.002*mod + 0.002*obsolete + 0.002*platform + 0.002*edithing + 0.002*review + 0.002*print + 0.002*table + 0.002*Nice + 0.002*dog + 0.002*article + 0.002*ball + 0.002*camera + 0.002*ease + 0.002*solid + 0.002*pirate + 0.002*pain + 0.002*brush 
+
+Topic 71 :
+
+0.003*flyer + 0.003*effectiveness + 0.002*laugh + 0.002*travelsthe + 0.002*result + 0.002*thought + 0.002*input + 0.002*place + 0.002*major + 0.002*annual + 0.002*weather + 0.002*addiction + 0.002*retrieval + 0.002*breath + 0.002*People + 0.002*daytime + 0.002*Glad + 0.002*organized + 0.002*boldunderliningitalic + 0.002*rock 
+
+Topic 72 :
+
+0.003*income + 0.002*perspective + 0.002*Magellan + 0.002*versa + 0.002*lackluster + 0.002*o + 0.002*Pin + 0.002*science + 0.002*info + 0.002*factor + 0.002*processing + 0.002*wrong + 0.002*little + 0.002*crafty + 0.002*inefficient + 0.002*son + 0.002*regional + 0.002*married + 0.002*clipping + 0.002*17 
+
+Topic 73 :
+
+0.004*program + 0.003*pure + 0.002*help + 0.002*geocache + 0.002*tetszett + 0.002*setup + 0.002*inevitable + 0.002*password + 0.002*parsec + 0.002*Magellan + 0.002*time + 0.002*sooo + 0.002*devs + 0.002*world + 0.002*devotional + 0.002*preference + 0.002*sad + 0.002*race + 0.002*theirs + 0.002*power 
+
+Topic 74 :
+
+0.003*God + 0.002*enjoyable + 0.002*knitting + 0.002*ilike + 0.002*upgrade + 0.002*texting + 0.002*marketplace + 0.002*week + 0.002*organizing + 0.002*GTD + 0.002*Love + 0.002*makeup + 0.002*obvious + 0.002*unresponsive + 0.002*Online + 0.002*v7 + 0.002*anytime + 0.002*web + 0.002*inefficient + 0.002*hawk 
+
+Topic 75 :
+
+0.003*rate + 0.003*record + 0.002*environment + 0.002*organizer + 0.002*bonus + 0.002*competition + 0.002*5th + 0.002*tonight + 0.002*absolute + 0.002*sick + 0.002*image + 0.002*woman + 0.002*app + 0.002*edithing + 0.002*genuine + 0.002*Twitter + 0.002*million + 0.002*multitasker + 0.002*thank + 0.002*main 
+
+Topic 76 :
+
+0.003*Samsung + 0.003*animal + 0.003*Railalupadhyay1010 + 0.003*drive + 0.003*interesting + 0.002*2inch + 0.002*size + 0.002*13 + 0.002*Twitter + 0.002*x + 0.002*file + 0.002*use + 0.002*Notes + 0.002*beast + 0.002*pricing + 0.002*NASCAR + 0.002*nightmare + 0.002*like + 0.002*TA + 0.002*que 
+
+Topic 77 :
+
+0.004*scanning + 0.003*overwhelmed + 0.002*tetszett + 0.002*tobe + 0.002*porn + 0.002*economical + 0.002*Wish + 0.002*hang + 0.002*essential + 0.002*stat + 0.002*ikililu + 0.002*Don + 0.002*Time + 0.002*attractive + 0.002*drinking + 0.002*texting + 0.002*label + 0.002*Apple + 0.002*coffee + 0.002*quit 
+
+Topic 78 :
+
+0.003*style + 0.003*nursing + 0.003*green + 0.003*hw + 0.003*motorcycle + 0.002*nice + 0.002*Easy + 0.002*manuel + 0.002*steep + 0.002*Reviewers + 0.002*screensaver + 0.002*editer + 0.002*rugg31 + 0.002*erase + 0.002*Miami + 0.002*nifty + 0.002*pin + 0.002*surgical + 0.002*muy + 0.002*catch 
+
+Topic 79 :
+
+0.003*gem + 0.003*zoom + 0.003*Mandarin + 0.003*honest + 0.002*menu + 0.002*msgs + 0.002*shocked + 0.002*mx880 + 0.002*85 + 0.002*issue + 0.002*term + 0.002*arrow + 0.002*screen + 0.002*frustrating + 0.002*alpha + 0.002*future + 0.002*dissertation + 0.002*viewer + 0.002*withstand + 0.002*unseen 
+
+Topic 80 :
+
+0.003*rent + 0.003*ACLS + 0.003*app + 0.003*priceless + 0.003*beneficial + 0.002*angle + 0.002*part + 0.002*motivation + 0.002*sword + 0.002*com + 0.002*celebration + 0.002*rip + 0.002*good + 0.002*ice + 0.002*drool + 0.002*UI + 0.002*marketplace + 0.002*upgraded + 0.002*customizable + 0.002*3 
+
+Topic 81 :
+
+0.003*searchable + 0.003*country + 0.003*party + 0.002*brand + 0.002*denial + 0.002*pinner + 0.002*quote + 0.002*Paris + 0.002*truthful + 0.002*bitter + 0.002*window + 0.002*expense + 0.002*Startup + 0.002*mobile + 0.002*recipe + 0.002*Fun + 0.002*100 + 0.002*closet + 0.002*favorite + 0.002*translator 
+
+Topic 82 :
+
+0.003*motor + 0.003*significant + 0.003*intuitive + 0.002*app + 0.002*access + 0.002*down + 0.002*low + 0.002*travelsthe + 0.002*awesomeness + 0.002*wowww + 0.002*tourist + 0.002*click + 0.002*eyed + 0.002*Christmas + 0.002*wisdom + 0.002*aplication + 0.002*hw + 0.002*Pin + 0.002*sun + 0.002*1 
+
+Topic 83 :
+
+0.003*joy + 0.003*gas + 0.003*generic + 0.002*savvy + 0.002*uose + 0.002*scanning + 0.002*ral + 0.002*comicbook + 0.002*situation + 0.002*chart + 0.002*annoying + 0.002*Halloween + 0.002*feeding + 0.002*reference + 0.002*cute + 0.002*maze + 0.002*concerned + 0.002*app + 0.002*lap + 0.002*skycaddie 
+
+Topic 84 :
+
+0.004*trick + 0.003*ringtone + 0.003*cooler + 0.002*mb + 0.002*news + 0.002*CM + 0.002*exam + 0.002*msgs + 0.002*4watsapp + 0.002*pygmy + 0.002*shiny + 0.002*sincere + 0.002*stressed + 0.002*editng + 0.002*phrase + 0.002*screensaver + 0.002*angry + 0.002*ridiculous + 0.002*advisor + 0.002*gee 
+
+Topic 85 :
+
+0.004*EverNote + 0.003*season + 0.002*yay + 0.002*perfect + 0.002*action + 0.002*box + 0.002*10 + 0.002*mean + 0.002*Dhansu + 0.002*intervention + 0.002*countless + 0.002*baby + 0.002*pirate + 0.002*don + 0.002*comprehensive + 0.002*bargain + 0.002*reliable + 0.002*version + 0.002*static + 0.002*addicting 
+
+Topic 86 :
+
+0.002*baby + 0.002*People + 0.002*initial + 0.002*relevant + 0.002*lso + 0.002*track + 0.002*app + 0.002*fun + 0.002*epic + 0.002*relative + 0.002*wht + 0.002*original + 0.002*recommendation + 0.002*culture + 0.002*swing + 0.002*draft + 0.002*wonder + 0.002*painting + 0.002*msgs + 0.002*visit 
+
+Topic 87 :
+
+0.003*practical + 0.003*tripadvisor + 0.003*label + 0.003*Daily + 0.003*hostess + 0.003*mess + 0.002*tuis + 0.002*difficulty + 0.002*April + 0.002*Stanza + 0.002*plant + 0.002*sooo + 0.002*fun + 0.002*writer + 0.002*doodle + 0.002*reunion + 0.002*picky + 0.002*classroom + 0.002*offensive + 0.002*clipping 
+
+Topic 88 :
+
+0.003*default + 0.002*shut + 0.002*answer + 0.002*public + 0.002*campaign + 0.002*palm + 0.002*1st + 0.002*fashionista + 0.002*pleasing + 0.002*freak + 0.002*export + 0.002*podcat + 0.002*calendar + 0.002*header + 0.002*tourist + 0.002*capital + 0.002*reticle + 0.002*mother + 0.002*amazing + 0.002*designer 
+
+Topic 89 :
+
+0.003*airline + 0.002*shot + 0.002*franchise + 0.002*contract + 0.002*comparison + 0.002*boss + 0.002*coach + 0.002*review + 0.002*app + 0.002*budgeting + 0.002*TBT + 0.002*satisfied + 0.002*page + 0.002*consultation + 0.002*transaction + 0.002*ride + 0.002*professional + 0.002*scrub + 0.002*frnd + 0.002*disappointing 
+
+Topic 90 :
+
+0.003*arrangement + 0.003*itmaybe + 0.003*primitive + 0.002*functional + 0.002*follower + 0.002*dependable + 0.002*frequent + 0.002*phone + 0.002*miningame + 0.002*spreadsheet + 0.002*jackpot + 0.002*flexibility + 0.002*honeymoon + 0.002*decoration + 0.002*segment + 0.002*50 + 0.002*innovative + 0.002*resturant + 0.002*answer + 0.002*change 
+
+Topic 91 :
+
+0.003*parsec + 0.003*convientent + 0.003*Word + 0.003*terrific + 0.002*sale + 0.002*Mapper + 0.002*brother + 0.002*threat + 0.002*frustrating + 0.002*hard + 0.002*safety + 0.002*unpopulated + 0.002*slow + 0.002*reviewer + 0.002*compatible + 0.002*disease + 0.002*inexpensive + 0.002*announcement + 0.002*option + 0.002*dog 
+
+Topic 92 :
+
+0.004*able + 0.003*opposite + 0.002*mentality + 0.002*arrow + 0.002*NSA + 0.002*breaker + 0.002*pad + 0.002*audio + 0.002*area + 0.002*organize + 0.002*usage + 0.002*ringtone + 0.002*speed + 0.002*statement + 0.002*subject + 0.002*wth + 0.002*bubble + 0.002*Houston + 0.002*incompatible + 0.002*calendar 
+
+Topic 93 :
+
+0.003*delete + 0.002*eatery + 0.002*island + 0.002*dissatisfied + 0.002*rap + 0.002*America + 0.002*notebook + 0.002*bday + 0.002*cap + 0.002*cut + 0.002*procedure + 0.002*connect + 0.002*date + 0.002*amazing + 0.002*material + 0.002*need + 0.002*hope + 0.002*progress + 0.002*10 + 0.002*team 
+
+Topic 94 :
+
+0.003*41 + 0.002*app + 0.002*guess + 0.002*article + 0.002*title + 0.002*dam + 0.002*math + 0.002*gmailcom + 0.002*hat + 0.002*docs + 0.002*bitter + 0.002*tremendous + 0.002*culture + 0.002*fixture + 0.002*room + 0.002*universal + 0.002*antiphon + 0.002*spin + 0.002*impact + 0.002*rich 
+
+Topic 95 :
+
+0.003*sliced + 0.003*fault + 0.002*bcom + 0.002*Gameloft + 0.002*clothe + 0.002*classroom + 0.002*drug + 0.002*247 + 0.002*dozen + 0.002*ea + 0.002*warning + 0.002*sad + 0.002*morning + 0.002*wise + 0.002*profile + 0.002*monster + 0.002*substandard + 0.002*context + 0.002*haha + 0.002*hawk 
+
+Topic 96 :
+
+0.003*jst + 0.003*perspective + 0.002*prowl + 0.002*alsop + 0.002*basis + 0.002*HP + 0.002*premium + 0.002*tf101 + 0.002*scene + 0.002*hair + 0.002*week + 0.002*touchy + 0.002*zip + 0.002*truth + 0.002*vote + 0.002*diaper + 0.002*meeting + 0.002*edditng + 0.002*tweek + 0.002*goody 
+
+Topic 97 :
+
+0.002*TRUE + 0.002*tuck + 0.002*NSA + 0.002*mini + 0.002*tap + 0.002*nce + 0.002*tooo + 0.002*compression + 0.002*separate + 0.002*constant + 0.002*husband + 0.002*ai + 0.002*Adbul + 0.002*lighting + 0.002*generation + 0.002*jam + 0.002*communication + 0.002*monthly + 0.002*palm + 0.002*smart 
+
+Topic 98 :
+
+0.003*idevice + 0.003*impossible + 0.003*tel + 0.002*Mandarin + 0.002*hd + 0.002*family + 0.002*car + 0.002*calling + 0.002*instsgram + 0.002*craft + 0.002*bit + 0.002*unfamiliar + 0.002*fair + 0.002*platform + 0.002*varied + 0.002*exact + 0.002*DropBox + 0.002*developer + 0.002*graphic + 0.002*disappointment 
+
+Topic 99 :
+
+0.003*Travelocity + 0.003*curve + 0.002*period + 0.002*clever + 0.002*upper + 0.002*receipt + 0.002*messy + 0.002*island + 0.002*highness + 0.002*group + 0.002*terrible + 0.002*dad + 0.002*useability + 0.002*Germans + 0.002*automatic + 0.002*multipurpose + 0.002*etcis + 0.002*wisdom + 0.002*unequivocal + 0.002*marketing 
+
+Topic 100 :
+
+0.003*prettier + 0.003*kay + 0.003*majority + 0.003*ppl + 0.002*mileage + 0.002*humanity + 0.002*plain + 0.002*1000 + 0.002*appliance + 0.002*lathy + 0.002*zero + 0.002*devotional + 0.002*grateful + 0.002*equal + 0.002*percent + 0.002*turn + 0.002*variety + 0.002*kindle + 0.002*multiplayer + 0.002*plan 
+
+Topic 101 :
+
+0.003*distance + 0.003*Keepas + 0.003*college + 0.002*daily + 0.002*hairstyle + 0.002*lso + 0.002*air + 0.002*round + 0.002*epic + 0.002*integration + 0.002*versa + 0.002*label + 0.002*globe + 0.002*offensive + 0.002*Haven + 0.002*formatting + 0.002*fond + 0.002*Easy + 0.002*rain + 0.002*5th 
+
+Topic 102 :
+
+0.002*speed + 0.002*iphone + 0.002*sprint + 0.002*fun + 0.002*ADD + 0.002*CNN + 0.002*Font + 0.002*fresh + 0.002*goal + 0.002*orthopedic + 0.002*para + 0.002*management + 0.002*pleasing + 0.002*JohnInThisLife + 0.002*jewel + 0.002*capital + 0.002*1200 + 0.002*interest + 0.002*Stanza + 0.002*super 
+
+Topic 103 :
+
+0.003*chance + 0.002*huge + 0.002*addictive + 0.002*handheld + 0.002*pad + 0.002*80 + 0.002*Shazam + 0.002*calculator + 0.002*nifty + 0.002*othman + 0.002*rewritten + 0.002*direction + 0.002*Reviews + 0.002*HP + 0.002*ful + 0.002*addiction + 0.002*security + 0.002*massage + 0.002*lap + 0.002*annoyance 
+
+Topic 104 :
+
+0.003*antivirus + 0.003*Directv + 0.003*viewable + 0.003*clothing + 0.002*clipper + 0.002*discouraged + 0.002*mundane + 0.002*wireless + 0.002*scanner + 0.002*skitch + 0.002*tweek + 0.002*queen + 0.002*compulsory + 0.002*fifth + 0.002*surgical + 0.002*procedure + 0.002*meat + 0.002*righthand + 0.002*datpiff + 0.002*weight 
+
+Topic 105 :
+
+0.003*reset + 0.002*yelp + 0.002*streaming + 0.002*cam + 0.002*advice + 0.002*bike + 0.002*itranslator + 0.002*stat + 0.002*grad + 0.002*aware + 0.002*Ifttt + 0.002*smart + 0.002*false + 0.002*Epic + 0.002*resort + 0.002*reviewer + 0.002*apps + 0.002*caution + 0.002*choice + 0.002*touch 
+
+Topic 106 :
+
+0.003*possibility + 0.003*turbo + 0.002*extreme + 0.002*WSM + 0.002*trippy + 0.002*lol + 0.002*obsession + 0.002*informative + 0.002*yard + 0.002*chunk + 0.002*mesmerizing + 0.002*skirmish + 0.002*manager + 0.002*ramp + 0.002*medium + 0.002*iexplorer + 0.002*reality + 0.002*Microsoft + 0.002*Handy + 0.002*limitless 
+
+Topic 107 :
+
+0.003*nail + 0.003*thx + 0.003*podcast + 0.002*mug + 0.002*scan + 0.002*kindle + 0.002*MCPE + 0.002*Accurate + 0.002*counter + 0.002*staff + 0.002*driver + 0.002*Ghh + 0.002*functionality + 0.002*chunk + 0.002*watch + 0.002*gud + 0.002*cheap + 0.002*persone + 0.002*Camera + 0.002*standard 
+
+Topic 108 :
+
+0.003*lathy + 0.003*exciting + 0.002*DIY + 0.002*worm + 0.002*srs + 0.002*sensor + 0.002*Magellan + 0.002*drawing + 0.002*excelent + 0.002*seemless + 0.002*number + 0.002*19 + 0.002*broken + 0.002*bold + 0.002*asteem + 0.002*quizzing + 0.002*snake + 0.002*85 + 0.002*suitcase + 0.002*inspiring 
+
+Topic 109 :
+
+0.003*obsession + 0.003*people + 0.003*gmailcom + 0.003*college + 0.002*store + 0.002*header + 0.002*daytime + 0.002*capsule + 0.002*Railalupadhyay1010 + 0.002*chapter + 0.002*ultimate + 0.002*lifeawesome + 0.002*realy + 0.002*10 + 0.002*out + 0.002*dissatisfied + 0.002*childhood + 0.002*rate + 0.002*paint + 0.002*song 
+
+Topic 110 :
+
+0.003*gr8 + 0.003*antivirus + 0.003*don + 0.002*obvious + 0.002*activity + 0.002*manager + 0.002*location + 0.002*log + 0.002*great + 0.002*milla + 0.002*ppl + 0.002*overwhelming + 0.002*othman + 0.002*40 + 0.002*possibility + 0.002*quid + 0.002*smooth + 0.002*rewrite + 0.002*bouquet + 0.002*galore 
+
+Topic 111 :
+
+0.003*middle + 0.003*developer + 0.003*award + 0.003*overall + 0.002*Rome + 0.002*variety + 0.002*viewer + 0.002*milla + 0.002*score + 0.002*minimum + 0.002*plant + 0.002*queen + 0.002*cell + 0.002*cooked + 0.002*85 + 0.002*recent + 0.002*native + 0.002*presentation + 0.002*folder + 0.002*pie 
+
+Topic 112 :
+
+0.003*asteem + 0.003*vital + 0.002*operation + 0.002*porn + 0.002*tip + 0.002*volunteer + 0.002*pricing + 0.002*tv + 0.002*semester + 0.002*fact + 0.002*liquor + 0.002*surgical + 0.002*roaming + 0.002*heaven + 0.002*social + 0.002*selling + 0.002*repetitive + 0.002*revue + 0.002*place + 0.002*Lacks 
+
+Topic 113 :
+
+0.003*sun + 0.003*doodle + 0.002*fantasy + 0.002*Zombies + 0.002*income + 0.002*greyscale + 0.002*awesomeness + 0.002*nBasic + 0.002*yellow + 0.002*Yelp + 0.002*helpful + 0.002*EXCELLENT + 0.002*difficulty + 0.002*birthday + 0.002*medication + 0.002*interest + 0.002*uninstall + 0.002*capture + 0.002*eyed + 0.002*facilityrestaurant 
+
+Topic 114 :
+
+0.003*collector + 0.002*papa + 0.002*guidance + 0.002*itune + 0.002*connect + 0.002*aggregation + 0.002*friendzz + 0.002*geocache + 0.002*charming + 0.002*edit + 0.002*wide + 0.002*etcis + 0.002*excelent + 0.002*med + 0.002*impact + 0.002*check + 0.002*follower + 0.002*regional + 0.002*improvement + 0.002*focus 
+
+Topic 115 :
+
+0.003*gameplay + 0.002*Twitter + 0.002*bunch + 0.002*bang + 0.002*kind + 0.002*appwebsite + 0.002*repository + 0.002*sorted + 0.002*sophistic + 0.002*wrong + 0.002*generation + 0.002*miningame + 0.002*available + 0.002*organized + 0.002*stunning + 0.002*rival + 0.002*versa + 0.002*overhead + 0.002*uninstall + 0.002*rating 
+
+Topic 116 :
+
+0.003*coverage + 0.002*tht + 0.002*taking + 0.002*formatting + 0.002*cute + 0.002*notebookmultiple + 0.002*lack + 0.002*143 + 0.002*compass + 0.002*respect + 0.002*w3 + 0.002*conversion + 0.002*mind + 0.002*mile + 0.002*sticker + 0.002*foreign + 0.002*ntwrk + 0.002*head + 0.002*iPhoto + 0.002*drool 
+
+Topic 117 :
+
+0.003*shoe + 0.002*viewer + 0.002*d + 0.002*sale + 0.002*contribution + 0.002*gertst + 0.002*living + 0.002*nude + 0.002*clever + 0.002*android + 0.002*rental + 0.002*confusing + 0.002*antiphon + 0.002*talent + 0.002*PDF + 0.002*additionally + 0.002*scripture + 0.002*Faadu + 0.002*baby + 0.002*app 
+
+Topic 118 :
+
+0.003*playlist + 0.002*Mailbox + 0.002*navigation + 0.002*stable + 0.002*enhancement + 0.002*stuff + 0.002*hat + 0.002*ready + 0.002*massage + 0.002*math + 0.002*problem + 0.002*mountain + 0.002*savvy + 0.002*effectiveness + 0.002*3113 + 0.002*Online + 0.002*text + 0.002*angle + 0.002*changeralmost + 0.002*rating 
+
+Topic 119 :
+
+0.003*comicbook + 0.003*craptastic + 0.003*aplicaci + 0.002*beginning + 0.002*food + 0.002*multifunctionality + 0.002*material + 0.002*achievement + 0.002*22 + 0.002*consistency + 0.002*software + 0.002*Tnx + 0.002*home + 0.002*trustful + 0.002*summary + 0.002*Paragraph + 0.002*JohnInThisLife + 0.002*sad + 0.002*12 + 0.002*Fashionista 
+
+Topic 120 :
+
+0.003*effort + 0.003*lb + 0.003*maze + 0.003*prepared + 0.002*bucket + 0.002*scroll + 0.002*musician + 0.002*wardrobe + 0.002*gps + 0.002*down + 0.002*tanjilaak + 0.002*DIY + 0.002*well + 0.002*gate + 0.002*enjoy + 0.002*MacBook + 0.002*Superb + 0.002*loving + 0.002*navigation + 0.002*role 
+
+Topic 121 :
+
+0.003*allow + 0.003*flex + 0.003*saver + 0.002*breath + 0.002*huge + 0.002*aplikasi + 0.002*jelaous + 0.002*bone + 0.002*attempt + 0.002*zero + 0.002*day + 0.002*realy + 0.002*scorecard + 0.002*soll + 0.002*radius + 0.002*snag + 0.002*changeralmost + 0.002*super + 0.002*rhubarb + 0.002*upper 
+
+Topic 122 :
+
+0.003*general + 0.003*Smart + 0.002*genuine + 0.002*lapse + 0.002*dear + 0.002*product + 0.002*organizing + 0.002*contract + 0.002*operator + 0.002*complex + 0.002*remarkable + 0.002*scan + 0.002*amount + 0.002*tetszett + 0.002*Superb + 0.002*successful + 0.002*member + 0.002*row + 0.002*Shazam + 0.002*bold 
+
+Topic 123 :
+
+0.003*Useless + 0.003*offensive + 0.003*dead + 0.002*goody + 0.002*60 + 0.002*consultation + 0.002*Scans + 0.002*basic + 0.002*fanatic + 0.002*current + 0.002*crafty + 0.002*cook + 0.002*simple + 0.002*do + 0.002*nLove + 0.002*track + 0.002*Mandarin + 0.002*happy + 0.002*kind + 0.002*frequent 
+
+Topic 124 :
+
+0.002*wid + 0.002*large + 0.002*mess + 0.002*part + 0.002*veteran + 0.002*85 + 0.002*role + 0.002*nursing + 0.002*guide + 0.002*persone + 0.002*setup + 0.002*communication + 0.002*magazine + 0.002*thank + 0.002*marketplace + 0.002*delete + 0.002*Alabama + 0.002*5 + 0.002*customer + 0.002*ui 
+
+Topic 125 :
+
+0.003*work + 0.003*bad + 0.002*port + 0.002*income + 0.002*line + 0.002*merci + 0.002*young + 0.002*hardness + 0.002*Alabama + 0.002*house + 0.002*phot + 0.002*security + 0.002*ghost + 0.002*awaome + 0.002*entrance + 0.002*vice + 0.002*ton + 0.002*sorting + 0.002*ppt + 0.002*rate 
+
+Topic 126 :
+
+0.002*professional + 0.002*broken + 0.002*swag + 0.002*icon + 0.002*cvs + 0.002*prblm + 0.002*unimportant + 0.002*butterfly + 0.002*race + 0.002*voluminous + 0.002*app + 0.002*name + 0.002*happy + 0.002*easy + 0.002*bold + 0.002*excellent + 0.002*play + 0.002*Time + 0.002*pygmy + 0.002*chat 
+
+Topic 127 :
+
+0.003*love + 0.002*plzzz + 0.002*fake + 0.002*middle + 0.002*7 + 0.002*savvy + 0.002*technology + 0.002*opener + 0.002*time + 0.002*justice + 0.002*pricey + 0.002*gameplay + 0.002*unable + 0.002*pen + 0.002*factory + 0.002*searchable + 0.002*medication + 0.002*goody + 0.002*USAA + 0.002*Evernote 
+
+Topic 128 :
+
+0.003*exotic + 0.002*highlight + 0.002*mod + 0.002*ticket + 0.002*stunning + 0.002*Chrome + 0.002*ecard + 0.002*Chinese + 0.002*pow + 0.002*clone + 0.002*colorful + 0.002*recommend + 0.002*mobile + 0.002*house + 0.002*devoloper + 0.002*thiz + 0.002*wonderful + 0.002*central + 0.002*EXTREMELY + 0.002*Miniusa 
+
+Topic 129 :
+
+0.003*credit + 0.003*feed + 0.002*shiny + 0.002*merci + 0.002*calling + 0.002*look + 0.002*inspirational + 0.002*workaround + 0.002*alpha + 0.002*reminder + 0.002*apps + 0.002*trustworthy + 0.002*meaningful + 0.002*smoother + 0.002*flight + 0.002*exploring + 0.002*artwork + 0.002*provoking + 0.002*retrieving + 0.002*term 
+
+Topic 130 :
+
+0.002*humanity + 0.002*road + 0.002*perspective + 0.002*Startup + 0.002*lso + 0.002*Facebook + 0.002*semi + 0.002*difference + 0.002*challenge + 0.002*Yojimbo + 0.002*bandwagon + 0.002*sky + 0.002*manuel + 0.002*asteem + 0.002*successful + 0.002*important + 0.002*Cortona + 0.002*endless + 0.002*difficult + 0.002*Chinese 
+
+Topic 131 :
+
+0.003*cache + 0.003*subsection + 0.003*enhancement + 0.003*worrying + 0.002*ABSOLUTE + 0.002*current + 0.002*clipboard + 0.002*basis + 0.002*import + 0.002*cel + 0.002*blurry + 0.002*worrier + 0.002*blogger + 0.002*nude + 0.002*Travelocity + 0.002*erase + 0.002*surprising + 0.002*persone + 0.002*lb + 0.002*evaluation 
+
+Topic 132 :
+
+0.003*angry + 0.003*pattern + 0.003*road + 0.002*AWSOME + 0.002*person + 0.002*unfamiliar + 0.002*crucial + 0.002*associate + 0.002*unavailable + 0.002*FB + 0.002*resolution + 0.002*airport + 0.002*reward + 0.002*believe + 0.002*Console + 0.002*postcard + 0.002*nifty + 0.002*stroke + 0.002*campaign + 0.002*Catholics 
+
+Topic 133 :
+
+0.003*minute + 0.003*Xperia + 0.002*weird + 0.002*devloper + 0.002*rom + 0.002*distance + 0.002*pics + 0.002*trouble + 0.002*syncing + 0.002*TripAdvisory + 0.002*nLove + 0.002*tonite + 0.002*amazed + 0.002*faithful + 0.002*app + 0.002*America + 0.002*humbug + 0.002*usefulness + 0.002*addicted + 0.002*bst 
+
+Topic 134 :
+
+0.003*tuck + 0.003*boo + 0.002*Christmas + 0.002*GTD + 0.002*MacBook + 0.002*mesh + 0.002*scrolling + 0.002*ACLS + 0.002*definite + 0.002*date + 0.002*repetitive + 0.002*flake + 0.002*omgg + 0.002*laata + 0.002*mature + 0.002*usefulness + 0.002*20 + 0.002*holiday + 0.002*threat + 0.002*usage 
+
+Topic 135 :
+
+0.003*boy + 0.002*mentality + 0.002*shipping + 0.002*camera + 0.002*pure + 0.002*aap + 0.002*mean + 0.002*kind + 0.002*trouble + 0.002*umbrella + 0.002*cooler + 0.002*road + 0.002*exotic + 0.002*fact + 0.002*wood + 0.002*necessity + 0.002*app + 0.002*Palm + 0.002*Instagram + 0.002*card 
+
+Topic 136 :
+
+0.003*good + 0.002*follower + 0.002*Mickey + 0.002*wrong + 0.002*digital + 0.002*promo + 0.002*story + 0.002*travel + 0.002*belt + 0.002*concept + 0.002*school + 0.002*lifesaver + 0.002*previous + 0.002*tonight + 0.002*shopping + 0.002*science + 0.002*fandom + 0.002*bored + 0.002*hand + 0.002*devs 
+
+Topic 137 :
+
+0.003*tremendous + 0.003*85 + 0.003*dedicated + 0.002*sync + 0.002*shame + 0.002*wrong + 0.002*tuis + 0.002*conversion + 0.002*Tnx + 0.002*1oo + 0.002*algebra + 0.002*inconsistent + 0.002*nyc + 0.002*logo + 0.002*TripAdvisor + 0.002*storw + 0.002*album + 0.002*quick + 0.002*novice + 0.002*glad 
+
+Topic 138 :
+
+0.003*pm + 0.003*useful + 0.003*early + 0.003*globe + 0.002*daughter + 0.002*sticker + 0.002*scene + 0.002*tonight + 0.002*Shriyansh + 0.002*dependable + 0.002*frequency + 0.002*ipad + 0.002*devoloper + 0.002*carpet + 0.002*omgg + 0.002*gadget + 0.002*satisfied + 0.002*feel + 0.002*professional + 0.002*nook 
+
+Topic 139 :
+
+0.003*tip + 0.003*app + 0.003*loop + 0.002*freeand + 0.002*bar + 0.002*iPad + 0.002*Widout + 0.002*uselful + 0.002*experience + 0.002*rental + 0.002*clip + 0.002*v7 + 0.002*grlnxtdr2 + 0.002*dull + 0.002*bookshelf + 0.002*cake + 0.002*friendly + 0.002*ral + 0.002*lb + 0.002*progress 
+
+Topic 140 :
+
+0.003*dull + 0.003*season + 0.002*buck + 0.002*environment + 0.002*worker + 0.002*promo + 0.002*bookmark + 0.002*chance + 0.002*ikililu + 0.002*resource + 0.002*recipe + 0.002*medium + 0.002*wording + 0.002*timestamp + 0.002*umbrella + 0.002*paragraph + 0.002*offensive + 0.002*team + 0.002*hit + 0.002*thesaurus 
+
+Topic 141 :
+
+0.003*chunk + 0.003*Adobe + 0.003*stateside + 0.002*face + 0.002*heck + 0.002*pack + 0.002*eatery + 0.002*jewel + 0.002*info + 0.002*truth + 0.002*flooring + 0.002*lathy + 0.002*island + 0.002*mileage + 0.002*rock + 0.002*kewl + 0.002*ldont + 0.002*travelling + 0.002*upgrade + 0.002*hideous 
+
+Topic 142 :
+
+0.003*like + 0.003*shocked + 0.002*shot + 0.002*war + 0.002*fat + 0.002*hardness + 0.002*chef + 0.002*orthopedic + 0.002*basis + 0.002*ice + 0.002*abbreviation + 0.002*Vernita + 0.002*era + 0.002*publish + 0.002*doodle + 0.002*angry + 0.002*padfone + 0.002*distance + 0.002*timestamp + 0.002*cheer 
+
+Topic 143 :
+
+0.003*fail + 0.003*home + 0.003*14 + 0.003*Nice + 0.002*aspect + 0.002*lifeawesome + 0.002*app + 0.002*unit + 0.002*disease + 0.002*dictionary + 0.002*strong + 0.002*lunch + 0.002*wealth + 0.002*great + 0.002*try + 0.002*banker + 0.002*pricy + 0.002*devs + 0.002*reward + 0.002*stupid 
+
+Topic 144 :
+
+0.003*clip + 0.003*spending + 0.003*1000 + 0.003*aggregation + 0.003*miningame + 0.002*legit + 0.002*luuuuuuuurrrrrve + 0.002*orbit + 0.002*ride + 0.002*devoloper + 0.002*u + 0.002*8 + 0.002*mucg + 0.002*notation + 0.002*prayer + 0.002*safety + 0.002*iexplorer + 0.002*rewrite + 0.002*ios + 0.002*aaps 
+
+Topic 145 :
+
+0.003*company + 0.003*concise + 0.002*landscape + 0.002*memory + 0.002*pintrest + 0.002*space + 0.002*way + 0.002*wowd + 0.002*advertisement + 0.002*face + 0.002*zakas + 0.002*reinstall + 0.002*Wish + 0.002*battle + 0.002*journalling + 0.002*sticky + 0.002*businessall + 0.002*bill + 0.002*portable + 0.002*burst 
+
+Topic 146 :
+
+0.003*voluminous + 0.002*german + 0.002*calendar + 0.002*worth + 0.002*payement + 0.002*action + 0.002*7 + 0.002*sun + 0.002*renovation + 0.002*minigame + 0.002*opposite + 0.002*kindle + 0.002*colorful + 0.002*Siiip + 0.002*actual + 0.002*Smooth + 0.002*fandom + 0.002*concern + 0.002*tap + 0.002*lacking 
+
+Topic 147 :
+
+0.003*weird + 0.002*breaker + 0.002*integration + 0.002*creazy + 0.002*ODB + 0.002*segment + 0.002*PS + 0.002*sequel + 0.002*reset + 0.002*undo + 0.002*photography + 0.002*fab + 0.002*daughter + 0.002*one + 0.002*edditng + 0.002*unpopulated + 0.002*answer + 0.002*best + 0.002*historical + 0.002*peer 
+
+Topic 148 :
+
+0.003*worthless + 0.003*tuck + 0.003*brave + 0.003*London + 0.003*frustrating + 0.002*clutter + 0.002*well + 0.002*fine + 0.002*nook + 0.002*favs + 0.002*child + 0.002*lesson + 0.002*Eastern + 0.002*editior + 0.002*facility + 0.002*relative + 0.002*share + 0.002*refined + 0.002*extreme + 0.002*yo 
+
+Topic 149 :
+
+0.003*yard + 0.002*pub + 0.002*vacation + 0.002*lovely + 0.002*kitchen + 0.002*Waw + 0.002*suck + 0.002*crisp + 0.002*organize + 0.002*action + 0.002*type + 0.002*majority + 0.002*style + 0.002*wind + 0.002*thrill + 0.002*France + 0.002*cvs + 0.002*min + 0.002*itinerary + 0.002*pics 
+

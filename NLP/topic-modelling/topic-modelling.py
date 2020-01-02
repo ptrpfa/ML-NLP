@@ -27,6 +27,15 @@ simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warni
 # Logging configurations
 # logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
+""" 
+NOTE: The Topic Modelling LDA Model needs to be hyper-tuned for every set of feedback
+
+Future enhancements:
+-Further hypertuning the LDA model's hyperparameters such as the alpha, beta and eta values (alpha and beta values from the HDP model could be used via the hdp_to_lda () method provided by Gensim)
+-The HDP model, which has a high coherence value could be reverse-engineered into a similarly equivalent LDA model for possibly better performance (Gensim provides the suggested_lda_model () method)
+
+"""
+
 # Function to strip heading and trailing whitespaces in the Text of Feedback (accepts a Series object of each row in the FeedbackML DataFrame and returns a cleaned Series object)
 def strip_dataframe (series):
 
@@ -346,7 +355,7 @@ topic_model_data = True # Boolean to trigger application of Topic Modelling mode
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_manual_tag = False # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
 use_pickle = False # Boolean to trigger whether to use pickled objects or not
-display_visuals = True # Boolean to trigger display of visualisations
+display_visuals = False # Boolean to trigger display of visualisations
 
 # Database global variables
 mysql_user = "root"                 # MySQL username
@@ -497,6 +506,9 @@ if (topic_model_data == True):
         lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 60, passes = 100, 
                                      chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) # Need to hypertune!
 
+        # lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 150, passes = 100, 
+        #                              chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) # Need to hypertune!
+
         hdp_model = models.HdpModel (corpus = gensim_corpus, id2word = id2word, random_state = 123) 
     
     # Using pickled objects
@@ -544,7 +556,7 @@ if (topic_model_data == True):
     topics_file.close ()
 
     # Get Gensim TransformedCorpus object containing feedback-topic mappings (Document-Topic mapping, Word-Topic mapping and Phi values)
-    transformed_gensim_corpus = lda_model.get_document_topics (gensim_corpus, per_word_topics = True, minimum_probability = 0.02) 
+    transformed_gensim_corpus = lda_model.get_document_topics (gensim_corpus, per_word_topics = True, minimum_probability = 0.03) 
 
     # Initialise list containing feedback-topic mappings
     feedback_topic_mapping = []
@@ -611,8 +623,8 @@ if (topic_model_data == True):
     # hypertune_no_topics (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start = 5, limit = 100, step = 5) # Find optimal number of topics with highest coherence value for LDA model
 
     # Get equivalent LDA parameters of HDP model 
-    print ("Hypertuned alpha and beta values of a LDA almost equivalent of current HDP:", hdp_model.hdp_to_lda ())
-    print ("Closest LDA model to HDP model:", hdp_model.suggested_lda_model ())
+    # print ("Hypertuned alpha and beta values of a LDA almost equivalent of current HDP:", hdp_model.hdp_to_lda ())
+    # print ("Closest LDA model to HDP model:", hdp_model.suggested_lda_model ())
 
 
     # Check boolean to see whether or not to assign manually labelled topics to feedbacks with manually tagged tokens [THIS HAS PRECEDENCE OVER THE TOPIC MODELLING MODEL]
