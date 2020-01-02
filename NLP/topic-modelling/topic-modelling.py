@@ -53,30 +53,39 @@ def tm_tokenize_corpus (corpus):
 
         # Loop to tokenize text in document
         for token in document:
-
-            # Check if token is a stop word
-            if (token.is_stop):
-
-                # Skip current for-loop iteration if token is a stop word
-                continue
             
-            # Get lemmatised form of token
-            lemmatised = token.lemma_
+            # Check if token is whitelisted (whitelisted terms are special terms that are returned in their normal form [non-lemmatised])
+            if (token.text.lower () in token_whitelist):
 
-            # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
-            if (lemmatised == "-PRON-"):
+                # Append current token to list of tokens
+                list_tokens.append (token.text)
+                
+            # Proceed with series of checks if token is not whitelisted
+            else:
 
-                # Skip current for-loop iteration
-                continue
+                # Check if token is a stop word
+                if (token.is_stop):
 
-            # Check if lemmatised token is a single non-word character
-            if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+                    # Skip current for-loop iteration if token is a stop word
+                    continue
+                
+                # Get lemmatised form of token
+                lemmatised = token.lemma_
 
-                # Skip current for-loop iteration
-                continue
+                # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
+                if (lemmatised == "-PRON-"):
 
-            # Add lemmatised token into list of tokens
-            list_tokens.append (lemmatised)
+                    # Skip current for-loop iteration
+                    continue
+
+                # Check if lemmatised token is a single non-word character
+                if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+
+                    # Skip current for-loop iteration
+                    continue
+
+                # Add lemmatised token into list of tokens
+                list_tokens.append (lemmatised)
         
         # Append list of tokens of current document to list containing tokenized documents
         list_tokenized_documents.append (list_tokens)
@@ -101,42 +110,51 @@ def tm_tokenize_corpus_pos_nouns_adj (corpus):
 
         # Loop to tokenize text in document
         for token in document:
-
-             # Check if token is a stop word
-            if (token.is_stop):
-
-                # Skip current for-loop iteration if token is a stop word
-                continue
             
-            # Get lemmatised form of token
-            lemmatised = token.lemma_
+            # Check if token is whitelisted (whitelisted terms are special terms that are returned in their normal form [non-lemmatised])
+            if (token.text.lower () in token_whitelist):
 
-            # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
-            if (lemmatised == "-PRON-"):
+                # Append current token to list of tokens
+                list_tokens.append (token.text)
+                
+            # Proceed with series of checks if token is not whitelisted
+            else:
 
-                # Skip current for-loop iteration
-                continue
+                # Check if token is a stop word
+                if (token.is_stop):
 
-            # Check if lemmatised token is a single non-word character
-            if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+                    # Skip current for-loop iteration if token is a stop word
+                    continue
+                
+                # Get lemmatised form of token
+                lemmatised = token.lemma_
 
-                # Skip current for-loop iteration
-                continue
-            
-            # Get Part-of-Speech of token
-            token_pos = token.pos_
+                # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
+                if (lemmatised == "-PRON-"):
 
-            # Check if token is a Named Entity
-            entity_check = str (token) in [str (entity) for entity in document.ents]
+                    # Skip current for-loop iteration
+                    continue
 
-            # Check if token's POS is not a NOUN or ADJECTIVE OR NAMED ENTITY
-            if (token_pos != "NOUN" and token_pos != "ADJ" and entity_check != True):
+                # Check if lemmatised token is a single non-word character
+                if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
 
-                # Skip current for-loop iteration
-                continue
+                    # Skip current for-loop iteration
+                    continue
+                
+                # Get Part-of-Speech of token
+                token_pos = token.pos_
 
-            # Add lemmatised token into list of tokens
-            list_tokens.append (lemmatised)
+                # Check if token is a Named Entity
+                entity_check = str (token) in [str (entity) for entity in document.ents]
+
+                # Check if token's POS is not a NOUN or ADJECTIVE OR NAMED ENTITY
+                if (token_pos != "NOUN" and token_pos != "ADJ" and entity_check != True):
+
+                    # Skip current for-loop iteration
+                    continue
+
+                # Add lemmatised token into list of tokens
+                list_tokens.append (lemmatised)
         
         # Append list of tokens of current document to list containing tokenized documents
         list_tokenized_documents.append (list_tokens)
@@ -161,42 +179,51 @@ def tm_tokenize_corpus_pos_nouns_adj_verb_adv (corpus):
 
         # Loop to tokenize text in document
         for token in document:
-
-            # Check if token is a stop word
-            if (token.is_stop):
-
-                # Skip current for-loop iteration if token is a stop word
-                continue
             
-            # Get lemmatised form of token
-            lemmatised = token.lemma_
+            # Check if token is whitelisted (whitelisted terms are special terms that are returned in their normal form [non-lemmatised])
+            if (token.text.lower () in token_whitelist):
 
-            # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
-            if (lemmatised == "-PRON-"):
+                # Append current token to list of tokens
+                list_tokens.append (token.text)
+                
+            # Proceed with series of checks if token is not whitelisted
+            else:
 
-                # Skip current for-loop iteration
-                continue
+                # Check if token is a stop word
+                if (token.is_stop):
 
-            # Check if lemmatised token is a single non-word character
-            if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+                    # Skip current for-loop iteration if token is a stop word
+                    continue
+                
+                # Get lemmatised form of token
+                lemmatised = token.lemma_
 
-                # Skip current for-loop iteration
-                continue
-            
-            # Get Part-of-Speech of token
-            token_pos = token.pos_
+                # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
+                if (lemmatised == "-PRON-"):
 
-            # Check if token is a Named Entity
-            entity_check = str (token) in [str (entity) for entity in document.ents]
-            
-            # Check if token's POS is not a NOUN or ADJECTIVE or VERB or ADVERB or NAMED ENTITY
-            if (token_pos != "NOUN" and token_pos != "ADJ" and token_pos != "VERB" and token_pos != "ADV" and entity_check != True):
+                    # Skip current for-loop iteration
+                    continue
 
-                # Skip current for-loop iteration
-                continue
+                # Check if lemmatised token is a single non-word character
+                if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
 
-            # Add lemmatised token into list of tokens
-            list_tokens.append (lemmatised)
+                    # Skip current for-loop iteration
+                    continue
+                
+                # Get Part-of-Speech of token
+                token_pos = token.pos_
+
+                # Check if token is a Named Entity
+                entity_check = str (token) in [str (entity) for entity in document.ents]
+                
+                # Check if token's POS is not a NOUN or ADJECTIVE or VERB or ADVERB or NAMED ENTITY
+                if (token_pos != "NOUN" and token_pos != "ADJ" and token_pos != "VERB" and token_pos != "ADV" and entity_check != True):
+
+                    # Skip current for-loop iteration
+                    continue
+
+                # Add lemmatised token into list of tokens
+                list_tokens.append (lemmatised)
         
         # Append list of tokens of current document to list containing tokenized documents
         list_tokenized_documents.append (list_tokens)
@@ -331,6 +358,7 @@ feedback_ml_table = "FeedbackML"    # Name of feedback table in database used fo
 
 # Tokens
 list_corpus_tokens = [] # List containing lists of document tokens in the corpus for training Gensim Bigram and Trigram models and for Topic Modelling
+token_whitelist = ["photoshop", "editing", "pinterest", "xperia", "instagram", "facebook", "evernote", "update", "dropbox", "picsart", "whatsapp", "tripadvisor"] # Token whitelist (to prevent important terms from not being tokenized)
 
 # Create spaCy NLP object
 nlp = spacy.load ("en_core_web_sm")
