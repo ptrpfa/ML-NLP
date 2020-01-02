@@ -418,7 +418,7 @@ if (topic_model_data == True):
     id2word = corpora.Dictionary (list_corpus_tokens)
 
     # # Human readable format of corpus (term-frequency)
-    # [[(id2word[id], freq) for id, freq in cp] for cp in corpus[:1]]
+    # dtm = [[(id2word[id], freq) for id, freq in cp] for cp in corpus[:1]]
 
     # Get Term-Document Frequency
     gensim_corpus = [id2word.doc2bow (document_tokens) for document_tokens in list_corpus_tokens]
@@ -446,11 +446,11 @@ if (topic_model_data == True):
     list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = 20, num_words = 20)
     list_hdp_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
-    print ("Topics:")
-    print ("LDA:")
-    print (list_lda_topics)
-    print ("HDP:")
-    print (list_hdp_topics)
+    # print ("Topics:")
+    # print ("LDA:")
+    # print (list_lda_topics)
+    # print ("HDP:")
+    # print (list_hdp_topics)
 
     # Store topic information in topics file
     topics_file = open (topics_file_path, "w") # Create file object (w = write)
@@ -478,9 +478,6 @@ if (topic_model_data == True):
 
     # Get Gensim TransformedCorpus object containing feedback-topic mappings (Document-Topic mapping, Word-Topic mapping and Phi values)
     transformed_gensim_corpus = lda_model.get_document_topics (gensim_corpus, per_word_topics = True, minimum_probability = 0.02) 
-
-    # transformed_gensim_corpus = hdp_model [gensim_corpus] 
-    # print (transformed_gensim_corpus, type (transformed_gensim_corpus), len (transformed_gensim_corpus))
 
     # Initialise list containing feedback-topic mappings
     feedback_topic_mapping = []
@@ -522,17 +519,27 @@ if (topic_model_data == True):
     # Assign topics to feedbacks in the DataFrame
     feedback_ml_df ['TextTopics'] = feedback_topic_mapping
 
-    # Assign no topics to Feedback with empty TextTokens (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
+    # Set topics of Feedback with empty TextTokens to nothing (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
     feedback_ml_df.apply (unassign_empty_topics_dataframe, axis = 1) # Access row by row 
 
     # Get model performance metrics
-    # Compute Perplexity
-    print('\nPerplexity: ', lda_model.log_perplexity(gensim_corpus))  # a measure of how good the model is. lower the better.
+    """ LDA Model """
+    print ("LDA:")
 
     # Compute Coherence Score
-    coherence_model_lda = models.CoherenceModel (model = lda_model, texts = list_corpus_tokens, dictionary = id2word, coherence = 'c_v')
+    # coherence_model_lda = models.CoherenceModel (model = lda_model, texts = list_corpus_tokens, dictionary = id2word, coherence = 'c_v')
+    coherence_model_lda = models.CoherenceModel (model = lda_model, texts = list_corpus_tokens, corpus = gensim_corpus, dictionary = id2word, coherence = 'c_v')
     coherence_lda = coherence_model_lda.get_coherence ()
     print('\nCoherence Score: ', coherence_lda)
+
+    """ HDP Model """
+    print ("\nHDP:")
+
+    # Compute Coherence Score
+    coherence_model_hdp = models.CoherenceModel (model = hdp_model, texts = list_corpus_tokens, dictionary = id2word, coherence = 'c_v')
+    coherence_hdp = coherence_model_hdp.get_coherence ()
+    print('\nCoherence Score: ', coherence_hdp)
+
 
     # Check boolean to see whether or not to assign manually labelled topics to feedbacks with manually tagged tokens [THIS HAS PRECEDENCE OVER THE TOPIC MODELLING MODEL]
     if (use_manual_tag == True): # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
