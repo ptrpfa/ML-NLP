@@ -234,34 +234,43 @@ def unassign_empty_topics_dataframe (series):
     # Return cleaned series object
     return series
 
-def compute_coherence_values(dictionary, corpus, texts, limit, start=2, step=3):
-    """
-    Compute c_v coherence for various number of topics
-
-    Parameters:
-    ----------
-    dictionary : Gensim dictionary
-    corpus : Gensim corpus
-    texts : List of input texts
-    limit : Max num of topics
-
-    Returns:
-    -------
-    model_list : List of LDA topic models
-    coherence_values : Coherence values corresponding to the LDA model with respective number of topics
-    """
-    # Initialise lists containing model hyper-parameters and coherence values
+# Function to hypertune LDA Model to tune the number of topics
+def hypertune_no_topics (dictionary, corpus, texts, limit, start, step):
+    
+    # Initialise list containing model coherence values
     coherence_values = []
-    model_list = []
-    for no_topics in range(start, limit, step):
+    
+    # Loop to create respective models and get respective coherence values
+    for no_topics in range (start, limit, step):
         
+        # Create LDA model
         model = models.LdaModel (corpus = corpus, id2word = id2word, num_topics = no_topics, passes = 100, 
-                                    chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) # Need to hypertune!
-        model_list.append(model)
-        coherencemodel = models.CoherenceModel (model = model, texts = texts, dictionary = dictionary, coherence = 'c_v')
-        coherence_values.append (coherencemodel.get_coherence ())
+                                 chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) 
+        
+        # Create coherence model
+        coherence_model = models.CoherenceModel (model = model, texts = texts, dictionary = dictionary, coherence = 'c_v')
+        coherence_values.append (coherence_model.get_coherence ()) # Append coherence value of current LDA model
+    
+    # Print results
+    for m, cv in zip (range (start, limit, step), coherence_values):
 
-    return model_list, coherence_values
+        print ("Number of Topics =", m, " has Coherence Value of", cv)
+
+    # Plot graph to visualise results
+    x = range (start, limit, step)
+    plt.plot (x, coherence_values)
+    plt.xlabel ("Number of Topics")
+    plt.ylabel ("Coherence value")
+    plt.legend (("coherence_values"), loc='best')
+
+    # Save graph
+    plt.savefig (accuracy_file_path + "topics-coherence.png")
+
+    # Display visualisations if global variable is True
+    if (display_visuals == True):
+
+        # Show visualisations
+        plt.show ()
 
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
@@ -303,6 +312,7 @@ topic_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml-t
 topics_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/topics.txt' # File path of topic details
 manual_tagging_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/manual-tagging.txt' # Manually tagged topic-tokens file path
 pickles_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/pickles/" # File path containing pickled objects
+accuracy_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/accuracies/" # Model accuracy results file path
 
 # Boolean triggers global variables
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
@@ -456,7 +466,7 @@ if (topic_model_data == True):
     if (not use_pickle):
 
         # Create Topic Modelling models
-        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 38, passes = 100, 
+        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 15, passes = 100, 
                                      chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) # Need to hypertune!
 
         hdp_model = models.HdpModel (corpus = gensim_corpus, id2word = id2word, random_state = 123) 
@@ -469,7 +479,7 @@ if (topic_model_data == True):
         hdp_model = load_pickle ("hdp-model.pkl")
 
     # Get topics
-    list_lda_topics = lda_model.show_topics (formatted = True, num_topics = 38, num_words = 20)
+    list_lda_topics = lda_model.show_topics (formatted = True, num_topics = 20, num_words = 20)
     list_lda_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
     list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = 20, num_words = 20)
@@ -556,7 +566,6 @@ if (topic_model_data == True):
     print ("LDA:")
 
     # Compute Coherence Score
-    # coherence_model_lda = models.CoherenceModel (model = lda_model, texts = list_corpus_tokens, dictionary = id2word, coherence = 'c_v')
     coherence_model_lda = models.CoherenceModel (model = lda_model, texts = list_corpus_tokens, corpus = gensim_corpus, dictionary = id2word, coherence = 'c_v')
     coherence_lda = coherence_model_lda.get_coherence ()
     print('\nCoherence Score: ', coherence_lda)
@@ -565,28 +574,18 @@ if (topic_model_data == True):
     print ("\nHDP:")
 
     # Compute Coherence Score
-    coherence_model_hdp = models.CoherenceModel (model = hdp_model, texts = list_corpus_tokens, dictionary = id2word, coherence = 'c_v')
+    coherence_model_hdp = models.CoherenceModel (model = hdp_model, texts = list_corpus_tokens, corpus = gensim_corpus, dictionary = id2word, coherence = 'c_v')
     coherence_hdp = coherence_model_hdp.get_coherence ()
     print('\nCoherence Score: ', coherence_hdp)
 
-    """ Hypertune LDA model """
-    print ("Hypertuning models..")    
-    # Can take a long time to run.
-    # model_list, coherence_values = compute_coherence_values (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start=2, limit=40, step=6)
+    # Hypertune LDA model
+    print ("Finding optimal number of topics for LDA model..")    
+    hypertune_no_topics (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start = 5, limit = 100, step = 5) # Find optimal number of topics with highest coherence value for LDA model
 
-    # # Show graph
-    # limit=40
-    # start=2 
-    # step=6
-    # x = range(start, limit, step)
-    # plt.plot(x, coherence_values)
-    # plt.xlabel("Num Topics")
-    # plt.ylabel("Coherence score")
-    # plt.legend(("coherence_values"), loc='best')
-    # plt.show()
+    # Get equivalent LDA parameters of HDP model 
+    print ("Hypertuned alpha and beta values of a LDA almost equivalent of current HDP:", hdp_model.hdp_to_lda ())
+    print ("Closest LDA model to HDP model:", hdp_model.suggested_lda_model ())
 
-    # for m, cv in zip(x, coherence_values):
-    #     print("Num Topics =", m, " has Coherence Value of", round(cv, 4))
 
     # Check boolean to see whether or not to assign manually labelled topics to feedbacks with manually tagged tokens [THIS HAS PRECEDENCE OVER THE TOPIC MODELLING MODEL]
     if (use_manual_tag == True): # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
