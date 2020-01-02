@@ -87,7 +87,6 @@ def tm_tokenize_corpus (corpus):
 # Function to tokenize documents (Only accepts POS: Nouns and Adjectives)
 def tm_tokenize_corpus_pos_nouns_adj (corpus):
 
-
     # Initialise list containing tokenized documents (list of lists)
     list_tokenized_documents = []
 
@@ -127,8 +126,11 @@ def tm_tokenize_corpus_pos_nouns_adj (corpus):
             # Get Part-of-Speech of token
             token_pos = token.pos_
 
-            # Check if token's POS is not a NOUN or ADJECTIVE
-            if (token_pos != "NOUN" and token_pos != "ADJ"):
+            # Check if token is a Named Entity
+            entity_check = str (token) in [str (entity) for entity in document.ents]
+
+            # Check if token's POS is not a NOUN or ADJECTIVE OR NAMED ENTITY
+            if (token_pos != "NOUN" and token_pos != "ADJ" and entity_check != True):
 
                 # Skip current for-loop iteration
                 continue
@@ -184,8 +186,11 @@ def tm_tokenize_corpus_pos_nouns_adj_verb_adv (corpus):
             # Get Part-of-Speech of token
             token_pos = token.pos_
 
-            # Check if token's POS is not a NOUN or ADJECTIVE or VERB or ADVERB
-            if (token_pos != "NOUN" and token_pos != "ADJ" and token_pos != "VERB" and token_pos != "ADV"):
+            # Check if token is a Named Entity
+            entity_check = str (token) in [str (entity) for entity in document.ents]
+            
+            # Check if token's POS is not a NOUN or ADJECTIVE or VERB or ADVERB or NAMED ENTITY
+            if (token_pos != "NOUN" and token_pos != "ADJ" and token_pos != "VERB" and token_pos != "ADV" and entity_check != True):
 
                 # Skip current for-loop iteration
                 continue
@@ -274,7 +279,7 @@ pickles_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/pickles/" # File
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_manual_tag = False # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = True # Boolean to trigger whether to use pickled objects or not
+use_pickle = False # Boolean to trigger whether to use pickled objects or not
 display_visuals = True # Boolean to trigger display of visualisations
 
 # Database global variables
@@ -378,8 +383,8 @@ if (topic_model_data == True):
     feature = feedback_ml_df.Text
 
     # Tokenize texts and assign text tokens to column in DataFrame
-    feedback_ml_df.TextTokens = tm_tokenize_corpus (feedback_ml_df.Text) # TextTokens is now a list of tokens for each document
-    # feedback_ml_df.TextTokens = tm_tokenize_corpus_pos_nouns_adj (feedback_ml_df.Text) # Only tokenize NOUNS and ADJECTIVES (will result in many empty token lists)
+    # feedback_ml_df.TextTokens = tm_tokenize_corpus (feedback_ml_df.Text) # TextTokens is now a list of tokens for each document
+    feedback_ml_df.TextTokens = tm_tokenize_corpus_pos_nouns_adj (feedback_ml_df.Text) # Only tokenize NOUNS and ADJECTIVES (will result in many empty token lists)
     # feedback_ml_df.TextTokens = tm_tokenize_corpus_pos_nouns_adj_verb_adv (feedback_ml_df.Text) # Only tokenize NOUNS, ADJECTIVES, VERBS and ADVERBS (will result in many empty token lists)
 
     # Assign document tokens in DataFrame to list containing all corpus tokens
