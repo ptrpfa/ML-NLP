@@ -466,7 +466,7 @@ if (topic_model_data == True):
     if (not use_pickle):
 
         # Create Topic Modelling models
-        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 15, passes = 100, 
+        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 60, passes = 100, 
                                      chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) # Need to hypertune!
 
         hdp_model = models.HdpModel (corpus = gensim_corpus, id2word = id2word, random_state = 123) 
@@ -479,10 +479,10 @@ if (topic_model_data == True):
         hdp_model = load_pickle ("hdp-model.pkl")
 
     # Get topics
-    list_lda_topics = lda_model.show_topics (formatted = True, num_topics = 20, num_words = 20)
+    list_lda_topics = lda_model.show_topics (formatted = True, num_topics = 60, num_words = 20)
     list_lda_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
-    list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = 20, num_words = 20)
+    list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = 60, num_words = 20)
     list_hdp_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
     # print ("Topics:")
@@ -579,8 +579,8 @@ if (topic_model_data == True):
     print('\nCoherence Score: ', coherence_hdp)
 
     # Hypertune LDA model
-    print ("Finding optimal number of topics for LDA model..")    
-    hypertune_no_topics (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start = 5, limit = 100, step = 5) # Find optimal number of topics with highest coherence value for LDA model
+    # print ("Finding optimal number of topics for LDA model..")    
+    # hypertune_no_topics (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start = 5, limit = 100, step = 5) # Find optimal number of topics with highest coherence value for LDA model
 
     # Get equivalent LDA parameters of HDP model 
     print ("Hypertuned alpha and beta values of a LDA almost equivalent of current HDP:", hdp_model.hdp_to_lda ())
