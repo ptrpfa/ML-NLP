@@ -234,6 +234,35 @@ def unassign_empty_topics_dataframe (series):
     # Return cleaned series object
     return series
 
+def compute_coherence_values(dictionary, corpus, texts, limit, start=2, step=3):
+    """
+    Compute c_v coherence for various number of topics
+
+    Parameters:
+    ----------
+    dictionary : Gensim dictionary
+    corpus : Gensim corpus
+    texts : List of input texts
+    limit : Max num of topics
+
+    Returns:
+    -------
+    model_list : List of LDA topic models
+    coherence_values : Coherence values corresponding to the LDA model with respective number of topics
+    """
+    # Initialise lists containing model hyper-parameters and coherence values
+    coherence_values = []
+    model_list = []
+    for no_topics in range(start, limit, step):
+        
+        model = models.LdaModel (corpus = corpus, id2word = id2word, num_topics = no_topics, passes = 100, 
+                                    chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) # Need to hypertune!
+        model_list.append(model)
+        coherencemodel = CoherenceModel (model = model, texts = texts, dictionary = dictionary, coherence = 'c_v')
+        coherence_values.append (coherencemodel.get_coherence ())
+
+    return model_list, coherence_values
+
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
 
@@ -540,7 +569,25 @@ if (topic_model_data == True):
     coherence_hdp = coherence_model_hdp.get_coherence ()
     print('\nCoherence Score: ', coherence_hdp)
 
+    """ Hypertune LDA model """
+    print ("Hypertuning models..")    
+    # Can take a long time to run.
+    model_list, coherence_values = compute_coherence_values (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start=2, limit=40, step=6)
 
+    # Show graph
+    limit=40
+    start=2 
+    step=6
+    x = range(start, limit, step)
+    plt.plot(x, coherence_values)
+    plt.xlabel("Num Topics")
+    plt.ylabel("Coherence score")
+    plt.legend(("coherence_values"), loc='best')
+    plt.show()
+
+    for m, cv in zip(x, coherence_values):
+        print("Num Topics =", m, " has Coherence Value of", round(cv, 4))
+        
     # Check boolean to see whether or not to assign manually labelled topics to feedbacks with manually tagged tokens [THIS HAS PRECEDENCE OVER THE TOPIC MODELLING MODEL]
     if (use_manual_tag == True): # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
 
