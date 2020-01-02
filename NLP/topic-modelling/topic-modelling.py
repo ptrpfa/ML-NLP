@@ -518,7 +518,6 @@ if (topic_model_data == True):
     feedback_ml_df ['TextTopics'] = feedback_topic_mapping
 
     # Assign no topics to Feedback with empty TextTokens (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
-    # feedback_ml_df.loc [feedback_ml_df ['TextTokens'] == [], 'TextTopics'] = 0  # Set TextTopics of feedbacks
     feedback_ml_df.apply (unassign_empty_topics_dataframe, axis = 1) # Access row by row 
 
     # Get model performance metrics
