@@ -258,7 +258,7 @@ def compute_coherence_values(dictionary, corpus, texts, limit, start=2, step=3):
         model = models.LdaModel (corpus = corpus, id2word = id2word, num_topics = no_topics, passes = 100, 
                                     chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) # Need to hypertune!
         model_list.append(model)
-        coherencemodel = CoherenceModel (model = model, texts = texts, dictionary = dictionary, coherence = 'c_v')
+        coherencemodel = models.CoherenceModel (model = model, texts = texts, dictionary = dictionary, coherence = 'c_v')
         coherence_values.append (coherencemodel.get_coherence ())
 
     return model_list, coherence_values
@@ -456,10 +456,10 @@ if (topic_model_data == True):
     if (not use_pickle):
 
         # Create Topic Modelling models
-        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 20, passes = 100, 
+        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 38, passes = 100, 
                                      chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) # Need to hypertune!
 
-        hdp_model = models.HdpModel (corpus = gensim_corpus, id2word = id2word, random_state = 123) # Need to hypertune!
+        hdp_model = models.HdpModel (corpus = gensim_corpus, id2word = id2word, random_state = 123) 
     
     # Using pickled objects
     else:
@@ -469,7 +469,7 @@ if (topic_model_data == True):
         hdp_model = load_pickle ("hdp-model.pkl")
 
     # Get topics
-    list_lda_topics = lda_model.show_topics (formatted = True, num_topics = 20, num_words = 20)
+    list_lda_topics = lda_model.show_topics (formatted = True, num_topics = 38, num_words = 20)
     list_lda_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
     list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = 20, num_words = 20)
@@ -572,22 +572,22 @@ if (topic_model_data == True):
     """ Hypertune LDA model """
     print ("Hypertuning models..")    
     # Can take a long time to run.
-    model_list, coherence_values = compute_coherence_values (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start=2, limit=40, step=6)
+    # model_list, coherence_values = compute_coherence_values (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start=2, limit=40, step=6)
 
-    # Show graph
-    limit=40
-    start=2 
-    step=6
-    x = range(start, limit, step)
-    plt.plot(x, coherence_values)
-    plt.xlabel("Num Topics")
-    plt.ylabel("Coherence score")
-    plt.legend(("coherence_values"), loc='best')
-    plt.show()
+    # # Show graph
+    # limit=40
+    # start=2 
+    # step=6
+    # x = range(start, limit, step)
+    # plt.plot(x, coherence_values)
+    # plt.xlabel("Num Topics")
+    # plt.ylabel("Coherence score")
+    # plt.legend(("coherence_values"), loc='best')
+    # plt.show()
 
-    for m, cv in zip(x, coherence_values):
-        print("Num Topics =", m, " has Coherence Value of", round(cv, 4))
-        
+    # for m, cv in zip(x, coherence_values):
+    #     print("Num Topics =", m, " has Coherence Value of", round(cv, 4))
+
     # Check boolean to see whether or not to assign manually labelled topics to feedbacks with manually tagged tokens [THIS HAS PRECEDENCE OVER THE TOPIC MODELLING MODEL]
     if (use_manual_tag == True): # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
 
