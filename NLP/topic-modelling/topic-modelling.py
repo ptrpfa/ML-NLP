@@ -217,6 +217,18 @@ def tokenize_trigram_dataframe (series):
     # Return tokenized series object
     return series
 
+# Function to set no topics to Feedback that do not have any tokens (accepts a Series object of each row in the FeedbackML DataFrame and returns a cleaned Series object)
+def unassign_empty_topics_dataframe (series):
+
+    # Check if the current feedback's tokens are empty
+    if (series ['TextTokens'] == []):
+
+        # Set topics of current feedback to nothing if its tokens are empty (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
+        series ['TextTopics'] = []
+
+    # Return cleaned series object
+    return series
+
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
 
@@ -262,7 +274,7 @@ pickles_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/pickles/" # File
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_manual_tag = False # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = False # Boolean to trigger whether to use pickled objects or not
+use_pickle = True # Boolean to trigger whether to use pickled objects or not
 display_visuals = True # Boolean to trigger display of visualisations
 
 # Database global variables
@@ -505,10 +517,9 @@ if (topic_model_data == True):
     # Assign topics to feedbacks in the DataFrame
     feedback_ml_df ['TextTopics'] = feedback_topic_mapping
 
-    # print ("texttopics", len (feedback_ml_df ['TextTopics']))
-
-    # # Filter to assign no topics to Feedback with empty TextTokens (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
+    # Assign no topics to Feedback with empty TextTokens (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
     # feedback_ml_df.loc [feedback_ml_df ['TextTokens'] == [], 'TextTopics'] = 0  # Set TextTopics of feedbacks
+    feedback_ml_df.apply (unassign_empty_topics_dataframe, axis = 1) # Access row by row 
 
     # Get model performance metrics
     # Compute Perplexity
