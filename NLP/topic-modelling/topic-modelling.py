@@ -267,6 +267,12 @@ def unassign_empty_topics_dataframe (series):
         # Set topics of current feedback to nothing if its tokens are empty (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
         series ['TextTopics'] = []
 
+    # Check if the current feedback's TextTopics are empty (checking if Gensim did not assign any topics to feedback)
+    if (series ['TextTopics'] == [[]]):
+
+        # Set topics of current feedback to nothing if its an empty 2-Dimensional list
+        series ['TextTopics'] = []
+
     # Return cleaned series object
     return series
 
@@ -281,8 +287,8 @@ def hypertune_no_topics (dictionary, corpus, texts, limit, start, step):
         
         # Create LDA model
         model = models.LdaModel (corpus = corpus, id2word = id2word, num_topics = no_topics, passes = 100, 
-                                 chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) 
-        
+                                 chunksize = 3500, minimum_probability = 0.05, random_state = 123) 
+ 
         # Create coherence model
         coherence_model = models.CoherenceModel (model = model, texts = texts, dictionary = dictionary, coherence = 'c_v')
         coherence_values.append (coherence_model.get_coherence ()) # Append coherence value of current LDA model
@@ -367,7 +373,8 @@ feedback_ml_table = "FeedbackML"    # Name of feedback table in database used fo
 
 # Tokens
 list_corpus_tokens = [] # List containing lists of document tokens in the corpus for training Gensim Bigram and Trigram models and for Topic Modelling
-token_whitelist = ["photoshop", "editing", "pinterest", "xperia", "instagram", "facebook", "evernote", "update", "dropbox", "picsart", "whatsapp", "tripadvisor"] # Token whitelist (to prevent important terms from not being tokenized)
+token_whitelist = ["photoshop", "editing", "pinterest", "xperia", "instagram", "facebook", "evernote", "update", "dropbox", "picsart", # Token whitelist (to prevent important terms from not being tokenized)
+                   "whatsapp", "tripadvisor", "onenote"] 
 
 # Create spaCy NLP object
 nlp = spacy.load ("en_core_web_sm")
@@ -503,11 +510,14 @@ if (topic_model_data == True):
     if (not use_pickle):
 
         # Create Topic Modelling models
+        # lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 60, passes = 100, 
+        #                              chunksize = 3500 , random_state = 123) # Original
+
         lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 60, passes = 100, 
-                                     chunksize = 3500 , random_state = 123) # Need to hypertune!
+                                     chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123, minimum_probability = 0.05) # Tuned
 
         # lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 150, passes = 100, 
-        #                              chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) # Need to hypertune!
+        #                              chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123, minimum_probability = 0.05) # Need to hypertune!
 
         hdp_model = models.HdpModel (corpus = gensim_corpus, id2word = id2word, random_state = 123) 
     
@@ -554,9 +564,9 @@ if (topic_model_data == True):
 
     # Close file object
     topics_file.close ()
-
+    
     # Get Gensim TransformedCorpus object containing feedback-topic mappings (Document-Topic mapping, Word-Topic mapping and Phi values)
-    transformed_gensim_corpus = lda_model.get_document_topics (gensim_corpus, per_word_topics = True, minimum_probability = 0.03) 
+    transformed_gensim_corpus = lda_model.get_document_topics (gensim_corpus, per_word_topics = True, minimum_probability = 0.05) 
 
     # Initialise list containing feedback-topic mappings
     feedback_topic_mapping = []
@@ -568,7 +578,7 @@ if (topic_model_data == True):
         list_document_topic = tuple_feedback_mapping [0] # List containing tuples of document/feedback - topic mapping
         list_word_topic = tuple_feedback_mapping [1]     # List containing tuples of word - topic mapping
         list_phi_value = tuple_feedback_mapping [2]      # List containing tuples of word phi values (probability of a word in the document belonging to a particular topic)
-
+        
         # Initialise topic(s) of current feedback/document
         list_topics = []
 
@@ -598,10 +608,59 @@ if (topic_model_data == True):
     # Assign topics to feedbacks in the DataFrame
     feedback_ml_df ['TextTopics'] = feedback_topic_mapping
 
-    # Set topics of Feedback with empty TextTokens to nothing (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
+    # Set topics of Feedback with empty TextTokens and TextTopics to nothing (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
     feedback_ml_df.apply (unassign_empty_topics_dataframe, axis = 1) # Access row by row 
 
+    # Function to get Feedback-Topic mappings
+    def get_lda_feedback_topic_mapping (model, corpus, texts, max_topics, minimum_probability):
+
+        # Create empty dataframe
+        sentence_topics_df = pd.DataFrame ()
+        print (len (model [corpus]))
+        # Loop to get main topic(s) in each document/Feedback
+        for index, tuple_row in enumerate (model [corpus]):
+            
+            # Tuple contains three lists
+            list_document_topic = tuple_row [0] # List containing tuples of document/feedback - topic mapping (with percentages)
+            # list_word_topic = tuple_row [1]     # List containing tuples of word - topic mapping
+            # list_phi_value = tuple_row [2]      # List containing tuples of word phi values (probability of a word in the document belonging to a particular topic)
+            
+            # Sort topics according to descending order of percentages
+            list_document_topic.sort (key = lambda tup: tup [1], reverse = True) 
+              
+            # Loop to get topics assigned to current feedback
+            for index_mapping, (topic_id, percentage) in enumerate (list_document_topic): # Get the Dominant topic, Perc Contribution and Keywords for each document
+
+                # Check if any topic is assigned to the current feedback
+                if (len (list_document_topic) > 0):
+                    pass
+                else:
+
+                    # Do something if no topic is assigned to the current feedback
+                    pass
+
+                if index_mapping == 0:  # => dominant topic
+                    wp = model.show_topic(topic_id, topn = 10) # Get a list of the top 10 most significant words associated with the topic, along with their weightage
+                    topic_keywords = ", ".join([word for word, weightage in wp])
+                    sentence_topics_df = sentence_topics_df.append(pd.Series([int(topic_id), round(percentage,4), topic_keywords]), ignore_index=True)
+                else:
+                    break
+
+        sentence_topics_df.columns = ['Dominant_Topic', 'Perc_Contribution', 'Topic_Keywords']
+        print (sentence_topics_df.head (), sentence_topics_df.shape)
+
+        # Add original text to the end of the output
+        contents = pd.Series(texts)
+        sentence_topics_df = pd.concat ([sentence_topics_df, contents], axis = 1)
+        sentence_topics_df.columns = ['Document_No', 'Dominant_Topic', 'Topic_Perc_Contrib', 'Keywords', 'Text']
+        sentence_topics_df.to_csv ("/home/p/Desktop/csitml/NLP/topic-modelling/data/temp.csv", index = False, encoding = "utf-8")
+
+    # get_hdp_feedback_topic_mapping (hdp_model, gensim_corpus, list_corpus_tokens) # NEED TO EDIT TO SUPPORT HDP RESULTS AS GET A SINGLE LIST INSTEAD OF TUPLE!
+    # get_lda_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.05)
+
     # Get model performance metrics
+    print ("\n*****Model Performances***\n")
+
     """ LDA Model """
     print ("LDA:")
 
