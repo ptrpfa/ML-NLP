@@ -360,8 +360,8 @@ accuracy_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/accuracies/" # 
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_manual_tag = False # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = False # Boolean to trigger whether to use pickled objects or not
-display_visuals = False # Boolean to trigger display of visualisations
+use_pickle = True # Boolean to trigger whether to use pickled objects or not
+display_visuals = True # Boolean to trigger display of visualisations
 
 # Database global variables
 mysql_user = "root"                 # MySQL username
@@ -678,8 +678,8 @@ if (topic_model_data == True):
     print('\nCoherence Score: ', coherence_hdp)
 
     # Hypertune LDA model
-    # print ("Finding optimal number of topics for LDA model..")    
-    # hypertune_no_topics (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start = 5, limit = 100, step = 5) # Find optimal number of topics with highest coherence value for LDA model
+    print ("Finding optimal number of topics for LDA model..")    
+    hypertune_no_topics (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start = 5, limit = 100, step = 5) # Find optimal number of topics with highest coherence value for LDA model
 
     # Get equivalent LDA parameters of HDP model 
     # print ("Hypertuned alpha and beta values of a LDA almost equivalent of current HDP:", hdp_model.hdp_to_lda ())
