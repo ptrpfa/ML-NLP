@@ -2,139 +2,139 @@ LDA Model:
 
 Topic 0 :
 
-0.208*"excellent" + 0.042*"app" + 0.038*"iPad" + 0.035*"handy" + 0.027*"great" + 0.022*"pics" + 0.019*"notification" + 0.019*"aap" + 0.016*"scanner" + 0.016*"creativity" + 0.016*"art" + 0.013*"control" + 0.013*"pinning" + 0.010*"single" + 0.008*"feature" + 0.007*"personal" + 0.006*"wind" + 0.006*"AI" + 0.006*"campaign" + 0.006*"earth" 
+0.208*"excellent" + 0.046*"app" + 0.037*"iPad" + 0.035*"handy" + 0.030*"great" + 0.022*"pics" + 0.019*"notification" + 0.019*"aap" + 0.016*"scanner" + 0.016*"creativity" + 0.016*"art" + 0.013*"control" + 0.013*"pinning" + 0.010*"single" + 0.008*"feature" + 0.007*"personal" + 0.006*"AI" + 0.006*"wind" + 0.006*"campaign" + 0.006*"earth" 
 
 Topic 1 :
 
-0.231*"cool" + 0.116*"app" + 0.080*"hour" + 0.028*"glad" + 0.016*"feature" + 0.016*"web" + 0.012*"Photoshop" + 0.012*"itune" + 0.012*"GREAT" + 0.012*"style" + 0.011*"load" + 0.009*"food" + 0.009*"mobile" + 0.008*"track" + 0.008*"lot" + 0.008*"Yojimbo" + 0.008*"archive" + 0.008*"wedding" + 0.008*"long" + 0.008*"closet" 
+0.231*"cool" + 0.117*"app" + 0.080*"hour" + 0.028*"glad" + 0.016*"feature" + 0.016*"web" + 0.012*"Photoshop" + 0.012*"itune" + 0.012*"GREAT" + 0.012*"style" + 0.011*"load" + 0.009*"food" + 0.009*"mobile" + 0.008*"track" + 0.008*"lot" + 0.008*"Yojimbo" + 0.008*"archive" + 0.008*"wedding" + 0.008*"long" + 0.008*"closet" 
 
 Topic 2 :
 
-0.100*"great" + 0.081*"app" + 0.035*"deal" + 0.030*"search" + 0.025*"music" + 0.022*"mobile" + 0.019*"time" + 0.015*"laptop" + 0.013*"thumb" + 0.013*"glitch" + 0.012*"file" + 0.010*"convenient" + 0.010*"box" + 0.009*"able" + 0.008*"function" + 0.008*"notebook" + 0.008*"annoying" + 0.007*"house" + 0.007*"road" + 0.007*"location" 
+0.102*"great" + 0.083*"app" + 0.035*"deal" + 0.030*"search" + 0.025*"music" + 0.022*"mobile" + 0.019*"time" + 0.015*"laptop" + 0.012*"thumb" + 0.012*"glitch" + 0.012*"file" + 0.010*"convenient" + 0.010*"box" + 0.009*"able" + 0.008*"function" + 0.008*"notebook" + 0.008*"annoying" + 0.007*"house" + 0.007*"road" + 0.007*"location" 
 
 Topic 3 :
 
-0.073*"great" + 0.066*"app" + 0.042*"device" + 0.038*"note" + 0.024*"brain" + 0.019*"Fun" + 0.019*"guy" + 0.019*"work" + 0.018*"touch" + 0.014*"killer" + 0.014*"follower" + 0.013*"time" + 0.013*"photo" + 0.009*"application" + 0.009*"scanning" + 0.009*"store" + 0.009*"sky" + 0.009*"queen" + 0.009*"regret" + 0.009*"beat" 
+0.072*"great" + 0.067*"app" + 0.042*"device" + 0.038*"note" + 0.024*"brain" + 0.019*"Fun" + 0.019*"guy" + 0.019*"work" + 0.018*"touch" + 0.014*"killer" + 0.014*"follower" + 0.013*"photo" + 0.013*"time" + 0.009*"application" + 0.009*"scanning" + 0.009*"store" + 0.009*"sky" + 0.009*"queen" + 0.009*"regret" + 0.009*"beat" 
 
 Topic 4 :
 
-0.357*"awesome" + 0.250*"app" + 0.108*"day" + 0.050*"great" + 0.017*"time" + 0.015*"content" + 0.013*"email" + 0.011*"crash" + 0.007*"collection" + 0.005*"graphic" + 0.004*"storage" + 0.004*"language" + 0.002*"home" + 0.002*"page" + 0.002*"para" + 0.002*"Excelente" + 0.002*"sword" + 0.002*"valor" + 0.002*"nail" + 0.002*"painting" 
+0.356*"awesome" + 0.255*"app" + 0.106*"day" + 0.049*"great" + 0.017*"time" + 0.015*"content" + 0.013*"email" + 0.011*"crash" + 0.007*"collection" + 0.005*"graphic" + 0.004*"storage" + 0.004*"language" + 0.002*"home" + 0.002*"page" + 0.002*"para" + 0.002*"Excelente" + 0.002*"sword" + 0.002*"valor" + 0.002*"nail" + 0.002*"painting" 
 
 Topic 5 :
 
-0.277*"love" + 0.158*"helpful" + 0.116*"app" + 0.069*"great" + 0.035*"time" + 0.025*"website" + 0.008*"computer" + 0.008*"lot" + 0.008*"picsart" + 0.007*"picture" + 0.005*"college" + 0.005*"alert" + 0.005*"ringtone" + 0.005*"role" + 0.005*"addictive" + 0.005*"bar" + 0.005*"wise" + 0.005*"student" + 0.004*"internet" + 0.003*"new" 
+0.276*"love" + 0.158*"helpful" + 0.118*"app" + 0.070*"great" + 0.035*"time" + 0.026*"website" + 0.008*"computer" + 0.008*"lot" + 0.008*"picsart" + 0.007*"picture" + 0.005*"college" + 0.005*"alert" + 0.005*"ringtone" + 0.005*"addictive" + 0.005*"bar" + 0.005*"role" + 0.005*"wise" + 0.005*"internet" + 0.004*"student" + 0.003*"new" 
 
 Topic 6 :
 
-0.090*"happy" + 0.042*"outstanding" + 0.036*"song" + 0.031*"time" + 0.030*"endless" + 0.030*"waste" + 0.030*"simple" + 0.024*"great" + 0.024*"smooth" + 0.018*"app" + 0.012*"jelaous" + 0.012*"dull" + 0.012*"enjoyment" + 0.012*"middle" + 0.012*"file" + 0.012*"IOS" + 0.007*"old" + 0.007*"datum" + 0.006*"function" + 0.006*"wonderful" 
+0.095*"happy" + 0.042*"outstanding" + 0.036*"song" + 0.032*"time" + 0.030*"endless" + 0.030*"waste" + 0.030*"simple" + 0.026*"great" + 0.024*"smooth" + 0.021*"app" + 0.012*"jelaous" + 0.012*"dull" + 0.012*"enjoyment" + 0.012*"middle" + 0.012*"file" + 0.012*"IOS" + 0.007*"old" + 0.007*"datum" + 0.006*"function" + 0.006*"wonderful" 
 
 Topic 7 :
 
-0.340*"Love" + 0.090*"pinterest" + 0.073*"app" + 0.037*"board" + 0.032*"food" + 0.030*"craft" + 0.023*"cover" + 0.020*"link" + 0.013*"party" + 0.013*"busy" + 0.013*"Pintrest" + 0.010*"sync" + 0.007*"cherryx3" + 0.007*"code" + 0.007*"planning" + 0.007*"NAS" + 0.007*"Works" + 0.007*"boring" + 0.007*"time" + 0.005*"year" 
+0.341*"Love" + 0.090*"pinterest" + 0.075*"app" + 0.037*"board" + 0.031*"food" + 0.030*"craft" + 0.023*"cover" + 0.020*"link" + 0.013*"party" + 0.013*"busy" + 0.013*"Pintrest" + 0.010*"sync" + 0.007*"cherryx3" + 0.007*"code" + 0.007*"planning" + 0.007*"Works" + 0.007*"NAS" + 0.007*"boring" + 0.006*"time" + 0.004*"video" 
 
 Topic 8 :
 
-0.272*"useful" + 0.072*"app" + 0.029*"bit" + 0.025*"great" + 0.021*"tool" + 0.015*"student" + 0.012*"capability" + 0.010*"good" + 0.010*"file" + 0.009*"daily" + 0.009*"power" + 0.009*"college" + 0.009*"work" + 0.007*"time" + 0.006*"money" + 0.006*"people" + 0.006*"datum" + 0.006*"audio" + 0.006*"shoe" + 0.006*"7" 
+0.267*"useful" + 0.074*"app" + 0.029*"bit" + 0.025*"great" + 0.022*"good" + 0.021*"tool" + 0.014*"student" + 0.012*"capability" + 0.010*"file" + 0.009*"daily" + 0.009*"power" + 0.009*"college" + 0.009*"work" + 0.007*"time" + 0.006*"money" + 0.006*"people" + 0.006*"datum" + 0.006*"audio" + 0.006*"huge" + 0.006*"shoe" 
 
 Topic 9 :
 
-0.120*"available" + 0.090*"app" + 0.050*"simple" + 0.030*"time" + 0.027*"heart" + 0.027*"rate" + 0.023*"new" + 0.017*"title" + 0.016*"Mac" + 0.016*"great" + 0.014*"platform" + 0.013*"diy" + 0.013*"dinner" + 0.010*"iPad" + 0.010*"list" + 0.010*"download" + 0.010*"pc" + 0.008*"location" + 0.007*"people" + 0.007*"project" 
+0.122*"available" + 0.090*"app" + 0.049*"simple" + 0.030*"time" + 0.027*"heart" + 0.027*"rate" + 0.023*"new" + 0.017*"title" + 0.016*"Mac" + 0.016*"great" + 0.014*"platform" + 0.013*"diy" + 0.013*"dinner" + 0.010*"list" + 0.010*"iPad" + 0.010*"download" + 0.010*"pc" + 0.007*"people" + 0.007*"project" + 0.007*"home" 
 
 Topic 10 :
 
-0.206*"pin" + 0.111*"issue" + 0.050*"app" + 0.035*"suite" + 0.027*"internet" + 0.016*"Super" + 0.016*"layout" + 0.012*"new" + 0.012*"Lose" + 0.012*"stop" + 0.012*"office" + 0.011*"touch" + 0.009*"easy" + 0.008*"solid" + 0.008*"reliable" + 0.008*"droid" + 0.008*"fabulous" + 0.008*"try" + 0.008*"month" + 0.006*"time" 
+0.204*"pin" + 0.114*"issue" + 0.051*"app" + 0.035*"suite" + 0.027*"internet" + 0.015*"Super" + 0.015*"layout" + 0.012*"new" + 0.012*"Lose" + 0.012*"stop" + 0.012*"office" + 0.011*"touch" + 0.009*"easy" + 0.008*"solid" + 0.008*"reliable" + 0.008*"droid" + 0.008*"fabulous" + 0.008*"try" + 0.008*"month" + 0.006*"time" 
 
 Topic 11 :
 
-0.069*"little" + 0.052*"app" + 0.031*"improvement" + 0.022*"great" + 0.021*"able" + 0.019*"UI" + 0.015*"new" + 0.012*"hair" + 0.012*"tab" + 0.012*"function" + 0.011*"work" + 0.010*"version" + 0.010*"Evernote" + 0.009*"plan" + 0.009*"vacation" + 0.009*"camera" + 0.009*"Google" + 0.009*"tough" + 0.009*"icon" + 0.009*"daily" 
+0.073*"little" + 0.052*"app" + 0.031*"improvement" + 0.023*"great" + 0.021*"able" + 0.019*"UI" + 0.015*"new" + 0.012*"hair" + 0.012*"tab" + 0.012*"function" + 0.010*"work" + 0.010*"version" + 0.010*"Evernote" + 0.009*"plan" + 0.009*"vacation" + 0.009*"camera" + 0.009*"Google" + 0.009*"tough" + 0.009*"icon" + 0.009*"daily" 
 
 Topic 12 :
 
-0.375*"app" + 0.158*"great" + 0.041*"favorite" + 0.018*"time" + 0.010*"whatsapp" + 0.007*"function" + 0.007*"voice" + 0.005*"feature" + 0.005*"interest" + 0.005*"choice" + 0.005*"type" + 0.005*"old" + 0.005*"version" + 0.004*"home" + 0.004*"control" + 0.004*"price" + 0.004*"iq" + 0.004*"system" + 0.004*"big" + 0.004*"document" 
+0.364*"app" + 0.142*"great" + 0.044*"favorite" + 0.016*"time" + 0.011*"whatsapp" + 0.008*"function" + 0.007*"voice" + 0.006*"feature" + 0.006*"interest" + 0.006*"choice" + 0.005*"type" + 0.005*"old" + 0.005*"version" + 0.004*"control" + 0.004*"price" + 0.004*"iq" + 0.004*"system" + 0.004*"big" + 0.004*"document" + 0.003*"home" 
 
 Topic 13 :
 
-0.073*"app" + 0.027*"text" + 0.022*"awesomeness" + 0.021*"great" + 0.018*"Editing" + 0.018*"message" + 0.014*"update" + 0.014*"phone" + 0.014*"flight" + 0.014*"event" + 0.014*"v" + 0.014*"trouble" + 0.014*"globe" + 0.010*"work" + 0.009*"willnot" + 0.009*"surprised" + 0.009*"yyy" + 0.009*"coast" + 0.009*"interesting" + 0.009*"edit" 
+0.073*"app" + 0.027*"text" + 0.022*"awesomeness" + 0.021*"great" + 0.018*"Editing" + 0.018*"message" + 0.014*"update" + 0.013*"phone" + 0.013*"flight" + 0.013*"event" + 0.013*"v" + 0.013*"trouble" + 0.013*"globe" + 0.010*"work" + 0.009*"willnot" + 0.009*"surprised" + 0.009*"yyy" + 0.009*"coast" + 0.009*"interesting" + 0.009*"edit" 
 
 Topic 14 :
 
-0.098*"app" + 0.044*"d" + 0.026*"ease" + 0.022*"great" + 0.011*"trail" + 0.011*"m" + 0.011*"basic" + 0.011*"penny" + 0.011*"offline" + 0.011*"account" + 0.011*"picture" + 0.009*"review" + 0.007*"ride" + 0.007*"GPS" + 0.007*"com" + 0.007*"paper" + 0.007*"student" + 0.007*"life" + 0.007*"epic" + 0.007*"well" 
+0.099*"app" + 0.044*"d" + 0.026*"ease" + 0.023*"great" + 0.011*"trail" + 0.011*"m" + 0.011*"basic" + 0.011*"penny" + 0.011*"offline" + 0.011*"account" + 0.011*"picture" + 0.010*"review" + 0.007*"com" + 0.007*"ride" + 0.007*"GPS" + 0.007*"student" + 0.007*"paper" + 0.007*"life" + 0.007*"epic" + 0.007*"well" 
 
 Topic 15 :
 
-0.294*"great" + 0.035*"app" + 0.019*"screen" + 0.013*"big" + 0.013*"4" + 0.013*"frustrating" + 0.013*"accessible" + 0.012*"button" + 0.012*"work" + 0.010*"news" + 0.010*"calculator" + 0.010*"learning" + 0.010*"AWESOME" + 0.009*"small" + 0.007*"week" + 0.007*"year" + 0.007*"lot" + 0.006*"home" + 0.006*"speaker" + 0.006*"xperia" 
+0.311*"great" + 0.059*"app" + 0.018*"screen" + 0.013*"big" + 0.012*"4" + 0.012*"frustrating" + 0.012*"accessible" + 0.011*"button" + 0.011*"work" + 0.010*"news" + 0.009*"home" + 0.009*"calculator" + 0.009*"learning" + 0.009*"AWESOME" + 0.008*"lot" + 0.007*"week" + 0.007*"year" + 0.006*"speaker" + 0.006*"xperia" + 0.006*"poor" 
 
 Topic 16 :
 
-0.161*"recipe" + 0.071*"app" + 0.041*"addictive" + 0.038*"map" + 0.033*"great" + 0.019*"store" + 0.019*"option" + 0.019*"service" + 0.017*"project" + 0.013*"design" + 0.011*"feature" + 0.010*"able" + 0.010*"lot" + 0.010*"terrain" + 0.010*"support" + 0.010*"g" + 0.010*"1" + 0.009*"year" + 0.006*"24th" + 0.006*"Google" 
+0.160*"recipe" + 0.070*"app" + 0.041*"addictive" + 0.038*"map" + 0.034*"great" + 0.019*"store" + 0.019*"option" + 0.018*"service" + 0.017*"project" + 0.013*"feature" + 0.013*"design" + 0.010*"lot" + 0.010*"able" + 0.010*"support" + 0.010*"terrain" + 0.010*"g" + 0.010*"1" + 0.009*"year" + 0.006*"Google" + 0.006*"24th" 
 
 Topic 17 :
 
-0.560*"good" + 0.161*"app" + 0.028*"great" + 0.023*"job" + 0.014*"time" + 0.007*"money" + 0.006*"year" + 0.006*"battery" + 0.006*"website" + 0.004*"info" + 0.004*"reference" + 0.003*"high" + 0.003*"lab" + 0.003*"GPS" + 0.003*"Quizlet" + 0.002*"different" + 0.002*"local" + 0.002*"half" + 0.002*"goal" + 0.002*"concept" 
+0.565*"good" + 0.159*"app" + 0.028*"great" + 0.023*"job" + 0.013*"time" + 0.007*"money" + 0.006*"battery" + 0.006*"website" + 0.004*"reference" + 0.003*"high" + 0.003*"info" + 0.003*"lab" + 0.003*"GPS" + 0.003*"Quizlet" + 0.002*"different" + 0.002*"year" + 0.002*"half" + 0.002*"goal" + 0.002*"concept" + 0.002*"international" 
 
 Topic 18 :
 
-0.109*"hotel" + 0.104*"restaurant" + 0.103*"review" + 0.071*"area" + 0.047*"great" + 0.044*"app" + 0.020*"attraction" + 0.016*"huge" + 0.016*"intuitive" + 0.016*"safe" + 0.015*"place" + 0.012*"filter" + 0.012*"activity" + 0.008*"editor" + 0.008*"value" + 0.008*"help" + 0.008*"decent" + 0.008*"unfamiliar" + 0.008*"baby" + 0.008*"hundred" 
+0.106*"restaurant" + 0.105*"hotel" + 0.104*"review" + 0.070*"area" + 0.049*"great" + 0.046*"app" + 0.020*"attraction" + 0.016*"huge" + 0.016*"intuitive" + 0.016*"safe" + 0.014*"place" + 0.012*"filter" + 0.012*"activity" + 0.008*"editor" + 0.008*"value" + 0.008*"help" + 0.008*"decent" + 0.008*"unfamiliar" + 0.008*"baby" + 0.008*"hundred" 
 
 Topic 19 :
 
-0.449*"thing" + 0.040*"great" + 0.038*"able" + 0.035*"contact" + 0.015*"feature" + 0.012*"new" + 0.011*"7" + 0.007*"med" + 0.007*"screen" + 0.007*"available" + 0.007*"lover" + 0.007*"library" + 0.007*"design" + 0.007*"saving" + 0.007*"price" + 0.005*"info" + 0.004*"kind" + 0.004*"product" + 0.004*"household" + 0.004*"cool" 
+0.455*"thing" + 0.039*"great" + 0.038*"able" + 0.035*"contact" + 0.012*"new" + 0.011*"7" + 0.011*"lover" + 0.008*"feature" + 0.007*"med" + 0.007*"design" + 0.007*"screen" + 0.007*"available" + 0.007*"library" + 0.007*"saving" + 0.005*"info" + 0.004*"price" + 0.004*"kind" + 0.004*"product" + 0.004*"household" + 0.004*"cool" 
 
 Topic 20 :
 
-0.205*"phone" + 0.096*"friend" + 0.068*"app" + 0.029*"great" + 0.025*"superb" + 0.024*"fine" + 0.023*"family" + 0.022*"able" + 0.019*"setting" + 0.019*"Nice" + 0.017*"computer" + 0.016*"time" + 0.013*"picture" + 0.012*"memory" + 0.011*"graphic" + 0.009*"run" + 0.009*"book" + 0.009*"satisfied" + 0.009*"video" + 0.009*"apple" 
+0.206*"phone" + 0.096*"friend" + 0.068*"app" + 0.028*"great" + 0.025*"superb" + 0.024*"fine" + 0.023*"family" + 0.022*"able" + 0.019*"setting" + 0.019*"Nice" + 0.018*"computer" + 0.016*"time" + 0.013*"picture" + 0.012*"memory" + 0.011*"graphic" + 0.009*"run" + 0.009*"book" + 0.009*"satisfied" + 0.009*"video" + 0.009*"apple" 
 
 Topic 21 :
 
-0.284*"amazing" + 0.114*"perfect" + 0.107*"app" + 0.028*"great" + 0.019*"feature" + 0.016*"moment" + 0.013*"option" + 0.013*"best" + 0.010*"phone" + 0.010*"image" + 0.009*"travel" + 0.007*"beautiful" + 0.007*"result" + 0.007*"com" + 0.007*"spur" + 0.007*"bucket" + 0.007*"screen" + 0.007*"appropriate" + 0.006*"kind" + 0.004*"file" 
+0.284*"amazing" + 0.114*"perfect" + 0.106*"app" + 0.028*"great" + 0.019*"feature" + 0.016*"moment" + 0.013*"option" + 0.013*"best" + 0.010*"phone" + 0.010*"image" + 0.009*"travel" + 0.007*"beautiful" + 0.007*"result" + 0.007*"com" + 0.007*"spur" + 0.007*"bucket" + 0.007*"screen" + 0.007*"appropriate" + 0.006*"kind" + 0.004*"file" 
 
 Topic 22 :
 
-0.159*"app" + 0.096*"worth" + 0.069*"new" + 0.023*"great" + 0.020*"neat" + 0.016*"review" + 0.014*"money" + 0.010*"sense" + 0.010*"Xperia" + 0.007*"stuff" + 0.007*"time" + 0.007*"fan" + 0.007*"uselful" + 0.007*"site" + 0.007*"inspiring" + 0.007*"hard" + 0.007*"hot" + 0.007*"girl" + 0.007*"home" + 0.007*"innovative" 
+0.160*"app" + 0.087*"worth" + 0.067*"new" + 0.027*"great" + 0.019*"neat" + 0.017*"review" + 0.014*"good" + 0.014*"money" + 0.010*"sense" + 0.010*"Xperia" + 0.007*"time" + 0.007*"stuff" + 0.007*"place" + 0.007*"fan" + 0.007*"site" + 0.007*"uselful" + 0.007*"hard" + 0.007*"inspiring" + 0.007*"hot" + 0.007*"innovative" 
 
 Topic 23 :
 
-0.398*"nice" + 0.158*"board" + 0.086*"app" + 0.031*"secret" + 0.021*"ad" + 0.014*"important" + 0.010*"order" + 0.010*"weekly" + 0.007*"version" + 0.007*"10" + 0.004*"Tripadvisor" + 0.004*"device" + 0.004*"money" + 0.004*"pc" + 0.004*"fix" + 0.003*"cake" + 0.003*"glad" + 0.003*"gaming" + 0.003*"desktop" + 0.003*"head" 
+0.400*"nice" + 0.159*"board" + 0.086*"app" + 0.031*"secret" + 0.021*"ad" + 0.014*"important" + 0.010*"order" + 0.010*"weekly" + 0.007*"version" + 0.007*"10" + 0.004*"Tripadvisor" + 0.004*"device" + 0.004*"money" + 0.004*"pc" + 0.004*"fix" + 0.004*"glad" + 0.004*"cake" + 0.004*"desktop" + 0.004*"gaming" + 0.004*"head" 
 
 Topic 24 :
 
-0.041*"PDF" + 0.035*"app" + 0.027*"2" + 0.023*"new" + 0.019*"game" + 0.018*"Dropbox" + 0.018*"round" + 0.018*"80" + 0.018*"frame" + 0.014*"stat" + 0.014*"feature" + 0.014*"entire" + 0.014*"gr8" + 0.014*"golf" + 0.014*"Update" + 0.009*"iPhone" + 0.009*"sleep" + 0.009*"ball" + 0.009*"phone" + 0.009*"viewer" 
+0.041*"PDF" + 0.035*"app" + 0.027*"2" + 0.022*"new" + 0.019*"game" + 0.018*"Dropbox" + 0.018*"round" + 0.018*"80" + 0.018*"frame" + 0.014*"stat" + 0.014*"feature" + 0.014*"entire" + 0.014*"gr8" + 0.014*"golf" + 0.014*"Update" + 0.009*"iPhone" + 0.009*"phone" + 0.009*"ball" + 0.009*"sleep" + 0.009*"viewer" 
 
 Topic 25 :
 
-0.162*"trip" + 0.068*"review" + 0.063*"advisor" + 0.061*"app" + 0.049*"great" + 0.039*"travel" + 0.022*"restaurant" + 0.021*"access" + 0.019*"tool" + 0.017*"useful" + 0.017*"quick" + 0.017*"hotel" + 0.016*"guide" + 0.016*"home" + 0.012*"messenger" + 0.011*"overall" + 0.009*"reading" + 0.009*"house" + 0.007*"husband" + 0.007*"traveler" 
+0.162*"trip" + 0.068*"review" + 0.063*"advisor" + 0.061*"app" + 0.049*"great" + 0.039*"travel" + 0.022*"restaurant" + 0.021*"access" + 0.019*"tool" + 0.017*"quick" + 0.017*"hotel" + 0.016*"guide" + 0.016*"useful" + 0.016*"home" + 0.012*"messenger" + 0.011*"overall" + 0.009*"reading" + 0.009*"house" + 0.007*"husband" + 0.007*"traveler" 
 
 Topic 26 :
 
-0.153*"work" + 0.099*"3" + 0.086*"site" + 0.045*"great" + 0.040*"program" + 0.032*"app" + 0.024*"iPhone" + 0.017*"folder" + 0.015*"class" + 0.012*"category" + 0.011*"access" + 0.009*"day" + 0.009*"lot" + 0.009*"favourite" + 0.009*"robust" + 0.009*"multiplayer" + 0.009*"opinion" + 0.009*"tablet" + 0.008*"important" + 0.006*"excellent" 
+0.155*"work" + 0.095*"3" + 0.086*"site" + 0.048*"great" + 0.040*"program" + 0.034*"app" + 0.024*"iPhone" + 0.018*"folder" + 0.015*"class" + 0.012*"category" + 0.011*"access" + 0.009*"day" + 0.009*"lot" + 0.009*"favourite" + 0.009*"robust" + 0.009*"multiplayer" + 0.009*"opinion" + 0.009*"tablet" + 0.008*"important" + 0.007*"able" 
 
 Topic 27 :
 
-0.174*"note" + 0.158*"Evernote" + 0.079*"life" + 0.049*"tool" + 0.026*"app" + 0.021*"notebook" + 0.020*"business" + 0.018*"personal" + 0.017*"new" + 0.017*"work" + 0.016*"meeting" + 0.016*"productivity" + 0.016*"paper" + 0.015*"version" + 0.014*"great" + 0.011*"sync" + 0.011*"indispensable" + 0.009*"evernote" + 0.009*"platform" + 0.008*"use" 
+0.174*"note" + 0.157*"Evernote" + 0.080*"life" + 0.050*"tool" + 0.024*"app" + 0.022*"notebook" + 0.020*"business" + 0.018*"personal" + 0.017*"work" + 0.017*"new" + 0.016*"meeting" + 0.016*"productivity" + 0.016*"paper" + 0.015*"version" + 0.013*"great" + 0.011*"sync" + 0.011*"indispensable" + 0.009*"evernote" + 0.009*"platform" + 0.008*"use" 
 
 Topic 28 :
 
-0.199*"star" + 0.160*"people" + 0.158*"5" + 0.053*"real" + 0.032*"review" + 0.031*"great" + 0.028*"slow" + 0.017*"app" + 0.010*"People" + 0.009*"magazine" + 0.007*"little" + 0.006*"reply" + 0.006*"human" + 0.006*"possible" + 0.006*"convenient" + 0.006*"gas" + 0.006*"save" + 0.005*"team" + 0.005*"time" + 0.005*"annoying" 
+0.203*"star" + 0.163*"people" + 0.161*"5" + 0.053*"real" + 0.032*"review" + 0.029*"great" + 0.029*"slow" + 0.017*"app" + 0.010*"People" + 0.010*"magazine" + 0.008*"little" + 0.006*"reply" + 0.006*"human" + 0.006*"possible" + 0.006*"convenient" + 0.006*"gas" + 0.006*"annoying" + 0.005*"team" + 0.004*"time" + 0.004*"handy" 
 
 Topic 29 :
 
-0.254*"problem" + 0.050*"app" + 0.032*"version" + 0.022*"new" + 0.018*"tag" + 0.016*"time" + 0.012*"Evernote" + 0.011*"folder" + 0.011*"addiction" + 0.011*"buck" + 0.008*"website" + 0.008*"desktop" + 0.007*"love" + 0.007*"star" + 0.007*"Search" + 0.007*"7" + 0.007*"buggy" + 0.007*"sentence" + 0.007*"speech" + 0.007*"interface" 
+0.254*"problem" + 0.051*"app" + 0.031*"version" + 0.022*"new" + 0.017*"tag" + 0.016*"time" + 0.013*"Evernote" + 0.011*"folder" + 0.011*"addiction" + 0.011*"buck" + 0.008*"website" + 0.008*"desktop" + 0.007*"love" + 0.007*"star" + 0.007*"Search" + 0.007*"7" + 0.007*"buggy" + 0.007*"sentence" + 0.007*"speech" + 0.007*"interface" 
 
 Topic 30 :
 
-0.054*"late" + 0.038*"Evernote" + 0.027*"EverNote" + 0.025*"planning" + 0.021*"file" + 0.019*"document" + 0.017*"info" + 0.016*"iPad" + 0.011*"lot" + 0.011*"tool" + 0.011*"work" + 0.011*"confidence" + 0.011*"text" + 0.011*"note" + 0.011*"device" + 0.011*"iPhone" + 0.011*"fix" + 0.011*"slide" + 0.011*"interface" + 0.010*"desktop" 
+0.054*"late" + 0.037*"Evernote" + 0.027*"EverNote" + 0.026*"lot" + 0.026*"planning" + 0.021*"file" + 0.019*"document" + 0.017*"info" + 0.016*"iPad" + 0.011*"tool" + 0.011*"work" + 0.011*"confidence" + 0.011*"text" + 0.011*"note" + 0.011*"device" + 0.011*"fix" + 0.011*"slide" + 0.011*"interface" + 0.011*"iPhone" + 0.009*"desktop" 
 
 Topic 31 :
 
-0.314*"idea" + 0.229*"Pinterest" + 0.070*"great" + 0.043*"app" + 0.021*"funny" + 0.018*"time" + 0.014*"lot" + 0.012*"picture" + 0.010*"wedding" + 0.010*"ton" + 0.008*"change" + 0.008*"website" + 0.006*"option" + 0.006*"worm" + 0.004*"limited" + 0.004*"FB" + 0.004*"interesting" + 0.004*"sticky" + 0.004*"person" + 0.004*"addition" 
+0.315*"idea" + 0.232*"Pinterest" + 0.070*"great" + 0.041*"app" + 0.021*"funny" + 0.018*"time" + 0.012*"picture" + 0.010*"wedding" + 0.010*"ton" + 0.009*"lot" + 0.008*"change" + 0.008*"website" + 0.006*"option" + 0.006*"worm" + 0.004*"limited" + 0.004*"FB" + 0.004*"interesting" + 0.004*"sticky" + 0.004*"person" + 0.004*"addition" 
 
 Topic 32 :
 
-0.142*"thank" + 0.073*"app" + 0.046*"great" + 0.025*"accurate" + 0.018*"year" + 0.015*"hole" + 0.015*"direction" + 0.015*"time" + 0.012*"thing" + 0.012*"spot" + 0.012*"fashion" + 0.012*"high" + 0.012*"able" + 0.011*"beautiful" + 0.009*"wonderful" + 0.009*"OMG" + 0.009*"saver" + 0.009*"network" + 0.008*"tool" + 0.007*"document" 
+0.142*"thank" + 0.076*"app" + 0.047*"great" + 0.025*"accurate" + 0.018*"year" + 0.015*"time" + 0.015*"hole" + 0.015*"direction" + 0.012*"thing" + 0.012*"spot" + 0.012*"fashion" + 0.012*"high" + 0.011*"able" + 0.011*"beautiful" + 0.009*"wonderful" + 0.009*"OMG" + 0.009*"saver" + 0.009*"network" + 0.008*"tool" + 0.007*"document" 
 
 Topic 33 :
 
-0.108*"app" + 0.057*"city" + 0.052*"complaint" + 0.047*"4" + 0.026*"page" + 0.021*"open" + 0.021*"point" + 0.016*"table" + 0.016*"possible" + 0.016*"difficult" + 0.016*"functionality" + 0.014*"restaurant" + 0.011*"tab" + 0.011*"phone" + 0.010*"backup" + 0.010*"sick" + 0.010*"option" + 0.010*"calendar" + 0.010*"reservation" + 0.010*"3" 
+0.109*"app" + 0.057*"city" + 0.052*"complaint" + 0.047*"4" + 0.026*"page" + 0.021*"open" + 0.021*"point" + 0.016*"table" + 0.016*"possible" + 0.016*"difficult" + 0.016*"functionality" + 0.014*"restaurant" + 0.011*"tab" + 0.011*"phone" + 0.010*"backup" + 0.010*"sick" + 0.010*"option" + 0.010*"calendar" + 0.010*"reservation" + 0.010*"3" 
 
 Topic 34 :
 
@@ -142,103 +142,103 @@ Topic 34 :
 
 Topic 35 :
 
-0.134*"option" + 0.069*"book" + 0.047*"year" + 0.041*"Facebook" + 0.035*"pc" + 0.034*"time" + 0.021*"landscape" + 0.021*"bt" + 0.021*"pro" + 0.021*"opportunity" + 0.019*"hand" + 0.014*"wife" + 0.014*"type" + 0.014*"subscription" + 0.014*"fingertip" + 0.007*"note" + 0.007*"annual" + 0.007*"fee" + 0.007*"boo" + 0.007*"cost" 
+0.126*"year" + 0.123*"option" + 0.063*"book" + 0.038*"Facebook" + 0.032*"pc" + 0.030*"time" + 0.019*"landscape" + 0.019*"bt" + 0.019*"pro" + 0.019*"opportunity" + 0.017*"hand" + 0.013*"wife" + 0.013*"type" + 0.013*"subscription" + 0.013*"fingertip" + 0.007*"document" + 0.007*"word" + 0.007*"note" + 0.006*"fee" + 0.006*"annual" 
 
 Topic 36 :
 
-0.077*"info" + 0.052*"app" + 0.041*"old" + 0.039*"great" + 0.032*"fact" + 0.028*"version" + 0.026*"forum" + 0.024*"travel" + 0.022*"Whatsapp" + 0.020*"computer" + 0.013*"brother" + 0.013*"home" + 0.012*"way" + 0.011*"site" + 0.010*"fast" + 0.010*"friend" + 0.010*"thank" + 0.010*"4" + 0.010*"Tripadvisor" + 0.010*"password" 
+0.083*"info" + 0.052*"app" + 0.041*"old" + 0.039*"great" + 0.032*"fact" + 0.028*"version" + 0.025*"forum" + 0.024*"travel" + 0.022*"Whatsapp" + 0.020*"computer" + 0.013*"brother" + 0.013*"home" + 0.011*"way" + 0.011*"site" + 0.010*"fast" + 0.010*"friend" + 0.010*"thank" + 0.010*"4" + 0.010*"Tripadvisor" + 0.010*"password" 
 
 Topic 37 :
 
-0.375*"update" + 0.115*"stuff" + 0.051*"item" + 0.032*"great" + 0.026*"app" + 0.018*"future" + 0.018*"hard" + 0.015*"quality" + 0.015*"wrong" + 0.015*"purchase" + 0.011*"bunch" + 0.007*"step" + 0.007*"excited" + 0.007*"buy" + 0.005*"rest" + 0.004*"different" + 0.004*"story" + 0.004*"2" + 0.004*"news" + 0.004*"multiple" 
+0.375*"update" + 0.112*"stuff" + 0.051*"item" + 0.034*"great" + 0.028*"app" + 0.018*"future" + 0.018*"hard" + 0.015*"quality" + 0.015*"purchase" + 0.015*"wrong" + 0.011*"bunch" + 0.007*"step" + 0.007*"excited" + 0.007*"buy" + 0.005*"rest" + 0.004*"different" + 0.004*"story" + 0.004*"2" + 0.004*"news" + 0.004*"multiple" 
 
 Topic 38 :
 
-0.047*"family" + 0.041*"dollar" + 0.039*"money" + 0.035*"reminder" + 0.029*"line" + 0.023*"customer" + 0.023*"holiday" + 0.018*"hour" + 0.018*"car" + 0.018*"minute" + 0.018*"rental" + 0.018*"daughter" + 0.012*"tonight" + 0.012*"service" + 0.012*"country" + 0.012*"support" + 0.012*"early" + 0.012*"european" + 0.008*"place" + 0.006*"important" 
+0.052*"family" + 0.040*"dollar" + 0.039*"money" + 0.035*"reminder" + 0.029*"line" + 0.023*"customer" + 0.023*"holiday" + 0.017*"hour" + 0.017*"car" + 0.017*"minute" + 0.017*"rental" + 0.017*"daughter" + 0.012*"tonight" + 0.012*"service" + 0.012*"country" + 0.012*"support" + 0.012*"early" + 0.012*"european" + 0.008*"place" + 0.006*"important" 
 
 Topic 39 :
 
-0.119*"sure" + 0.033*"app" + 0.024*"great" + 0.018*"minor" + 0.014*"school" + 0.014*"location" + 0.014*"iPad" + 0.013*"couple" + 0.011*"business" + 0.010*"service" + 0.010*"home" + 0.009*"rhubarb" + 0.009*"wedding" + 0.009*"pleasure" + 0.009*"sad" + 0.009*"instruction" + 0.009*"matter" + 0.009*"mode" + 0.009*"distance" + 0.009*"supper" 
+0.119*"sure" + 0.037*"app" + 0.027*"great" + 0.018*"minor" + 0.017*"location" + 0.014*"school" + 0.014*"iPad" + 0.013*"couple" + 0.011*"business" + 0.010*"service" + 0.010*"home" + 0.009*"rhubarb" + 0.009*"pleasure" + 0.009*"wedding" + 0.009*"sad" + 0.009*"instruction" + 0.009*"matter" + 0.009*"mode" + 0.009*"distance" + 0.009*"supper" 
 
 Topic 40 :
 
-0.089*"editor" + 0.053*"need" + 0.049*"photo" + 0.038*"app" + 0.026*"Picsart" + 0.021*"datum" + 0.016*"7" + 0.014*"fast" + 0.012*"time" + 0.011*"minute" + 0.011*"road" + 0.011*"Dropbox" + 0.011*"buena" + 0.011*"terrible" + 0.011*"semester" + 0.011*"size" + 0.011*"c" + 0.011*"invaluable" + 0.009*"video" + 0.005*"aplicaci" 
+0.089*"editor" + 0.052*"photo" + 0.052*"need" + 0.041*"app" + 0.026*"Picsart" + 0.020*"datum" + 0.016*"7" + 0.014*"fast" + 0.012*"time" + 0.011*"minute" + 0.011*"road" + 0.011*"Dropbox" + 0.011*"buena" + 0.011*"terrible" + 0.011*"semester" + 0.011*"size" + 0.011*"c" + 0.011*"invaluable" + 0.008*"video" + 0.005*"Muchas" 
 
 Topic 41 :
 
-0.236*"place" + 0.141*"wonderful" + 0.063*"app" + 0.024*"time" + 0.022*"photo" + 0.019*"interesting" + 0.015*"file" + 0.014*"thing" + 0.012*"plan" + 0.012*"teacher" + 0.012*"automatic" + 0.012*"didn" + 0.012*"crafty" + 0.009*"well" + 0.008*"birthday" + 0.008*"elementary" + 0.008*"related" + 0.007*"software" + 0.004*"load" + 0.004*"amazing" 
+0.234*"place" + 0.140*"wonderful" + 0.064*"app" + 0.024*"time" + 0.022*"photo" + 0.019*"interesting" + 0.015*"file" + 0.014*"thing" + 0.011*"plan" + 0.011*"teacher" + 0.011*"automatic" + 0.011*"didn" + 0.011*"crafty" + 0.009*"well" + 0.008*"birthday" + 0.008*"elementary" + 0.008*"related" + 0.007*"software" + 0.004*"good" + 0.004*"load" 
 
 Topic 42 :
 
-0.221*"game" + 0.132*"well" + 0.046*"app" + 0.020*"time" + 0.017*"money" + 0.015*"great" + 0.014*"thing" + 0.013*"new" + 0.012*"map" + 0.008*"mode" + 0.008*"work" + 0.008*"line" + 0.008*"15" + 0.008*"mod" + 0.008*"limit" + 0.008*"issue" + 0.008*"backyard" + 0.008*"start" + 0.006*"able" + 0.006*"mobile" 
+0.221*"game" + 0.131*"well" + 0.048*"app" + 0.020*"time" + 0.017*"money" + 0.015*"great" + 0.014*"thing" + 0.013*"new" + 0.012*"map" + 0.008*"mode" + 0.008*"work" + 0.008*"line" + 0.008*"15" + 0.008*"mod" + 0.008*"limit" + 0.008*"issue" + 0.008*"backyard" + 0.008*"start" + 0.006*"able" + 0.006*"mobile" 
 
 Topic 43 :
 
-0.180*"list" + 0.069*"date" + 0.042*"today" + 0.035*"keyboard" + 0.031*"Evernote" + 0.028*"second" + 0.028*"grocery" + 0.020*"app" + 0.014*"mark" + 0.014*"screen" + 0.014*"white" + 0.014*"reason" + 0.014*"tree" + 0.007*"perfect" + 0.007*"able" + 0.007*"program" + 0.007*"editing" + 0.007*"people" + 0.007*"yesterday" + 0.007*"unusable" 
+0.179*"list" + 0.062*"date" + 0.045*"today" + 0.039*"Evernote" + 0.035*"keyboard" + 0.028*"second" + 0.028*"grocery" + 0.019*"app" + 0.014*"mark" + 0.014*"screen" + 0.014*"white" + 0.014*"reason" + 0.014*"tree" + 0.007*"perfect" + 0.007*"able" + 0.007*"program" + 0.007*"editing" + 0.007*"people" + 0.007*"yesterday" + 0.007*"unusable" 
 
 Topic 44 :
 
-0.286*"way" + 0.096*"picture" + 0.057*"world" + 0.035*"different" + 0.027*"category" + 0.025*"space" + 0.022*"new" + 0.022*"TripAdvisor" + 0.022*"memory" + 0.018*"HTC" + 0.014*"ability" + 0.014*"app" + 0.008*"card" + 0.008*"travel" + 0.007*"page" + 0.007*"change" + 0.007*"inside" + 0.007*"button" + 0.007*"social" + 0.005*"clothe" 
+0.294*"way" + 0.094*"picture" + 0.057*"world" + 0.035*"different" + 0.027*"category" + 0.025*"space" + 0.024*"TripAdvisor" + 0.022*"new" + 0.021*"memory" + 0.018*"HTC" + 0.015*"app" + 0.014*"ability" + 0.008*"card" + 0.008*"travel" + 0.007*"page" + 0.007*"change" + 0.007*"inside" + 0.007*"button" + 0.005*"social" + 0.005*"clothe" 
 
 Topic 45 :
 
-0.045*"Samsung" + 0.032*"app" + 0.028*"daily" + 0.028*"track" + 0.023*"new" + 0.023*"galaxy" + 0.021*"great" + 0.017*"word" + 0.017*"useful" + 0.017*"true" + 0.017*"task" + 0.016*"2" + 0.011*"pronunciation" + 0.011*"podcast" + 0.011*"artistic" + 0.011*"journal" + 0.011*"everyday" + 0.011*"horrible" + 0.011*"ready" + 0.011*"possibility" 
+0.045*"Samsung" + 0.032*"app" + 0.028*"daily" + 0.024*"track" + 0.023*"new" + 0.023*"galaxy" + 0.021*"great" + 0.017*"word" + 0.017*"useful" + 0.017*"true" + 0.017*"task" + 0.016*"2" + 0.011*"pronunciation" + 0.011*"podcast" + 0.011*"artistic" + 0.011*"journal" + 0.011*"everyday" + 0.011*"pic" + 0.011*"ready" + 0.011*"horrible" 
 
 Topic 46 :
 
-0.081*"great" + 0.080*"app" + 0.045*"interface" + 0.029*"tip" + 0.026*"vacation" + 0.023*"variety" + 0.017*"good" + 0.017*"option" + 0.016*"performance" + 0.016*"right" + 0.013*"new" + 0.013*"collage" + 0.013*"well" + 0.013*"finger" + 0.013*"pleased" + 0.010*"PDF" + 0.010*"upgrade" + 0.010*"pinner" + 0.010*"intuitive" + 0.010*"bit" 
+0.082*"app" + 0.081*"great" + 0.045*"interface" + 0.029*"tip" + 0.026*"vacation" + 0.023*"variety" + 0.017*"good" + 0.017*"option" + 0.016*"performance" + 0.016*"right" + 0.013*"new" + 0.013*"collage" + 0.013*"well" + 0.013*"finger" + 0.013*"pleased" + 0.010*"PDF" + 0.010*"upgrade" + 0.010*"pinner" + 0.010*"bit" + 0.010*"intuitive" 
 
 Topic 47 :
 
-0.072*"bug" + 0.046*"version" + 0.042*"new" + 0.036*"online" + 0.030*"reliable" + 0.024*"server" + 0.020*"great" + 0.018*"suck" + 0.018*"support" + 0.018*"upload" + 0.018*"search" + 0.013*"problem" + 0.013*"app" + 0.012*"photo" + 0.012*"video" + 0.012*"hotel" + 0.012*"1" + 0.012*"sale" + 0.009*"time" + 0.007*"update" 
+0.071*"bug" + 0.048*"version" + 0.041*"new" + 0.036*"online" + 0.030*"reliable" + 0.024*"server" + 0.020*"great" + 0.018*"suck" + 0.018*"support" + 0.018*"upload" + 0.018*"search" + 0.013*"problem" + 0.012*"app" + 0.012*"photo" + 0.012*"video" + 0.012*"hotel" + 0.012*"1" + 0.012*"sale" + 0.009*"time" + 0.007*"update" 
 
 Topic 48 :
 
-0.263*"fun" + 0.105*"time" + 0.046*"app" + 0.026*"number" + 0.020*"office" + 0.020*"multiple" + 0.017*"card" + 0.015*"work" + 0.013*"sim" + 0.013*"dual" + 0.013*"age" + 0.010*"like" + 0.010*"address" + 0.010*"home" + 0.010*"mobile" + 0.009*"way" + 0.007*"accurate" + 0.007*"phone" + 0.007*"plz" + 0.007*"weight" 
+0.259*"fun" + 0.110*"time" + 0.062*"app" + 0.026*"number" + 0.020*"office" + 0.019*"multiple" + 0.016*"card" + 0.015*"work" + 0.013*"sim" + 0.013*"dual" + 0.013*"age" + 0.010*"like" + 0.010*"address" + 0.010*"home" + 0.010*"mobile" + 0.007*"accurate" + 0.007*"phone" + 0.007*"plz" + 0.007*"weight" + 0.007*"accessible" 
 
 Topic 49 :
 
-0.058*"great" + 0.038*"product" + 0.032*"time" + 0.030*"computer" + 0.021*"specific" + 0.017*"camera" + 0.015*"way" + 0.012*"app" + 0.010*"navigation" + 0.010*"payment" + 0.010*"r" + 0.010*"site" + 0.010*"gameplay" + 0.010*"roll" + 0.010*"iphone" + 0.010*"convenient" + 0.008*"money" + 0.007*"option" + 0.007*"turn" + 0.007*"weekend" 
+0.057*"great" + 0.038*"product" + 0.033*"time" + 0.031*"computer" + 0.021*"specific" + 0.017*"camera" + 0.013*"way" + 0.012*"app" + 0.010*"navigation" + 0.010*"payment" + 0.010*"r" + 0.010*"site" + 0.010*"gameplay" + 0.010*"roll" + 0.010*"iphone" + 0.010*"convenient" + 0.009*"money" + 0.007*"option" + 0.007*"turn" + 0.007*"weekend" 
 
 Topic 50 :
 
-0.054*"time" + 0.039*"long" + 0.030*"past" + 0.014*"user" + 0.013*"tripadvisor" + 0.013*"space" + 0.010*"app" + 0.009*"issue" + 0.009*"interface" + 0.009*"thinking" + 0.009*"book" + 0.009*"able" + 0.009*"wedding" + 0.009*"french" + 0.009*"bday" + 0.009*"mind" + 0.009*"fail" + 0.009*"e" + 0.009*"station" + 0.009*"multi" 
+0.055*"time" + 0.038*"long" + 0.030*"past" + 0.015*"great" + 0.013*"user" + 0.013*"tripadvisor" + 0.013*"space" + 0.012*"app" + 0.009*"interface" + 0.009*"issue" + 0.009*"book" + 0.009*"thinking" + 0.009*"able" + 0.009*"wedding" + 0.009*"french" + 0.009*"bday" + 0.009*"mind" + 0.009*"fail" + 0.009*"e" + 0.009*"station" 
 
 Topic 51 :
 
-0.203*"application" + 0.038*"beautiful" + 0.029*"great" + 0.026*"level" + 0.020*"app" + 0.017*"story" + 0.014*"quick" + 0.014*"helpfull" + 0.013*"road" + 0.013*"person" + 0.013*"100" + 0.013*"frnd" + 0.013*"kind" + 0.009*"professional" + 0.009*"function" + 0.009*"day" + 0.009*"Jennifer" + 0.009*"short" + 0.009*"concise" + 0.009*"efficient" 
+0.203*"application" + 0.038*"beautiful" + 0.027*"great" + 0.025*"level" + 0.020*"app" + 0.017*"story" + 0.014*"quick" + 0.014*"helpfull" + 0.013*"road" + 0.013*"person" + 0.013*"100" + 0.013*"frnd" + 0.013*"kind" + 0.009*"function" + 0.009*"professional" + 0.009*"day" + 0.009*"Jennifer" + 0.009*"short" + 0.009*"concise" + 0.009*"efficient" 
 
 Topic 52 :
 
-0.062*"weather" + 0.019*"hour" + 0.019*"helpful" + 0.019*"visual" + 0.014*"target" + 0.014*"dependable" + 0.014*"extra" + 0.014*"simple" + 0.014*"app" + 0.013*"opinion" + 0.012*"photo" + 0.012*"day" + 0.010*"well" + 0.010*"graphic" + 0.010*"bill" + 0.010*"track" + 0.010*"wedding" + 0.010*"art" + 0.010*"vital" + 0.010*"accurate" 
+0.062*"weather" + 0.019*"hour" + 0.019*"helpful" + 0.019*"visual" + 0.014*"target" + 0.014*"dependable" + 0.014*"day" + 0.014*"extra" + 0.014*"simple" + 0.013*"opinion" + 0.013*"app" + 0.013*"photo" + 0.010*"well" + 0.010*"graphic" + 0.010*"bill" + 0.010*"track" + 0.010*"wedding" + 0.010*"art" + 0.010*"vital" + 0.010*"accurate" 
 
 Topic 53 :
 
-0.405*"easy" + 0.079*"app" + 0.060*"great" + 0.045*"fantastic" + 0.032*"feature" + 0.029*"review" + 0.022*"convenient" + 0.012*"traveler" + 0.012*"clear" + 0.011*"use" + 0.010*"recent" + 0.010*"search" + 0.009*"accurate" + 0.008*"info" + 0.008*"post" + 0.008*"negative" + 0.008*"honest" + 0.007*"version" + 0.006*"attention" + 0.006*"writer" 
+0.405*"easy" + 0.081*"app" + 0.061*"great" + 0.045*"fantastic" + 0.032*"feature" + 0.027*"review" + 0.022*"convenient" + 0.012*"traveler" + 0.012*"clear" + 0.010*"use" + 0.010*"recent" + 0.010*"search" + 0.009*"accurate" + 0.008*"post" + 0.008*"negative" + 0.008*"honest" + 0.008*"info" + 0.006*"version" + 0.006*"attention" + 0.006*"writer" 
 
 Topic 54 :
 
-0.084*"app" + 0.057*"Dropbox" + 0.044*"file" + 0.035*"great" + 0.027*"video" + 0.022*"version" + 0.018*"thought" + 0.017*"feature" + 0.015*"cloud" + 0.014*"project" + 0.012*"day" + 0.012*"sync" + 0.012*"work" + 0.011*"computer" + 0.011*"way" + 0.010*"scripture" + 0.010*"link" + 0.010*"able" + 0.010*"simple" + 0.009*"home" 
+0.086*"app" + 0.057*"Dropbox" + 0.045*"file" + 0.035*"great" + 0.027*"video" + 0.022*"version" + 0.017*"thought" + 0.017*"feature" + 0.015*"cloud" + 0.014*"project" + 0.012*"day" + 0.012*"sync" + 0.011*"way" + 0.010*"scripture" + 0.010*"link" + 0.010*"computer" + 0.010*"able" + 0.010*"simple" + 0.009*"home" + 0.009*"work" 
 
 Topic 55 :
 
-0.103*"word" + 0.057*"ability" + 0.029*"10" + 0.028*"1" + 0.023*"game" + 0.017*"gift" + 0.017*"color" + 0.013*"little" + 0.012*"flashlight" + 0.012*"sub" + 0.012*"lag" + 0.012*"entertaining" + 0.011*"2" + 0.011*"bright" + 0.007*"device" + 0.007*"3" + 0.006*"handy" + 0.006*"list" + 0.006*"prettier" + 0.006*"buggy" 
+0.109*"word" + 0.057*"ability" + 0.029*"10" + 0.029*"1" + 0.023*"game" + 0.017*"gift" + 0.017*"color" + 0.013*"little" + 0.012*"flashlight" + 0.012*"sub" + 0.012*"lag" + 0.012*"entertaining" + 0.011*"2" + 0.011*"bright" + 0.007*"sticky" + 0.007*"page" + 0.007*"device" + 0.007*"3" + 0.006*"handy" + 0.006*"list" 
 
 Topic 56 :
 
-0.281*"user" + 0.198*"experience" + 0.073*"app" + 0.042*"inspiration" + 0.038*"friendly" + 0.038*"pic" + 0.031*"way" + 0.015*"essential" + 0.012*"device" + 0.011*"year" + 0.011*"android" + 0.011*"help" + 0.010*"new" + 0.009*"feature" + 0.006*"developer" + 0.005*"tablet" + 0.005*"hope" + 0.005*"8" + 0.005*"premium" + 0.005*"Amazing" 
+0.282*"user" + 0.199*"experience" + 0.072*"app" + 0.043*"inspiration" + 0.038*"friendly" + 0.038*"pic" + 0.032*"way" + 0.015*"essential" + 0.012*"device" + 0.011*"android" + 0.011*"help" + 0.010*"new" + 0.009*"feature" + 0.008*"year" + 0.006*"developer" + 0.005*"tablet" + 0.005*"hope" + 0.005*"8" + 0.005*"premium" + 0.005*"Amazing" 
 
 Topic 57 :
 
-0.055*"creative" + 0.042*"app" + 0.023*"time" + 0.018*"resource" + 0.018*"room" + 0.018*"info" + 0.015*"solution" + 0.011*"movie" + 0.011*"audio" + 0.011*"watsapp" + 0.011*"product" + 0.011*"place" + 0.008*"recipe" + 0.007*"America" + 0.007*"program" + 0.007*"Philippines" + 0.007*"Yelp" + 0.007*"AVG" + 0.007*"business" + 0.007*"flash" 
+0.055*"creative" + 0.043*"app" + 0.024*"time" + 0.018*"resource" + 0.018*"room" + 0.018*"info" + 0.015*"solution" + 0.011*"movie" + 0.011*"audio" + 0.011*"watsapp" + 0.011*"product" + 0.011*"place" + 0.008*"recipe" + 0.007*"America" + 0.007*"program" + 0.007*"Philippines" + 0.007*"Yelp" + 0.007*"AVG" + 0.007*"business" + 0.007*"unreliable" 
 
 Topic 58 :
 
-0.145*"App" + 0.039*"app" + 0.030*"time" + 0.028*"informative" + 0.023*"one" + 0.023*"comment" + 0.021*"great" + 0.021*"review" + 0.019*"impressed" + 0.018*"good" + 0.014*"yesterday" + 0.014*"funny" + 0.014*"Pretty" + 0.014*"doctor" + 0.009*"card" + 0.009*"pick" + 0.009*"enjoyable" + 0.009*"week" + 0.009*"communication" + 0.009*"song" 
+0.145*"App" + 0.040*"app" + 0.030*"time" + 0.028*"informative" + 0.023*"one" + 0.023*"comment" + 0.021*"great" + 0.021*"review" + 0.019*"impressed" + 0.018*"good" + 0.014*"yesterday" + 0.014*"funny" + 0.014*"Pretty" + 0.014*"doctor" + 0.009*"card" + 0.009*"pick" + 0.009*"enjoyable" + 0.009*"week" + 0.009*"communication" + 0.009*"song" 
 
 Topic 59 :
 
-0.256*"photo" + 0.131*"bad" + 0.076*"editing" + 0.039*"app" + 0.013*"guy" + 0.010*"simple" + 0.010*"Update" + 0.010*"ui" + 0.010*"rule" + 0.010*"garden" + 0.010*"purpose" + 0.010*"adjustment" + 0.010*"fan" + 0.008*"able" + 0.008*"tool" + 0.007*"year" + 0.007*"Snapseed" + 0.007*"edit" + 0.007*"price" + 0.007*"junk" 
+0.254*"photo" + 0.131*"bad" + 0.077*"editing" + 0.039*"app" + 0.013*"guy" + 0.010*"simple" + 0.010*"Update" + 0.010*"ui" + 0.010*"rule" + 0.010*"garden" + 0.010*"purpose" + 0.010*"adjustment" + 0.010*"fan" + 0.008*"able" + 0.008*"tool" + 0.007*"year" + 0.007*"Snapseed" + 0.007*"edit" + 0.007*"price" + 0.007*"junk" 
 
 
 

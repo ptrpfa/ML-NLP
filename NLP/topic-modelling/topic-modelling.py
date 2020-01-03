@@ -504,7 +504,7 @@ if (topic_model_data == True):
 
         # Create Topic Modelling models
         lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 60, passes = 100, 
-                                     chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) # Need to hypertune!
+                                     chunksize = 3500 , random_state = 123) # Need to hypertune!
 
         # lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 150, passes = 100, 
         #                              chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123) # Need to hypertune!
