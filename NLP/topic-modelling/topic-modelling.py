@@ -360,7 +360,7 @@ accuracy_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/accuracies/" # 
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_manual_tag = False # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = True # Boolean to trigger whether to use pickled objects or not
+use_pickle = False # Boolean to trigger whether to use pickled objects or not
 display_visuals = True # Boolean to trigger display of visualisations
 
 # Database global variables
@@ -513,7 +513,7 @@ if (topic_model_data == True):
         # lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 60, passes = 100, 
         #                              chunksize = 3500 , random_state = 123) # Original
 
-        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 60, passes = 100, 
+        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 65, passes = 100, 
                                      chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123, minimum_probability = 0.05) # Tuned
 
         # lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 150, passes = 100, 
@@ -529,10 +529,10 @@ if (topic_model_data == True):
         hdp_model = load_pickle ("hdp-model.pkl")
 
     # Get topics
-    list_lda_topics = lda_model.show_topics (formatted = True, num_topics = 60, num_words = 20)
+    list_lda_topics = lda_model.show_topics (formatted = True, num_topics = 65, num_words = 20)
     list_lda_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
-    list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = 60, num_words = 20)
+    list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = 65, num_words = 20)
     list_hdp_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
     # print ("Topics:")
@@ -678,8 +678,8 @@ if (topic_model_data == True):
     print('\nCoherence Score: ', coherence_hdp)
 
     # Hypertune LDA model
-    print ("Finding optimal number of topics for LDA model..")    
-    hypertune_no_topics (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start = 5, limit = 100, step = 5) # Find optimal number of topics with highest coherence value for LDA model
+    # print ("Finding optimal number of topics for LDA model..")    
+    # hypertune_no_topics (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start = 5, limit = 100, step = 5) # Find optimal number of topics with highest coherence value for LDA model
 
     # Get equivalent LDA parameters of HDP model 
     # print ("Hypertuned alpha and beta values of a LDA almost equivalent of current HDP:", hdp_model.hdp_to_lda ())

@@ -1,4 +1,4 @@
-Start time:  2020-01-03 10:58:22.036264
+Start time:  2020-01-03 12:36:07.333490
 
 Preliminary information about Topic Modelling dataset:
 Dimensions:  (3285, 6) 
@@ -27,12 +27,12 @@ dtype: object
 
 LDA:
 
-Coherence Score:  0.4392197188429598
+Coherence Score:  0.4576548914463027
 
 HDP:
 
 Coherence Score:  0.7485384922401099
 
-Program start time:  2020-01-03 10:58:22.036264
-Program end time:  2020-01-03 11:02:58.681200
-Program runtime:  276.644936 seconds
+Program start time:  2020-01-03 12:36:07.333490
+Program end time:  2020-01-03 12:40:44.410178
+Program runtime:  277.076688 seconds
