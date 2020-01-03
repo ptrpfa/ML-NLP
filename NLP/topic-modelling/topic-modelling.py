@@ -360,7 +360,7 @@ accuracy_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/accuracies/" # 
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_manual_tag = False # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = False # Boolean to trigger whether to use pickled objects or not
+use_pickle = True # Boolean to trigger whether to use pickled objects or not
 display_visuals = True # Boolean to trigger display of visualisations
 
 # Database global variables
@@ -455,8 +455,8 @@ if (topic_model_data == True):
     feedback_ml_df.apply (strip_dataframe, axis = 1) # Access row by row 
 
     # Create new columns for dataframe
-    feedback_ml_df ['TextTokens'] = ""
-    feedback_ml_df ['TextTopics'] = ""
+    feedback_ml_df ['TextTokens'] = "[]"
+    feedback_ml_df ['TextTopics'] = "[]"
 
     # Convert dataframe prior to topic modelling to CSV
     feedback_ml_df.to_csv (train_file_path, index = False, encoding = "utf-8")
@@ -510,9 +510,6 @@ if (topic_model_data == True):
     if (not use_pickle):
 
         # Create Topic Modelling models
-        # lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 60, passes = 100, 
-        #                              chunksize = 3500 , random_state = 123) # Original
-
         lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 65, passes = 100, 
                                      chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123, minimum_probability = 0.05) # Tuned
 
@@ -527,6 +524,10 @@ if (topic_model_data == True):
         # Load serialised models
         lda_model = load_pickle ("lda-model.pkl")
         hdp_model = load_pickle ("hdp-model.pkl")
+
+    # Create dataframes for Topic and Feedback-Topic mappings
+    topic_df = pd.DataFrame (columns = ["ID", "Remarks"]) # Initialise DataFrame to contain topic data 
+    feedback_topic_df = pd.DataFrame (columns = ["FeedbackID", "TopicID", "Percentage"]) # Initialise DataFrame to contain feedback-topic mapping data 
 
     # Get topics
     list_lda_topics = lda_model.show_topics (formatted = True, num_topics = 65, num_words = 20)
@@ -627,24 +628,44 @@ if (topic_model_data == True):
             
             # Sort topics according to descending order of percentages
             list_document_topic.sort (key = lambda tup: tup [1], reverse = True) 
-              
+
             # Loop to get topics assigned to current feedback
             for index_mapping, (topic_id, percentage) in enumerate (list_document_topic): # Get the Dominant topic, Perc Contribution and Keywords for each document
 
                 # Check if any topic is assigned to the current feedback
                 if (len (list_document_topic) > 0):
                     pass
+
                 else:
 
-                    # Do something if no topic is assigned to the current feedback
-                    pass
+                    # Don't add mapping or do anything if no topics are assigned to the current Feedback
+                    pass # Should initialise feedback_ml_df with empty [] for TextTopics so that can later remove topics are not assigned to any feedback! 
 
                 if index_mapping == 0:  # => dominant topic
-                    wp = model.show_topic(topic_id, topn = 10) # Get a list of the top 10 most significant words associated with the topic, along with their weightage
-                    topic_keywords = ", ".join([word for word, weightage in wp])
-                    sentence_topics_df = sentence_topics_df.append(pd.Series([int(topic_id), round(percentage,4), topic_keywords]), ignore_index=True)
+                    
                 else:
                     break
+        
+
+        # Initialise topic(s) of current feedback/document
+        list_topics = []
+
+        # Check length of document-topic mapping
+        if (len (list_document_topic) > 0):
+
+            # Loop to access list of tuples containing document-topic mappings
+            for feedback_topic in list_document_topic:
+                
+                # Add topic to list containing the topics assigned to the current document/feedback
+                list_topics.append (feedback_topic [0]) 
+    
+        else:
+
+            # Add empty list of topics to the list containing the topics assigned to the current document/feedback if the feedback is not assigned any topic
+            list_topics.append ([]) 
+
+        # Add list of topics assigned to the current feedback/document to the list containing the document-topic mappings
+        feedback_topic_mapping.append (list_topics) 
 
         sentence_topics_df.columns = ['Dominant_Topic', 'Perc_Contribution', 'Topic_Keywords']
         print (sentence_topics_df.head (), sentence_topics_df.shape)
@@ -656,7 +677,15 @@ if (topic_model_data == True):
         sentence_topics_df.to_csv ("/home/p/Desktop/csitml/NLP/topic-modelling/data/temp.csv", index = False, encoding = "utf-8")
 
     # get_hdp_feedback_topic_mapping (hdp_model, gensim_corpus, list_corpus_tokens) # NEED TO EDIT TO SUPPORT HDP RESULTS AS GET A SINGLE LIST INSTEAD OF TUPLE!
-    # get_lda_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.05)
+    get_lda_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.05)
+
+
+    # Populate Topic DataFrame with new topics
+    # wp = model.show_topic(topic_id, topn = 10) # Get a list of the top 10 most significant words associated with the topic, along with their weightage
+    # topic_keywords = ", ".join([word for word, weightage in wp])
+    # sentence_topics_df = sentence_topics_df.append(pd.Series([int(topic_id), round(percentage,4), topic_keywords]), ignore_index=True)
+
+    # Remove topics that have not been assigned a topic in feedback_topic_df****
 
     # Get model performance metrics
     print ("\n*****Model Performances***\n")

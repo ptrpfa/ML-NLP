@@ -140,7 +140,7 @@ Id,Subject,MainText,Text,TextTokens,TextTopics
 99_3308_4,information giving,I m on it all the time and love how you can organize your boards ,information giving I m on it all the time and love how you can organize your boards,"['time', 'board']","[30, 32]"
 99_3309_4,information giving,I never have problems with crashing ,information giving I never have problems with crashing,['problem'],[41]
 99_3311_4,information giving,It s easy to use and you can find anything you need with just a little searching and effort ,information giving It s easy to use and you can find anything you need with just a little searching and effort,"['easy', 'little', 'searching', 'effort']","[24, 25]"
-99_3316_4,information giving,Old way was fine ,information giving Old way was fine,"['old', 'way', 'fine']","[38, 58]"
+99_3316_4,information giving,Old way was fine ,information giving Old way was fine,"['old', 'way', 'fine']","[38, 63]"
 99_3317_4,information giving,Still could use a few minor tweaks but overall very good ,information giving Still could use a few minor tweaks but overall very good,"['minor', 'tweak', 'good']","[17, 19, 56]"
 99_3318_4,information giving,Please restore it back the way it was ,information giving Please restore it back the way it was,['way'],[58]
 99_3321_4,information seeking,Why can you drag and drop whole boards but not the pins within a board ,information seeking Why can you drag and drop whole boards but not the pins within a board,"['board', 'pin', 'board']","[30, 58]"
@@ -594,7 +594,7 @@ Id,Subject,MainText,Text,TextTokens,TextTopics
 99_4178_4,information seeking,Who needs a magazine ,information seeking Who needs a magazine,['magazine'],[7]
 99_4180_4,information giving,I have no issues with this app and have a bunch of fun with it ,information giving I have no issues with this app and have a bunch of fun with it,"['issue', 'app', 'bunch', 'fun']","[11, 29, 63]"
 99_4183_4,information giving,It s so easy to save organize and find whatever you need ,information giving It s so easy to save organize and find whatever you need,['easy'],[25]
-99_4184_4,information giving,I m able to get where I need to go with little problems ,information giving I m able to get where I need to go with little problems,"['able', 'little', 'problem']","[31, 41]"
+99_4184_4,information giving,I m able to get where I need to go with little problems ,information giving I m able to get where I need to go with little problems,"['able', 'little', 'problem']","[11, 41, 42]"
 99_4185_4,information giving,I can t stop and I won t pinning ,information giving I can t stop and I won t pinning,['pinning'],[63]
 99_4186_4,information giving,Great recipes for those of us that can t cook without them ,information giving Great recipes for those of us that can t cook without them,"['great', 'recipe']","[15, 29]"
 99_4188_4,information giving,I have had a Pinterest for a few years back when you had to request to be part of it and now I use it on both my computer and iPhone ,information giving I have had a Pinterest for a few years back when you had to request to be part of it and now I use it on both my computer and iPhone,"['Pinterest', 'year', 'computer', 'iPhone']","[9, 25, 36]"
@@ -628,7 +628,7 @@ Id,Subject,MainText,Text,TextTokens,TextTopics
 99_4247_4,information seeking,It now suggests people who might like a pin sent every ,information seeking It now suggests people who might like a pin sent every,"['people', 'pin']",[58]
 99_4250_4,information seeking,It had everything you need ,information seeking It had everything you need,[],[]
 99_4251_4,information giving,e and I create out wedding and wish lists so we know what to get each other for Xmas and bdays ,information giving e and I create out wedding and wish lists so we know what to get each other for Xmas and bdays,"['e', 'wedding', 'wish', 'list', 'Xmas', 'bday']","[54, 62]"
-99_4252_4,information giving,Also helping create our bucket list ,information giving Also helping create our bucket list,"['bucket', 'list']","[21, 30]"
+99_4252_4,information giving,Also helping create our bucket list ,information giving Also helping create our bucket list,"['bucket', 'list']",[21]
 99_4253_4,information giving,Like how it s gotten easier for me to navigate through ,information giving Like how it s gotten easier for me to navigate through,['easy'],[25]
 99_4255_4,information giving,Downloaded a few days ago and haven t had any issues ,information giving Downloaded a few days ago and haven t had any issues,"['day', 'issue']","[11, 47]"
 99_4256_4,information giving, you even made me a better cook ,information giving  you even made me a better cook,"['well', 'cook']",[1]
@@ -1388,7 +1388,7 @@ Id,Subject,MainText,Text,TextTokens,TextTopics
 99_5433_4,Day one,Really like this app It is a very easy way to journal,Day one Really like this app It is a very easy way to journal,"['day', 'app', 'easy', 'way']","[25, 47]"
 99_5434_4,Nice little niche,I have Day One on both my iOS devices and my Mac It just works beautifully seamlessly and smoothly Add simple photo function and you'll rule the journal app world Five star ,Nice little niche I have Day One on both my iOS devices and my Mac It just works beautifully seamlessly and smoothly Add simple photo function and you'll rule the journal app world Five star,"['nice', 'little', 'niche', 'device', 'Mac', 'simple', 'photo', 'function', 'star']","[11, 23, 27]"
 99_5435_4,Great app ,This is cool app I've used before but no search function I need it much ,Great app  This is cool app I've used before but no search function I need it much,"['great', 'app', 'cool', 'app', 'search', 'function']","[15, 34, 55]"
-99_5436_4,iPad,This app is awesome and makes recording everything so easy the only thing I can request is to make it compatible with iPads ,iPad This app is awesome and makes recording everything so easy the only thing I can request is to make it compatible with iPads,"['app', 'awesome', 'thing', 'compatible', 'ipad']","[31, 39, 52, 62]"
+99_5436_4,iPad,This app is awesome and makes recording everything so easy the only thing I can request is to make it compatible with iPads ,iPad This app is awesome and makes recording everything so easy the only thing I can request is to make it compatible with iPads,"['app', 'awesome', 'thing', 'compatible', 'ipad']","[31, 52, 54]"
 99_5437_4,Love it ,I have been a P 90 X client for some time now and love the workout With the P 90 X app I now have the option of taking my workout to the gym or with me when I travel Plus the nutrition journal makes it easier for me to keep track of what I eat during the day For me it is a great app Glad I purchased this app ,Love it  I have been a P 90 X client for some time now and love the workout With the P 90 X app I now have the option of taking my workout to the gym or with me when I travel Plus the nutrition journal makes it easier for me to keep track of what I eat during the day For me it is a great app Glad I purchased this app,"['p', '90', 'x', 'client', 'time', 'workout', 'p', '90', 'x', 'app', 'option', 'workout', 'gym', 'nutrition', 'journal', 'easy', 'track', 'day', 'great', 'app', 'app']","[10, 15]"
 99_5438_4,Love this game ,I LOVE this game Please add more options like a curler and much more stuff I really want there to be a update PLEASE Oh and add MORE characters ,Love this game  I LOVE this game Please add more options like a curler and much more stuff I really want there to be a update PLEASE Oh and add MORE characters,"['game', 'game', 'option', 'curler', 'stuff', 'update', 'character']","[19, 39, 49]"
 99_5439_4,Fun ,I love it it's fun to play on boring car rides ,Fun  I love it it's fun to play on boring car rides,"['fun', 'boring', 'car', 'ride']","[3, 29]"
@@ -1422,7 +1422,7 @@ Id,Subject,MainText,Text,TextTokens,TextTopics
 99_5467_4,Review,Love,Review Love,[],[]
 99_5468_4,D,Guud,D Guud,[],[]
 99_5469_4,Amazing app ,Go to mp 3 skull com One of my favorite apps ,Amazing app  Go to mp 3 skull com One of my favorite apps,"['amazing', 'app', '3', 'skull', 'com', 'favorite', 'app']","[16, 21, 50, 64]"
-99_5470_4,This app,I love this app Music on top of music ,This app I love this app Music on top of music,"['app', 'app', 'music']","[15, 54]"
+99_5470_4,This app,I love this app Music on top of music ,This app I love this app Music on top of music,"['app', 'app', 'music']",[54]
 99_5471_4,Great ,Very practical easy and for all music lovers ,Great  Very practical easy and for all music lovers,"['great', 'practical', 'music', 'lover']","[5, 15]"
 99_5472_4,Radar,Love this app I use it often and it is dependable ,Radar Love this app I use it often and it is dependable,"['app', 'dependable']",[42]
 99_5473_4,FANTASTIC ,Gets better and better with every update Thank you for this app Much appreciated ,FANTASTIC  Gets better and better with every update Thank you for this app Much appreciated,"['well', 'well', 'update', 'app']","[1, 19]"
@@ -1455,7 +1455,7 @@ Id,Subject,MainText,Text,TextTokens,TextTopics
 99_5500_4,Nice budgeting app,This helps me keep track of all my budgets that I've set up groceries gas rent etc and also has tons of graphs that compare my income vs expenses Very easy to use and it's already helping me save my money ,Nice budgeting app This helps me keep track of all my budgets that I've set up groceries gas rent etc and also has tons of graphs that compare my income vs expenses Very easy to use and it's already helping me save my money,"['nice', 'budgeting', 'app', 'track', 'budget', 'grocery', 'gas', 'rent', 'ton', 'graph', 'income', 'expense', 'easy', 'money']","[23, 25, 36]"
 99_5501_4,Really like it,Just wish I knew how to center the text ,Really like it Just wish I knew how to center the text,['text'],[55]
 99_5502_4,Best thing ever,Its kewl,Best thing ever Its kewl,"['best', 'thing', 'kewl']","[31, 42]"
-99_5503_4,Birthdays,Love this app don't let me forget Birthdays ,Birthdays Love this app don't let me forget Birthdays,"['app', 'birthday']",[6]
+99_5503_4,Birthdays,Love this app don't let me forget Birthdays ,Birthdays Love this app don't let me forget Birthdays,"['app', 'birthday']","[6, 15]"
 99_5504_4,It works idiots ,Ok people this app works and if you are too stupid to figure out how to make something so simple work you shouldn't own a smart phone especially the iPhone The only thing keeping this from 5 stars is the addition of all the contacts Looking forward to future updates ,It works idiots  Ok people this app works and if you are too stupid to figure out how to make something so simple work you shouldn't own a smart phone especially the iPhone The only thing keeping this from 5 stars is the addition of all the contacts Looking forward to future updates,"['idiot', 'people', 'app', 'stupid', 'simple', 'work', 'smart', 'phone', 'iPhone', 'thing', '5', 'star', 'addition', 'contact', 'future', 'update']","[11, 19, 31, 42, 44, 58]"
 99_5505_4,I can't believe this works so well,I never have to take a foreign language class again ,I can't believe this works so well I never have to take a foreign language class again,"['foreign', 'language', 'class']","[3, 62]"
 99_5506_4,ITranslator 1 0,Itranslater 1 0 is a good app but sometimes it dose't work out as you plan it to that is why I only rate it 4 stars rather than 5,ITranslator 1 0 Itranslater 1 0 is a good app but sometimes it dose't work out as you plan it to that is why I only rate it 4 stars rather than 5,"['itranslator', 'itranslater', 'good', 'app', '4', 'star', '5']","[11, 17, 51]"
@@ -1856,7 +1856,7 @@ Id,Subject,MainText,Text,TextTokens,TextTopics
 99_5907_4,Owner Musikraft,My life just got easier Great application,Owner Musikraft My life just got easier Great application,"['Musikraft', 'life', 'easy', 'great', 'application']","[5, 14, 15, 25, 47]"
 99_5908_4,Its very helpful ,It's useful and helpful All my files and especially my photos are being synced FAST to my laptop This is the app that I've been looking for It's very convenient also to use,Its very helpful  It's useful and helpful All my files and especially my photos are being synced FAST to my laptop This is the app that I've been looking for It's very convenient also to use,"['helpful', 'useful', 'helpful', 'file', 'photo', 'laptop', 'app', 'convenient']","[4, 7, 27, 52, 53]"
 99_5909_4,Saved my photos ,I would've lost hundreds of photos if it wasn't for this app Thank you ,Saved my photos  I would've lost hundreds of photos if it wasn't for this app Thank you,"['photo', 'hundred', 'photo', 'app']","[27, 41]"
-99_5910_4,Wow,Best app ever made for busy people Keeps up with everything and great app for people with jobs and hobbies that take up your time,Wow Best app ever made for busy people Keeps up with everything and great app for people with jobs and hobbies that take up your time,"['good', 'app', 'busy', 'people', 'great', 'app', 'people', 'job', 'hobby', 'time']","[15, 17, 58, 60, 61]"
+99_5910_4,Wow,Best app ever made for busy people Keeps up with everything and great app for people with jobs and hobbies that take up your time,Wow Best app ever made for busy people Keeps up with everything and great app for people with jobs and hobbies that take up your time,"['good', 'app', 'busy', 'people', 'great', 'app', 'people', 'job', 'hobby', 'time']","[15, 17, 32, 58, 60, 61]"
 99_5911_4,Great way to go paperless,Going paperless and this is working for me so far Great stuff Recommend,Great way to go paperless Going paperless and this is working for me so far Great stuff Recommend,"['great', 'way', 'paperless', 'paperless', 'great', 'stuff', 'recommend']","[15, 19, 49]"
 99_5912_4,Awesome ,I like to be organized and be able to customize things as well and with this app I think it does pretty good with both I would recommend it ,Awesome  I like to be organized and be able to customize things as well and with this app I think it does pretty good with both I would recommend it,"['awesome', 'able', 'thing', 'app', 'good']","[17, 31, 52]"
 99_5913_4,Current Version Doesn't Work,Wait for the bugs to get fixed Better yet Look for an alternative app,Current Version Doesn't Work Wait for the bugs to get fixed Better yet Look for an alternative app,"['current', 'version', 'bug', 'alternative', 'app']","[35, 59]"
@@ -1936,7 +1936,7 @@ Id,Subject,MainText,Text,TextTokens,TextTopics
 99_5989_4,There should 11 stars,11 stars Good stuff,There should 11 stars 11 stars Good stuff,"['11', 'star', '11', 'star', 'good', 'stuff']","[11, 17, 19, 56]"
 99_5990_4,Decent,Decent,Decent Decent,['decent'],[24]
 99_5991_4,I'm in Evernote all day,I use Evernote every day It's more and more robust with each new edition,I'm in Evernote all day I use Evernote every day It's more and more robust with each new edition,"['Evernote', 'day', 'Evernote', 'day', 'robust', 'new', 'edition']","[26, 30, 38, 47]"
-99_5992_4,Vital app ,I've been depending on Evernote for years The mobile app makes it even more convenient,Vital app  I've been depending on Evernote for years The mobile app makes it even more convenient,"['vital', 'app', 'Evernote', 'year', 'mobile', 'app', 'convenient']","[7, 9, 29, 30, 42]"
+99_5992_4,Vital app ,I've been depending on Evernote for years The mobile app makes it even more convenient,Vital app  I've been depending on Evernote for years The mobile app makes it even more convenient,"['vital', 'app', 'Evernote', 'year', 'mobile', 'app', 'convenient']","[7, 9, 15, 29, 30, 42]"
 99_5993_4,Just got better,Was a great app that I use every day before Update with reminders makes it that much better Evernote keeps me organized ,Just got better Was a great app that I use every day before Update with reminders makes it that much better Evernote keeps me organized,"['well', 'great', 'app', 'day', 'Update', 'reminder', 'well', 'Evernote']","[1, 15, 30, 47]"
 99_5994_4,Great app,It allows me to record daily notes that aid in medical evaluations It feel almost like cheating my memory,Great app It allows me to record daily notes that aid in medical evaluations It feel almost like cheating my memory,"['great', 'app', 'daily', 'note', 'medical', 'evaluation', 'memory']",[12]
 99_5995_4,Essential,I've been an Evernote user for years It's the first App I install on any new device Essential I use it for everything,Essential I've been an Evernote user for years It's the first App I install on any new device Essential I use it for everything,"['essential', 'Evernote', 'user', 'year', 'new', 'device', 'essential']","[6, 9, 28, 30, 38]"
@@ -2138,7 +2138,7 @@ Id,Subject,MainText,Text,TextTokens,TextTopics
 99_6192_4,rating,Good Good Good,rating Good Good Good,"['good', 'good', 'good']",[17]
 99_6193_4,rating,Yes Top,rating Yes Top,[],[]
 99_6194_4,rating,Good Cool,rating Good Cool,['good'],[17]
-99_6195_4,rating,This app is really surprised everyone This app is really surprised everyone,rating This app is really surprised everyone This app is really surprised everyone,"['app', 'surprised', 'app', 'surprised']","[15, 45]"
+99_6195_4,rating,This app is really surprised everyone This app is really surprised everyone,rating This app is really surprised everyone This app is really surprised everyone,"['app', 'surprised', 'app', 'surprised']",[45]
 99_6196_4,rating,Nice Good,rating Nice Good,['good'],[17]
 99_6197_4,rating,Suprb Osm app i realy love it,rating Suprb Osm app i realy love it,[],[]
 99_6198_4,rating,Very Good,rating Very Good,['good'],[17]
@@ -2631,7 +2631,7 @@ Id,Subject,MainText,Text,TextTokens,TextTopics
 99_6691_4,rating,Super like Luuuuuuuurrrrrve it ,rating Super like Luuuuuuuurrrrrve it,"['Super', 'luuuuuuuurrrrrve']",[12]
 99_6692_4,rating,Love ,rating Love,[],[]
 99_6693_4,rating,Pin head I'm a pinterest addict and this fills my addiction on the go ,rating Pin head I'm a pinterest addict and this fills my addiction on the go,"['Pin', 'head', 'pinterest', 'addict', 'addiction']","[27, 42]"
-99_6694_4,rating,Pintrest I love tuis app it gives me ideas i would totaly recomend this app,rating Pintrest I love tuis app it gives me ideas i would totaly recomend this app,"['tuis', 'idea', 'app']","[15, 18]"
+99_6694_4,rating,Pintrest I love tuis app it gives me ideas i would totaly recomend this app,rating Pintrest I love tuis app it gives me ideas i would totaly recomend this app,"['tuis', 'idea', 'app']",[18]
 99_6695_4,rating,Great for creatives and multitaskers So many ideas not enough time,rating Great for creatives and multitaskers So many ideas not enough time,"['creative', 'multitasker', 'idea', 'time']","[18, 32, 50]"
 99_6696_4,rating,My favorite app ,rating My favorite app,"['favorite', 'app']",[16]
 99_6697_4,rating,I love love love this app ,rating I love love love this app,"['love', 'app']",[50]
@@ -2812,7 +2812,7 @@ Id,Subject,MainText,Text,TextTokens,TextTopics
 99_6872_4,rating,very good i love mariah carey,rating very good i love mariah carey,['good'],[17]
 99_6873_4,rating,Awesome Best photo editior i ever use,rating Awesome Best photo editior i ever use,"['good', 'photo', 'editior']","[17, 27]"
 99_6874_4,rating,Awesome Its totally worth downloading it,rating Awesome Its totally worth downloading it,['worth'],[14]
-99_6875_4,rating,sick app i jst luv this app,rating sick app i jst luv this app,"['sick', 'app', 'app']","[8, 15]"
+99_6875_4,rating,sick app i jst luv this app,rating sick app i jst luv this app,"['sick', 'app', 'app']",[8]
 99_6876_4,rating,Nice app Worth downloading,rating Nice app Worth downloading,"['app', 'worth']",[14]
 99_6877_4,rating,143 Wow nice sachin,rating 143 Wow nice sachin,"['143', 'nice', 'sachin']",[23]
 99_6878_4,rating,Photoshop Ok,rating Photoshop Ok,['Photoshop'],[18]
