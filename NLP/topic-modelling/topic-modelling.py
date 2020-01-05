@@ -258,7 +258,7 @@ def tokenize_trigram_dataframe (series):
     # Return tokenized series object
     return series
 
-# Function to get Feedback-Topic mappings 
+# Function to get Feedback-Topic mappings for LDA model
 def get_lda_feedback_topic_mapping (model, corpus, texts, max_no_topics, minimum_percentage):
     
     # NOTE:
@@ -308,6 +308,52 @@ def get_lda_feedback_topic_mapping (model, corpus, texts, max_no_topics, minimum
         # Add lists of topics and percentages assigned to the current feedback/document to the lists containing the document-topic mappings
         feedback_topic_mapping.append (list_topics)  
         feedback_topic_percentage_mapping.append (list_topics_percentages)  
+
+# Function to get Feedback-Topic mappings for HDP model
+def get_hdp_feedback_topic_mapping (model, corpus, texts, max_no_topics, minimum_percentage):
+    
+    # NOTE:
+    # max_no_topics = maxium number of topics that can be assigned to a Feedback
+    # minimum_percentage = minimum percentage contribution required for a topic to be assigned to a Feedback
+
+    # Apply HDP model on corpus to get a Gensim TransformedCorpus object of mappings (Document-Topic mapping ONLY)
+    transformed_gensim_corpus = model [corpus]
+    
+    # Loop to access mappings in the Gensim transformed corpus (made of lists of document-topic mappings)
+    for list_document_topic in transformed_gensim_corpus: # Access document by document
+
+        # Remove topics below specified minimum percentage contribution
+        list_document_topic = list (filter (lambda tup: (tup [1] >= minimum_percentage), list_document_topic)) 
+
+        # Sort list of current document's topic mapping according to descending order of its percentages
+        list_document_topic.sort (key = lambda tup: tup [1], reverse = True) # Topics with higher percentage contribution to the feedback will be in front
+
+        # Get the specified amount of top few topics
+        list_document_topic = list_document_topic [:max_no_topics] # Get up to the specified number of topics in max_no_topics
+
+        # Initialise lists containing topic(s) and percentages of topic(s) of current feedback/document
+        list_topics = []
+        list_topics_percentages = []
+
+        # Check length of document-topic mapping to see if any topic is assigned to the current feedback/document (after filtering)
+        if (len (list_document_topic) > 0): 
+
+            # Loop to access list of tuples containing document-topic mappings 
+            for feedback_topic in list_document_topic: # List is in the form  of [(topic_no, percentage), ..]
+                
+                # Add topic to list containing the topics assigned to the current document/feedback
+                list_topics.append (feedback_topic [0]) # List contains topics in descending order of percentage contribution
+                list_topics_percentages.append (feedback_topic [1]) # List contains percentages in descending order
+    
+        else:
+
+            # Add empty lists of topics to the list containing the topics assigned to the current document/feedback if the feedback is not assigned any topic
+            list_topics.append ([]) 
+            list_topics_percentages.append ([]) 
+
+        # Add lists of topics and percentages assigned to the current feedback/document to the lists containing the document-topic mappings
+        feedback_topic_mapping.append (list_topics)  
+        feedback_topic_percentage_mapping.append (list_topics_percentages) 
 
 # Function to set no topics to Feedback that do not have any tokens (accepts a Series object of each row in the FeedbackML DataFrame and returns a cleaned Series object)
 def unassign_empty_topics_dataframe (series):
@@ -571,7 +617,7 @@ if (topic_model_data == True):
         lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = selected_topic_no, passes = 100, 
                                      chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123, minimum_probability = 0.05) # LDA Model
 
-        hdp_model = models.HdpModel (corpus = gensim_corpus, id2word = id2word, random_state = 123) # HDP Model (infers the number of topics)
+        hdp_model = models.HdpModel (corpus = gensim_corpus, id2word = id2word, random_state = 123) # HDP Model (infers the number of topics [always generates 150 topics])
     
     # Using pickled objects
     else:
@@ -588,7 +634,7 @@ if (topic_model_data == True):
     list_lda_topics = lda_model.show_topics (formatted = True, num_topics = selected_topic_no, num_words = 20)
     list_lda_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
-    list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = selected_topic_no, num_words = 20)
+    list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = 150, num_words = 20)
     list_hdp_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
     # print ("Topics:")
@@ -621,13 +667,13 @@ if (topic_model_data == True):
     # Close file object
     topics_file.close ()
     
-    # Initialise list containing feedback-topic mappings
+    # Initialise lists containing feedback-topic and percentages mappings
     feedback_topic_mapping = []
     feedback_topic_percentage_mapping = []
 
-    # Get mappings
-    # get_hdp_feedback_topic_mapping (hdp_model, gensim_corpus, list_corpus_tokens) # NEED TO EDIT TO SUPPORT HDP RESULTS AS GET A SINGLE LIST INSTEAD OF TUPLE!
-    get_lda_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.3)
+    # Get Feedback-Topic mappings
+    get_lda_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.3) # Get mappings for LDA model
+    # get_hdp_feedback_topic_mapping (hdp_model, gensim_corpus, list_corpus_tokens, 3, 0.45) # Get mappigns for HDP model
 
     # Populate Topic DataFrame with new topics
     # wp = model.show_topic(topic_id, topn = 10) # Get a list of the top 10 most significant words associated with the topic, along with their weightage
@@ -637,7 +683,7 @@ if (topic_model_data == True):
     pass
     # Remove topics that have not been assigned a topic in feedback_topic_df****
 
-    # Assign topics to feedbacks in the DataFrame
+    # Assign topics and topics percentages to feedbacks in the DataFrame
     feedback_ml_df ['TextTopics'] = feedback_topic_mapping
     feedback_ml_df ['TopicPercentages'] = feedback_topic_percentage_mapping
 
