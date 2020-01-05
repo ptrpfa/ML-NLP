@@ -18,6 +18,8 @@ import logging # 4) Gensim topic modelling logging
 from sklearn.model_selection import GridSearchCV # 4) For model hyperparameters tuning
 import matplotlib.pyplot as plt # For visualisations
 import matplotlib # For visualisations
+import pyLDAvis.gensim # For topic modelling visualisations
+import pyLDAvis # For topic modelling visualisations
 import sklearn.metrics as metrics # 4.5) For determination of model accuracy
 
 # Suppress scikit-learn FutureWarnings
@@ -760,10 +762,13 @@ if (topic_model_data == True):
     # Save file
     feedback_ml_df.to_csv (topic_file_path, index = False, encoding = "utf-8")
 
+    # Create interactive visualisation for LDA model
+    lda_visualise = pyLDAvis.gensim.prepare (lda_model, gensim_corpus, id2word) # Create visualisation
+    pyLDAvis.save_html (lda_visualise, accuracy_file_path + 'lda.html') # Export visualisation to HTML file
+
     # Save models (pickling/serialization)
     pickle_object (lda_model, "lda-model.pkl") # LDA Model
     pickle_object (hdp_model, "hdp-model.pkl") # HDP Model
-
 
 # Print debugging message if topic modelling not carried out
 else:
