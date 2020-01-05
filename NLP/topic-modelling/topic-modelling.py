@@ -627,7 +627,7 @@ if (topic_model_data == True):
 
     # Get mappings
     # get_hdp_feedback_topic_mapping (hdp_model, gensim_corpus, list_corpus_tokens) # NEED TO EDIT TO SUPPORT HDP RESULTS AS GET A SINGLE LIST INSTEAD OF TUPLE!
-    get_lda_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.1)
+    get_lda_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.3)
 
     # Populate Topic DataFrame with new topics
     # wp = model.show_topic(topic_id, topn = 10) # Get a list of the top 10 most significant words associated with the topic, along with their weightage
