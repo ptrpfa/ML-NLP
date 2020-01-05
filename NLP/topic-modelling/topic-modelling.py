@@ -372,9 +372,12 @@ feedback_table = "Feedback"         # Name of feedback table in database
 feedback_ml_table = "FeedbackML"    # Name of feedback table in database used for machine learning
 
 # Tokens
-list_corpus_tokens = [] # List containing lists of document tokens in the corpus for training Gensim Bigram and Trigram models and for Topic Modelling
+list_corpus_tokens = [] # Initialise list containing lists of document tokens in the corpus for training Gensim Bigram and Trigram models and for Topic Modelling
 token_whitelist = ["photoshop", "editing", "pinterest", "xperia", "instagram", "facebook", "evernote", "update", "dropbox", "picsart", # Token whitelist (to prevent important terms from not being tokenized)
                    "whatsapp", "tripadvisor", "onenote"] 
+
+# Set projected number of topics
+selected_topic_no = 65
 
 # Create spaCy NLP object
 nlp = spacy.load ("en_core_web_sm")
@@ -401,7 +404,9 @@ try:
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
     # Create SQL query to get FeedbackML table values (Feature Engineering)
-    sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE SpamStatus = 0 AND CategoryID = 4;" % (feedback_ml_table)
+    sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE SpamStatus = 0 AND CategoryID = 4;" % (feedback_ml_table)   # General 
+    # sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE SpamStatus = 0 AND CategoryID = 2;" % (feedback_ml_table) # Bug Report 
+    # sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE SpamStatus = 0 AND CategoryID = 5;" % (feedback_ml_table) # Feature Request
 
     # Execute query and convert FeedbackML table into a pandas DataFrame
     feedback_ml_df = pd.read_sql (sql_query, db_connection)
@@ -429,11 +434,15 @@ except mysql.connector.Error as error:
 
     # Print MySQL connection error
     print ("MySQL error when trying to get General HAM records from the FeedbackML table:", error)
+    # print ("MySQL error when trying to get Bug Report HAM records from the FeedbackML table:", error)
+    # print ("MySQL error when trying to get Feature Request HAM records from the FeedbackML table:", error)
 
 except:
 
     # Print other errors
     print ("Error occurred attempting to establish database connection to get General HAM records from the FeedbackML table")
+    # print ("Error occurred attempting to establish database connection to get Bug Report HAM records from the FeedbackML table")
+    # print ("Error occurred attempting to establish database connection to get Feature Request HAM records from the FeedbackML table")
 
 finally:
 
@@ -455,19 +464,15 @@ if (topic_model_data == True):
     feedback_ml_df.apply (strip_dataframe, axis = 1) # Access row by row 
 
     # Create new columns for dataframe
-    feedback_ml_df ['TextTokens'] = "[]"
-    feedback_ml_df ['TextTopics'] = "[]"
+    feedback_ml_df ['TextTokens'] = "[]" # Default empty list for tokens of feedback text after tokenization
+    feedback_ml_df ['TextTopics'] = "[]" # Default empty list of topics assigned to feedback
 
     # Convert dataframe prior to topic modelling to CSV
     feedback_ml_df.to_csv (train_file_path, index = False, encoding = "utf-8")
 
-    # Assign target and features variables
-    target = feedback_ml_df.TextTopics
-    feature = feedback_ml_df.Text
-
     # Tokenize texts and assign text tokens to column in DataFrame
-    # feedback_ml_df.TextTokens = tm_tokenize_corpus (feedback_ml_df.Text) # TextTokens is now a list of tokens for each document
-    feedback_ml_df.TextTokens = tm_tokenize_corpus_pos_nouns_adj (feedback_ml_df.Text) # Only tokenize NOUNS and ADJECTIVES (will result in many empty token lists)
+    # feedback_ml_df.TextTokens = tm_tokenize_corpus (feedback_ml_df.Text)                        # Default tokenize function without any POS tagging specifications
+    feedback_ml_df.TextTokens = tm_tokenize_corpus_pos_nouns_adj (feedback_ml_df.Text)            # Only tokenize NOUNS and ADJECTIVES (will result in many empty token lists)
     # feedback_ml_df.TextTokens = tm_tokenize_corpus_pos_nouns_adj_verb_adv (feedback_ml_df.Text) # Only tokenize NOUNS, ADJECTIVES, VERBS and ADVERBS (will result in many empty token lists)
 
     # Assign document tokens in DataFrame to list containing all corpus tokens
@@ -496,12 +501,11 @@ if (topic_model_data == True):
         print (feedback_ml_df.dtypes, "\n")
     
     # 4) Apply topic modelling transformations and models
-
     # Convert list of corpus document-tokens into a dictionary of the locations of each token in the format {location: 'term'}
     id2word = corpora.Dictionary (list_corpus_tokens)
 
     # # Human readable format of corpus (term-frequency)
-    # dtm = [[(id2word[id], freq) for id, freq in cp] for cp in corpus[:1]]
+    # dtm = [[(id2word [id], freq) for id, freq in cp] for cp in corpus[:1]]
 
     # Get Term-Document Frequency
     gensim_corpus = [id2word.doc2bow (document_tokens) for document_tokens in list_corpus_tokens]
@@ -510,7 +514,7 @@ if (topic_model_data == True):
     if (not use_pickle):
 
         # Create Topic Modelling models
-        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 65, passes = 100, 
+        lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = selected_topic_no, passes = 100, 
                                      chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123, minimum_probability = 0.05) # Tuned
 
         # lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = 150, passes = 100, 
@@ -530,10 +534,10 @@ if (topic_model_data == True):
     feedback_topic_df = pd.DataFrame (columns = ["FeedbackID", "TopicID", "Percentage"]) # Initialise DataFrame to contain feedback-topic mapping data 
 
     # Get topics
-    list_lda_topics = lda_model.show_topics (formatted = True, num_topics = 65, num_words = 20)
+    list_lda_topics = lda_model.show_topics (formatted = True, num_topics = selected_topic_no, num_words = 20)
     list_lda_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
-    list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = 65, num_words = 20)
+    list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = selected_topic_no, num_words = 20)
     list_hdp_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
     # print ("Topics:")
@@ -642,7 +646,7 @@ if (topic_model_data == True):
                     pass # Should initialise feedback_ml_df with empty [] for TextTopics so that can later remove topics are not assigned to any feedback! 
 
                 if index_mapping == 0:  # => dominant topic
-                    
+                    pass
                 else:
                     break
         
@@ -677,7 +681,7 @@ if (topic_model_data == True):
         sentence_topics_df.to_csv ("/home/p/Desktop/csitml/NLP/topic-modelling/data/temp.csv", index = False, encoding = "utf-8")
 
     # get_hdp_feedback_topic_mapping (hdp_model, gensim_corpus, list_corpus_tokens) # NEED TO EDIT TO SUPPORT HDP RESULTS AS GET A SINGLE LIST INSTEAD OF TUPLE!
-    get_lda_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.05)
+    # get_lda_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.05)
 
 
     # Populate Topic DataFrame with new topics
@@ -733,6 +737,11 @@ if (topic_model_data == True):
             # dictionary_manual_tag [topic] # List of tokens
             print (dictionary_manual_tag [topic])
 
+        # Add records in Topic dataframe
+        pass
+        
+        # Add records in Feedback-Topic dataframe
+        pass
 
     # Create topics in Topic table
     pass
