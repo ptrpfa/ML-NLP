@@ -777,9 +777,12 @@ if (topic_model_data == True):
     feedback_topic_df = pd.DataFrame (columns = ["FeedbackID", "TopicID", "Percentage"]) # Initialise DataFrame to contain feedback-topic mapping data 
 
     # Create temporary dataframe to store all feedback assigned a topic after Topic Modelling
-    # temp_df = feedback_ml_df [feedback_ml_df.TextTopics != []].copy () # Get feedback that are assigned at least one topic
+    temp_df = feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'] # Get feedback that are assigned at least one topic
 
-    # Remove unused columns and get TopicID from topics dataframe
+    # Save Topics dataframe
+    temp_df.to_csv (feedback_topics_df_file_path, index = False, encoding = "utf-8")
+
+    # Remove unused columns 
 
     # Populate FeedbackTopic dataframe
     pass
