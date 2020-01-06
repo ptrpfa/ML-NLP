@@ -494,6 +494,34 @@ def hypertune_no_topics (dictionary, corpus, texts, limit, start, step):
         # Show visualisations
         plt.show ()
 
+# Function to split the FeedbackTopic dataframe such that one record contains one mapping of Feedback to Topic only (accepts a Series object of each row in the FeedbackTopic DataFrame and returns a cleaned Series object)
+def split_feedback_topic_dataframe (series):
+    
+    # Check length of TextTopics to see if more than one topic is assigned to current Feedback
+    if (len (series ['TextTopics']) > 1 ):
+
+        # Initialise counter variable
+        counter = 0
+
+        # Initialise dicitionary to store new row information
+        dict_feedback_topic = {"Id": series ['Id'], "TextTopics": 0, "TopicPercentages": 0}
+
+        # Loop to access list of topics assigned to current feedback
+        while (counter < len (series ['TextTopics'])):
+            
+            # Assign TopicID and percentage contribution of current topic to dictionary
+            dict_feedback_topic ['TextTopics'] = series ['TextTopics'] [counter]
+            dict_feedback_topic ['TopicPercentages'] = series ['TopicPercentages'] [counter]
+            
+            # Append dictionary of new row to list containing new rows to insert into the FeedbackTopic dataframe later on
+            list_new_feedback_topic.append (dict_feedback_topic)
+            
+            # Increment counter
+            counter = counter + 1
+    
+    # Return cleaned series object
+    return series
+
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
 
@@ -773,16 +801,27 @@ if (topic_model_data == True):
     # Set topics of Feedback with empty TextTokens and TextTopics to nothing (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
     feedback_ml_df.apply (unassign_empty_topics_dataframe, axis = 1) # Access row by row 
 
-    # Create new dataframe for Feedback-Topic mapping
-    feedback_topic_df = pd.DataFrame (columns = ["FeedbackID", "TopicID", "Percentage"]) # Initialise DataFrame to contain feedback-topic mapping data 
-
-    # Create temporary dataframe to store all feedback assigned a topic after Topic Modelling
-    temp_df = feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'] # Get feedback that are assigned at least one topic
-
-    # Save Topics dataframe
-    temp_df.to_csv (feedback_topics_df_file_path, index = False, encoding = "utf-8")
+    # Create new dataframe to store all feedback assigned to at least a topic after Topic Modelling
+    feedback_topic_df = feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'].copy () # Get feedback that are assigned at least one topic
 
     # Remove unused columns 
+    feedback_topic_df.drop (columns = ['Subject', 'MainText', 'Text', 'TextTokens'], inplace = True)
+
+    # Initialise lists used to store unique topics and new rows to add into the topic-feedback dataframe
+    list_topics_assigned = []    # List containing unique topics assigned to at least one Feedback
+    list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe
+
+    # Split feedback assigned more than one topic into multiple entries in the Feedback-Topic dataframe
+    feedback_topic_df.apply (split_feedback_topic_dataframe, axis = 1) # NEED TO FIX LOGIC ERROR OF SAME VALUE BEING INSERTED!
+    
+    # Remove feedback that are assigned more than one topic
+    pass
+
+    # Insert new rows in FeedbackTopic DataFrame
+    feedback_topic_df = feedback_topic_df.append (list_new_feedback_topic, ignore_index = True)
+
+    # Save Topics dataframe
+    feedback_topic_df.to_csv (feedback_topics_df_file_path, index = False, encoding = "utf-8")
 
     # Populate FeedbackTopic dataframe
     pass
