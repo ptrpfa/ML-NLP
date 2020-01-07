@@ -482,6 +482,18 @@ def clean_split_feedback_topic_dataframe (series):
             # Increment counter
             counter = counter + 1
     
+    # Loop to access each topic assigned to the current feedback
+    for topic in series ['TextTopics']:
+
+        # Check if current topic is a new topic that has not been added to the list containing all topics that have been assigned to at least one Feedback
+        if (topic not in list_topics_assigned):
+
+            # Add topic into the list if it has not been added inside previously
+            list_topics_assigned.append (topic)
+
+            # Sort list of unique topics assigned to at least one Feedback in ascending order of TopicIDs
+            list_topics_assigned.sort ()
+
     # Clean and convert datatype of TextTopics
     series ['TextTopics'] = str (series ['TextTopics']).strip ("[]") # Convert TextTopics to a string and remove square brackets
     series ['TopicPercentages'] = str (series ['TopicPercentages']).strip ("[]") # Convert TopicPercentages to a string and remove square brackets
@@ -761,7 +773,7 @@ if (topic_model_data == True):
     # Save topics in topic file
     save_topics (list_lda_topics, list_hdp_topics)
 
-    """ Get Topics information """
+    """ Create and populate Topics DataFrame """
     # Create new dataframe for Topics
     topic_df = pd.DataFrame (columns = ["Id", "Name", "PriorityScore", "Remarks"]) # Initialise DataFrame to contain topic data 
 
@@ -791,9 +803,6 @@ if (topic_model_data == True):
         # Add new row in Topic DataFrame
         topic_df = topic_df.append (dict_topic, ignore_index = True)
 
-    # Save Topics dataframe
-    topic_df.to_csv (topics_df_file_path, index = False, encoding = "utf-8")
-    
     """ Get Feedback-Topic mappings """
     # Initialise lists containing feedback-topic and percentage contribution mappings
     feedback_topic_mapping = []
@@ -810,8 +819,8 @@ if (topic_model_data == True):
     # Set topics of Feedback with empty TextTokens and TextTopics to nothing (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
     feedback_ml_df.apply (unassign_empty_topics_dataframe, axis = 1) # Access row by row 
 
-    """ Populate Feedback-Topic """
-    # Create new dataframe to store all feedback assigned to at least a topic after Topic Modelling
+    """ Create and populate Feedback-Topic DataFrame """
+    # Create new dataframe to store all feedback that are assigned with at least one topic after Topic Modelling
     feedback_topic_df = feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'].copy () # Get feedback that are assigned at least one topic
 
     # Remove unused columns 
@@ -828,30 +837,27 @@ if (topic_model_data == True):
     feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"^\d*$")] # Only obtain feedbacks whose topics are made of digits (only one topic, since no commas which would be indicative of multiple topics)
     # feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"\d+,\D?\d+")] # Inverse
 
-    # Insert new rows in FeedbackTopic DataFrame
+    # Insert new rows of feedback splitted previously into the FeedbackTopic DataFrame
     feedback_topic_df = feedback_topic_df.append (list_new_feedback_topic, ignore_index = True)
 
     # Remove duplicate records (for redundancy)
     feedback_topic_df.drop_duplicates (inplace = True)
 
-    # Save Topics dataframe
+    # Save FeedbackTopic DataFrame
     feedback_topic_df.to_csv (feedback_topics_df_file_path, index = False, encoding = "utf-8")
 
-    # Populate FeedbackTopic dataframe
-    pass
+    # Remove topics that have not been assigned to at least one feedback in the Feedback-Topic mapping DataFrame
+    topic_df = topic_df [topic_df.Id.isin (list_topics_assigned)]
 
-    # Insert Feedback-Topic mappings in FeedbackTopic table
-    pass
-
-    # Remove topics that have not been assigned a topic in feedback_topic_df****
-    pass
+    # Save Topics dataframe
+    topic_df.to_csv (topics_df_file_path, index = False, encoding = "utf-8")
 
     ######################
 
-    # Create topic-feedback mappings in FeedbackTopic table
+    # Calculate priorityscore of topic
     pass
 
-    # Calculate priorityscore of topic
+    # Create topic-feedback mappings in FeedbackTopic table
     pass
 
     # Insert into Topics table

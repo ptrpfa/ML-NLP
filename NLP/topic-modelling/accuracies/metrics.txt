@@ -1,4 +1,4 @@
-Start time:  2020-01-07 09:02:58.274305
+Start time:  2020-01-07 10:41:11.547601
 
 Preliminary information about Topic Modelling dataset:
 Dimensions:  (3285, 7) 
@@ -43,13 +43,13 @@ Coherence Score:  0.7485384922401099
   from collections import Iterable
 /home/p/anaconda3/lib/python3.7/site-packages/past/translation/__init__.py:35: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
   import imp
+/home/p/anaconda3/lib/python3.7/site-packages/past/types/oldstr.py:5: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  from collections import Iterable
 /home/p/anaconda3/lib/python3.7/site-packages/past/translation/__init__.py:35: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
   import imp
 /home/p/anaconda3/lib/python3.7/site-packages/past/types/oldstr.py:5: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
   from collections import Iterable
-/home/p/anaconda3/lib/python3.7/site-packages/past/types/oldstr.py:5: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
-  from collections import Iterable
 
-Program start time:  2020-01-07 09:02:58.274305
-Program end time:  2020-01-07 09:05:33.382513
-Program runtime:  155.108208 seconds
+Program start time:  2020-01-07 10:41:11.547601
+Program end time:  2020-01-07 10:44:01.194553
+Program runtime:  169.646952 seconds
