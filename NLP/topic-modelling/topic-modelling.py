@@ -758,6 +758,35 @@ if (topic_model_data == True):
         lda_model = load_pickle ("lda-model.pkl")
         hdp_model = load_pickle ("hdp-model.pkl")
 
+    """ Get model performances """
+    # Get model performance metrics
+    print ("*****Model Performances***\n")
+
+    # Hypertune LDA model
+    # print ("Finding optimal number of topics for LDA model..")    
+    # hypertune_no_topics (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start = 5, limit = 100, step = 5) # Find optimal number of topics with highest coherence value for LDA model
+
+    # Get equivalent LDA parameters of HDP model 
+    # print ("Hypertuned alpha and beta values of a LDA almost equivalent of current HDP:", hdp_model.hdp_to_lda ())
+    # print ("Closest LDA model to HDP model:", hdp_model.suggested_lda_model ())
+
+    # LDA Model
+    print ("LDA:")
+
+    # Compute Coherence Score
+    coherence_model_lda = models.CoherenceModel (model = lda_model, texts = list_corpus_tokens, corpus = gensim_corpus, dictionary = id2word, coherence = 'c_v')
+    coherence_lda = coherence_model_lda.get_coherence ()
+    print('\nCoherence Score: ', coherence_lda)
+
+    # HDP Model
+    print ("\nHDP:")
+
+    # Compute Coherence Score
+    coherence_model_hdp = models.CoherenceModel (model = hdp_model, texts = list_corpus_tokens, corpus = gensim_corpus, dictionary = id2word, coherence = 'c_v')
+    coherence_hdp = coherence_model_hdp.get_coherence ()
+    print('\nCoherence Score: ', coherence_hdp, "\n")
+
+    """ Get topics generated """
     # Get topics
     list_lda_topics = lda_model.show_topics (formatted = True, num_topics = selected_topic_no, num_words = 20)
     list_lda_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
@@ -773,36 +802,6 @@ if (topic_model_data == True):
 
     # Save topics in topic file
     save_topics (list_lda_topics, list_hdp_topics)
-
-    """ Create and populate Topics DataFrame """
-    # Create new dataframe for Topics
-    topic_df = pd.DataFrame (columns = ["Id", "Name", "PriorityScore", "Remarks"]) # Initialise DataFrame to contain topic data 
-
-    # Get current largest TopicID value in the Topics table
-    largest_topicid = get_largest_topicid () + 1 # Add extra 1 as Gensim topic IDs start from 0 instead of 1 (added to compensate for this)
-
-    # Initialise dictionary to store information of new row to insert into the Topics DataFrame
-    dict_topic = {'Id': 0, 'Name': "", 'PriorityScore': 0, 'Remarks': ""}
-
-    # Populate Topic DataFrame with new topics
-    for topic in list_lda_topics: # OR list_hdp_topics for HDP model
-
-        # Assign new ID to current topic
-        dict_topic ['Id'] = largest_topicid + topic [0]
-
-        # Get a list of the top 10 most significant words associated with the current topic, along with their weightages [(word, weightage),..]
-        list_top_words = lda_model.show_topic (topic [0], topn = 10) # List is by default sorted according to descending order of weightages
-        # list_top_words = hdp_model.show_topic (topic [0], topn = 10) # List is by default sorted according to descending order of weightages
-        
-        # Assign top 10 words associated with the current topic to Remarks
-        dict_topic ['Remarks'] = ", ".join ([word for word, weightage in list_top_words])
-
-        # Assign custom name for current topic (model_top_five_words)
-        dict_topic ['Name'] = "lda_" + "_".join ([word for word, weightage in list_top_words [:5]])
-        # dict_topic ['Name'] = "hdp_" + "_".join ([word for word, weightage in list_top_words [:5]])
-        
-        # Add new row in Topic DataFrame
-        topic_df = topic_df.append (dict_topic, ignore_index = True)
 
     """ Get Feedback-Topic mappings """
     # Initialise lists containing feedback-topic and percentage contribution mappings
@@ -845,54 +844,40 @@ if (topic_model_data == True):
     # Remove duplicate records (for redundancy)
     feedback_topic_df.drop_duplicates (inplace = True)
 
-    # Save FeedbackTopic DataFrame
-    feedback_topic_df.to_csv (feedback_topics_df_file_path, index = False, encoding = "utf-8")
+    """ Create and populate Topics DataFrame """
+    # Create new dataframe for Topics
+    topic_df = pd.DataFrame (columns = ["Id", "Name", "PriorityScore", "Remarks"]) # Initialise DataFrame to contain topic data 
+
+    # Get current largest TopicID value in the Topics table
+    largest_topicid = get_largest_topicid () + 1 # Add extra 1 as Gensim topic IDs start from 0 instead of 1 (added to compensate for this)
+
+    # Initialise dictionary to store information of new row to insert into the Topics DataFrame
+    dict_topic = {'Id': 0, 'Name': "", 'PriorityScore': 0, 'Remarks': ""}
+
+    # Populate Topic DataFrame with new topics
+    for topic in list_lda_topics: # OR list_hdp_topics for HDP model
+
+        # Assign new ID to current topic
+        dict_topic ['Id'] = largest_topicid + topic [0]
+
+        # Get a list of the top 10 most significant words associated with the current topic, along with their weightages [(word, weightage),..]
+        list_top_words = lda_model.show_topic (topic [0], topn = 10) # List is by default sorted according to descending order of weightages
+        # list_top_words = hdp_model.show_topic (topic [0], topn = 10) # List is by default sorted according to descending order of weightages
+        
+        # Assign top 10 words associated with the current topic to Remarks
+        dict_topic ['Remarks'] = ", ".join ([word for word, weightage in list_top_words])
+
+        # Assign custom name for current topic (model_top_five_words)
+        dict_topic ['Name'] = "lda_" + "_".join ([word for word, weightage in list_top_words [:5]])
+        # dict_topic ['Name'] = "hdp_" + "_".join ([word for word, weightage in list_top_words [:5]])
+        
+        # Add new row in Topic DataFrame
+        topic_df = topic_df.append (dict_topic, ignore_index = True)
 
     # Remove topics that have not been assigned to at least one feedback in the Feedback-Topic mapping DataFrame
     topic_df = topic_df [topic_df.Id.isin (list_topics_assigned)]
 
-    # Save Topics dataframe
-    topic_df.to_csv (topics_df_file_path, index = False, encoding = "utf-8")
-
     ######################
-
-    # Insert records into Topics table
-    pass
-
-    # Insert records into FeedbackTopic table
-    pass
-
-    # Calculate priorityscore of topic and update Topics table
-    pass
-
-    
-
-    # Get model performance metrics
-    print ("\n*****Model Performances***\n")
-
-    # Hypertune LDA model
-    # print ("Finding optimal number of topics for LDA model..")    
-    # hypertune_no_topics (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start = 5, limit = 100, step = 5) # Find optimal number of topics with highest coherence value for LDA model
-
-    # Get equivalent LDA parameters of HDP model 
-    # print ("Hypertuned alpha and beta values of a LDA almost equivalent of current HDP:", hdp_model.hdp_to_lda ())
-    # print ("Closest LDA model to HDP model:", hdp_model.suggested_lda_model ())
-
-    """ LDA Model """
-    print ("LDA:")
-
-    # Compute Coherence Score
-    coherence_model_lda = models.CoherenceModel (model = lda_model, texts = list_corpus_tokens, corpus = gensim_corpus, dictionary = id2word, coherence = 'c_v')
-    coherence_lda = coherence_model_lda.get_coherence ()
-    print('\nCoherence Score: ', coherence_lda)
-
-    """ HDP Model """
-    print ("\nHDP:")
-
-    # Compute Coherence Score
-    coherence_model_hdp = models.CoherenceModel (model = hdp_model, texts = list_corpus_tokens, corpus = gensim_corpus, dictionary = id2word, coherence = 'c_v')
-    coherence_hdp = coherence_model_hdp.get_coherence ()
-    print('\nCoherence Score: ', coherence_hdp)
 
     # Check boolean to see whether or not to assign manually labelled topics to feedbacks with manually tagged tokens [THIS HAS PRECEDENCE OVER THE TOPIC MODELLING MODEL]
     if (use_manual_tag == True): # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
@@ -922,9 +907,17 @@ if (topic_model_data == True):
         # Add records in Feedback-Topic dataframe
         pass
 
-    # Save file
-    feedback_ml_df.to_csv (topic_file_path, index = False, encoding = "utf-8")
+    # Insert records into Topics table
+    pass
 
+    # Insert records into FeedbackTopic table
+    pass
+
+    # Calculate priorityscore of topic and update Topics table
+    pass
+
+
+    """ Miscellaneous """
     # Create interactive visualisation for LDA model
     lda_visualise = pyLDAvis.gensim.prepare (lda_model, gensim_corpus, id2word) # Create visualisation
     pyLDAvis.save_html (lda_visualise, accuracy_file_path + 'lda.html') # Export visualisation to HTML file
@@ -933,6 +926,11 @@ if (topic_model_data == True):
     pickle_object (lda_model, "lda-model.pkl") # LDA Model
     pickle_object (hdp_model, "hdp-model.pkl") # HDP Model
 
+    # Export and save DataFrames
+    feedback_ml_df.to_csv (topic_file_path, index = False, encoding = "utf-8") # Save FeedbackML DataFrame
+    topic_df.to_csv (topics_df_file_path, index = False, encoding = "utf-8") # Save Topics DataFrame
+    feedback_topic_df.to_csv (feedback_topics_df_file_path, index = False, encoding = "utf-8") # Save FeedbackTopic DataFrame
+    
 # Print debugging message if topic modelling not carried out
 else:
 
