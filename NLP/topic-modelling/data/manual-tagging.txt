@@ -1,3 +1,3 @@
-{"Apple": ["ios", "iphone", "ipad", "ipod", "macbook"], 
-"Evernote": ["evernote", "note", "pork"], 
-"Pinterest": ["pinterest", "pin", "pinned", "idea"]}
+{"Apple": ["ios", "iphone", "ipad", "ipod", "macbook", "itune", "itunes", "air", "airpod", "mac"], 
+"Tripadvisor": ["tripadvisor", "tripadisor", "trip", "trips", "advisor", "travel", "stay", "hotel", "traveler", "tourist", "restaurant", "accomodation"], 
+"Pinterest": ["pinterest", "pin", "pinned", "idea", "board", "pintrest", "pinning", "visual", "fashion", "repin", "creative"]}

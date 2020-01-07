@@ -502,6 +502,30 @@ def clean_split_feedback_topic_dataframe (series):
     # Return cleaned series object
     return series
 
+"""
+# Function to get Feedback-Topic mappings from manual tagging (accepts a Series object of each row in the FeedbackML DataFrame, a list of keywords for the current manually tagged topic as well as the topic's ID)
+def get_manual_feedback_topic_mapping (series, list_keywords, topic_id):
+
+    # Initialise lists containing feedback-topic and percentage contribution mappings
+    feedback_topic_mapping = []
+    feedback_topic_percentage_mapping = [] # Calculation of percentage contribution is no of matching words in feedback/no of total words
+
+    # Initialise counter variable
+    no_occurances = 0
+
+    # Loop to access each keyword in the list of keywords
+    for keyword in list_keywords:
+
+        # Check the number of times the current topic keyword appears in the feedback token list and add it to the number of occurances
+        no_occurances = no_occurances + series ['TextTokens'].count (keyword) # Max number of occurances will be the length of the token list
+
+    feedback_topic_mapping = []
+    feedback_topic_percentage_mapping = [] # Calculation of percentage contribution is no of matching words in feedback/no of total words
+
+    # Return series object
+    return series
+"""
+
 # Function to hypertune LDA Model to tune the number of topics
 def hypertune_no_topics (dictionary, corpus, texts, limit, start, step):
     
@@ -587,8 +611,8 @@ accuracy_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/accuracies/" # 
 # Boolean triggers global variables
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
-use_manual_tag = False # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = False # Boolean to trigger whether to use pickled objects or not
+use_manual_tag = True # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
+use_pickle = True # Boolean to trigger whether to use pickled objects or not
 display_visuals = True # Boolean to trigger display of visualisations
 
 # Database global variables
@@ -786,7 +810,7 @@ if (topic_model_data == True):
     coherence_hdp = coherence_model_hdp.get_coherence ()
     print('\nCoherence Score: ', coherence_hdp, "\n")
 
-    """ Get topics generated """
+    """ Get Topics generated """
     # Get topics
     list_lda_topics = lda_model.show_topics (formatted = True, num_topics = selected_topic_no, num_words = 20)
     list_lda_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
@@ -877,29 +901,45 @@ if (topic_model_data == True):
     # Remove topics that have not been assigned to at least one feedback in the Feedback-Topic mapping DataFrame
     topic_df = topic_df [topic_df.Id.isin (list_topics_assigned)]
 
-    ######################
+    """ Manual Tagging """
+    # Manually tag topics and assign them to feedbacks from a specified set of tagged words
+    # ie if feedback contain words related to Pinterest, assign them to the Pinterest topic
 
-    # Check boolean to see whether or not to assign manually labelled topics to feedbacks with manually tagged tokens [THIS HAS PRECEDENCE OVER THE TOPIC MODELLING MODEL]
-    if (use_manual_tag == True): # Implement manual tagging (from a specified set of tagged words, tag topics and assign them to feedbacks ie if contain the word Pinterest, put in the same topic)
+    # Check boolean to see whether or not to assign manually labelled topics to feedbacks
+    if (use_manual_tag == True): # Implement manual tagging 
 
-        # Update value of largest TopicID (for manual tagging)
-        # largest_topicid = dict_topic ['Id'] # Don't need to add extra 1 in this case as manual tag will increment from 1 (unlike Gensim that starts from 0)
-
-
-        # Manually tagged topic-tokens file format:
+        # Manually tagged topic-tokens/words file format:
         # { topic_name: ['token1', 'token2'], topic_2: ['token3'] } 
 
+        # NOTE: Manually-tagged file should contain different topic-word mappings for different datasets (ie a different set of word-tag list should each be used 
+        # for datasets about Google VS Facebook). The terms should also be as specific to the specified topic as possible to avoid it being assigned to many topics
+    
         # Initialise dictionary containing manually-tagged topic-word mappings
         dictionary_manual_tag = json.load (open (manual_tagging_file_path))
 
-        print ("\nManual tagging [INCOMPLETE!]")
+        # Get updated value of largest TopicID (after Topic Modelling)
+        largest_topicid = max (list_topics_assigned) + 1 # Get largest TopicID in list containing topics that have been assigned to at least one feedback and increment by one for new TopicID
 
         # Loop through each topic in the manually-tagged topic-word mapping
-        for topic in dictionary_manual_tag:
+        for topic in dictionary_manual_tag.keys (): 
+            
+            """ Update Topics DataFrame """
+            # Add the new topic into the Topics DataFrame
+            topic_df = topic_df.append ({'Id': largest_topicid, 'Name': "manual_" + topic, 'PriorityScore': 0, 
+                                         'Remarks': ", ".join ([word for word in dictionary_manual_tag [topic][:10]])}, ignore_index = True)
+            
+            # Increment the largest TopicID (to prepare for the next topic)
+            largest_topicid = largest_topicid + 1
 
-            # See if tokens in DTM match any token in list of tokens in each topic in dictionary_manual_tag
-            # dictionary_manual_tag [topic] # List of tokens
-            print (dictionary_manual_tag [topic])
+        """ Update FeedbackTopic DataFrame """
+        # See if tokens in DTM match any token in list of tokens in each topic in dictionary_manual_tag
+        # dictionary_manual_tag [topic] # List of tokens
+        # print (dictionary_manual_tag [topic])
+
+        # Check is full equal instead of contains as contains will result in many matches!
+
+        # Get Feedback-Topic mappings and assign mappings to lists created previously
+        # feedback_ml_df.apply (get_manual_feedback_topic_mapping, args = (dictionary_manual_tag [topic], largest_topicid), axis = 1) # TO FIX!
 
         # Add records in Topic dataframe
         pass
@@ -907,6 +947,8 @@ if (topic_model_data == True):
         # Add records in Feedback-Topic dataframe
         pass
 
+
+    """ Database updates """
     # Insert records into Topics table
     pass
 
