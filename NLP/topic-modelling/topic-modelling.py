@@ -854,15 +854,14 @@ if (topic_model_data == True):
 
     ######################
 
-    # Calculate priorityscore of topic
+    # Insert records into Topics table
     pass
 
-    # Create topic-feedback mappings in FeedbackTopic table
+    # Insert records into FeedbackTopic table
     pass
 
-    # Insert into Topics table
+    # Calculate priorityscore of topic and update Topics table
     pass
-    
 
     
 
