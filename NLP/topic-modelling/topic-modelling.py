@@ -7,6 +7,7 @@ import json
 import string
 import html
 import unidecode
+from ast import literal_eval
 import pickle 
 import scipy
 import datetime
@@ -502,29 +503,52 @@ def clean_split_feedback_topic_dataframe (series):
     # Return cleaned series object
     return series
 
-"""
-# Function to get Feedback-Topic mappings from manual tagging (accepts a Series object of each row in the FeedbackML DataFrame, a list of keywords for the current manually tagged topic as well as the topic's ID)
-def get_manual_feedback_topic_mapping (series, list_keywords, topic_id):
+# Function to get Feedback-Topic mappings from manual tagging (accepts a Series object of each row in the FeedbackML DataFrame and a dictionary of the manually tagged topics)
+def get_manual_feedback_topic_mapping (series, dictionary_manual_tag, minimum_percentage): 
 
-    # Initialise lists containing feedback-topic and percentage contribution mappings
-    feedback_topic_mapping = []
-    feedback_topic_percentage_mapping = [] # Calculation of percentage contribution is no of matching words in feedback/no of total words
+    # NOTE:
+    # dictionary_manual_tag is in the format {"topic": (["keyword",..], topic_id)}
 
-    # Initialise counter variable
-    no_occurances = 0
+    # Loop to access the dictionary containing manually tagged topics
+    for topic in dictionary_manual_tag.keys ():
+        
+        # Get the current topic's TopicID
+        topic_id = dictionary_manual_tag [topic] [1]
 
-    # Loop to access each keyword in the list of keywords
-    for keyword in list_keywords:
+        # Get the current topic's list of keywords and change it to lowercase
+        list_keywords = [keyword.lower () for keyword in dictionary_manual_tag [topic] [0]]
 
-        # Check the number of times the current topic keyword appears in the feedback token list and add it to the number of occurances
-        no_occurances = no_occurances + series ['TextTokens'].count (keyword) # Max number of occurances will be the length of the token list
+        # Initialise counter variable to count the number of times a tagged keyword appears in the current Feedback's list of tokens
+        no_occurances = 0
 
-    feedback_topic_mapping = []
-    feedback_topic_percentage_mapping = [] # Calculation of percentage contribution is no of matching words in feedback/no of total words
+        # Create a copy of the current Feedback's token list 
+        token_list = series ['TextTokens'].astype (str).lower().copy ()     # Lowercase token list (currently Series is made up of strings)
+        token_list = token_list.apply (lambda x: literal_eval (x)) # Convert token list's contents into lists
 
-    # Return series object
+        # Inner loop to access the list of keywords associated with the current topic
+        for keyword in list_keywords:
+
+            # Check if the topic keyword appears at least once in the current Feedback's list of tokens
+            if (token_list.count (keyword) > 0):
+
+                # Add the number of times the current topic keyword appears in the feedback token list to the number of occurances
+                no_occurances = no_occurances + token_list.count (keyword) # Max number of occurances will be the length of the token list
+        
+        # Check if any keywords associated with the current topic appears in the current Feedback
+        if (no_occurances > 0):
+
+            # Calculate the percentage contribution of the current topic if the current topic is assigned to the current Feedback
+            percentage_contribution = no_occurances / len (token_list) 
+            
+            # Check if the percentage contribution of the current topic is above the minimum percentage
+            if (percentage_contribution >= minimum_percentage): # Can also implement maximum percentage contribution threshold (NOT IMPLEMENTED)
+
+                # Add the topic and its percentage contribution to the Feedback if the current topic is assigned to the current Feedback (after filtering)
+                series ['TextTopics'].append (topic_id)
+                series ['TopicPercentages'].append (percentage_contribution)
+    
+    # Return modified Series object
     return series
-"""
 
 # Function to hypertune LDA Model to tune the number of topics
 def hypertune_no_topics (dictionary, corpus, texts, limit, start, step):
@@ -913,6 +937,7 @@ if (topic_model_data == True):
 
         # NOTE: Manually-tagged file should contain different topic-word mappings for different datasets (ie a different set of word-tag list should each be used 
         # for datasets about Google VS Facebook). The terms should also be as specific to the specified topic as possible to avoid it being assigned to many topics
+        # The terms also should be in lowercase
     
         # Initialise dictionary containing manually-tagged topic-word mappings
         dictionary_manual_tag = json.load (open (manual_tagging_file_path))
@@ -920,33 +945,48 @@ if (topic_model_data == True):
         # Get updated value of largest TopicID (after Topic Modelling)
         largest_topicid = max (list_topics_assigned) + 1 # Get largest TopicID in list containing topics that have been assigned to at least one feedback and increment by one for new TopicID
 
-        # Loop through each topic in the manually-tagged topic-word mapping
+        """ Update Topics DataFrame """
+        # Loop through each topic in the manually-tagged topic-word mapping to add topics into the Topic DataFrame
         for topic in dictionary_manual_tag.keys (): 
             
-            """ Update Topics DataFrame """
             # Add the new topic into the Topics DataFrame
             topic_df = topic_df.append ({'Id': largest_topicid, 'Name': "manual_" + topic, 'PriorityScore': 0, 
                                          'Remarks': ", ".join ([word for word in dictionary_manual_tag [topic][:10]])}, ignore_index = True)
             
+            # Update dictionary so that the key-value pair is a tuple in the format {"topic": (["keyword",..], topic_id)}
+            dictionary_manual_tag [topic] = (dictionary_manual_tag [topic], largest_topicid)
+
             # Increment the largest TopicID (to prepare for the next topic)
             largest_topicid = largest_topicid + 1
 
         """ Update FeedbackTopic DataFrame """
-        # See if tokens in DTM match any token in list of tokens in each topic in dictionary_manual_tag
-        # dictionary_manual_tag [topic] # List of tokens
-        # print (dictionary_manual_tag [topic])
+        # Get Feedback-Topic mappings and update the FeedbackML DataFrame accordingly
+        feedback_ml_df.apply (get_manual_feedback_topic_mapping, args = (dictionary_manual_tag, 0.3), axis = 1)
+    
+        # Re-create Feedback-Topic DataFrame to store all feedback that are assigned with at least one topic after Topic Modelling
+        feedback_topic_df = feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'].copy () # Get feedback that are assigned at least one topic
 
-        # Check is full equal instead of contains as contains will result in many matches!
+        # Remove unused columns 
+        feedback_topic_df.drop (columns = ['Subject', 'MainText', 'Text', 'TextTokens'], inplace = True)
 
-        # Get Feedback-Topic mappings and assign mappings to lists created previously
-        # feedback_ml_df.apply (get_manual_feedback_topic_mapping, args = (dictionary_manual_tag [topic], largest_topicid), axis = 1) # TO FIX!
+        # Re-initialise lists used to store unique topics and new rows to add into the topic-feedback dataframe
+        list_topics_assigned = []    # List containing unique topics assigned to at least one Feedback
+        list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe later on
 
-        # Add records in Topic dataframe
-        pass
+        # Clean and split feedback that are assigned more than one topic into multiple entries in the Feedback-Topic dataframe
+        feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
         
-        # Add records in Feedback-Topic dataframe
-        pass
+        # Remove feedbacks that are assigned with more than one topic
+        feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"^\d*$")] # Only obtain feedbacks whose topics are made of digits (only one topic, since no commas which would be indicative of multiple topics)
 
+        # Insert new rows of feedback splitted previously into the FeedbackTopic DataFrame
+        feedback_topic_df = feedback_topic_df.append (list_new_feedback_topic, ignore_index = True)
+
+        # Remove duplicate records (for redundancy)
+        feedback_topic_df.drop_duplicates (inplace = True)
+
+        # Remove topics that have not been assigned to at least one feedback in the Feedback-Topic mapping DataFrame
+        topic_df = topic_df [topic_df.Id.isin (list_topics_assigned)]
 
     """ Database updates """
     # Insert records into Topics table
