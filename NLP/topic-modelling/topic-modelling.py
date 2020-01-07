@@ -267,7 +267,7 @@ def get_largest_topicid ():
     # Initialise variable to store the largest TopicID value
     largest_id = 0 
 
-    # Connect to database to get the factor value of each feedback's category
+    # Connect to database to get the largest TopicID value of each feedback's category
     try:
 
         # Create MySQL connection and cursor objects to the database
@@ -275,7 +275,8 @@ def get_largest_topicid ():
         db_cursor = db_connection.cursor ()
 
         # SQL query to get the largest TopicID value in the Topics table
-        sql = "SELECT MAX(TopicID) FROM %s;" % (topic_table)
+        sql = "SELECT IFNULL(MAX(TopicID), 0) FROM %s;" % (topic_table)
+        # sql = "SELECT MAX(TopicID) FROM %s;" % (topic_table)
 
         # Execute query
         db_cursor.execute (sql)
@@ -297,7 +298,7 @@ def get_largest_topicid ():
 
     finally:
 
-        # Close connection objects once factor is obtained
+        # Close connection objects once the largest TopicID value is obtained
         db_cursor.close ()
         db_connection.close () # Close MySQL connection
     
@@ -314,7 +315,7 @@ def save_topics (list_lda_topics, list_hdp_topics):
     topics_file.write ("LDA Model:\n\n")
 
     # Get current largest TopicID value in the Topics table
-    largest_topicid = get_largest_topicid () + 1 # Add extra 1 as Gensim topic IDs start from 0 instead of 1 (added to compensate for this)
+    largest_topicid = get_largest_topicid () + 1 # Add extra 1 as Gensim topic IDs start from 0 instead of 1    (added to compensate for this)
 
     # Loop to store each topic in the topics file (LDA topics)
     for topic in list_lda_topics:
@@ -334,19 +335,19 @@ def save_topics (list_lda_topics, list_hdp_topics):
     # Close file object
     topics_file.close ()
 
-# Function to get Feedback-Topic mappings for LDA model
-def get_lda_feedback_topic_mapping (model, corpus, texts, max_no_topics, minimum_percentage):
+# Function to get Feedback-Topic mappings for LDA model (provides additional information like word-topic mapping and word phi values)
+def get_lda_feedback_topic_mapping (model, corpus, texts, max_no_topics, minimum_percentage, minimum_prob = 0.02):
     
     # NOTE:
     # max_no_topics = maxium number of topics that can be assigned to a Feedback
     # minimum_percentage = minimum percentage contribution required for a topic to be assigned to a Feedback
 
     # Apply LDA model on corpus to get a Gensim TransformedCorpus object of mappings (Document-Topic mapping, Word-Topic mapping and Phi values)
-    transformed_gensim_corpus = model [corpus]
+    transformed_gensim_corpus = model.get_document_topics (corpus, per_word_topics = True, minimum_probability = minimum_prob)
 
     # Loop to access mappings in the Gensim transformed corpus (made of tuples of lists)
     for tuple_feedback_mapping in transformed_gensim_corpus: # Access document by document
-
+        
         # Tuple contains three lists
         list_document_topic = tuple_feedback_mapping [0] # List containing tuples of current document/feedback topic-percentage mapping [(topic_no, percentage), ..]
         # list_word_topic = tuple_feedback_mapping [1]     # List containing tuples of word - topic mapping [unused]
@@ -388,14 +389,14 @@ def get_lda_feedback_topic_mapping (model, corpus, texts, max_no_topics, minimum
         feedback_topic_mapping.append (list_topics)  
         feedback_topic_percentage_mapping.append (list_topics_percentages)  
 
-# Function to get Feedback-Topic mappings for HDP model
-def get_hdp_feedback_topic_mapping (model, corpus, texts, max_no_topics, minimum_percentage):
+# Function to get Feedback-Topic mappings for LDA/HDP model
+def get_feedback_topic_mapping (model, corpus, texts, max_no_topics, minimum_percentage):
     
     # NOTE:
     # max_no_topics = maxium number of topics that can be assigned to a Feedback
     # minimum_percentage = minimum percentage contribution required for a topic to be assigned to a Feedback
 
-    # Apply HDP model on corpus to get a Gensim TransformedCorpus object of mappings (Document-Topic mapping ONLY)
+    # Apply model on corpus to get a Gensim TransformedCorpus object of mappings (Document-Topic mapping ONLY)
     transformed_gensim_corpus = model [corpus]
     
     # Loop to access mappings in the Gensim transformed corpus (made of lists of document-topic mappings)
@@ -414,7 +415,7 @@ def get_hdp_feedback_topic_mapping (model, corpus, texts, max_no_topics, minimum
         list_topics = []
         list_topics_percentages = []
 
-        # Check length of document-topic mapping to see if any topic is assigned to the current feedback/document (after filtering)
+        # Check length of document-topic mapping to see if any topic is assigned to the current feedback/document after filtering
         if (len (list_document_topic) > 0): 
 
             # Get largest TopicID value from the database 
@@ -443,7 +444,7 @@ def unassign_empty_topics_dataframe (series):
     # Check if the current feedback's tokens are empty
     if (series ['TextTokens'] == []):
 
-        # Set topics of current feedback to nothing if its tokens are empty (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
+        # Set topics of current feedback to nothing if its tokens are empty (NOTE: By default, if gensim receives an empty list of tokens, it will assign the document ALL topics!)
         series ['TextTopics'] = []
         series ['TopicPercentages'] = []
 
@@ -587,7 +588,7 @@ accuracy_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/accuracies/" # 
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_manual_tag = False # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = True # Boolean to trigger whether to use pickled objects or not
+use_pickle = False # Boolean to trigger whether to use pickled objects or not
 display_visuals = True # Boolean to trigger display of visualisations
 
 # Database global variables
@@ -627,7 +628,7 @@ for word in list_custom_stopwords:
 program_start_time = datetime.datetime.now ()
 print ("Start time: ", program_start_time)
 
-# 1) Get dataset (GENERAL FEEDBACK FIRST!)
+# 1) Get dataset (General Feedback)
 try:
 
     # Create MySQL connection object to the database
@@ -683,7 +684,7 @@ finally:
 if (topic_model_data == True):
 
     # 2) Further feature engineering and data pre-processings
-    # Drop empty rows/columns
+    # Drop empty rows/columns (for redundancy)
     feedback_ml_df.dropna (how = "all", inplace = True) # Drop empty rows
     feedback_ml_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
     
@@ -713,7 +714,7 @@ if (topic_model_data == True):
     bigram = models.Phrases (list_corpus_tokens, min_count = 5, threshold = 100) # Bigrams must be above threshold in order to be formed
     bigram_model = models.phrases.Phraser (bigram) # Create bigram model
     
-    trigram = models.Phrases (bigram [list_corpus_tokens], threshold = 100) # Threshold should be higher (for trigrams to be formed, need to have higher frequency of occurance)
+    trigram = models.Phrases (bigram [list_corpus_tokens], threshold = 110) # Threshold should be higher (for trigrams to be formed, need to have higher frequency of occurance)
     trigram_model = models.phrases.Phraser (trigram) # Create trigram model
 
     # Create bigram and trigram tokens in DataFrame
@@ -746,7 +747,7 @@ if (topic_model_data == True):
 
         # Create Topic Modelling models
         lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = selected_topic_no, passes = 100, 
-                                     chunksize = 3500 , alpha = 'auto', eta = 'auto', random_state = 123, minimum_probability = 0.05) # LDA Model
+                                     chunksize = 3500, alpha = 'auto', eta = 'auto', random_state = 123, minimum_probability = 0.05) # LDA Model
 
         hdp_model = models.HdpModel (corpus = gensim_corpus, id2word = id2word, random_state = 123) # HDP Model (infers the number of topics [always generates 150 topics])
     
@@ -809,14 +810,15 @@ if (topic_model_data == True):
     feedback_topic_percentage_mapping = []
 
     # Get Feedback-Topic mappings and assign mappings to lists created previously
-    get_lda_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.3) # Get mappings for LDA model
-    # get_hdp_feedback_topic_mapping (hdp_model, gensim_corpus, list_corpus_tokens, 3, 0.45) # Get mappings for HDP model
+    get_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.3) # Get mappings for LDA model
+    # get_lda_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.3) # Get mappings for LDA model (more information)
+    # get_feedback_topic_mapping (hdp_model, gensim_corpus, list_corpus_tokens, 3, 0.45) # Get mappings for HDP model
 
     # Assign topics and topics percentages to feedbacks in the DataFrame
     feedback_ml_df ['TextTopics'] = feedback_topic_mapping
     feedback_ml_df ['TopicPercentages'] = feedback_topic_percentage_mapping
 
-    # Set topics of Feedback with empty TextTokens and TextTopics to nothing (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
+    # Set topics of Feedback with empty TextTokens and TextTopics to nothing (NOTE: By default, if gensim receives an empty list of tokens, it will assign the document ALL topics!)
     feedback_ml_df.apply (unassign_empty_topics_dataframe, axis = 1) # Access row by row 
 
     """ Create and populate Feedback-Topic DataFrame """
