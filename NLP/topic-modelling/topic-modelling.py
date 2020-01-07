@@ -24,7 +24,8 @@ import sklearn.metrics as metrics # 4.5) For determination of model accuracy
 
 # Suppress scikit-learn FutureWarnings
 from warnings import simplefilter
-simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
+simplefilter (action = 'ignore', category = FutureWarning)      # Ignore Future Warnings
+simplefilter (action = 'ignore', category = DeprecationWarning) # Ignore Deprecation Warnings
 
 # Logging configurations
 # logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
@@ -279,7 +280,7 @@ def get_largest_topicid ():
         # Execute query
         db_cursor.execute (sql)
 
-        # Get the largest TopicID value from the databases
+        # Get the largest TopicID value from the database
         largest_id = db_cursor.fetchone ()[0] 
 
     # Catch MySQL Exception
@@ -447,13 +448,41 @@ def unassign_empty_topics_dataframe (series):
         series ['TopicPercentages'] = []
 
     # Check if the current feedback's TextTopics are empty (checking if Gensim did not assign any topics to the feedback)
-    if (series ['TextTopics'] == [[]]):
+    if (series ['TextTopics'] == [[]] or series ['TopicPercentages'] == [[]]):
 
         # Set topics of current feedback to nothing if its an empty 2-Dimensional list
         series ['TextTopics'] = []
         series ['TopicPercentages'] = []
 
     # Return cleaned series object
+    return series
+
+# Function to split the FeedbackTopic dataframe such that one record contains one mapping of Feedback to Topic only (accepts a Series object of each row in the FeedbackTopic DataFrame and returns a cleaned Series object)
+def split_feedback_topic_dataframe (series):
+    
+    # Check length of TextTopics to see if more than one topic is assigned to current Feedback
+    if (len (series ['TextTopics']) > 1 ):
+
+        # Initialise counter variable
+        counter = 0
+
+        # Loop to access list of topics assigned to current feedback
+        while (counter < len (series ['TextTopics'])):
+            
+            # Initialise dictionary to store new row information
+            dict_feedback_topic = {"Id": series ['Id'], "TextTopics": 0, "TopicPercentages": 0}
+
+            # Assign TopicID and percentage contribution of current topic to dictionary
+            dict_feedback_topic ['TextTopics'] = series ['TextTopics'] [counter]
+            dict_feedback_topic ['TopicPercentages'] = series ['TopicPercentages'] [counter]
+            
+            # Append dictionary of new row to list containing new rows to insert into the FeedbackTopic dataframe later on
+            list_new_feedback_topic.append (dict_feedback_topic)
+            
+            # Increment counter
+            counter = counter + 1
+    
+    # Return unchanged series object
     return series
 
 # Function to hypertune LDA Model to tune the number of topics
@@ -493,34 +522,6 @@ def hypertune_no_topics (dictionary, corpus, texts, limit, start, step):
 
         # Show visualisations
         plt.show ()
-
-# Function to split the FeedbackTopic dataframe such that one record contains one mapping of Feedback to Topic only (accepts a Series object of each row in the FeedbackTopic DataFrame and returns a cleaned Series object)
-def split_feedback_topic_dataframe (series):
-    
-    # Check length of TextTopics to see if more than one topic is assigned to current Feedback
-    if (len (series ['TextTopics']) > 1 ):
-
-        # Initialise counter variable
-        counter = 0
-
-        # Initialise dicitionary to store new row information
-        dict_feedback_topic = {"Id": series ['Id'], "TextTopics": 0, "TopicPercentages": 0}
-
-        # Loop to access list of topics assigned to current feedback
-        while (counter < len (series ['TextTopics'])):
-            
-            # Assign TopicID and percentage contribution of current topic to dictionary
-            dict_feedback_topic ['TextTopics'] = series ['TextTopics'] [counter]
-            dict_feedback_topic ['TopicPercentages'] = series ['TopicPercentages'] [counter]
-            
-            # Append dictionary of new row to list containing new rows to insert into the FeedbackTopic dataframe later on
-            list_new_feedback_topic.append (dict_feedback_topic)
-            
-            # Increment counter
-            counter = counter + 1
-    
-    # Return cleaned series object
-    return series
 
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
@@ -758,13 +759,13 @@ if (topic_model_data == True):
 
     """ Get Topics information """
     # Create new dataframe for Topics
-    topic_df = pd.DataFrame (columns = ["Id", "Remarks"]) # Initialise DataFrame to contain topic data 
+    topic_df = pd.DataFrame (columns = ["Id", "Name", "PriorityScore", "Remarks"]) # Initialise DataFrame to contain topic data 
 
     # Get current largest TopicID value in the Topics table
     largest_topicid = get_largest_topicid () + 1 # Add extra 1 as Gensim topic IDs start from 0 instead of 1 (added to compensate for this)
 
     # Initialise dictionary to store information of new row to insert into the Topics DataFrame
-    dict_topic = {'Id': 0, 'Remarks': ""}
+    dict_topic = {'Id': 0, 'Name': "", 'PriorityScore': 0, 'Remarks': ""}
 
     # Populate Topic DataFrame with new topics
     for topic in list_lda_topics: # OR list_hdp_topics for HDP model
@@ -778,6 +779,10 @@ if (topic_model_data == True):
         
         # Assign top 10 words associated with the current topic to Remarks
         dict_topic ['Remarks'] = ", ".join ([word for word, weightage in list_top_words])
+
+        # Assign custom name for current topic (model_top_five_words)
+        dict_topic ['Name'] = "lda_" + "_".join ([word for word, weightage in list_top_words [:5]])
+        # dict_topic ['Name'] = "hdp_" + "_".join ([word for word, weightage in list_top_words [:5]])
         
         # Add new row in Topic DataFrame
         topic_df = topic_df.append (dict_topic, ignore_index = True)
@@ -801,6 +806,7 @@ if (topic_model_data == True):
     # Set topics of Feedback with empty TextTokens and TextTopics to nothing (NOTE: By default, if gensim receives an empty list of tokens, will assign the document ALL topics!)
     feedback_ml_df.apply (unassign_empty_topics_dataframe, axis = 1) # Access row by row 
 
+    """ Populate Feedback-Topic """
     # Create new dataframe to store all feedback assigned to at least a topic after Topic Modelling
     feedback_topic_df = feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'].copy () # Get feedback that are assigned at least one topic
 
@@ -809,16 +815,19 @@ if (topic_model_data == True):
 
     # Initialise lists used to store unique topics and new rows to add into the topic-feedback dataframe
     list_topics_assigned = []    # List containing unique topics assigned to at least one Feedback
-    list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe
+    list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe later on
 
-    # Split feedback assigned more than one topic into multiple entries in the Feedback-Topic dataframe
-    feedback_topic_df.apply (split_feedback_topic_dataframe, axis = 1) # NEED TO FIX LOGIC ERROR OF SAME VALUE BEING INSERTED!
+    # Split feedback that are assigned more than one topic into multiple entries in the Feedback-Topic dataframe
+    feedback_topic_df.apply (split_feedback_topic_dataframe, axis = 1) 
     
     # Remove feedback that are assigned more than one topic
     pass
 
     # Insert new rows in FeedbackTopic DataFrame
     feedback_topic_df = feedback_topic_df.append (list_new_feedback_topic, ignore_index = True)
+
+    # Remove duplicate records (for redundancy)
+    pass
 
     # Save Topics dataframe
     feedback_topic_df.to_csv (feedback_topics_df_file_path, index = False, encoding = "utf-8")
