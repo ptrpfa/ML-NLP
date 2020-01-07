@@ -457,11 +457,11 @@ def unassign_empty_topics_dataframe (series):
     # Return cleaned series object
     return series
 
-# Function to split the FeedbackTopic dataframe such that one record contains one mapping of Feedback to Topic only (accepts a Series object of each row in the FeedbackTopic DataFrame and returns a cleaned Series object)
-def split_feedback_topic_dataframe (series):
+# Function to clean and split the FeedbackTopic dataframe such that one record contains one mapping of Feedback to Topic only (accepts a Series object of each row in the FeedbackTopic DataFrame and returns a cleaned Series object)
+def clean_split_feedback_topic_dataframe (series):
     
     # Check length of TextTopics to see if more than one topic is assigned to current Feedback
-    if (len (series ['TextTopics']) > 1 ):
+    if (len (series ['TextTopics']) > 1 ): # Proceed to split feedback into multiple new records if current feedback is assigned to more than one topic
 
         # Initialise counter variable
         counter = 0
@@ -482,7 +482,11 @@ def split_feedback_topic_dataframe (series):
             # Increment counter
             counter = counter + 1
     
-    # Return unchanged series object
+    # Clean and convert datatype of TextTopics
+    series ['TextTopics'] = str (series ['TextTopics']).strip ("[]") # Convert TextTopics to a string and remove square brackets
+    series ['TopicPercentages'] = str (series ['TopicPercentages']).strip ("[]") # Convert TopicPercentages to a string and remove square brackets
+
+    # Return cleaned series object
     return series
 
 # Function to hypertune LDA Model to tune the number of topics
@@ -817,17 +821,18 @@ if (topic_model_data == True):
     list_topics_assigned = []    # List containing unique topics assigned to at least one Feedback
     list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe later on
 
-    # Split feedback that are assigned more than one topic into multiple entries in the Feedback-Topic dataframe
-    feedback_topic_df.apply (split_feedback_topic_dataframe, axis = 1) 
+    # Clean and split feedback that are assigned more than one topic into multiple entries in the Feedback-Topic dataframe
+    feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
     
-    # Remove feedback that are assigned more than one topic
-    pass
+    # Remove feedbacks that are assigned with more than one topic
+    feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"^\d*$")] # Only obtain feedbacks whose topics are made of digits (only one topic, since no commas which would be indicative of multiple topics)
+    # feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"\d+,\D?\d+")] # Inverse
 
     # Insert new rows in FeedbackTopic DataFrame
     feedback_topic_df = feedback_topic_df.append (list_new_feedback_topic, ignore_index = True)
 
     # Remove duplicate records (for redundancy)
-    pass
+    feedback_topic_df.drop_duplicates (inplace = True)
 
     # Save Topics dataframe
     feedback_topic_df.to_csv (feedback_topics_df_file_path, index = False, encoding = "utf-8")
