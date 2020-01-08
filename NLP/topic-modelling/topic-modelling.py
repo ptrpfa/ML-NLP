@@ -618,6 +618,124 @@ def insert_feedback_topic_dataframe (series, cursor, connection):
     # Commit changes made
     connection.commit ()
 
+# Function to calculate the PriorityScore of each Topic in the Topics DataFrame
+def calculate_topic_priority_score (series):
+
+    # NOTE:
+    # PriorityScore = Average OverallScore of all Feedbacks assigned to the current Topic
+    # --> Sum of all Feedbacks' OverallScore in current Topic / Total number of Feedbacks in current Topic
+
+    # Initialise variables for calculating the PriorityScore of the current Topic
+    sum_overall_score = 0 # Sum of all Feedback's OverallScore in the current Topic
+    no_feedback = 0       # Total number of Feedbacks in current Topic
+    priority_score = 0    # PriorityScore of current Topic
+
+    # Connect to database to get the total number of Feedbacks in the current Topic 
+    try:
+
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
+
+        # SQL query to get the total number of unique Feedbacks in the current Topic
+        sql = "SELECT COUNT(DISTINCT (FeedbackID)) FROM %s WHERE TopicID = %s;" % (feedback_topic_table, series ['Id'])
+
+        # Execute query
+        db_cursor.execute (sql)
+
+        # Update the total number of Feedbacks in the current Topic
+        no_feedback = db_cursor.fetchone ()[0] 
+
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error occurred when trying to get the total number of Feedbacks in a particular Topic:", error)
+
+    # Catch other errors
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to get the total number of Feedbacks in a particular Topic")
+
+    finally:
+
+        # Close connection objects once factor is obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
+
+    # Connect to database to get the sum of all the OverallScore of Feedbacks in the current Topic
+    try:
+
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
+
+        # SQL query to get the sum of all the OverallScore of Feedbacks in the current Topic
+        sql = "SELECT SUM(OverallScore) FROM %s WHERE FeedbackID IN (SELECT DISTINCT (FeedbackID) FROM %s WHERE TopicID = %s);" % (feedback_table, feedback_topic_table, series ['Id'])
+
+        # Execute query
+        db_cursor.execute (sql)
+
+        # Update the sum of all Feedback's OverallScore in the current Topic
+        sum_overall_score = int (db_cursor.fetchone ()[0])  
+
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error occurred when trying to get the sum of all the OverallScore of Feedbacks in a particular Topic:", error)
+
+    # Catch other errors
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to get the sum of all the OverallScore of Feedbacks in a particular Topic")
+
+    finally:
+
+        # Close connection objects once factor is obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
+
+    # Calculate the current Topic's PriorityScore 
+    priority_score = round ((sum_overall_score / no_feedback), 2) # PriorityScore is rounded to 2 decimal places
+
+    # Connect to database to get update the PriorityScore of the current Topic
+    try:
+
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
+
+        # Create SQL statement to update Feedback table values
+        sql = "UPDATE %s " % (topic_table)
+        sql = sql + "SET PriorityScore = %s WHERE TopicID = %s;" 
+
+        # Execute SQL statement
+        db_cursor.execute (sql, (priority_score, series ['Id']))
+
+        # Commit changes made
+        db_connection.commit ()
+
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error occurred when trying to update the PriorityScore of a particular Topic:", error)
+
+    # Catch other errors
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to update the PriorityScore of a particular Topic")
+
+    finally:
+
+        # Close connection objects once factor is obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
+
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
 
@@ -1084,11 +1202,11 @@ if (topic_model_data == True):
             db_cursor.close ()
             db_connection.close () # Close MySQL connection
 
+        # Calculate the PriorityScore of each Topic and update the Topics table
+        topic_df.apply (calculate_topic_priority_score, axis = 1) # Access each topic row by row
 
-
-        # Calculate priorityscore of topic and update Topics table
-        pass
-
+        # Print debugging message
+        print (len (topic_df), "record(s)' PriorityScore updated")
 
     """ Miscellaneous """
     # Create interactive visualisation for LDA model
