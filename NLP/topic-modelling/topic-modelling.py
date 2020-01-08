@@ -736,6 +736,12 @@ def calculate_topic_priority_score (series):
         db_cursor.close ()
         db_connection.close () # Close MySQL connection
 
+    # Update current Topic's PriorityScore in the Topics DataFrame
+    series ['PriorityScore'] = priority_score
+
+    # Return modified Series object
+    return series
+
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
 
@@ -784,7 +790,7 @@ accuracy_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/accuracies/" # 
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_manual_tag = True # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = True # Boolean to trigger whether to use pickled objects or not
+use_pickle = False # Boolean to trigger whether to use pickled objects or not
 display_visuals = True # Boolean to trigger display of visualisations
 modify_database = True # Boolean to trigger modifications of the database
 
@@ -833,8 +839,8 @@ try:
 
     # Create SQL query to get FeedbackML table values (Feature Engineering)
     sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE WebAppID = %s AND SpamStatus = 0 AND CategoryID = 4;" % (feedback_ml_table, web_app_id)   # General 
-    # sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE SpamStatus = 0 AND CategoryID = 2;" % (feedback_ml_table) # Bug Report 
-    # sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE SpamStatus = 0 AND CategoryID = 5;" % (feedback_ml_table) # Feature Request
+    # sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE WebAppID = %s AND SpamStatus = 0 AND CategoryID = 2;" % (feedback_ml_table, web_app_id) # Bug Report 
+    # sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE WebAppID = %s AND SpamStatus = 0 AND CategoryID = 5;" % (feedback_ml_table, web_app_id) # Feature Request
 
     # Execute query and convert FeedbackML table into a pandas DataFrame
     feedback_ml_df = pd.read_sql (sql_query, db_connection)

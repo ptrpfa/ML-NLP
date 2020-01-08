@@ -1,4 +1,4 @@
-Start time:  2020-01-07 14:02:34.851137
+Start time:  2020-01-08 14:09:54.913006
 
 Preliminary information about Topic Modelling dataset:
 Dimensions:  (3285, 7) 
@@ -23,7 +23,6 @@ TextTopics          object
 TopicPercentages    object
 dtype: object 
 
-
 *****Model Performances***
 
 LDA:
@@ -32,7 +31,11 @@ Coherence Score:  0.4576548914463027
 
 HDP:
 
-Coherence Score:  0.7485384922401099
+Coherence Score:  0.7485384922401099 
+
+68 record(s) successfully inserted into Topics table
+3131 record(s) successfully inserted into FeedbackTopic table
+68 record(s)' PriorityScore updated
 /home/p/anaconda3/lib/python3.7/site-packages/past/translation/__init__.py:35: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
   import imp
 /home/p/anaconda3/lib/python3.7/site-packages/past/translation/__init__.py:35: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
@@ -43,13 +46,13 @@ Coherence Score:  0.7485384922401099
   from collections import Iterable
 /home/p/anaconda3/lib/python3.7/site-packages/past/translation/__init__.py:35: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
   import imp
-/home/p/anaconda3/lib/python3.7/site-packages/past/translation/__init__.py:35: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
-  import imp
 /home/p/anaconda3/lib/python3.7/site-packages/past/types/oldstr.py:5: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
   from collections import Iterable
+/home/p/anaconda3/lib/python3.7/site-packages/past/translation/__init__.py:35: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
 /home/p/anaconda3/lib/python3.7/site-packages/past/types/oldstr.py:5: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
   from collections import Iterable
 
-Program start time:  2020-01-07 14:02:34.851137
-Program end time:  2020-01-07 14:08:39.638823
-Program runtime:  364.787686 seconds
+Program start time:  2020-01-08 14:09:54.913006
+Program end time:  2020-01-08 14:16:17.658513
+Program runtime:  382.745507 seconds
