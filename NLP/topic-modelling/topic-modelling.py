@@ -589,6 +589,35 @@ def hypertune_no_topics (dictionary, corpus, texts, limit, start, step):
         # Show visualisations
         plt.show ()
 
+# Function to insert each row in the series object passed to the Topics table
+def insert_topics_dataframe (series, cursor, connection): 
+
+    # Create SQL statement to insert Topics table values
+    sql = "INSERT INTO %s (TopicID, WebAppID, Name, PriorityScore, Remarks) " % (topic_table)
+    sql = sql + "VALUES (%s, %s, %s, %s, %s);" 
+
+    # Execute SQL statement
+    cursor.execute (sql, (series ['Id'], web_app_id, series ['Name'], series ['PriorityScore'], series ['Remarks']))
+
+    # Commit changes made
+    connection.commit ()
+
+# Function to insert each row in the series object passed to the FeedbackTopic table
+def insert_feedback_topic_dataframe (series, cursor, connection): 
+
+    # Split Id (WebAppID_FeedbackID_CategoryID) into a list
+    list_id = series ['Id'].split ('_') # Each ID component is delimited by underscore
+
+    # Create SQL statement to insert FeedbackTopic table values
+    sql = "INSERT INTO %s (FBWebAppID, FeedbackID, CategoryID, TopicID, TWebAppID, Percentage) " % (feedback_topic_table)
+    sql = sql + "VALUES (%s, %s, %s, %s, %s, %s);" 
+
+    # Execute SQL statement
+    cursor.execute (sql, (list_id [0], list_id [1], list_id [2], series ['TextTopics'], web_app_id, series ['TopicPercentages']))
+
+    # Commit changes made
+    connection.commit ()
+
 # Function to pickle object (accepts object to pickle and its filename to save as)
 def pickle_object (pickle_object, filename):
 
@@ -639,6 +668,7 @@ preliminary_check = True # Boolean to trigger display of preliminary dataset vis
 use_manual_tag = True # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
 use_pickle = True # Boolean to trigger whether to use pickled objects or not
 display_visuals = True # Boolean to trigger display of visualisations
+modify_database = True # Boolean to trigger modifications of the database
 
 # Database global variables
 mysql_user = "root"                     # MySQL username
@@ -989,14 +1019,75 @@ if (topic_model_data == True):
         topic_df = topic_df [topic_df.Id.isin (list_topics_assigned)]
 
     """ Database updates """
-    # Insert records into Topics table
-    pass
+    # Check  global boolean variable to see whether or not to modify the database
+    if (modify_database == True): # Execute database modifications
 
-    # Insert records into FeedbackTopic table
-    pass
+        # Connect to database to INSERT new topics into the Topics table (need to first insert into the Topics table as FeedbackTopic insertions later on have foreign key references to the Topics table)
+        try:
 
-    # Calculate priorityscore of topic and update Topics table
-    pass
+            # Create MySQL connection and cursor objects to the database
+            db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+            db_cursor = db_connection.cursor ()
+
+            # Insert the new topics into the Topics database table
+            topic_df.apply (insert_topics_dataframe, axis = 1, args = (db_cursor, db_connection))
+
+            # Print debugging message
+            print (len (topic_df), "record(s) successfully inserted into Topics table")
+            
+        # Catch MySQL Exception
+        except mysql.connector.Error as error:
+
+            # Print MySQL connection error
+            print ("MySQL error occurred when trying to insert values into Topics table:", error)
+
+        # Catch other errors
+        except:
+
+            # Print other errors
+            print ("Error occurred attempting to establish database connection to insert values into the Topics table")
+
+        finally:
+
+            # Close connection objects once Feedback has been obtained
+            db_cursor.close ()
+            db_connection.close () # Close MySQL connection
+
+        # Connect to database to INSERT new Feedback-Topic mappings into the FeedbackTopic table
+        try:
+
+            # Create MySQL connection and cursor objects to the database
+            db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+            db_cursor = db_connection.cursor ()
+
+            # Insert the new Feedback-Topic mappings into the FeedbackTopic database table
+            feedback_topic_df.apply (insert_feedback_topic_dataframe, axis = 1, args = (db_cursor, db_connection))
+
+            # Print debugging message
+            print (len (feedback_topic_df), "record(s) successfully inserted into FeedbackTopic table")
+            
+        # Catch MySQL Exception
+        except mysql.connector.Error as error:
+
+            # Print MySQL connection error
+            print ("MySQL error occurred when trying to insert values into FeedbackTopic table:", error)
+
+        # Catch other errors
+        except:
+
+            # Print other errors
+            print ("Error occurred attempting to establish database connection to insert values into the FeedbackTopic table")
+
+        finally:
+
+            # Close connection objects once Feedback has been obtained
+            db_cursor.close ()
+            db_connection.close () # Close MySQL connection
+
+
+
+        # Calculate priorityscore of topic and update Topics table
+        pass
 
 
     """ Miscellaneous """
