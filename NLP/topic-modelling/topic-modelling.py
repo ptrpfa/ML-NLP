@@ -7,7 +7,6 @@ import json
 import string
 import html
 import unidecode
-from ast import literal_eval
 import pickle 
 import scipy
 import datetime
@@ -523,12 +522,9 @@ def get_manual_feedback_topic_mapping (series, dictionary_manual_tag, minimum_pe
         no_occurances = 0
 
         # Get current Feedback's list of tokens in lowercase
-        token_list = series.TextTokens.copy () # Create a copy of the current Feedback's token list (LIST object)
-        token_list = literal_eval (str (token_list).lower ()) # Lowercase token list and convert it back into a list object (ast.literal_eval raises an exception if the input isn't a valid Python datatype)
-        # token_list = token_list.apply (lambda x: literal_eval (str (x).lower ())) # Lowercase token list and convert it back into a list object (ast.literal_eval raises an exception if the input isn't a valid Python datatype)
-
-        # token_list = series ['TextTokens'].astype (str).lower().copy ()     # Lowercase token list (currently Series is made up of strings) [ISSUE HERE]
-        # token_list = token_list.apply (lambda x: literal_eval (x)) # Convert token list's contents into lists
+        token_list = series.TextTokens.copy () # Create a copy of the current Feedback's token list 
+        token_list = [token.lower () for token in token_list] # Lowercase contents of token list
+        # OR token_list = ast.literal_eval (str (token_list).lower ()) # Lowercase token list and convert it back into a list object (ast.literal_eval raises an exception if the input isn't a valid Python datatype)
 
         # Inner loop to access the list of keywords associated with the current topic
         for keyword in list_keywords:
@@ -551,15 +547,6 @@ def get_manual_feedback_topic_mapping (series, dictionary_manual_tag, minimum_pe
                 # Assign the topic and its percentage contribution to the Feedback if the current topic is assigned to the current Feedback (after filtering)
                 series ['TextTopics'].append (topic_id)
                 series ['TopicPercentages'].append (percentage_contribution)
-
-                # # Check if the current topic is a new topic that has not been added to the list containing all topics that have been assigned to at least one Feedback
-                # if (topic_id not in list_topics_assigned):
-
-                #     # Add topic into the list if it has not been added inside previously
-                #     list_topics_assigned.append (topic_id)
-
-                #     # Sort list of unique topics assigned to at least one Feedback in ascending order of TopicIDs
-                #     list_topics_assigned.sort ()
         
     # Return modified Series object
     return series
