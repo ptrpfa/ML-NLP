@@ -503,11 +503,12 @@ def clean_split_feedback_topic_dataframe (series):
     # Return cleaned series object
     return series
 
-# Function to get Feedback-Topic mappings from manual tagging (accepts a Series object of each row in the FeedbackML DataFrame and a dictionary of the manually tagged topics)
+# Function to get Feedback-Topic mappings from manual tagging (accepts a Series object of each row in the FeedbackML DataFrame, a dictionary of the manually tagged topics as well as the minimum percentage contribution for a topic)
 def get_manual_feedback_topic_mapping (series, dictionary_manual_tag, minimum_percentage): 
 
     # NOTE:
     # dictionary_manual_tag is in the format {"topic": (["keyword",..], topic_id)}
+    # minimum_percentage = minimum percentage contribution of a topic for it to be assigned to the current Feedback
 
     # Loop to access the dictionary containing manually tagged topics
     for topic in dictionary_manual_tag.keys ():
@@ -521,9 +522,13 @@ def get_manual_feedback_topic_mapping (series, dictionary_manual_tag, minimum_pe
         # Initialise counter variable to count the number of times a tagged keyword appears in the current Feedback's list of tokens
         no_occurances = 0
 
-        # Create a copy of the current Feedback's token list 
-        token_list = series ['TextTokens'].astype (str).lower().copy ()     # Lowercase token list (currently Series is made up of strings)
-        token_list = token_list.apply (lambda x: literal_eval (x)) # Convert token list's contents into lists
+        # Get current Feedback's list of tokens in lowercase
+        token_list = series.TextTokens.copy () # Create a copy of the current Feedback's token list (LIST object)
+        token_list = literal_eval (str (token_list).lower ()) # Lowercase token list and convert it back into a list object (ast.literal_eval raises an exception if the input isn't a valid Python datatype)
+        # token_list = token_list.apply (lambda x: literal_eval (str (x).lower ())) # Lowercase token list and convert it back into a list object (ast.literal_eval raises an exception if the input isn't a valid Python datatype)
+
+        # token_list = series ['TextTokens'].astype (str).lower().copy ()     # Lowercase token list (currently Series is made up of strings) [ISSUE HERE]
+        # token_list = token_list.apply (lambda x: literal_eval (x)) # Convert token list's contents into lists
 
         # Inner loop to access the list of keywords associated with the current topic
         for keyword in list_keywords:
@@ -531,7 +536,7 @@ def get_manual_feedback_topic_mapping (series, dictionary_manual_tag, minimum_pe
             # Check if the topic keyword appears at least once in the current Feedback's list of tokens
             if (token_list.count (keyword) > 0):
 
-                # Add the number of times the current topic keyword appears in the feedback token list to the number of occurances
+                # Add the number of times the current topic keyword appears in the feedback token list to the total number of occurances
                 no_occurances = no_occurances + token_list.count (keyword) # Max number of occurances will be the length of the token list
         
         # Check if any keywords associated with the current topic appears in the current Feedback
@@ -543,10 +548,19 @@ def get_manual_feedback_topic_mapping (series, dictionary_manual_tag, minimum_pe
             # Check if the percentage contribution of the current topic is above the minimum percentage
             if (percentage_contribution >= minimum_percentage): # Can also implement maximum percentage contribution threshold (NOT IMPLEMENTED)
 
-                # Add the topic and its percentage contribution to the Feedback if the current topic is assigned to the current Feedback (after filtering)
+                # Assign the topic and its percentage contribution to the Feedback if the current topic is assigned to the current Feedback (after filtering)
                 series ['TextTopics'].append (topic_id)
                 series ['TopicPercentages'].append (percentage_contribution)
-    
+
+                # # Check if the current topic is a new topic that has not been added to the list containing all topics that have been assigned to at least one Feedback
+                # if (topic_id not in list_topics_assigned):
+
+                #     # Add topic into the list if it has not been added inside previously
+                #     list_topics_assigned.append (topic_id)
+
+                #     # Sort list of unique topics assigned to at least one Feedback in ascending order of TopicIDs
+                #     list_topics_assigned.sort ()
+        
     # Return modified Series object
     return series
 
@@ -879,7 +893,7 @@ if (topic_model_data == True):
     list_topics_assigned = []    # List containing unique topics assigned to at least one Feedback
     list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe later on
 
-    # Clean and split feedback that are assigned more than one topic into multiple entries in the Feedback-Topic dataframe
+    # Clean and split feedback that are assigned more than one topic into multiple new entries to be added later on in the Feedback-Topic dataframe
     feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
     
     # Remove feedbacks that are assigned with more than one topic
@@ -963,17 +977,16 @@ if (topic_model_data == True):
         # Get Feedback-Topic mappings and update the FeedbackML DataFrame accordingly
         feedback_ml_df.apply (get_manual_feedback_topic_mapping, args = (dictionary_manual_tag, 0.3), axis = 1)
     
-        # Re-create Feedback-Topic DataFrame to store all feedback that are assigned with at least one topic after Topic Modelling
+        # Create Feedback-Topic DataFrame again to store all feedback that are assigned with at least one topic after Topic Modelling
         feedback_topic_df = feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'].copy () # Get feedback that are assigned at least one topic
 
-        # Remove unused columns 
+        # Remove unused columns from re-created dataframe
         feedback_topic_df.drop (columns = ['Subject', 'MainText', 'Text', 'TextTokens'], inplace = True)
 
-        # Re-initialise lists used to store unique topics and new rows to add into the topic-feedback dataframe
-        list_topics_assigned = []    # List containing unique topics assigned to at least one Feedback
+        # Re-initialise list used to store new rows to add into the topic-feedback dataframe
         list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe later on
 
-        # Clean and split feedback that are assigned more than one topic into multiple entries in the Feedback-Topic dataframe
+        # Clean and split feedback that are assigned more than one topic into multiple entries to add later on in the Feedback-Topic dataframe
         feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
         
         # Remove feedbacks that are assigned with more than one topic
