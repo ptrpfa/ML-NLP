@@ -27,10 +27,14 @@ NOTE: Since the database is only accessed by the database administrator/programs
 it is assumed that the records inserted will be CORRECT and validated
 --> Calculation of OverallScore of each Feedback is only done on INSERTs into the Feedback table ONCE. 
 UPDATEs to the Feedback table will not re-calculate the OverallScore of each Feedback
-
 --> Calculation of PriorityScore of each Topic is only done on INSERTs into the FeedbackTopic table ONCE. 
 UPDATEs to the FeedbackTopic table will not re-calculate the OverallScore of each Topic.
---> For this need to add in code that will automatically run upon changes within the FeedbackTopic table!
+
+Use case:
+This data mining program is designed to only run ONCE on Feedback data that HAVE NOT been data mined before
+--> The data mining program does not respond to UPDATEs of features that can only be derived after data mining
+(ie change of SpamStatus from 0 to 1 does not trigger the running of Sentiment Analysis/Topic Modelling)
+
 """
 
 # Function to get the factor of each category from the database for computing the overall scores of feedbacks
@@ -290,7 +294,7 @@ def insert_feedback_ml_dataframe (series, cursor, connection):
     # Commit changes made
     connection.commit ()
 
-# Function to compute Spam Status of Feedback
+# Function to compute overall Spam Status of Feedback
 def spam_status_dataframe (series):
 
     # Get current row's SubjectSpam and MainTextSpam values
@@ -442,13 +446,13 @@ print ("Start time: ", program_start_time)
 print ("\n***Preliminary preparations before data mining process***\n")
 
 # Check if there are any Feedback in the database which have not been pre-processed yet
-try: # Unprocessed Feedback are Feedbacks with PreprocessStatus = 0 and Whitelist = 2 (implicit, assumed that if PreprocessStatus = 0, Whitelist will be = 2)
+try: # Unprocessed Feedback are Feedbacks with PreprocessStatus = 0 and Whitelist = 2 
 
     # Create MySQL connection object to the database
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
     # Create SQL query to get Feedback table values
-    sql_query = "SELECT * FROM %s WHERE PreprocessStatus = 0;" % (feedback_table)
+    sql_query = "SELECT * FROM %s WHERE PreprocessStatus = 0 AND Whitelist = 2;" % (feedback_table)
 
     # Execute query and convert Feedback table into a pandas DataFrame
     feedback_df = pd.read_sql (sql_query, db_connection)
@@ -527,12 +531,12 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
     combined_feedback_df_trash = combined_feedback_df [combined_feedback_df.MainTextCleaned == ""].copy () # Get feedback with MainTextCleaned set to blank first to work on trash records
 
     # Update columns accordingly to mark invalid rows as blacklisted invalid trash records
-    combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'SubjectSpam'] = 3  # Set SubjectSpam status to unable to process (3) [for UNWHITELISTED records]
+    combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'SubjectSpam'] = 3   # Set SubjectSpam status to unable to process (3) [for UNWHITELISTED records]
     combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'MainTextSpam'] = 3  # Set MainTextSpam status to unable to process (3) [for UNWHITELISTED records]
-    combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'SpamStatus'] = 3  # Set SpamStatus to unable to process (3) [for UNWHITELISTED records]
+    combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'SpamStatus'] = 3    # Set SpamStatus to unable to process (3) [for UNWHITELISTED records]
     combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'Subjectivity'] = 3  # Set Subjectivity to unable to process (3) [for UNWHITELISTED records] {Note for this, whitelisted trash records will have sentiment value of UNPROCESSED (2)}
-    combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'Polarity'] = 3  # Set Polarity to unable to process (3) [for UNWHITELISTED records] {Note for this, whitelisted trash records will have sentiment value of UNPROCESSED (2)}
-    combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'Whitelist'] = 3  # Set whitelisted status to blacklisted (3) [for UNWHITELISTED records]
+    combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'Polarity'] = 3      # Set Polarity to unable to process (3) [for UNWHITELISTED records] {Note for this, whitelisted trash records will have sentiment value of UNPROCESSED (2)}
+    combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1, 'Whitelist'] = 3     # Set whitelisted status to blacklisted (3) [for UNWHITELISTED records]
 
     # Print debugging message
     print ("Number of trash record(s) found:", len (combined_feedback_df_trash.loc [combined_feedback_df_trash ['Whitelist'] != 1]), "record(s)")
@@ -771,8 +775,8 @@ if (mine_data == True):
         """
         Selected Feedback features:
         -Id (WebAppID + FeedbackID + CategoryID) [Not ID as will cause Excel .sylk file intepretation error]
-        -SubjectCleaned (processed)
-        -MainTextCleaned (processed)
+        -Subject (pre-processed)
+        -MainText (pre-processed)
         -SubjectSpam [target1]
         -MainTextSpam [target2]
         -SpamStatus [target]
@@ -942,8 +946,8 @@ if (mine_data == True):
         # Create MySQL connection object to the database
         db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
-        # Create SQL query to get FeedbackML table values (Feature Engineering) [SpamStatus = 0, Subjectivity = 2 & Polarity = 2 (implicit, not included in query as it is assumed if Subjectivity = 2, Polarity will also be = 2. This is also done for speed)]
-        sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, MainTextCleaned as `MainText`, Subjectivity, Polarity FROM %s WHERE SpamStatus = 0 AND Subjectivity = 2;" % (feedback_ml_table)
+        # Create SQL query to get FeedbackML table values (Feature Engineering) [SpamStatus = 0, Subjectivity = 2 & Polarity = 2] 
+        sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, MainTextCleaned as `MainText`, Subjectivity, Polarity FROM %s WHERE SpamStatus = 0 AND Subjectivity = 2 AND Polarity = 2;" % (feedback_ml_table)
 
         # Execute query and convert FeedbackML table into a pandas DataFrame
         feedback_ml_df = pd.read_sql (sql_query, db_connection)
@@ -962,7 +966,7 @@ if (mine_data == True):
         """
         Selected Feedback features:
         -Id (WebAppID + FeedbackID + CategoryID) [Not ID as will cause Excel .sylk file intepretation error]
-        -MainTextCleaned (processed)
+        -MainText (processed)
         -Subjectivity [target1]
         -Polarity [target2]
 
@@ -971,7 +975,8 @@ if (mine_data == True):
         NOTE: Subject of Feedback is omitted from sentiment analysis instead of combining it together with MainText to get a longer text because 1) Sentiment analysis
         takes into account the order of words and 2) Practically, Subject should be a summary or subset of MainText, with MainText giving the real value of the Feedback
         --> Alternatives to include Subject with MainText would be to compute the Subject of each individual Feedback's subjectivity and polarity scores separately and
-        combining it with the values of the Feedback's MainText to some degree/factor (ie Subjectivity = (0.3 * SubjectivityScore of Subject) + (0.7 * SubjectivityScore of MainText))
+        combining it with the values of the Feedback's MainText to some degree/factor (ie Subjectivity = (0.3 * SubjectivityScore of Subject) + (0.7 * SubjectivityScore 
+        of MainText))
         """
 
     except mysql.connector.Error as error:
