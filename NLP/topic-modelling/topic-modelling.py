@@ -39,6 +39,10 @@ NOTE: The Topic Modelling LDA Model needs to be hyper-tuned for every set of fee
 2) Feedback-Topic assignments should make sense (Feedbacks within a topic should be similar/be semantically related & Topics should be correctly assigned to Feedbacks)
 3) Across topics, topics should be as different as possible (topics shuold be as different from one another as possible)
 
+Caveat:
+-Some feedback will not be assigned any topic even though they contain certain keywords (for manual tagging), like 'iPhone', as such topics' percentage contribution 
+to the feedbacks are lower than the minimum_percentage threshold specified
+
 Future enhancements:
 -Further hypertuning the LDA model's hyperparameters such as the alpha, beta and eta values (alpha and beta values from the HDP model could be used via the hdp_to_lda () 
 method provided by Gensim)
