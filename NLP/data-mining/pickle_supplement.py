@@ -1,5 +1,6 @@
-# Referenced program for pickled vectorizers and models used in data-mining.py (must be in the same directory)
+# Referenced program for pickled TF-IDF vectorizer used in data-mining.py (must be in the same directory)
 
+# Imports
 import pandas as pd
 import numpy as np
 import re # REGEX

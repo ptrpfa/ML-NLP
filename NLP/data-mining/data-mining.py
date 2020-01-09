@@ -366,17 +366,17 @@ def model_runtime (duration, start_time, end_time):
     return duration
 
 # Custom unpickler to prevent pickle attribute errors (as pickles do not store info on how a class is constructed and needs access to the pickler class when unpickling)
-class CustomUnpickler (pickle.Unpickler):
+class CustomUnpickler (pickle.Unpickler): # For TF-IDF Vectorizer used during Spam Detection
 
     def find_class (self, module, name):
         
-        # Reference to tokenize function in spam_detect.py
+        # Reference to tokenize function in spam_detect.py (For TF-IDF Vectorizer)
         if name == 'tokenize':
 
-            from spam_detect_supplement import tokenize # References spam_detect_supplement.py in the same directory
+            from pickle_supplement import tokenize # References pickle_supplement.py in the same directory
             return tokenize
             
-        return super().find_class(module, name)
+        return super ().find_class (module, name)
 
 # Function to load pickle object (accepts filename of pickle to load and returns the de-pickled object)
 def load_pickle (filename):
