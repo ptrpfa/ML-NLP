@@ -3,27 +3,38 @@ import mysql.connector # MySQL
 from sqlalchemy import create_engine # MySQL
 import numpy as np
 import re # REGEX
+import json
 import string
 import html
 import unidecode
 import pickle 
+import scipy
 import datetime
 import os
-from sklearn import svm # 4) SVM classifier
-from sklearn.linear_model import LogisticRegression # 4) Logistic Regression classifier
+from sklearn import svm # SVM classifier
+from sklearn.linear_model import LogisticRegression # Logistic Regression classifier
 from sklearn.feature_extraction.text import TfidfVectorizer # NLP Vectorizer
-from textblob import TextBlob # 4) Naive sentiment analysis
+from textblob import TextBlob # Naive sentiment analysis
+import spacy # NLP
+from gensim import matutils, models # Gensim topic modelling
+import gensim.corpora as corpora # Gensim topic modelling
+import scipy.sparse # Gensim topic modelling
+import logging # Gensim topic modelling logging
+import pyLDAvis.gensim # For topic modelling visualisations
+import pyLDAvis # For topic modelling visualisations
 
 # Suppress scikit-learn FutureWarnings
 from warnings import simplefilter
-simplefilter (action = 'ignore', category = FutureWarning) # Ignore Future Warnings
+simplefilter (action = 'ignore', category = FutureWarning)      # Ignore Future Warnings
+simplefilter (action = 'ignore', category = DeprecationWarning) # Ignore Deprecation Warnings
 
 # Pre-requisite:
 # MySQL Setting:
 # SET SQL Setting SET SQL_SAFE_UPDATES = 0; # To allow for updates using non-key columns in the WHERE clause
 
 """
-NOTE: Since the database is only accessed by the database administrator/programs, 
+NOTE: 
+1) Since the database is only accessed by the database administrator/programs, 
 it is assumed that the records inserted will be CORRECT and validated
 --> Calculation of OverallScore of each Feedback is only done on INSERTs into the Feedback table ONCE. 
 UPDATEs to the Feedback table will not re-calculate the OverallScore of each Feedback
@@ -34,6 +45,9 @@ Use case:
 This data mining program is designed to only run ONCE on Feedback data that HAVE NOT been data mined before
 --> The data mining program does not respond to UPDATEs of features that can only be derived after data mining
 (ie change of SpamStatus from 0 to 1 does not trigger the running of Sentiment Analysis/Topic Modelling)
+
+2) This program uses PICKLED models for data mining (Spam-Detection and Topic Modelling models)
+--> Tuned models are required to be pickled and in the pickle file directory in order to run this program
 
 """
 
@@ -353,6 +367,617 @@ def update_sentiment_values_dataframe (series, cursor, connection):
     # Commit changes made
     connection.commit ()
 
+# Function to strip heading and trailing whitespaces in the Text of Feedback (accepts a Series object of each row in the FeedbackML DataFrame and returns a cleaned Series object)
+def strip_dataframe (series):
+
+    # Remove heading and trailing whitespaces in Text
+    series ['Text'] = series ['Text'].strip ()
+
+    # Return cleaned series object
+    return series
+
+# Function to tokenize documents (Normal tokenizer function without any POS tagging)
+def tm_tokenize_corpus (corpus):
+
+    # Initialise list containing tokenized documents (list of lists)
+    list_tokenized_documents = []
+
+    # Loop to tokenize documents in the sequence object
+    for document in corpus:
+
+        # Convert document into a spaCy tokens document
+        document = nlp (document)
+
+        # Initialise list to contain tokens of current document being tokenized
+        list_tokens = []
+
+        # Loop to tokenize text in document
+        for token in document:
+            
+            # Check if token is whitelisted (whitelisted terms are special terms that are returned in their normal form [non-lemmatised])
+            if (token.text.lower () in token_whitelist):
+
+                # Append current token to list of tokens
+                list_tokens.append (token.text)
+                
+            # Proceed with series of checks if token is not whitelisted
+            else:
+
+                # Check if token is a stop word
+                if (token.is_stop):
+
+                    # Skip current for-loop iteration if token is a stop word
+                    continue
+                
+                # Get lemmatised form of token
+                lemmatised = token.lemma_
+
+                # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
+                if (lemmatised == "-PRON-"):
+
+                    # Skip current for-loop iteration
+                    continue
+
+                # Check if lemmatised token is a single non-word character
+                if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+
+                    # Skip current for-loop iteration
+                    continue
+
+                # Add lemmatised token into list of tokens
+                list_tokens.append (lemmatised)
+        
+        # Append list of tokens of current document to list containing tokenized documents
+        list_tokenized_documents.append (list_tokens)
+    
+    # Return list of tokenized documents to calling program
+    return (list_tokenized_documents)
+
+# Function to tokenize documents (Only accepts POS: Nouns and Adjectives)
+def tm_tokenize_corpus_pos_nouns_adj (corpus):
+
+    # Initialise list containing tokenized documents (list of lists)
+    list_tokenized_documents = []
+
+    # Loop to tokenize documents in the sequence object
+    for document in corpus:
+
+        # Convert document into a spaCy tokens document
+        document = nlp (document)
+
+        # Initialise list to contain tokens of current document being tokenized
+        list_tokens = []
+
+        # Loop to tokenize text in document
+        for token in document:
+            
+            # Check if token is whitelisted (whitelisted terms are special terms that are returned in their normal form [non-lemmatised])
+            if (token.text.lower () in token_whitelist):
+
+                # Append current token to list of tokens
+                list_tokens.append (token.text)
+                
+            # Proceed with series of checks if token is not whitelisted
+            else:
+
+                # Check if token is a stop word
+                if (token.is_stop):
+
+                    # Skip current for-loop iteration if token is a stop word
+                    continue
+                
+                # Get lemmatised form of token
+                lemmatised = token.lemma_
+
+                # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
+                if (lemmatised == "-PRON-"):
+
+                    # Skip current for-loop iteration
+                    continue
+
+                # Check if lemmatised token is a single non-word character
+                if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+
+                    # Skip current for-loop iteration
+                    continue
+                
+                # Get Part-of-Speech of token
+                token_pos = token.pos_
+
+                # Check if token is a Named Entity
+                entity_check = str (token) in [str (entity) for entity in document.ents]
+
+                # Check if token's POS is not a NOUN or ADJECTIVE OR NAMED ENTITY
+                if (token_pos != "NOUN" and token_pos != "ADJ" and entity_check != True):
+
+                    # Skip current for-loop iteration
+                    continue
+
+                # Add lemmatised token into list of tokens
+                list_tokens.append (lemmatised)
+        
+        # Append list of tokens of current document to list containing tokenized documents
+        list_tokenized_documents.append (list_tokens)
+    
+    # Return list of tokenized documents to calling program
+    return (list_tokenized_documents)
+
+# Function to tokenize documents (Only accepts POS: Nouns, Adjectives, Verbs and Adverbs)
+def tm_tokenize_corpus_pos_nouns_adj_verb_adv (corpus):
+
+    # Initialise list containing tokenized documents (list of lists)
+    list_tokenized_documents = []
+
+    # Loop to tokenize documents in the sequence object
+    for document in corpus:
+
+        # Convert document into a spaCy tokens document
+        document = nlp (document)
+
+        # Initialise list to contain tokens of current document being tokenized
+        list_tokens = []
+
+        # Loop to tokenize text in document
+        for token in document:
+            
+            # Check if token is whitelisted (whitelisted terms are special terms that are returned in their normal form [non-lemmatised])
+            if (token.text.lower () in token_whitelist):
+
+                # Append current token to list of tokens
+                list_tokens.append (token.text)
+                
+            # Proceed with series of checks if token is not whitelisted
+            else:
+
+                # Check if token is a stop word
+                if (token.is_stop):
+
+                    # Skip current for-loop iteration if token is a stop word
+                    continue
+                
+                # Get lemmatised form of token
+                lemmatised = token.lemma_
+
+                # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
+                if (lemmatised == "-PRON-"):
+
+                    # Skip current for-loop iteration
+                    continue
+
+                # Check if lemmatised token is a single non-word character
+                if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+
+                    # Skip current for-loop iteration
+                    continue
+                
+                # Get Part-of-Speech of token
+                token_pos = token.pos_
+
+                # Check if token is a Named Entity
+                entity_check = str (token) in [str (entity) for entity in document.ents]
+                
+                # Check if token's POS is not a NOUN or ADJECTIVE or VERB or ADVERB or NAMED ENTITY
+                if (token_pos != "NOUN" and token_pos != "ADJ" and token_pos != "VERB" and token_pos != "ADV" and entity_check != True):
+
+                    # Skip current for-loop iteration
+                    continue
+
+                # Add lemmatised token into list of tokens
+                list_tokens.append (lemmatised)
+        
+        # Append list of tokens of current document to list containing tokenized documents
+        list_tokenized_documents.append (list_tokens)
+    
+    # Return list of tokenized documents to calling program
+    return (list_tokenized_documents)
+
+# Function to fill TextTokens columns in DataFrame with tokenized BI-GRAM values (accepts a Series object of each row in the FeedbackML DataFrame and returns a tokenized Series object)
+def tokenize_bigram_dataframe (series):
+
+    # Tokenize text and assign list of tokens to row column value
+    series ['TextTokens'] = bigram_model [series ['TextTokens']]
+    
+    # Return tokenized series object
+    return series
+
+# Function to fill TextTokens columns in DataFrame with tokenized TRI-GRAM values (accepts a Series object of each row in the FeedbackML DataFrame and returns a tokenized Series object)
+def tokenize_trigram_dataframe (series):
+
+    # Tokenize text and assign list of tokens to row column value
+    series ['TextTokens'] = trigram_model [series ['TextTokens']]
+    
+    # Return tokenized series object
+    return series
+
+# Function to get the largest TopicID from the database to assign unique IDs to new topics after Topic Modelling
+def get_largest_topicid ():
+
+    # Initialise variable to store the largest TopicID value
+    largest_id = 0 
+
+    # Connect to database to get the largest TopicID value of each feedback's category
+    try:
+
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
+
+        # SQL query to get the largest TopicID value in the Topics table
+        sql = "SELECT IFNULL(MAX(TopicID), 0) FROM %s;" % (topic_table)
+        # sql = "SELECT MAX(TopicID) FROM %s;" % (topic_table)
+
+        # Execute query
+        db_cursor.execute (sql)
+
+        # Get the largest TopicID value from the database
+        largest_id = db_cursor.fetchone ()[0] 
+
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error occurred when trying to get the largest TopicID value:", error)
+
+    # Catch other errors
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to get the largest TopicID value")
+
+    finally:
+
+        # Close connection objects once the largest TopicID value is obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
+    
+    # Return the largest TopicID value
+    return largest_id
+
+# Function to save topics generated by LDA and HDP Models respectively
+def save_topics (list_lda_topics, list_hdp_topics):
+
+    # Store topic information in topics file
+    topics_file = open (topics_file_path_dm, "w") # Create file object (w = write)
+
+    # Write header information in topics file
+    topics_file.write ("LDA Model:\n\n")
+
+    # Get current largest TopicID value in the Topics table
+    largest_topicid = get_largest_topicid () + 1 # Add extra 1 as Gensim topic IDs start from 0 instead of 1 (added to compensate for this)
+
+    # Loop to store each topic in the topics file (LDA topics)
+    for topic in list_lda_topics:
+
+        print ("Topic", (largest_topicid + topic [0]), ":\n", file = topics_file)
+        print (topic [1], "\n", file = topics_file)
+
+    # Write header information in topics file
+    topics_file.write ("----------------------------------------------------------------------------------\nHDP Model:\n\n")
+
+    # Loop to store each topic in the topics file (HDP topics)
+    for topic in list_hdp_topics:
+
+        print ("Topic", (largest_topicid + topic [0]), ":\n", file = topics_file)
+        print (topic [1], "\n", file = topics_file)
+
+    # Close file object
+    topics_file.close ()
+
+# Function to get Feedback-Topic mappings for LDA/HDP model
+def get_feedback_topic_mapping (model, corpus, texts, max_no_topics, minimum_percentage):
+    
+    # NOTE:
+    # max_no_topics = maxium number of topics that can be assigned to a Feedback
+    # minimum_percentage = minimum percentage contribution required for a topic to be assigned to a Feedback
+
+    # Apply model on corpus to get a Gensim TransformedCorpus object of mappings (Document-Topic mapping ONLY)
+    transformed_gensim_corpus = model [corpus]
+    
+    # Loop to access mappings in the Gensim transformed corpus (made of lists of document-topic mappings)
+    for list_document_topic in transformed_gensim_corpus: # Access document by document
+
+        # Remove topics below specified minimum percentage contribution
+        list_document_topic = list (filter (lambda tup: (tup [1] >= minimum_percentage), list_document_topic)) 
+
+        # Sort list of current document's topic mapping according to descending order of its percentages
+        list_document_topic.sort (key = lambda tup: tup [1], reverse = True) # Topics with higher percentage contribution to the feedback will be in front
+
+        # Get the specified amount of top few topics
+        list_document_topic = list_document_topic [:max_no_topics] # Get up to the specified number of topics in max_no_topics
+
+        # Initialise lists containing topic(s) and percentages of topic(s) of current feedback/document
+        list_topics = []
+        list_topics_percentages = []
+
+        # Check length of document-topic mapping to see if any topic is assigned to the current feedback/document after filtering
+        if (len (list_document_topic) > 0): 
+
+            # Get largest TopicID value from the database 
+            largest_topicid = get_largest_topicid () + 1 # Add extra 1 as Gensim topic IDs start from 0 instead of 1 (added to compensate for this)
+
+            # Loop to access list of tuples containing document-topic mappings 
+            for feedback_topic in list_document_topic: # List is in the form  of [(topic_no, percentage), ..]
+                
+                # Add topic to list containing the topics assigned to the current document/feedback
+                list_topics.append (largest_topicid + feedback_topic [0]) # List contains topics in descending order of percentage contribution
+                list_topics_percentages.append (feedback_topic [1]) # List contains percentages in descending order
+    
+        else:
+
+            # Add empty lists of topics to the list containing the topics assigned to the current document/feedback if the feedback is not assigned any topic
+            list_topics.append ([]) 
+            list_topics_percentages.append ([]) 
+
+        # Add lists of topics and percentages assigned to the current feedback/document to the lists containing the document-topic mappings
+        feedback_topic_mapping.append (list_topics)  
+        feedback_topic_percentage_mapping.append (list_topics_percentages) 
+
+# Function to set no topics to Feedback that do not have any tokens (accepts a Series object of each row in the FeedbackML DataFrame and returns a cleaned Series object)
+def unassign_empty_topics_dataframe (series):
+
+    # Check if the current feedback's tokens are empty
+    if (series ['TextTokens'] == []):
+
+        # Set topics of current feedback to nothing if its tokens are empty (NOTE: By default, if gensim receives an empty list of tokens, it will assign the document ALL topics!)
+        series ['TextTopics'] = []
+        series ['TopicPercentages'] = []
+
+    # Check if the current feedback's TextTopics are empty (checking if Gensim did not assign any topics to the feedback)
+    if (series ['TextTopics'] == [[]] or series ['TopicPercentages'] == [[]]):
+
+        # Set topics of current feedback to nothing if its an empty 2-Dimensional list
+        series ['TextTopics'] = []
+        series ['TopicPercentages'] = []
+
+    # Return cleaned series object
+    return series
+
+# Function to clean and split the FeedbackTopic dataframe such that one record contains one mapping of Feedback to Topic only (accepts a Series object of each row in the FeedbackTopic DataFrame and returns a cleaned Series object)
+def clean_split_feedback_topic_dataframe (series):
+    
+    # Check length of TextTopics to see if more than one topic is assigned to current Feedback
+    if (len (series ['TextTopics']) > 1 ): # Proceed to split feedback into multiple new records if current feedback is assigned to more than one topic
+
+        # Initialise counter variable
+        counter = 0
+
+        # Loop to access list of topics assigned to current feedback
+        while (counter < len (series ['TextTopics'])):
+            
+            # Initialise dictionary to store new row information
+            dict_feedback_topic = {"Id": series ['Id'], "TextTopics": 0, "TopicPercentages": 0}
+
+            # Assign TopicID and percentage contribution of current topic to dictionary
+            dict_feedback_topic ['TextTopics'] = series ['TextTopics'] [counter]
+            dict_feedback_topic ['TopicPercentages'] = series ['TopicPercentages'] [counter]
+            
+            # Append dictionary of new row to list containing new rows to insert into the FeedbackTopic dataframe later on
+            list_new_feedback_topic.append (dict_feedback_topic)
+            
+            # Increment counter
+            counter = counter + 1
+    
+    # Loop to access each topic assigned to the current feedback
+    for topic in series ['TextTopics']:
+
+        # Check if current topic is a new topic that has not been added to the list containing all topics that have been assigned to at least one Feedback
+        if (topic not in list_topics_assigned):
+
+            # Add topic into the list if it has not been added inside previously
+            list_topics_assigned.append (topic)
+
+            # Sort list of unique topics assigned to at least one Feedback in ascending order of TopicIDs
+            list_topics_assigned.sort ()
+
+    # Clean and convert datatype of TextTopics
+    series ['TextTopics'] = str (series ['TextTopics']).strip ("[]") # Convert TextTopics to a string and remove square brackets
+    series ['TopicPercentages'] = str (series ['TopicPercentages']).strip ("[]") # Convert TopicPercentages to a string and remove square brackets
+
+    # Return cleaned series object
+    return series
+
+# Function to get Feedback-Topic mappings from manual tagging (accepts a Series object of each row in the FeedbackML DataFrame, a dictionary of the manually tagged topics as well as the minimum percentage contribution for a topic)
+def get_manual_feedback_topic_mapping (series, dictionary_manual_tag, minimum_percentage): 
+
+    # NOTE:
+    # dictionary_manual_tag is in the format {"topic": (["keyword",..], topic_id)}
+    # minimum_percentage = minimum percentage contribution of a topic for it to be assigned to the current Feedback
+
+    # Loop to access the dictionary containing manually tagged topics
+    for topic in dictionary_manual_tag.keys ():
+        
+        # Get the current topic's TopicID
+        topic_id = dictionary_manual_tag [topic] [1]
+
+        # Get the current topic's list of keywords and change it to lowercase
+        list_keywords = [keyword.lower () for keyword in dictionary_manual_tag [topic] [0]]
+
+        # Initialise counter variable to count the number of times a tagged keyword appears in the current Feedback's list of tokens
+        no_occurances = 0
+
+        # Get current Feedback's list of tokens in lowercase
+        token_list = series.TextTokens.copy () # Create a copy of the current Feedback's token list 
+        token_list = [token.lower () for token in token_list] # Lowercase contents of token list
+        # OR token_list = ast.literal_eval (str (token_list).lower ()) # Lowercase token list and convert it back into a list object (ast.literal_eval raises an exception if the input isn't a valid Python datatype)
+
+        # Inner loop to access the list of keywords associated with the current topic
+        for keyword in list_keywords:
+
+            # Check if the topic keyword appears at least once in the current Feedback's list of tokens
+            if (token_list.count (keyword) > 0):
+
+                # Add the number of times the current topic keyword appears in the feedback token list to the total number of occurances
+                no_occurances = no_occurances + token_list.count (keyword) # Max number of occurances will be the length of the token list
+        
+        # Check if any keywords associated with the current topic appears in the current Feedback
+        if (no_occurances > 0):
+
+            # Calculate the percentage contribution of the current topic if the current topic is assigned to the current Feedback
+            percentage_contribution = no_occurances / len (token_list) 
+            
+            # Check if the percentage contribution of the current topic is above the minimum percentage
+            if (percentage_contribution >= minimum_percentage): # Can also implement maximum percentage contribution threshold (NOT IMPLEMENTED)
+
+                # Assign the topic and its percentage contribution to the Feedback if the current topic is assigned to the current Feedback (after filtering)
+                series ['TextTopics'].append (topic_id)
+                series ['TopicPercentages'].append (percentage_contribution)
+        
+    # Return modified Series object
+    return series
+
+# Function to insert each row in the series object passed to the Topics table
+def insert_topics_dataframe (series, cursor, connection): 
+
+    # Create SQL statement to insert Topics table values
+    sql = "INSERT INTO %s (TopicID, WebAppID, Name, PriorityScore, Remarks) " % (topic_table)
+    sql = sql + "VALUES (%s, %s, %s, %s, %s);" 
+
+    # Execute SQL statement
+    cursor.execute (sql, (series ['Id'], web_app_id, series ['Name'], series ['PriorityScore'], series ['Remarks']))
+
+    # Commit changes made
+    connection.commit ()
+
+# Function to insert each row in the series object passed to the FeedbackTopic table
+def insert_feedback_topic_dataframe (series, cursor, connection): 
+
+    # Split Id (WebAppID_FeedbackID_CategoryID) into a list
+    list_id = series ['Id'].split ('_') # Each ID component is delimited by underscore
+
+    # Create SQL statement to insert FeedbackTopic table values
+    sql = "INSERT INTO %s (FBWebAppID, FeedbackID, CategoryID, TopicID, TWebAppID, Percentage) " % (feedback_topic_table)
+    sql = sql + "VALUES (%s, %s, %s, %s, %s, %s);" 
+
+    # Execute SQL statement
+    cursor.execute (sql, (list_id [0], list_id [1], list_id [2], series ['TextTopics'], web_app_id, series ['TopicPercentages']))
+
+    # Commit changes made
+    connection.commit ()
+
+# Function to calculate the PriorityScore of each Topic in the Topics DataFrame
+def calculate_topic_priority_score (series):
+
+    # NOTE:
+    # PriorityScore = Average OverallScore of all Feedbacks assigned to the current Topic
+    # --> Sum of all Feedbacks' OverallScore in current Topic / Total number of Feedbacks in current Topic
+
+    # Initialise variables for calculating the PriorityScore of the current Topic
+    sum_overall_score = 0 # Sum of all Feedback's OverallScore in the current Topic
+    no_feedback = 0       # Total number of Feedbacks in current Topic
+    priority_score = 0    # PriorityScore of current Topic
+
+    # Connect to database to get the total number of Feedbacks in the current Topic 
+    try:
+
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
+
+        # SQL query to get the total number of unique Feedbacks in the current Topic
+        sql = "SELECT COUNT(DISTINCT (FeedbackID)) FROM %s WHERE TopicID = %s;" % (feedback_topic_table, series ['Id'])
+
+        # Execute query
+        db_cursor.execute (sql)
+
+        # Update the total number of Feedbacks in the current Topic
+        no_feedback = db_cursor.fetchone ()[0] 
+
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error occurred when trying to get the total number of Feedbacks in a particular Topic:", error)
+
+    # Catch other errors
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to get the total number of Feedbacks in a particular Topic")
+
+    finally:
+
+        # Close connection objects once factor is obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
+
+    # Connect to database to get the sum of all the OverallScore of Feedbacks in the current Topic
+    try:
+
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
+
+        # SQL query to get the sum of all the OverallScore of Feedbacks in the current Topic
+        sql = "SELECT SUM(OverallScore) FROM %s WHERE FeedbackID IN (SELECT DISTINCT (FeedbackID) FROM %s WHERE TopicID = %s);" % (feedback_table, feedback_topic_table, series ['Id'])
+
+        # Execute query
+        db_cursor.execute (sql)
+
+        # Update the sum of all Feedback's OverallScore in the current Topic
+        sum_overall_score = int (db_cursor.fetchone ()[0])  
+
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error occurred when trying to get the sum of all the OverallScore of Feedbacks in a particular Topic:", error)
+
+    # Catch other errors
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to get the sum of all the OverallScore of Feedbacks in a particular Topic")
+
+    finally:
+
+        # Close connection objects once factor is obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
+
+    # Calculate the current Topic's PriorityScore 
+    priority_score = round ((sum_overall_score / no_feedback), 2) # PriorityScore is rounded to 2 decimal places
+
+    # Connect to database to update the PriorityScore of the current Topic
+    try:
+
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
+
+        # Create SQL statement to update Feedback table values
+        sql = "UPDATE %s " % (topic_table)
+        sql = sql + "SET PriorityScore = %s WHERE TopicID = %s;" 
+
+        # Execute SQL statement
+        db_cursor.execute (sql, (priority_score, series ['Id']))
+
+        # Commit changes made
+        db_connection.commit ()
+
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error occurred when trying to update the PriorityScore of a particular Topic:", error)
+
+    # Catch other errors
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to update the PriorityScore of a particular Topic")
+
+    finally:
+
+        # Close connection objects once factor is obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
+
+    # Update current Topic's PriorityScore in the Topics DataFrame
+    series ['PriorityScore'] = priority_score
+
+    # Return modified Series object
+    return series
+
 # Function to calculate runtime of models
 def model_runtime (duration, start_time, end_time):
 
@@ -397,38 +1022,57 @@ def load_pickle (filename):
     return pickled_object
 
 # Global variables
-# File paths to store data pre-processing and data mining feedback
+""" File paths to store data pre-processing and data mining feedback """
 folder = "%s-%s:%s" % (str (datetime.date.today ()), str (datetime.datetime.now ().hour), str (datetime.datetime.now ().minute)) # Folder file name (yyyy-mm-dd:hh:mm)
-feedback_file_path_p = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/feedback.csv' % folder # Dataset file path 
-feedback_ml_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/feedback-ml.csv" % folder # Dataset file path 
-combined_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/combined-feedback.csv" % folder # Dataset file path 
-trash_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/trash-feedback.csv" % folder # Dataset file path 
-feedback_ml_prior_file_path_spam_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-spam-before.csv' % folder # Raw dataset file path (dataset PRIOR to spam detection) 
-feedback_ml_file_path_spam_dm = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-spam.csv" % folder # Dataset file path (dataset AFTER spam detection)
-feedback_ml_prior_file_path_sa_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-sentiment-before.csv' % folder # Raw dataset file path (dataset PRIOR to sentiment analysis)
-feedback_ml_file_path_sa_dm = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-sentiment.csv" % folder # Dataset file path (dataset AFTER sentiment analysis)
 pickles_file_path = "/home/p/Desktop/csitml/NLP/data-mining/pickles/" # File path containing pickled objects
 
-# Boolean triggers global variables
-preprocess_data = True # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
-remove_trash_data = False # Boolean to trigger deletion of trash Feedback data in the database (Default value is FALSE) [INTRUSIVE]
-mine_data = True # Boolean to trigger data mining of Feedback data in the database (Default value is TRUE)
-spam_check_data = True # Boolean to trigger application of Spam Detection model on Feedback data in the database (Default value is TRUE)
-sentiment_check_data = True # Boolean to trigger application of Naive Sentiment Analysis on Feedback data in the database (Default value is TRUE)
-topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
-preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
+# Data Pre-processing
+feedback_file_path_p = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/feedback.csv' % folder                   # Dataset file path 
+feedback_ml_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/feedback-ml.csv" % folder             # Dataset file path 
+combined_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/combined-feedback.csv" % folder # Dataset file path 
+trash_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/trash-feedback.csv" % folder       # Dataset file path 
 
-# Database global variables
-mysql_user = "root"                 # MySQL username
-mysql_password = "csitroot"         # MySQL password
-mysql_host = "localhost"            # MySQL host
-mysql_schema = "csitDB"             # MySQL schema (NOTE: MySQL in Windows is case-insensitive)
-feedback_table = "Feedback"         # Name of feedback table in database
-feedback_ml_table = "FeedbackML"    # Name of feedback table in database used for machine learning
-category_factor = {}                # Initialise empty dictionary to contain mapping of category-factor values for computing overall score of feedback
+# Data Mining
+feedback_ml_prior_file_path_spam_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-spam-before.csv' % folder    # Raw dataset file path (dataset PRIOR to spam detection) 
+feedback_ml_file_path_spam_dm = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-spam.csv" % folder                 # Dataset file path (dataset AFTER spam detection)
+feedback_ml_prior_file_path_sa_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-sentiment-before.csv' % folder # Raw dataset file path (dataset PRIOR to sentiment analysis)
+feedback_ml_file_path_sa_dm = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-sentiment.csv" % folder              # Dataset file path (dataset AFTER sentiment analysis)
+topic_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-topics.csv' % folder                          # Topic modelled dataset file path
+topics_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/topics.txt' % folder                                     # File path of topic details
+topics_df_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/topics.csv' % folder                                  # File path of topics table
+feedback_topics_df_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-topics.csv' % folder                # File path of feedback-topics table
+manual_tagging_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/manual-tagging.txt'                                             # Manually tagged topic-tokens file path
+topic_visualise_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/lda.html'                                                      # pyLDAvis topics file path
 
-# Whitelisting
-whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitelist for identifying non-SPAM feedbacks (NOTE: whitelisted words are in lowercase)
+""" Boolean triggers global variables """
+preprocess_data = True          # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
+remove_trash_data = False       # Boolean to trigger deletion of trash Feedback data in the database (Default value is FALSE) [INTRUSIVE]
+mine_data = True                # Boolean to trigger data mining of Feedback data in the database (Default value is TRUE)
+spam_check_data = True          # Boolean to trigger application of Spam Detection model on Feedback data in the database (Default value is TRUE)
+sentiment_check_data = True     # Boolean to trigger application of Naive Sentiment Analysis on Feedback data in the database (Default value is TRUE)
+topic_model_data = True         # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
+use_manual_tag = True           # Boolean to trigger whether to use manually tagged topics (keyword-based topic modelling) (Default value is TRUE)
+use_topic_model_pickle = False  # Boolean to trigger whether or not to use the already pickled Topic Models (For TESTING purposes only as pickled Gensim models will not be applied on new data)
+preliminary_check = True        # Boolean to trigger display of preliminary dataset visualisations and presentations
+
+""" Database global variables """
+mysql_user = "root"                     # MySQL username
+mysql_password = "csitroot"             # MySQL password
+mysql_host = "localhost"                # MySQL host
+mysql_schema = "csitDB"                 # MySQL schema (NOTE: MySQL in Windows is case-insensitive)
+feedback_table = "Feedback"             # Name of feedback table in database
+feedback_ml_table = "FeedbackML"        # Name of feedback table in database used for machine learning
+topic_table = "Topic"                   # Name of topic table in database 
+feedback_topic_table = "FeedbackTopic"  # Name of feedback-topic table in database 
+category_factor = {}                    # Initialise empty dictionary to contain mapping of category-factor values for computing overall score of feedback
+
+# Topic modelling specific variables (Need to specify the IDs of the selected Web App and selected Category for topic modelling as the models used will be different for different web apps and categories)
+web_app_id = 99  # ID of selected web app whose feedback will be topic modelled
+category_id = 4  # ID of selected category whose feedback will be topic modelled (2: Bug Report, 4: General, 5: Feature Request)
+
+""" Data mining specific variables """
+# Spam Detection specific variables
+whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Spam Detection whitelist for identifying non-SPAM feedbacks (NOTE: whitelisted words are in lowercase)
             'comms-tech', 'communications-tech', 'comms-technology',
             'communications-technology', 'crypto-tech', 'cryptography-tech',
             'crypto-technology', 'cryptography-technology', 'crash', 'information', 'giving', 'problem', 
@@ -437,6 +1081,27 @@ whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Whitel
             'stop', 'usablility', 'usable', 'feedback', 'slow', 'long', 'memory', 'update', 'alert', 
             'install', 'fix', 'future', 'experience']
 bugcode_regex = r"(.*)(BUG\d{6}\$)(.*)" # Assume bug code is BUGXXXXXX$ ($ is delimiter)
+
+# Topic Modelling specific variables and actions
+list_corpus_tokens = [] # Initialise list containing lists of document tokens in the corpus for Topic Modelling
+token_whitelist = ["photoshop", "editing", "pinterest", "xperia", "instagram", "facebook", "evernote", "update", "dropbox", "picsart", 
+                   "whatsapp", "tripadvisor", "onenote"] # Token whitelist (to prevent important terms from not being tokenized)
+selected_topic_no = 65 # Set projected number of topics
+
+# Create spaCy NLP object
+nlp = spacy.load ("en_core_web_sm")
+
+# Custom list of stop words to add to spaCy's existing stop word list
+list_custom_stopwords = ["I", "i",  "yer", "ya", "yar", "u", "loh", "lor", "lah", "leh", "lei", "lar", "liao", "hmm", "hmmm", "mmm", "information", "ok",
+                         "man", "giving", "discovery", "seek", "seeking", "rating", "my", "very", "mmmmmm", "wah", "eh", "h", "lol", "guy", "lot", "t", "d",
+                         "w", "p", "ve", "y", "s", "m", "aps", "n"]  
+
+# Add custom stop words to spaCy's stop word list
+for word in list_custom_stopwords:
+
+    # Add custom word to stopword word list
+    nlp.vocab [word].is_stop = True
+
 
 # Program starts here
 program_start_time = datetime.datetime.now ()
@@ -1060,22 +1725,350 @@ if (mine_data == True):
             db_cursor.close ()
             db_connection.close () # Close MySQL connection
 
-    """ Topic Modelling on Feedback data to group similar feedback together for ease of prioritisation to developers in the developer's platform """
+    """ Topic Modelling on Feedback data to group similar feedback together for ease of prioritisation of feedbacks for developers in the developer's platform """
+    # 1) Get dataset for Topic Modelling
+    try:
 
-    # Apply TOPIC MODELLING model
-    pass
+        # Create MySQL connection object to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
-    # Insert Feedback-Topic mappings to the FeedbackTopic table in the database
-    pass
+        # Create SQL query to get FeedbackML table values (Feature Engineering)
+        sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE WebAppID = %s AND SpamStatus = 0 AND CategoryID = %s;" % (feedback_ml_table, web_app_id, category_id)
 
-    # Update each topic's PriorityScore in the Topic table in the database (compute average OverallScore of all Feedback in the same topic)
-    pass
+        # Execute query and convert FeedbackML table into a pandas DataFrame
+        feedback_ml_df = pd.read_sql (sql_query, db_connection)
 
-    # Apply Topic Modelling on General Feedback
-    pass
-    # Apply Topic Modelling on Feature Request Feedback (different models used for different datasets)
-    pass
+        # Check if dataframe obtained is empty
+        if (feedback_ml_df.empty == True):
 
+            # Set boolean to apply topic modelling model on data to False if dataframe obtained is empty
+            topic_model_data = False
+
+        else:
+
+            # Set boolean to apply topic modelling model on data to True (default value) if dataframe obtained is not empty
+            topic_model_data = True
+
+        """
+        Selected Feedback features:
+        -Id (WebAppID + FeedbackID + CategoryID) [Not ID as will cause Excel .sylk file intepretation error]
+        -Text [SubjectCleaned (processed) + MainTextCleaned (processed)]
+
+        --> Dataset obtained at this point contains pre-processed Feedback data that are NOT trash records, NOT whitelisted and classified as ham (NOT SPAM)
+        --> Dataset obtained is also from the Web Application specified from web_app_id and the Category specified from web_app_id (Global variables specified)
+        """
+
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error when trying to get records from the FeedbackML table for Topic Modelling:", error)
+
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to get records from the FeedbackML table for Topic Modelling")
+
+    finally:
+
+        # Close connection object once Feedback has been obtained
+        db_connection.close () # Close MySQL connection
+
+    # Check boolean variable to see whether or not to apply Topic Modelling model on Feedback dataset
+    if (topic_model_data == True):
+
+        # 2) Further feature engineering and data pre-processings
+        # Drop empty rows/columns (for redundancy)
+        feedback_ml_df.dropna (how = "all", inplace = True) # Drop empty rows
+        feedback_ml_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
+        
+        # Combine subject and main text into one column [Will apply topic modelling on combined texts of subject together with main text instead of both separately as topic modelling uses the DTM/Bag of Words format, in which the order of words does not matter]
+        feedback_ml_df ['Text'] = feedback_ml_df ['Subject'] + " " + feedback_ml_df ['MainText']
+        
+        # Remove heading and trailing whitespaces in Text (to accomodate cases of blank Subjects in header)
+        feedback_ml_df.apply (strip_dataframe, axis = 1) # Access row by row 
+
+        # Create new columns for dataframe
+        feedback_ml_df ['TextTokens'] = "[]"       # Default empty list for tokens of feedback text after tokenization
+        feedback_ml_df ['TextTopics'] = "[]"       # Default empty list of topics assigned to feedback
+        feedback_ml_df ['TopicPercentages'] = "[]" # Default empty list of the percentage contributions of topics assigned to feedback
+
+        # Tokenize texts and assign text tokens to column in DataFrame
+        # feedback_ml_df.TextTokens = tm_tokenize_corpus (feedback_ml_df.Text)                        # Default tokenize function without any POS tagging specifications
+        feedback_ml_df.TextTokens = tm_tokenize_corpus_pos_nouns_adj (feedback_ml_df.Text)            # Only tokenize NOUNS and ADJECTIVES (will result in many empty token lists)
+        # feedback_ml_df.TextTokens = tm_tokenize_corpus_pos_nouns_adj_verb_adv (feedback_ml_df.Text) # Only tokenize NOUNS, ADJECTIVES, VERBS and ADVERBS (will result in many empty token lists)
+
+        # Assign document tokens in DataFrame to global list containing all corpus tokens
+        list_corpus_tokens = list (feedback_ml_df.TextTokens)
+
+        # Create bigram and trigram models
+        bigram = models.Phrases (list_corpus_tokens, min_count = 5, threshold = 100) # Bigrams must be above threshold in order to be formed
+        bigram_model = models.phrases.Phraser (bigram) # Create bigram model
+        
+        trigram = models.Phrases (bigram [list_corpus_tokens], threshold = 110) # Threshold should be higher (for trigrams to be formed, need to have higher frequency of occurance)
+        trigram_model = models.phrases.Phraser (trigram) # Create trigram model
+
+        # Create bigram and trigram tokens in DataFrame
+        feedback_ml_df.apply (tokenize_bigram_dataframe, axis = 1) 
+        feedback_ml_df.apply (tokenize_trigram_dataframe, axis = 1) 
+
+        # 3) Understand dataset
+        if (preliminary_check == True): # Check boolean to display preliminary information
+
+            # Print some information of about the data
+            print ("\nPreliminary information about Topic Modelling dataset:")
+            print ("Dimensions: ", feedback_ml_df.shape, "\n")
+            print ("First few records:")
+            print (feedback_ml_df.head (), "\n")
+            print ("Columns and data types:")
+            print (feedback_ml_df.dtypes, "\n")
+        
+        # 4) Apply topic modelling transformations and models
+        # Convert list of corpus document-tokens into a dictionary of the locations of each token in the format {location: 'term'}
+        id2word = corpora.Dictionary (list_corpus_tokens)
+
+        # Get Term-Document Frequency
+        gensim_corpus = [id2word.doc2bow (document_tokens) for document_tokens in list_corpus_tokens]
+
+        # Create new models if not using serialised models 
+        if (not use_topic_model_pickle):
+
+            # Create Topic Modelling models (a different model should be used if the category of the Feedback or the web app where the Feedback is from is different)
+            lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = selected_topic_no, passes = 100, 
+                                        chunksize = 3500, alpha = 'auto', eta = 'auto', random_state = 123, minimum_probability = 0.05) # Hypertuned LDA Model
+
+            hdp_model = models.HdpModel (corpus = gensim_corpus, id2word = id2word, random_state = 123) # HDP Model (infers the number of topics [always generates 150 topics])
+        
+        # Using pickled objects (NOTE: Serialised Topic Modelling models should only be used for testing purposes as they are not fitted with the new data obtained)
+        else:
+
+            # Load serialised models
+            lda_model = load_pickle ("lda-model-general.pkl") 
+            hdp_model = load_pickle ("hdp-model-general.pkl")
+
+        """ Get Topics generated """
+        # Get topics
+        list_lda_topics = lda_model.show_topics (formatted = True, num_topics = selected_topic_no, num_words = 20)
+        list_lda_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
+
+        list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = 150, num_words = 20)
+        list_hdp_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
+
+        # Save topics in topic file
+        save_topics (list_lda_topics, list_hdp_topics)
+
+        """ Get Feedback-Topic mappings """
+        # Initialise lists containing feedback-topic and percentage contribution mappings
+        feedback_topic_mapping = []
+        feedback_topic_percentage_mapping = []
+
+        # Get Feedback-Topic mappings and assign mappings to lists created previously
+        get_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.3) # Get mappings for LDA model
+        # get_feedback_topic_mapping (hdp_model, gensim_corpus, list_corpus_tokens, 3, 0.45) # Get mappings for HDP model
+
+        # Assign topics and topic percentages to feedbacks in the DataFrame
+        feedback_ml_df ['TextTopics'] = feedback_topic_mapping
+        feedback_ml_df ['TopicPercentages'] = feedback_topic_percentage_mapping
+
+        # Set topics of Feedback with empty TextTokens and TextTopics to nothing (NOTE: By default, if gensim receives an empty list of tokens, it will assign the document ALL topics!)
+        feedback_ml_df.apply (unassign_empty_topics_dataframe, axis = 1) # Access row by row 
+
+        """ Create and populate Feedback-Topic DataFrame """
+        # Create new dataframe to store all feedback that are assigned with at least one topic after Topic Modelling
+        feedback_topic_df = feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'].copy () # Get feedback that are assigned at least one topic
+
+        # Remove unused columns 
+        feedback_topic_df.drop (columns = ['Subject', 'MainText', 'Text', 'TextTokens'], inplace = True)
+
+        # Initialise lists used to store unique topics and new rows to add into the topic-feedback dataframe
+        list_topics_assigned = []    # List containing unique topics assigned to at least one Feedback
+        list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe later on
+
+        # Clean and split feedback that are assigned more than one topic into multiple new entries to be added later on in the Feedback-Topic dataframe
+        feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
+        
+        # Remove feedbacks that are assigned with more than one topic
+        feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"^\d*$")] # Only obtain feedbacks whose topics are made of digits (only one topic, since no commas which would be indicative of multiple topics)
+
+        # Insert new rows of feedback splitted previously into the FeedbackTopic DataFrame
+        feedback_topic_df = feedback_topic_df.append (list_new_feedback_topic, ignore_index = True)
+
+        # Remove duplicate records (for redundancy)
+        feedback_topic_df.drop_duplicates (inplace = True)
+
+        """ Create and populate Topics DataFrame """
+        # Create new dataframe for Topics
+        topic_df = pd.DataFrame (columns = ["Id", "Name", "PriorityScore", "Remarks"]) # Initialise DataFrame to contain topic data 
+
+        # Get current largest TopicID value in the Topics table
+        largest_topicid = get_largest_topicid () + 1 # Add extra 1 as Gensim topic IDs start from 0 instead of 1 (added to compensate for this)
+
+        # Initialise dictionary to store information of new row to insert into the Topics DataFrame
+        dict_topic = {'Id': 0, 'Name': "", 'PriorityScore': 0, 'Remarks': ""}
+
+        # Populate Topic DataFrame with new topics
+        for topic in list_lda_topics: # OR list_hdp_topics for HDP model
+
+            # Assign new ID to current topic
+            dict_topic ['Id'] = largest_topicid + topic [0]
+
+            # Get a list of the top 10 most significant words associated with the current topic, along with their weightages [(word, weightage),..]
+            list_top_words = lda_model.show_topic (topic [0], topn = 10) # List is by default sorted according to descending order of weightages
+            # list_top_words = hdp_model.show_topic (topic [0], topn = 10) # List is by default sorted according to descending order of weightages
+            
+            # Assign top 10 words associated with the current topic to Remarks
+            dict_topic ['Remarks'] = ", ".join ([word for word, weightage in list_top_words])
+
+            # Assign custom name for current topic (model_top_five_words)
+            dict_topic ['Name'] = "lda_" + "_".join ([word for word, weightage in list_top_words [:5]])
+            # dict_topic ['Name'] = "hdp_" + "_".join ([word for word, weightage in list_top_words [:5]])
+            
+            # Add new row in Topic DataFrame
+            topic_df = topic_df.append (dict_topic, ignore_index = True)
+
+        # Remove topics that have not been assigned to at least one feedback in the Feedback-Topic mapping DataFrame
+        topic_df = topic_df [topic_df.Id.isin (list_topics_assigned)]
+
+        """ Manual Tagging """
+        # Manually tag topics and assign them to feedbacks from a specified set of tagged words (manual keyword-based topic modelling)
+        # ie if feedback contain words related to Pinterest, assign them to the Pinterest topic
+
+        # Check boolean to see whether or not to assign manually labelled topics to feedbacks
+        if (use_manual_tag == True): # Implement manual tagging 
+
+            # Manually tagged topic-tokens/words file format:
+            # { topic_name: ['token1', 'token2'], topic_2: ['token3'] } 
+
+            # NOTE: Manually-tagged file should contain different topic-word mappings for different datasets (ie a different set of word-tag list should each be used 
+            # for datasets about Google VS Facebook). The terms should also be as specific to the specified topic as possible to avoid it being assigned to many topics
+            # The terms also should be in lowercase
+        
+            # Initialise dictionary containing manually-tagged topic-word mappings
+            dictionary_manual_tag = json.load (open (manual_tagging_file_path_dm))
+
+            # Get updated value of largest TopicID (after Topic Modelling)
+            largest_topicid = max (list_topics_assigned) + 1 # Get largest TopicID in list containing topics that have been assigned to at least one feedback and increment by one for new TopicID
+
+            """ Update Topics DataFrame """
+            # Loop through each topic in the manually-tagged topic-word mapping to add topics into the Topic DataFrame
+            for topic in dictionary_manual_tag.keys (): 
+                
+                # Add the new topic into the Topics DataFrame
+                topic_df = topic_df.append ({'Id': largest_topicid, 'Name': "manual_" + topic, 'PriorityScore': 0, 
+                                            'Remarks': ", ".join ([word for word in dictionary_manual_tag [topic][:10]])}, ignore_index = True)
+                
+                # Update dictionary so that the key-value pair is a tuple in the format {"topic": (["keyword",..], topic_id)}
+                dictionary_manual_tag [topic] = (dictionary_manual_tag [topic], largest_topicid)
+
+                # Increment the largest TopicID (to prepare for the next topic)
+                largest_topicid = largest_topicid + 1
+
+            """ Update FeedbackTopic DataFrame """
+            # Get Feedback-Topic mappings and update the FeedbackML DataFrame accordingly
+            feedback_ml_df.apply (get_manual_feedback_topic_mapping, args = (dictionary_manual_tag, 0.3), axis = 1)
+        
+            # Create Feedback-Topic DataFrame again to store all feedback that are assigned with at least one topic after Topic Modelling
+            feedback_topic_df = feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'].copy () # Get feedback that are assigned at least one topic
+
+            # Remove unused columns from re-created dataframe
+            feedback_topic_df.drop (columns = ['Subject', 'MainText', 'Text', 'TextTokens'], inplace = True)
+
+            # Re-initialise list used to store new rows to add into the topic-feedback dataframe
+            list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe later on
+
+            # Clean and split feedback that are assigned more than one topic into multiple entries to add later on in the Feedback-Topic dataframe
+            feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
+            
+            # Remove feedbacks that are assigned with more than one topic
+            feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"^\d*$")] # Only obtain feedbacks whose topics are made of digits (only one topic, since no commas which would be indicative of multiple topics)
+
+            # Insert new rows of feedback splitted previously into the FeedbackTopic DataFrame
+            feedback_topic_df = feedback_topic_df.append (list_new_feedback_topic, ignore_index = True)
+
+            # Remove duplicate records (for redundancy)
+            feedback_topic_df.drop_duplicates (inplace = True)
+
+            # Remove topics that have not been assigned to at least one feedback in the Feedback-Topic mapping DataFrame
+            topic_df = topic_df [topic_df.Id.isin (list_topics_assigned)]
+
+        """ Database updates """
+        # Connect to database to INSERT new topics into the Topics table (need to first insert into the Topics table as FeedbackTopic insertions later on have foreign key references to the Topics table)
+        try:
+
+            # Create MySQL connection and cursor objects to the database
+            db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+            db_cursor = db_connection.cursor ()
+
+            # Insert the new topics into the Topics database table
+            topic_df.apply (insert_topics_dataframe, axis = 1, args = (db_cursor, db_connection))
+
+            # Print debugging message
+            print (len (topic_df), "record(s) successfully inserted into Topics table")
+            
+        # Catch MySQL Exception
+        except mysql.connector.Error as error:
+
+            # Print MySQL connection error
+            print ("MySQL error occurred when trying to insert values into Topics table:", error)
+
+        # Catch other errors
+        except:
+
+            # Print other errors
+            print ("Error occurred attempting to establish database connection to insert values into the Topics table")
+
+        finally:
+
+            # Close connection objects once Feedback has been obtained
+            db_cursor.close ()
+            db_connection.close () # Close MySQL connection
+
+        # Connect to database to INSERT new Feedback-Topic mappings into the FeedbackTopic table
+        try:
+
+            # Create MySQL connection and cursor objects to the database
+            db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+            db_cursor = db_connection.cursor ()
+
+            # Insert the new Feedback-Topic mappings into the FeedbackTopic database table
+            feedback_topic_df.apply (insert_feedback_topic_dataframe, axis = 1, args = (db_cursor, db_connection))
+
+            # Print debugging message
+            print (len (feedback_topic_df), "record(s) successfully inserted into FeedbackTopic table")
+            
+        # Catch MySQL Exception
+        except mysql.connector.Error as error:
+
+            # Print MySQL connection error
+            print ("MySQL error occurred when trying to insert values into FeedbackTopic table:", error)
+
+        # Catch other errors
+        except:
+
+            # Print other errors
+            print ("Error occurred attempting to establish database connection to insert values into the FeedbackTopic table")
+
+        finally:
+
+            # Close connection objects once Feedback has been obtained
+            db_cursor.close ()
+            db_connection.close () # Close MySQL connection
+
+        # Calculate the PriorityScore of each Topic and update the Topics table
+        topic_df.apply (calculate_topic_priority_score, axis = 1) # Access each topic row by row
+
+        # Print debugging message
+        print (len (topic_df), "Topic(s)' PriorityScore updated")
+
+        """ Miscellaneous """
+        # Create interactive visualisation for LDA model
+        lda_visualise = pyLDAvis.gensim.prepare (lda_model, gensim_corpus, id2word) # Create visualisation
+        pyLDAvis.save_html (lda_visualise, topic_visualise_file_path_dm) # Export visualisation to HTML file
+
+        # Save Topic-Modelled DataFrames
+        feedback_ml_df.to_csv (topic_file_path_dm, index = False, encoding = "utf-8") # Save FeedbackML DataFrame
+        topic_df.to_csv (topics_df_file_path_dm, index = False, encoding = "utf-8") # Save Topics DataFrame
+        feedback_topic_df.to_csv (feedback_topics_df_file_path_dm, index = False, encoding = "utf-8") # Save FeedbackTopic DataFrame
+    
     """ Post-data-mining preparations """
     # Connect to database to UPDATE MineStatus of Feedback 
     try: 
