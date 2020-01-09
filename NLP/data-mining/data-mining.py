@@ -1066,6 +1066,11 @@ if (mine_data == True):
     # Update each topic's PriorityScore in the Topic table in the database (compute average OverallScore of all Feedback in the same topic)
     pass
 
+    # Apply Topic Modelling on General Feedback
+    pass
+    # Apply Topic Modelling on Feature Request Feedback (different models used for different datasets)
+    pass
+
     """ Post-data-mining preparations """
     # Connect to database to UPDATE MineStatus of Feedback 
     try: 

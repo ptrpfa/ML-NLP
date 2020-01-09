@@ -31,7 +31,7 @@ simplefilter (action = 'ignore', category = DeprecationWarning) # Ignore Depreca
 # logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 """ 
-NOTE: The Topic Modelling LDA Model needs to be hyper-tuned for every set of feedback
+NOTE: The Topic Modelling LDA Model needs to be hyper-tuned for every set of feedback (ie different category of Feedback)
 -Model performances were measured using Coherence Score/Value (CV) and eye-balling:
 -Coherence Score: Measures the degree of semantic similarity between high scoring words in the topic (a set of topics is said to be coherent if they support each other)
 -Eye-balling:
@@ -40,8 +40,8 @@ NOTE: The Topic Modelling LDA Model needs to be hyper-tuned for every set of fee
 3) Across topics, topics should be as different as possible (topics shuold be as different from one another as possible)
 
 Caveat:
--Some feedback will not be assigned any topic even though they contain certain keywords (for manual tagging), like 'iPhone', as such topics' percentage contribution 
-to the feedbacks are lower than the minimum_percentage threshold specified
+-Some feedback will not be assigned any topic even though they contain certain keywords (for manual tagging), like 'iPhone' for topic 'Apple', as such topics' percentage 
+contribution to the feedbacks are lower than the minimum_percentage threshold specified
 
 Future enhancements:
 -Further hypertuning the LDA model's hyperparameters such as the alpha, beta and eta values (alpha and beta values from the HDP model could be used via the hdp_to_lda () 
@@ -49,12 +49,12 @@ method provided by Gensim)
 -The HDP model, which has a high coherence value could be reverse-engineered into a similarly equivalent LDA model for possibly better performance (Gensim provides the
 suggested_lda_model () method)
 -Dataset used could have been crawled from the web for selected mobile applications in the Google Play Store/Apple Store for more specific type of topics (not done due to
-time constraint as would 
-require a 1) Web crawling program and 2) Classification model to classify feedbacks obtained into the chosen categories)
+time constraint as would require a 1) Web crawling program and 2) Classification model to classify feedbacks obtained into the chosen categories)
+--> Normal use case would be just to query the database for collected user feedback
 
 Limitations:
 -Limitation of previous spam-detection model in mis-labelling of spam feedback as normal feedback resulted in topic modelling not being as good (error carry forward)
--Some topics did not make sense
+-Some topics did not make sense (ie road, internet, audio, rule, brother, person, 100, muscle, condition, junk)
 -Some Feedback were assigned to the wrong topics
 -Many topics are very similar and not clearly distinguishable (topics were not very different from one another)
 -Topics generated from manual tagging (keyword-based topic modelling) are not combined with that of the topics generated from topic modelling using Gensim (will result 
@@ -337,7 +337,7 @@ def save_topics (list_lda_topics, list_hdp_topics):
     topics_file.write ("LDA Model:\n\n")
 
     # Get current largest TopicID value in the Topics table
-    largest_topicid = get_largest_topicid () + 1 # Add extra 1 as Gensim topic IDs start from 0 instead of 1    (added to compensate for this)
+    largest_topicid = get_largest_topicid () + 1 # Add extra 1 as Gensim topic IDs start from 0 instead of 1 (added to compensate for this)
 
     # Loop to store each topic in the topics file (LDA topics)
     for topic in list_lda_topics:
@@ -346,7 +346,7 @@ def save_topics (list_lda_topics, list_hdp_topics):
         print (topic [1], "\n", file = topics_file)
 
     # Write header information in topics file
-    topics_file.write ("\n\nHDP Model:\n\n")
+    topics_file.write ("----------------------------------------------------------------------------------\nHDP Model:\n\n")
 
     # Loop to store each topic in the topics file (HDP topics)
     for topic in list_hdp_topics:
@@ -723,7 +723,7 @@ def calculate_topic_priority_score (series):
     # Calculate the current Topic's PriorityScore 
     priority_score = round ((sum_overall_score / no_feedback), 2) # PriorityScore is rounded to 2 decimal places
 
-    # Connect to database to get update the PriorityScore of the current Topic
+    # Connect to database to update the PriorityScore of the current Topic
     try:
 
         # Create MySQL connection and cursor objects to the database
@@ -799,7 +799,7 @@ def load_pickle (filename):
 
 # Global variables
 # File paths
-train_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml.csv" # Dataset file path
+train_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml.csv" # Dataset file path (prior to topic modelling)
 topic_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml-topics.csv' # Topic modelled dataset file path
 topics_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/topics.txt' # File path of topic details
 topics_df_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/topics.csv' # File path of topics table
@@ -826,6 +826,7 @@ feedback_ml_table = "FeedbackML"        # Name of feedback table in database use
 topic_table = "Topic"                   # Name of topic table in database 
 feedback_topic_table = "FeedbackTopic"  # Name of feedback-topic table in database 
 web_app_id = 99                         # ID of selected web app whose feedback will be topic modelled
+category_id = 4                         # ID of selected category whose feedback will be topic modelled (2: Bug Report, 4: General, 5: Feature Request)
 
 # Tokens
 list_corpus_tokens = [] # Initialise list containing lists of document tokens in the corpus for training Gensim Bigram and Trigram models and for Topic Modelling
@@ -853,16 +854,14 @@ for word in list_custom_stopwords:
 program_start_time = datetime.datetime.now ()
 print ("Start time: ", program_start_time)
 
-# 1) Get dataset (General Feedback)
+# 1) Get dataset
 try:
 
     # Create MySQL connection object to the database
     db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
     # Create SQL query to get FeedbackML table values (Feature Engineering)
-    sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE WebAppID = %s AND SpamStatus = 0 AND CategoryID = 4;" % (feedback_ml_table, web_app_id)   # General 
-    # sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE WebAppID = %s AND SpamStatus = 0 AND CategoryID = 2;" % (feedback_ml_table, web_app_id) # Bug Report 
-    # sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE WebAppID = %s AND SpamStatus = 0 AND CategoryID = 5;" % (feedback_ml_table, web_app_id) # Feature Request
+    sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE WebAppID = %s AND SpamStatus = 0 AND CategoryID = %s;" % (feedback_ml_table, web_app_id, category_id)
 
     # Execute query and convert FeedbackML table into a pandas DataFrame
     feedback_ml_df = pd.read_sql (sql_query, db_connection)
@@ -1038,7 +1037,7 @@ if (topic_model_data == True):
     # get_lda_feedback_topic_mapping (lda_model, gensim_corpus, list_corpus_tokens, 3, 0.3) # Get mappings for LDA model (more information)
     # get_feedback_topic_mapping (hdp_model, gensim_corpus, list_corpus_tokens, 3, 0.45) # Get mappings for HDP model
 
-    # Assign topics and topics percentages to feedbacks in the DataFrame
+    # Assign topics and topic percentages to feedbacks in the DataFrame
     feedback_ml_df ['TextTopics'] = feedback_topic_mapping
     feedback_ml_df ['TopicPercentages'] = feedback_topic_percentage_mapping
 
@@ -1103,7 +1102,7 @@ if (topic_model_data == True):
     topic_df = topic_df [topic_df.Id.isin (list_topics_assigned)]
 
     """ Manual Tagging """
-    # Manually tag topics and assign them to feedbacks from a specified set of tagged words
+    # Manually tag topics and assign them to feedbacks from a specified set of tagged words (manual keyword-based topic modelling)
     # ie if feedback contain words related to Pinterest, assign them to the Pinterest topic
 
     # Check boolean to see whether or not to assign manually labelled topics to feedbacks
@@ -1234,7 +1233,7 @@ if (topic_model_data == True):
         topic_df.apply (calculate_topic_priority_score, axis = 1) # Access each topic row by row
 
         # Print debugging message
-        print (len (topic_df), "record(s)' PriorityScore updated")
+        print (len (topic_df), "Topic(s)' PriorityScore updated")
 
     """ Miscellaneous """
     # Create interactive visualisation for LDA model
