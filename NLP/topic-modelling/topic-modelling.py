@@ -812,7 +812,7 @@ accuracy_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/accuracies/" # 
 topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_manual_tag = True # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = False # Boolean to trigger whether to use pickled objects or not
+use_pickle = True # Boolean to trigger whether to use pickled objects or not
 display_visuals = True # Boolean to trigger display of visualisations
 modify_database = True # Boolean to trigger modifications of the database
 
