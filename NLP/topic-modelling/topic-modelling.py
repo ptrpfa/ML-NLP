@@ -32,11 +32,29 @@ simplefilter (action = 'ignore', category = DeprecationWarning) # Ignore Depreca
 
 """ 
 NOTE: The Topic Modelling LDA Model needs to be hyper-tuned for every set of feedback
+-Model performances were measured using Coherence Score/Value (CV) and eye-balling:
+-Coherence Score: Measures the degree of semantic similarity between high scoring words in the topic (a set of topics is said to be coherent if they support each other)
+-Eye-balling:
+1) Topics must make sense (words that make up a topic should be semantically related)
+2) Feedback-Topic assignments should make sense (Feedbacks within a topic should be similar/be semantically related & Topics should be correctly assigned to Feedbacks)
+3) Across topics, topics should be as different as possible (topics shuold be as different from one another as possible)
 
 Future enhancements:
--Further hypertuning the LDA model's hyperparameters such as the alpha, beta and eta values (alpha and beta values from the HDP model could be used via the hdp_to_lda () method provided by Gensim)
--The HDP model, which has a high coherence value could be reverse-engineered into a similarly equivalent LDA model for possibly better performance (Gensim provides the suggested_lda_model () method)
+-Further hypertuning the LDA model's hyperparameters such as the alpha, beta and eta values (alpha and beta values from the HDP model could be used via the hdp_to_lda () 
+method provided by Gensim)
+-The HDP model, which has a high coherence value could be reverse-engineered into a similarly equivalent LDA model for possibly better performance (Gensim provides the
+suggested_lda_model () method)
+-Dataset used could have been crawled from the web for selected mobile applications in the Google Play Store/Apple Store for more specific type of topics (not done due to
+time constraint as would 
+require a 1) Web crawling program and 2) Classification model to classify feedbacks obtained into the chosen categories)
 
+Limitations:
+-Limitation of previous spam-detection model in mis-labelling of spam feedback as normal feedback resulted in topic modelling not being as good (error carry forward)
+-Some topics did not make sense
+-Some Feedback were assigned to the wrong topics
+-Many topics are very similar and not clearly distinguishable (topics were not very different from one another)
+-Topics generated from manual tagging (keyword-based topic modelling) are not combined with that of the topics generated from topic modelling using Gensim (will result 
+in potential duplicate topics, one from manual tagging and another from topic modelling)
 """
 
 # Function to strip heading and trailing whitespaces in the Text of Feedback (accepts a Series object of each row in the FeedbackML DataFrame and returns a cleaned Series object)
