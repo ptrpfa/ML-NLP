@@ -15,12 +15,11 @@ from gensim import matutils, models # 4) Gensim topic modelling
 import gensim.corpora as corpora # 4) Gensim topic modelling
 import scipy.sparse # 4) Gensim topic modelling
 import logging # 4) Gensim topic modelling logging
-from sklearn.model_selection import GridSearchCV # 4) For model hyperparameters tuning
 import matplotlib.pyplot as plt # For visualisations
 import matplotlib # For visualisations
 import pyLDAvis.gensim # For topic modelling visualisations
 import pyLDAvis # For topic modelling visualisations
-import sklearn.metrics as metrics # 4.5) For determination of model accuracy
+# NOTE: Edit ~/anaconda3/lib/python3.7/site-packages/pyLDAvis/utils.py to comment out warnings.simplefilter("always", DeprecationWarning) to suppress DeprecationWarnings raised by pyLDAvis
 
 # Suppress scikit-learn FutureWarnings
 from warnings import simplefilter
@@ -799,22 +798,22 @@ def load_pickle (filename):
 
 # Global variables
 # File paths
-train_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml.csv" # Dataset file path (prior to topic modelling)
-topic_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml-topics.csv' # Topic modelled dataset file path
-topics_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/topics.txt' # File path of topic details
-topics_df_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/topics.csv' # File path of topics table
+train_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml.csv"                  # Dataset file path (prior to topic modelling)
+topic_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-ml-topics.csv'           # Topic modelled dataset file path
+topics_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/topics.txt'                      # File path of topic details
+topics_df_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/topics.csv'                   # File path of topics table
 feedback_topics_df_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/feedback-topics.csv' # File path of feedback-topics table
-manual_tagging_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/manual-tagging.txt' # Manually tagged topic-tokens file path
-pickles_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/pickles/" # File path containing pickled objects
-accuracy_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/accuracies/" # Model accuracy results file path
+manual_tagging_file_path = '/home/p/Desktop/csitml/NLP/topic-modelling/data/manual-tagging.txt'      # Manually tagged topic-tokens file path
+pickles_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/pickles/"                            # File path containing pickled objects
+accuracy_file_path = "/home/p/Desktop/csitml/NLP/topic-modelling/accuracies/"                        # Model accuracy results file path
 
 # Boolean triggers global variables
-topic_model_data = True # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
+topic_model_data = True  # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
-use_manual_tag = True # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = True # Boolean to trigger whether to use pickled objects or not
-display_visuals = True # Boolean to trigger display of visualisations
-modify_database = True # Boolean to trigger modifications of the database
+use_manual_tag = True    # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
+use_pickle = True        # Boolean to trigger whether to use pickled objects or not
+display_visuals = True   # Boolean to trigger display of visualisations
+modify_database = True   # Boolean to trigger modifications of the database
 
 # Database global variables
 mysql_user = "root"                     # MySQL username

@@ -21,7 +21,8 @@ import gensim.corpora as corpora # Gensim topic modelling
 import scipy.sparse # Gensim topic modelling
 import logging # Gensim topic modelling logging
 import pyLDAvis.gensim # For topic modelling visualisations
-import pyLDAvis # For topic modelling visualisations
+import pyLDAvis # For topic modelling visualisations 
+# NOTE: Edit ~/anaconda3/lib/python3.7/site-packages/pyLDAvis/utils.py to comment out warnings.simplefilter("always", DeprecationWarning) to suppress DeprecationWarnings raised by pyLDAvis
 
 # Suppress scikit-learn FutureWarnings
 from warnings import simplefilter
@@ -978,8 +979,8 @@ def calculate_topic_priority_score (series):
     # Return modified Series object
     return series
 
-# Function to calculate runtime of models
-def model_runtime (duration, start_time, end_time):
+# Function to calculate runtime of specific sections of code
+def calculate_runtime (duration, start_time, end_time):
 
     # Difference in time
     difference = end_time - start_time
@@ -1042,7 +1043,7 @@ topics_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-minin
 topics_df_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/topics.csv' % folder                                  # File path of topics table
 feedback_topics_df_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-topics.csv' % folder                # File path of feedback-topics table
 manual_tagging_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/manual-tagging.txt'                                             # Manually tagged topic-tokens file path
-topic_visualise_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/lda.html'                                                      # pyLDAvis topics file path
+topic_visualise_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/lda.html' % folder                              # pyLDAvis topics file path
 
 """ Boolean triggers global variables """
 preprocess_data = True          # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
@@ -1070,23 +1071,10 @@ category_factor = {}                    # Initialise empty dictionary to contain
 web_app_id = 99  # ID of selected web app whose feedback will be topic modelled
 category_id = 4  # ID of selected category whose feedback will be topic modelled (2: Bug Report, 4: General, 5: Feature Request)
 
-""" Data mining specific variables """
-# Spam Detection specific variables
-whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Spam Detection whitelist for identifying non-SPAM feedbacks (NOTE: whitelisted words are in lowercase)
-            'comms-tech', 'communications-tech', 'comms-technology',
-            'communications-technology', 'crypto-tech', 'cryptography-tech',
-            'crypto-technology', 'cryptography-technology', 'crash', 'information', 'giving', 'problem', 
-            'discovery', 'feature', 'request', 'bug', 'report', 'discover', 'seeking', 'general', 'ui', 
-            'ux', 'user', 'password', 'malware', 'malicious', 'vulnerable', 'vulnerability', 'lag', 'hang', 
-            'stop', 'usablility', 'usable', 'feedback', 'slow', 'long', 'memory', 'update', 'alert', 
-            'install', 'fix', 'future', 'experience']
-bugcode_regex = r"(.*)(BUG\d{6}\$)(.*)" # Assume bug code is BUGXXXXXX$ ($ is delimiter)
-
-# Topic Modelling specific variables and actions
-list_corpus_tokens = [] # Initialise list containing lists of document tokens in the corpus for Topic Modelling
+""" Data mining specific variables and processings"""
+# Token whitelist (to prevent important terms from not being tokenized)
 token_whitelist = ["photoshop", "editing", "pinterest", "xperia", "instagram", "facebook", "evernote", "update", "dropbox", "picsart", 
-                   "whatsapp", "tripadvisor", "onenote"] # Token whitelist (to prevent important terms from not being tokenized)
-selected_topic_no = 65 # Set projected number of topics
+                   "whatsapp", "tripadvisor", "onenote"] 
 
 # Create spaCy NLP object
 nlp = spacy.load ("en_core_web_sm")
@@ -1102,6 +1090,20 @@ for word in list_custom_stopwords:
     # Add custom word to stopword word list
     nlp.vocab [word].is_stop = True
 
+# Spam Detection specific variables
+whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Spam Detection whitelist for identifying non-SPAM feedbacks (NOTE: whitelisted words are in lowercase)
+            'comms-tech', 'communications-tech', 'comms-technology',
+            'communications-technology', 'crypto-tech', 'cryptography-tech',
+            'crypto-technology', 'cryptography-technology', 'crash', 'information', 'giving', 'problem', 
+            'discovery', 'feature', 'request', 'bug', 'report', 'discover', 'seeking', 'general', 'ui', 
+            'ux', 'user', 'password', 'malware', 'malicious', 'vulnerable', 'vulnerability', 'lag', 'hang', 
+            'stop', 'usablility', 'usable', 'feedback', 'slow', 'long', 'memory', 'update', 'alert', 
+            'install', 'fix', 'future', 'experience']
+bugcode_regex = r"(.*)(BUG\d{6}\$)(.*)" # Assume bug code is BUGXXXXXX$ ($ is delimiter)
+
+# Topic Modelling specific variables
+list_corpus_tokens = [] # Initialise list containing lists of document tokens in the corpus for Topic Modelling
+selected_topic_no = 65 # Set projected number of topics
 
 # Program starts here
 program_start_time = datetime.datetime.now ()
@@ -1314,7 +1316,7 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
     end_time = datetime.datetime.now ()
 
     # Print data pre-processing duration
-    print ("\nData pre-processing completed in", model_runtime (0, start_time, end_time), "seconds")
+    print ("\nData pre-processing completed in", calculate_runtime (0, start_time, end_time), "seconds")
 
 # Print debugging message if no data pre-processing is carried out
 else:
@@ -1469,6 +1471,11 @@ if (mine_data == True):
     # Check boolean variable to see whether or not to apply Spam Detection model on Feedback data
     if (spam_check_data == True):
 
+        print ("\n(1) Conducting SPAM DETECTION..")
+
+        # Get start time of spam detection
+        spam_start_time = datetime.datetime.now ()
+
         # 2) Further feature engineering (Data pre-processing) [FOR REDUNDANCY]
         # Drop empty rows/columns
         feedback_ml_df.dropna (how = "all", inplace = True) # Drop empty rows
@@ -1515,18 +1522,18 @@ if (mine_data == True):
         start_time = datetime.datetime.now ()
         vectorizer = load_pickle ("tfidf-vectorizer.pkl")
         end_time = datetime.datetime.now ()
-        print ("Loaded vectorizer in", model_runtime (0, start_time, end_time), "seconds")
+        print ("Loaded vectorizer in", calculate_runtime (0, start_time, end_time), "seconds")
 
         # Fit data to vectorizer [Create DTM of dataset (features)]
         start_time = datetime.datetime.now ()
         feature_subject = vectorizer.transform (feature_subject) 
         end_time = datetime.datetime.now ()
-        print ("Transformed subject to DTM in", model_runtime (0, start_time, end_time), "seconds")
+        print ("Transformed subject to DTM in", calculate_runtime (0, start_time, end_time), "seconds")
 
         start_time = datetime.datetime.now ()
         feature_main_text = vectorizer.transform (feature_main_text) 
         end_time = datetime.datetime.now ()
-        print ("Transformed main text to DTM in", model_runtime (0, start_time, end_time), "seconds")
+        print ("Transformed main text to DTM in", calculate_runtime (0, start_time, end_time), "seconds")
 
         # Initialise model duration
         spam_model_duration = 0 
@@ -1536,14 +1543,14 @@ if (mine_data == True):
         spam_model = load_pickle ("svm-model.pkl") # Used SVM Model in this case
         # spam_model = load_pickle ("logistic-regression-model.pkl") # Used LR Model in this case
         end_time = datetime.datetime.now ()
-        spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
+        spam_model_duration = calculate_runtime (spam_model_duration, start_time, end_time)
 
         # Predict whether Subject is spam or not
         print ("\nPredicting whether subjects of feedback is spam..")
         start_time = datetime.datetime.now ()
         model_prediction_subject = spam_model.predict (feature_subject) # Store predicted results of model
         end_time = datetime.datetime.now ()
-        spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
+        spam_model_duration = calculate_runtime (spam_model_duration, start_time, end_time)
         print ("Predicted subject values:", model_prediction_subject)
 
         # Predict whether MainText is spam or not
@@ -1551,7 +1558,7 @@ if (mine_data == True):
         start_time = datetime.datetime.now ()
         model_prediction_main_text = spam_model.predict (feature_main_text) # Store predicted results of model
         end_time = datetime.datetime.now ()
-        spam_model_duration = model_runtime (spam_model_duration, start_time, end_time)
+        spam_model_duration = calculate_runtime (spam_model_duration, start_time, end_time)
         print ("Predicted main text values:", model_prediction_main_text)
 
         # Print spam model runtime
@@ -1601,6 +1608,10 @@ if (mine_data == True):
             # Close connection objects once Feedback has been obtained
             db_cursor.close ()
             db_connection.close () # Close MySQL connection
+
+        # Get end time of spam detection
+        spam_end_time = datetime.datetime.now ()
+        print ("\nCompleted Spam Detection in", calculate_runtime (0, spam_start_time, spam_end_time), "seconds")
 
     """ NOTE: Sentiment Analysis and Topic Modelling will only be carried out AFTER Spam Detection is carried out and they will only be applied to NON-SPAM records! """
 
@@ -1662,6 +1673,11 @@ if (mine_data == True):
     # Check boolean variable to see whether or not to apply Naive Sentiment Analysis on Feedback data
     if (sentiment_check_data == True):
 
+        print ("\n\n(2) Conducting SENTIMENT ANALYSIS..\n")
+        
+        # Get start time of sentiment analysis
+        sentiment_start_time = datetime.datetime.now ()
+        
         # 2) Further feature engineering (Data pre-processing) [FOR REDUNDANCY]
         # Drop empty rows/columns
         feedback_ml_df.dropna (how = "all", inplace = True) # Drop empty rows
@@ -1725,6 +1741,10 @@ if (mine_data == True):
             db_cursor.close ()
             db_connection.close () # Close MySQL connection
 
+        # Get end time of sentiment analysis
+        sentiment_end_time = datetime.datetime.now ()
+        print ("\nCompleted Sentiment Analysis in", calculate_runtime (0, sentiment_start_time, sentiment_end_time), "seconds")
+
     """ Topic Modelling on Feedback data to group similar feedback together for ease of prioritisation of feedbacks for developers in the developer's platform """
     # 1) Get dataset for Topic Modelling
     try:
@@ -1775,6 +1795,11 @@ if (mine_data == True):
 
     # Check boolean variable to see whether or not to apply Topic Modelling model on Feedback dataset
     if (topic_model_data == True):
+
+        print ("\n\n(3) Conducting TOPIC MODELLING..")
+
+        # Get start time of topic modelling
+        topic_start_time = datetime.datetime.now ()
 
         # 2) Further feature engineering and data pre-processings
         # Drop empty rows/columns (for redundancy)
@@ -2068,7 +2093,11 @@ if (mine_data == True):
         feedback_ml_df.to_csv (topic_file_path_dm, index = False, encoding = "utf-8") # Save FeedbackML DataFrame
         topic_df.to_csv (topics_df_file_path_dm, index = False, encoding = "utf-8") # Save Topics DataFrame
         feedback_topic_df.to_csv (feedback_topics_df_file_path_dm, index = False, encoding = "utf-8") # Save FeedbackTopic DataFrame
-    
+
+        # Get end time of topic modelling
+        topic_end_time = datetime.datetime.now ()
+        print ("\nCompleted Topic Modelling in", calculate_runtime (0, topic_start_time, topic_end_time), "seconds")
+
     """ Post-data-mining preparations """
     # Connect to database to UPDATE MineStatus of Feedback 
     try: 
