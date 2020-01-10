@@ -283,6 +283,60 @@ def clean_document (corpus):
     # Return list of cleaned documents
     return list_cleaned_documents
 
+# Function to tokenize each row in the series object passed from the FeedbackML table
+def tokenize_document (series):
+
+    # Initialise document variable
+    document = series ['Text']
+
+    # Convert document into a spaCy tokens document
+    document = nlp (document)
+
+    # Initialise list to contain tokens of current document being tokenized
+    list_tokens = []
+
+    # Loop to tokenize text in document
+    for token in document:
+        
+        # Check if token is whitelisted (whitelisted terms are special terms that are returned in their normal form [non-lemmatised])
+        if (token.text.lower () in token_whitelist):
+
+            # Append current token to list of tokens
+            list_tokens.append (token.text)
+            
+        # Proceed with series of checks if token is not whitelisted
+        else:
+
+            # Check if token is a stop word
+            if (token.is_stop):
+
+                # Skip current for-loop iteration if token is a stop word
+                continue
+            
+            # Get lemmatised form of token
+            lemmatised = token.lemma_
+
+            # Check if lemmatised token is -PRON- (all English pronouns are lemmatized to the special token -PRON-)
+            if (lemmatised == "-PRON-"):
+
+                # Skip current for-loop iteration
+                continue
+
+            # Check if lemmatised token is a single non-word character
+            if (re.match (r"[^a-zA-Z0-9]", lemmatised)):
+
+                # Skip current for-loop iteration
+                continue
+
+            # Add lemmatised token into list of tokens
+            list_tokens.append (lemmatised)
+    
+    # Update current Feedback's TextTokens
+    series ['TextTokens'] = list_tokens
+    
+    # Return tokenized series object
+    return series
+
 # Function to execute SQL UPDATE for each row in the series object passed to update processed Feedback data
 def update_feedback_dataframe (series, cursor, connection): 
 
@@ -300,11 +354,14 @@ def update_feedback_dataframe (series, cursor, connection):
 def insert_feedback_ml_dataframe (series, cursor, connection): 
 
     # Create SQL statement to update Feedback table values
-    sql = "INSERT INTO %s (FeedbackID, CategoryID, WebAppID, SubjectCleaned, MainTextCleaned, SubjectSpam, MainTextSpam, SpamStatus, Subjectivity, Polarity) " % (feedback_ml_table)
-    sql = sql + "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);" 
+    sql = "INSERT INTO %s (FeedbackID, CategoryID, WebAppID, SubjectCleaned, MainTextCleaned, SubjectSpam, MainTextSpam, SpamStatus, Subjectivity, Polarity, TextTokens) " % (feedback_ml_table)
+    sql = sql + "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);" 
+    
+    print (series ['FeedbackID'], series ['CategoryID'], series ['WebAppID'], series ['SubjectCleaned'], series ['MainTextCleaned'], series ['SubjectSpam'], series ['MainTextSpam'], 
+           series ['SpamStatus'], series ['Subjectivity'], series ['Polarity'], str (series ['TextTokens']))
 
     # Execute SQL statement
-    cursor.execute (sql, (series ['FeedbackID'], series ['CategoryID'], series ['WebAppID'], series ['SubjectCleaned'], series ['MainTextCleaned'], series ['SubjectSpam'], series ['MainTextSpam'], series ['SpamStatus'], series ['Subjectivity'], series ['Polarity']))
+    cursor.execute (sql, (series ['FeedbackID'], series ['CategoryID'], series ['WebAppID'], series ['SubjectCleaned'], series ['MainTextCleaned'], series ['SubjectSpam'], series ['MainTextSpam'], series ['SpamStatus'], series ['Subjectivity'], series ['Polarity'], str (series ['TextTokens'])))
 
     # Commit changes made
     connection.commit ()
@@ -1025,25 +1082,26 @@ def load_pickle (filename):
 # Global variables
 """ File paths to store data pre-processing and data mining feedback """
 folder = "%s-%s:%s" % (str (datetime.date.today ()), str (datetime.datetime.now ().hour), str (datetime.datetime.now ().minute)) # Folder file name (yyyy-mm-dd:hh:mm)
-pickles_file_path = "/home/p/Desktop/csitml/NLP/data-mining/pickles/" # File path containing pickled objects
+working_directory = "/home/p/Desktop/csitml/NLP/data-mining/" # Working directory of program
+pickles_file_path = "%spickles/" % working_directory # File path containing pickled objects
 
 # Data Pre-processing
-feedback_file_path_p = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/feedback.csv' % folder                   # Dataset file path 
-feedback_ml_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/feedback-ml.csv" % folder             # Dataset file path 
-combined_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/combined-feedback.csv" % folder # Dataset file path 
-trash_feedback_file_path_p = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/trash-feedback.csv" % folder       # Dataset file path 
+feedback_file_path_p = '%sdata/%s/pre-processing/feedback.csv' % (working_directory, folder)                   # Dataset file path 
+feedback_ml_file_path_p = "%sdata/%s/pre-processing/feedback-ml.csv" % (working_directory, folder)             # Dataset file path 
+combined_feedback_file_path_p = "%sdata/%s/pre-processing/combined-feedback.csv" % (working_directory, folder) # Dataset file path 
+trash_feedback_file_path_p = "%sdata/%s/pre-processing/trash-feedback.csv" % (working_directory, folder)       # Dataset file path 
 
 # Data Mining
-feedback_ml_prior_file_path_spam_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-spam-before.csv' % folder    # Raw dataset file path (dataset PRIOR to spam detection) 
-feedback_ml_file_path_spam_dm = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-spam.csv" % folder                 # Dataset file path (dataset AFTER spam detection)
-feedback_ml_prior_file_path_sa_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-sentiment-before.csv' % folder # Raw dataset file path (dataset PRIOR to sentiment analysis)
-feedback_ml_file_path_sa_dm = "/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-sentiment.csv" % folder              # Dataset file path (dataset AFTER sentiment analysis)
-topic_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-ml-topics.csv' % folder                          # Topic modelled dataset file path
-topics_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/topics.txt' % folder                                     # File path of topic details
-topics_df_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/topics.csv' % folder                                  # File path of topics table
-feedback_topics_df_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-topics.csv' % folder                # File path of feedback-topics table
-manual_tagging_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/manual-tagging.txt'                                             # Manually tagged topic-tokens file path
-topic_visualise_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/lda-topics.html' % folder                       # pyLDAvis topics file path
+feedback_ml_prior_file_path_spam_dm = '%sdata/%s/data-mining/feedback-ml-spam-before.csv' % (working_directory, folder)    # Raw dataset file path (dataset PRIOR to spam detection) 
+feedback_ml_file_path_spam_dm = "%sdata/%s/data-mining/feedback-ml-spam.csv" % (working_directory, folder)                 # Dataset file path (dataset AFTER spam detection)
+feedback_ml_prior_file_path_sa_dm = '%sdata/%s/data-mining/feedback-ml-sentiment-before.csv' % (working_directory, folder) # Raw dataset file path (dataset PRIOR to sentiment analysis)
+feedback_ml_file_path_sa_dm = "%sdata/%s/data-mining/feedback-ml-sentiment.csv" % (working_directory, folder)              # Dataset file path (dataset AFTER sentiment analysis)
+topic_file_path_dm = '%sdata/%s/data-mining/feedback-ml-topics.csv' % (working_directory, folder)                          # Topic modelled dataset file path
+topics_file_path_dm = '%sdata/%s/data-mining/topics.txt' % (working_directory, folder)                                     # File path of topic details
+topics_df_file_path_dm = '%sdata/%s/data-mining/topics.csv' % (working_directory, folder)                                  # File path of topics table
+feedback_topics_df_file_path_dm = '%sdata/%s/data-mining/feedback-topics.csv' % (working_directory, folder)                # File path of feedback-topics table
+manual_tagging_file_path_dm = '%sdata/manual-tagging.txt' % (working_directory)                                            # Manually tagged topic-tokens file path
+topic_visualise_file_path_dm = '%sdata/%s/data-mining/lda-topics.html' % (working_directory, folder)                       # pyLDAvis topics file path
 
 """ Boolean triggers global variables """
 preprocess_data = True          # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
@@ -1163,7 +1221,7 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
     print ("Pre-processing:", len (feedback_df), "record(s)")
 
     # Create new empty dataframe for feedback database table used for machine learning
-    feedback_ml_df = pd.DataFrame (columns = ["FeedbackID", "WebAppID", "CategoryID", "SubjectCleaned", "MainTextCleaned", "SubjectSpam", "MainTextSpam", "SpamStatus", "Subjectivity", "Polarity"]) 
+    feedback_ml_df = pd.DataFrame (columns = ["FeedbackID", "WebAppID", "CategoryID", "SubjectCleaned", "MainTextCleaned", "SubjectSpam", "MainTextSpam", "SpamStatus", "Subjectivity", "Polarity", "TextTokens"]) 
 
     # Set index values in FeedbackML (NOTE: Other columns in feedback_ml_df are empty as data mining have not been carried out yet)
     feedback_ml_df.FeedbackID = feedback_df.FeedbackID # Set FeedbackID
@@ -1171,8 +1229,9 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
     feedback_ml_df.WebAppID = feedback_df.WebAppID     # Set WebAppID
 
     # Set default values in FeedbackML
-    feedback_ml_df ['Subjectivity'] = 2 # Set default Subjectivity value (Value of 2 indicates that the record is UNPROCESSED)
-    feedback_ml_df ['Polarity'] = 2     # Set default Polarity value (Value of 2 indicates that the record is UNPROCESSED)
+    feedback_ml_df ['Subjectivity'] = 2  # Set default Subjectivity value (Value of 2 indicates that the record is UNPROCESSED)
+    feedback_ml_df ['Polarity'] = 2      # Set default Polarity value (Value of 2 indicates that the record is UNPROCESSED)
+    feedback_ml_df ['TextTokens'] = "[]" # Set default TextTokens value (empty list of tokens)
 
     # Create temporary dataframe that combines both Feedback and FeedbackML tables (combine dataframes just to get new columns from FeedbackML)
     combined_feedback_df = feedback_df.merge (feedback_ml_df, on = ['FeedbackID', 'CategoryID', 'WebAppID']) # Inner join based on common IDs
@@ -1231,6 +1290,15 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
     feedback_ml_df.SpamStatus = combined_feedback_df.SpamStatus
     feedback_ml_df.Subjectivity = combined_feedback_df.Subjectivity
     feedback_ml_df.Polarity = combined_feedback_df.Polarity
+
+    # # Create new column to combine Subject and MainText fields of FeedbackML
+    feedback_ml_df ['Text'] = feedback_ml_df ['SubjectCleaned'] + " " + feedback_ml_df ['MainTextCleaned']
+
+    # Remove heading and trailing whitespaces in Text (to accomodate cases of blank Subjects in header)
+    feedback_ml_df = feedback_ml_df.apply (strip_dataframe, axis = 1) # Access row by row 
+
+    # Tokenize feedback
+    feedback_ml_df = feedback_ml_df.apply (tokenize_document, axis = 1)        
 
     # Connect to database to UPDATE Feedback table
     try:
@@ -1295,16 +1363,16 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
         db_connection.close () # Close MySQL connection
 
     # Check if folder to store pre-processed feedback exists
-    if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder)):
+    if (not os.path.exists ("%sdata/%s" % (working_directory, folder))):
 
         # Create folder if it doesn't exist
-        os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder) 
+        os.mkdir ("%sdata/%s" % (working_directory, folder)) 
     
     # Check if sub-folder for pre-processed feedback exists
-    if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/" % folder)):
+    if (not os.path.exists ("%sdata/%s/pre-processing/" % (working_directory, folder))):
 
         # Create sub-folder if it doesn't exist
-        os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/pre-processing/" % folder) 
+        os.mkdir ("%sdata/%s/pre-processing/" % (working_directory, folder)) 
     
     # Export dataframes to CSV
     combined_feedback_df.to_csv (combined_feedback_file_path_p, index = False, encoding = "utf-8")
@@ -1485,16 +1553,16 @@ if (mine_data == True):
         feedback_ml_df = feedback_ml_df [feedback_ml_df.MainText != ""]
 
         # Check if folder to store data-mined feedback exists
-        if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder)):
+        if (not os.path.exists ("%sdata/%s" % (working_directory, folder))):
 
             # Create folder if it doesn't exist
-            os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder) 
+            os.mkdir ("%sdata/%s" % (working_directory, folder)) 
 
         # Check if sub-folder for data-mined feedback exists
-        if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/" % folder)):
+        if (not os.path.exists ("%sdata/%s/data-mining/" % (working_directory, folder))):
 
             # Create sub-folder if it doesn't exist
-            os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/" % folder) 
+            os.mkdir ("%sdata/%s/data-mining/" % (working_directory, folder)) 
 
         # Save cleaned raw (prior to spam detection data mining) dataset to CSV
         feedback_ml_df.to_csv (feedback_ml_prior_file_path_spam_dm, index = False, encoding = "utf-8")
@@ -1684,16 +1752,16 @@ if (mine_data == True):
         feedback_ml_df.dropna (how = "all", axis = 1, inplace = True) # Drop empty columns
 
         # Check if folder to store data-mined feedback exists
-        if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder)):
+        if (not os.path.exists ("%sdata/%s" % (working_directory, folder))):
 
             # Create folder if it doesn't exist
-            os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s" % folder) 
+            os.mkdir ("%sdata/%s" % (working_directory, folder)) 
 
         # Check if sub-folder for data-mined feedback exists
-        if (not os.path.exists ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/" % folder)):
+        if (not os.path.exists ("%sdata/%s/data-mining/" % (working_directory, folder))):
 
             # Create sub-folder if it doesn't exist
-            os.mkdir ("/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/" % folder) 
+            os.mkdir ("%sdata/%s/data-mining/" % (working_directory, folder)) 
 
         # Save cleaned raw (prior to sentiment analysis data mining) dataset to CSV
         feedback_ml_df.to_csv (feedback_ml_prior_file_path_sa_dm, index = False, encoding = "utf-8")
@@ -1810,14 +1878,14 @@ if (mine_data == True):
         feedback_ml_df ['Text'] = feedback_ml_df ['Subject'] + " " + feedback_ml_df ['MainText']
         
         # Remove heading and trailing whitespaces in Text (to accomodate cases of blank Subjects in header)
-        feedback_ml_df.apply (strip_dataframe, axis = 1) # Access row by row 
+        feedback_ml_df = feedback_ml_df.apply (strip_dataframe, axis = 1) # Access row by row 
 
         # Create new columns for dataframe
         feedback_ml_df ['TextTokens'] = "[]"       # Default empty list for tokens of feedback text after tokenization
         feedback_ml_df ['TextTopics'] = "[]"       # Default empty list of topics assigned to feedback
         feedback_ml_df ['TopicPercentages'] = "[]" # Default empty list of the percentage contributions of topics assigned to feedback
 
-        # Tokenize texts and assign text tokens to column in DataFrame
+        # Tokenize texts and assign text tokens to column in DataFrame (tokenize again even though pre-processing has already tokenized texts so as to apply CUSTOM tokenize functions for Topic Modelling)
         # feedback_ml_df.TextTokens = tm_tokenize_corpus (feedback_ml_df.Text)                        # Default tokenize function without any POS tagging specifications
         feedback_ml_df.TextTokens = tm_tokenize_corpus_pos_nouns_adj (feedback_ml_df.Text)            # Only tokenize NOUNS and ADJECTIVES (will result in many empty token lists)
         # feedback_ml_df.TextTokens = tm_tokenize_corpus_pos_nouns_adj_verb_adv (feedback_ml_df.Text) # Only tokenize NOUNS, ADJECTIVES, VERBS and ADVERBS (will result in many empty token lists)
@@ -1833,8 +1901,8 @@ if (mine_data == True):
         trigram_model = models.phrases.Phraser (trigram) # Create trigram model
 
         # Create bigram and trigram tokens in DataFrame
-        feedback_ml_df.apply (tokenize_bigram_dataframe, axis = 1) 
-        feedback_ml_df.apply (tokenize_trigram_dataframe, axis = 1) 
+        feedback_ml_df = feedback_ml_df.apply (tokenize_bigram_dataframe, axis = 1) 
+        feedback_ml_df = feedback_ml_df.apply (tokenize_trigram_dataframe, axis = 1) 
 
         # 3) Understand dataset
         if (preliminary_check == True): # Check boolean to display preliminary information
@@ -1895,7 +1963,7 @@ if (mine_data == True):
         feedback_ml_df ['TopicPercentages'] = feedback_topic_percentage_mapping
 
         # Set topics of Feedback with empty TextTokens and TextTopics to nothing (NOTE: By default, if gensim receives an empty list of tokens, it will assign the document ALL topics!)
-        feedback_ml_df.apply (unassign_empty_topics_dataframe, axis = 1) # Access row by row 
+        feedback_ml_df = feedback_ml_df.apply (unassign_empty_topics_dataframe, axis = 1) # Access row by row 
 
         """ Create and populate Feedback-Topic DataFrame """
         # Create new dataframe to store all feedback that are assigned with at least one topic after Topic Modelling
@@ -1909,7 +1977,7 @@ if (mine_data == True):
         list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe later on
 
         # Clean and split feedback that are assigned more than one topic into multiple new entries to be added later on in the Feedback-Topic dataframe
-        feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
+        feedback_topic_df = feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
         
         # Remove feedbacks that are assigned with more than one topic
         feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"^\d*$")] # Only obtain feedbacks whose topics are made of digits (only one topic, since no commas which would be indicative of multiple topics)
@@ -1989,7 +2057,7 @@ if (mine_data == True):
 
             """ Update FeedbackTopic DataFrame """
             # Get Feedback-Topic mappings and update the FeedbackML DataFrame accordingly
-            feedback_ml_df.apply (get_manual_feedback_topic_mapping, args = (dictionary_manual_tag, 0.3), axis = 1)
+            feedback_ml_df = feedback_ml_df.apply (get_manual_feedback_topic_mapping, args = (dictionary_manual_tag, 0.3), axis = 1)
         
             # Create Feedback-Topic DataFrame again to store all feedback that are assigned with at least one topic after Topic Modelling
             feedback_topic_df = feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'].copy () # Get feedback that are assigned at least one topic
@@ -2001,7 +2069,7 @@ if (mine_data == True):
             list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe later on
 
             # Clean and split feedback that are assigned more than one topic into multiple entries to add later on in the Feedback-Topic dataframe
-            feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
+            feedback_topic_df = feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
             
             # Remove feedbacks that are assigned with more than one topic
             feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"^\d*$")] # Only obtain feedbacks whose topics are made of digits (only one topic, since no commas which would be indicative of multiple topics)
@@ -2085,6 +2153,18 @@ if (mine_data == True):
         print (len (topic_df), "Topic(s)' PriorityScore updated")
 
         """ Miscellaneous """
+        # Check if folder to store data-mined feedback exists
+        if (not os.path.exists ("%sdata/%s" % (working_directory, folder))):
+
+            # Create folder if it doesn't exist
+            os.mkdir ("%sdata/%s" % (working_directory, folder)) 
+
+        # Check if sub-folder for data-mined feedback exists
+        if (not os.path.exists ("%sdata/%s/data-mining/" % (working_directory, folder))):
+
+            # Create sub-folder if it doesn't exist
+            os.mkdir ("%sdata/%s/data-mining/" % (working_directory, folder)) 
+
         # Create interactive visualisation for LDA model
         lda_visualise = pyLDAvis.gensim.prepare (lda_model, gensim_corpus, id2word) # Create visualisation
         pyLDAvis.save_html (lda_visualise, topic_visualise_file_path_dm) # Export visualisation to HTML file

@@ -915,7 +915,7 @@ if (topic_model_data == True):
     feedback_ml_df ['Text'] = feedback_ml_df ['Subject'] + " " + feedback_ml_df ['MainText']
     
     # Remove heading and trailing whitespaces in Text (to accomodate cases of blank Subjects in header)
-    feedback_ml_df.apply (strip_dataframe, axis = 1) # Access row by row 
+    feedback_ml_df = feedback_ml_df.apply (strip_dataframe, axis = 1) # Access row by row 
 
     # Create new columns for dataframe
     feedback_ml_df ['TextTokens'] = "[]"       # Default empty list for tokens of feedback text after tokenization
@@ -941,8 +941,8 @@ if (topic_model_data == True):
     trigram_model = models.phrases.Phraser (trigram) # Create trigram model
 
     # Create bigram and trigram tokens in DataFrame
-    feedback_ml_df.apply (tokenize_bigram_dataframe, axis = 1) 
-    feedback_ml_df.apply (tokenize_trigram_dataframe, axis = 1) 
+    feedback_ml_df = feedback_ml_df.apply (tokenize_bigram_dataframe, axis = 1) 
+    feedback_ml_df = feedback_ml_df.apply (tokenize_trigram_dataframe, axis = 1) 
 
     # 3) Understand dataset
     if (preliminary_check == True): # Check boolean to display preliminary information
@@ -1041,7 +1041,7 @@ if (topic_model_data == True):
     feedback_ml_df ['TopicPercentages'] = feedback_topic_percentage_mapping
 
     # Set topics of Feedback with empty TextTokens and TextTopics to nothing (NOTE: By default, if gensim receives an empty list of tokens, it will assign the document ALL topics!)
-    feedback_ml_df.apply (unassign_empty_topics_dataframe, axis = 1) # Access row by row 
+    feedback_ml_df = feedback_ml_df.apply (unassign_empty_topics_dataframe, axis = 1) # Access row by row 
 
     """ Create and populate Feedback-Topic DataFrame """
     # Create new dataframe to store all feedback that are assigned with at least one topic after Topic Modelling
@@ -1055,7 +1055,7 @@ if (topic_model_data == True):
     list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe later on
 
     # Clean and split feedback that are assigned more than one topic into multiple new entries to be added later on in the Feedback-Topic dataframe
-    feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
+    feedback_topic_df = feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
     
     # Remove feedbacks that are assigned with more than one topic
     feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"^\d*$")] # Only obtain feedbacks whose topics are made of digits (only one topic, since no commas which would be indicative of multiple topics)
@@ -1136,7 +1136,7 @@ if (topic_model_data == True):
 
         """ Update FeedbackTopic DataFrame """
         # Get Feedback-Topic mappings and update the FeedbackML DataFrame accordingly
-        feedback_ml_df.apply (get_manual_feedback_topic_mapping, args = (dictionary_manual_tag, 0.3), axis = 1)
+        feedback_ml_df = feedback_ml_df.apply (get_manual_feedback_topic_mapping, args = (dictionary_manual_tag, 0.3), axis = 1)
     
         # Create Feedback-Topic DataFrame again to store all feedback that are assigned with at least one topic after Topic Modelling
         feedback_topic_df = feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'].copy () # Get feedback that are assigned at least one topic
@@ -1148,7 +1148,7 @@ if (topic_model_data == True):
         list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe later on
 
         # Clean and split feedback that are assigned more than one topic into multiple entries to add later on in the Feedback-Topic dataframe
-        feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
+        feedback_topic_df = feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
         
         # Remove feedbacks that are assigned with more than one topic
         feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"^\d*$")] # Only obtain feedbacks whose topics are made of digits (only one topic, since no commas which would be indicative of multiple topics)
