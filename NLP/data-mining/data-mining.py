@@ -1043,7 +1043,7 @@ topics_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-minin
 topics_df_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/topics.csv' % folder                                  # File path of topics table
 feedback_topics_df_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/feedback-topics.csv' % folder                # File path of feedback-topics table
 manual_tagging_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/manual-tagging.txt'                                             # Manually tagged topic-tokens file path
-topic_visualise_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/lda.html' % folder                              # pyLDAvis topics file path
+topic_visualise_file_path_dm = '/home/p/Desktop/csitml/NLP/data-mining/data/%s/data-mining/lda-topics.html' % folder                       # pyLDAvis topics file path
 
 """ Boolean triggers global variables """
 preprocess_data = True          # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
