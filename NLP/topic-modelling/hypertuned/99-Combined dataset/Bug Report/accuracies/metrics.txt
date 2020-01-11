@@ -1,0 +1,42 @@
+Start time:  2020-01-11 22:27:03.028527
+
+Preliminary information about Topic Modelling dataset:
+Dimensions:  (845, 7) 
+
+First few records:
+          Id            Subject                                           MainText  ...                          TextTokens TextTopics TopicPercentages
+0  99_3007_2  problem discovery      App crashes when new power up notice pops up   ...  [problem, App, new, power, notice]         []               []
+1  99_3009_2  problem discovery                      App crashes with new release   ...        [problem, App, new, release]         []               []
+2  99_3012_2  problem discovery  This is not worth buying it will crash right f...  ...         [problem, worth, beginning]         []               []
+3  99_3016_2  problem discovery                       This should Really be fixed   ...                           [problem]         []               []
+4  99_3017_2  problem discovery                 And you still can t upload videos   ...                    [problem, video]         []               []
+
+[5 rows x 7 columns] 
+
+Columns and data types:
+Id                  object
+Subject             object
+MainText            object
+Text                object
+TextTokens          object
+TextTopics          object
+TopicPercentages    object
+dtype: object 
+
+*****Model Performances***
+
+LDA:
+
+Coherence Score:  0.42366400084356065
+
+HDP:
+
+Coherence Score:  0.7731231257651253 
+
+92 record(s) successfully inserted into Topics table
+959 record(s) successfully inserted into FeedbackTopic table
+92 Topic(s)' PriorityScore updated
+
+Program start time:  2020-01-11 22:27:03.028527
+Program end time:  2020-01-11 22:28:49.670133
+Program runtime:  106.641606 seconds

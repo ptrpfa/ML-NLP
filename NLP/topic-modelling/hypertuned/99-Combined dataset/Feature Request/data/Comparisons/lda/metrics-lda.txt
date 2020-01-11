@@ -1,0 +1,58 @@
+Start time:  2020-01-08 14:09:54.913006
+
+Preliminary information about Topic Modelling dataset:
+Dimensions:  (3285, 7) 
+
+First few records:
+          Id             Subject                                           MainText  ...                                         TextTokens TextTopics TopicPercentages
+0  99_3005_4  information giving  These screens are small enough without crowdin...  ...  [screen, small, stuff, tuck, rest, add, ons, f...         []               []
+1  99_3006_4  information giving  Dear Rovio If you absolutely must continue try...  ...  [dollar, customer, way, decency, opt, equal, a...         []               []
+2  99_3008_4  information giving  It would be nice to have an update that didn t...  ...                   [nice, update, didn, crash, app]         []               []
+3  99_3010_4  information giving  I have had no problems with any of the version...  ...                                 [problem, version]         []               []
+4  99_3014_4  information giving                              That needs to change   ...                                                 []         []               []
+
+[5 rows x 7 columns] 
+
+Columns and data types:
+Id                  object
+Subject             object
+MainText            object
+Text                object
+TextTokens          object
+TextTopics          object
+TopicPercentages    object
+dtype: object 
+
+*****Model Performances***
+
+LDA:
+
+Coherence Score:  0.4576548914463027
+
+HDP:
+
+Coherence Score:  0.7485384922401099 
+
+68 record(s) successfully inserted into Topics table
+3131 record(s) successfully inserted into FeedbackTopic table
+68 record(s)' PriorityScore updated
+/home/p/anaconda3/lib/python3.7/site-packages/past/translation/__init__.py:35: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+/home/p/anaconda3/lib/python3.7/site-packages/past/translation/__init__.py:35: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+/home/p/anaconda3/lib/python3.7/site-packages/past/types/oldstr.py:5: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  from collections import Iterable
+/home/p/anaconda3/lib/python3.7/site-packages/past/types/oldstr.py:5: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  from collections import Iterable
+/home/p/anaconda3/lib/python3.7/site-packages/past/translation/__init__.py:35: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+/home/p/anaconda3/lib/python3.7/site-packages/past/types/oldstr.py:5: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  from collections import Iterable
+/home/p/anaconda3/lib/python3.7/site-packages/past/translation/__init__.py:35: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+/home/p/anaconda3/lib/python3.7/site-packages/past/types/oldstr.py:5: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  from collections import Iterable
+
+Program start time:  2020-01-08 14:09:54.913006
+Program end time:  2020-01-08 14:16:17.658513
+Program runtime:  382.745507 seconds

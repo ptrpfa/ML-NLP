@@ -1,0 +1,21 @@
+Number of Topics = 5  has Coherence Value of 0.3696612123430639
+Number of Topics = 10  has Coherence Value of 0.40488749882482067
+Number of Topics = 15  has Coherence Value of 0.41989575292365006
+Number of Topics = 20  has Coherence Value of 0.40587075250160815
+Number of Topics = 25  has Coherence Value of 0.43406587539996494
+Number of Topics = 30  has Coherence Value of 0.42688669851627303
+Number of Topics = 35  has Coherence Value of 0.4159459031250943
+Number of Topics = 40  has Coherence Value of 0.4229904288625515
+Number of Topics = 45  has Coherence Value of 0.44712433903795035
+Number of Topics = 50  has Coherence Value of 0.4149163695801283
+Number of Topics = 55  has Coherence Value of 0.41455251562125
+Number of Topics = 60  has Coherence Value of 0.4424070674810524
+Number of Topics = 65  has Coherence Value of 0.44784107224699743
+Number of Topics = 70  has Coherence Value of 0.4788045867678753
+Number of Topics = 75  has Coherence Value of 0.4603117543459439
+Number of Topics = 80  has Coherence Value of 0.46638078909068614
+Number of Topics = 85  has Coherence Value of 0.47458983932148147
+Number of Topics = 90  has Coherence Value of 0.44965533957411197
+Number of Topics = 95  has Coherence Value of 0.47513872483216857
+
+Optimal number of topics: 70
