@@ -1,15 +1,58 @@
-Start time:  2020-01-10 08:15:45.860670
+Start time:  2020-01-12 22:37:15.080607
 
-Preliminary information about Topic Modelling dataset:
+Performing Topic Modelling on Category 2..
+
+
+Preliminary information about Topic Modelling Category 2 dataset:
+Dimensions:  (845, 7) 
+
+First few records:
+          Id            Subject                                           MainText  ...                          TextTokens TextTopics TopicPercentages
+0  99_3007_2  problem discovery      App crashes when new power up notice pops up   ...  [problem, App, new, power, notice]         []               []
+1  99_3009_2  problem discovery                      App crashes with new release   ...        [problem, App, new, release]         []               []
+2  99_3012_2  problem discovery  This is not worth buying it will crash right f...  ...         [problem, worth, beginning]         []               []
+3  99_3016_2  problem discovery                       This should Really be fixed   ...                           [problem]         []               []
+4  99_3017_2  problem discovery                 And you still can t upload videos   ...                    [problem, video]         []               []
+
+[5 rows x 7 columns] 
+
+Columns and data types:
+Id                  object
+Subject             object
+MainText            object
+Text                object
+TextTokens          object
+TextTopics          object
+TopicPercentages    object
+dtype: object 
+
+*****Model Performances***
+
+LDA:
+
+Coherence Score:  0.42366400084356065
+
+HDP:
+
+Coherence Score:  0.7731231257651253 
+
+92 record(s) successfully inserted into Topics table for Category 2
+966 record(s) successfully inserted into FeedbackTopic table for Category 2
+92 Category 2 Topic(s)' PriorityScore updated
+
+Performing Topic Modelling on Category 4..
+
+
+Preliminary information about Topic Modelling Category 4 dataset:
 Dimensions:  (3285, 7) 
 
 First few records:
-          Id             Subject                                           MainText  ...                                         TextTokens TextTopics TopicPercentages
-0  99_3005_4  information giving  These screens are small enough without crowdin...  ...  [screen, small, stuff, tuck, rest, add, ons, f...         []               []
-1  99_3006_4  information giving  Dear Rovio If you absolutely must continue try...  ...  [dollar, customer, way, decency, opt, equal, a...         []               []
-2  99_3008_4  information giving  It would be nice to have an update that didn t...  ...                   [nice, update, didn, crash, app]         []               []
-3  99_3010_4  information giving  I have had no problems with any of the version...  ...                                 [problem, version]         []               []
-4  99_3014_4  information giving                              That needs to change   ...                                                 []         []               []
+          Id             Subject  ... TextTopics TopicPercentages
+0  99_3005_4  information giving  ...         []               []
+1  99_3006_4  information giving  ...         []               []
+2  99_3008_4  information giving  ...         []               []
+3  99_3010_4  information giving  ...         []               []
+4  99_3014_4  information giving  ...         []               []
 
 [5 rows x 7 columns] 
 
@@ -33,10 +76,50 @@ HDP:
 
 Coherence Score:  0.7485384922401099 
 
-68 record(s) successfully inserted into Topics table
-3126 record(s) successfully inserted into FeedbackTopic table
-68 Topic(s)' PriorityScore updated
+68 record(s) successfully inserted into Topics table for Category 4
+3126 record(s) successfully inserted into FeedbackTopic table for Category 4
+68 Category 4 Topic(s)' PriorityScore updated
 
-Program start time:  2020-01-10 08:15:45.860670
-Program end time:  2020-01-10 08:18:36.885116
-Program runtime:  171.024446 seconds
+Performing Topic Modelling on Category 5..
+
+
+Preliminary information about Topic Modelling Category 5 dataset:
+Dimensions:  (401, 7) 
+
+First few records:
+          Id          Subject                                           MainText  ...                               TextTokens TextTopics TopicPercentages
+0  99_3004_5  feature request  Make it like better with a giant pig bigger th...  ...      [feature, request, giant, pig, big]         []               []
+1  99_3011_5  feature request  Please bring back the trajectory line or at le...  ...     [feature, request, trajectory, line]         []               []
+2  99_3013_5  feature request  I will say you should make shock so close to t...  ...  [feature, request, shock, button, bird]         []               []
+3  99_3019_5  feature request                          I need to save my photos   ...                [feature, request, photo]         []               []
+4  99_3023_5  feature request  Please please give us the ability to rename fi...  ...   [feature, request, ability, file, app]         []               []
+
+[5 rows x 7 columns] 
+
+Columns and data types:
+Id                  object
+Subject             object
+MainText            object
+Text                object
+TextTokens          object
+TextTopics          object
+TopicPercentages    object
+dtype: object 
+
+*****Model Performances***
+
+LDA:
+
+Coherence Score:  0.4804705945205432
+
+HDP:
+
+Coherence Score:  0.7881739136268613 
+
+68 record(s) successfully inserted into Topics table for Category 5
+472 record(s) successfully inserted into FeedbackTopic table for Category 5
+68 Category 5 Topic(s)' PriorityScore updated
+
+Program start time:  2020-01-12 22:37:15.080607
+Program end time:  2020-01-12 22:41:54.945600
+Program runtime:  279.864993 seconds

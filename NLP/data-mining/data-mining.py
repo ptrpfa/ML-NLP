@@ -2166,7 +2166,7 @@ if (mine_data == True):
             os.mkdir ("%sdata/%s/data-mining/" % (working_directory, folder)) 
 
         # Create interactive visualisation for LDA model
-        lda_visualise = pyLDAvis.gensim.prepare (lda_model, gensim_corpus, id2word) # Create visualisation
+        lda_visualise = pyLDAvis.gensim.prepare (lda_model, gensim_corpus, id2word,  mds = 'mmds') # Create visualisation
         pyLDAvis.save_html (lda_visualise, topic_visualise_file_path_dm) # Export visualisation to HTML file
 
         # Save Topic-Modelled DataFrames
