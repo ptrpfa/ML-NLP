@@ -1,0 +1,104 @@
+Start time:  2020-01-12 23:52:53.574851
+
+***Preliminary preparations before data mining process***
+
+Unprocessed feedback data detected!
+Pre-processing: 4557 record(s)
+Cleaning unprocessed feedbacks..
+Number of trash record(s) found: 13 record(s)
+4557 record(s) successfully pre-processed
+4557 record(s) successfully inserted into FeedbackML table
+
+Data pre-processing completed in 68.098362 seconds
+
+
+***Data Mining***
+
+Unmined feedback data detected!
+Mining: 4557 record(s)
+
+(1) Conducting SPAM DETECTION..
+
+Preliminary information about SPAM/HAM dataset:
+Dimensions:  (2185, 8) 
+
+First few records:
+          Id                     Subject                                           MainText  SubjectSpam  MainTextSpam  SpamStatus  Subjectivity  Polarity
+0      1_1_1                     Subject                                           MainText            2             2           2           2.0       2.0
+1      1_2_2                     Subject                                           MainText            2             2           2           2.0       2.0
+2  99_4377_2  It's good to look at stuff  It's good if you want to browse but is horribl...            2             2           2           2.0       2.0
+3  99_4380_2               Yup It's ugly  The white app icon is so atrocious I'm hiding ...            2             2           2           2.0       2.0
+4  99_4390_2                        Hats  I love the app but it's annoying cause when I ...            2             2           2           2.0       2.0 
+
+Columns and data types:
+Id               object
+Subject          object
+MainText         object
+SubjectSpam       int64
+MainTextSpam      int64
+SpamStatus        int64
+Subjectivity    float64
+Polarity        float64
+dtype: object 
+
+Loaded vectorizer in 0.763502 seconds
+Transformed subject to DTM in 17.598911 seconds
+Transformed main text to DTM in 20.586653 seconds
+
+Predicting whether subjects of feedback is spam..
+Predicted subject values: [0 0 0 ... 0 0 0]
+
+Predicting whether main texts of feedback is spam..
+Predicted main text values: [0 0 0 ... 0 0 0]
+
+Spam model runtime:  0.7137629999999999 seconds
+
+2185 record(s) successfully classified as SPAM/HAM
+
+Completed Spam Detection in 42.86675 seconds
+
+
+(2) Conducting SENTIMENT ANALYSIS..
+
+4533 record(s)' sentiment subjectivity and polarity values analysed
+
+Completed Sentiment Analysis in 7.955887 seconds
+
+
+(3) Conducting TOPIC MODELLING..
+
+Preliminary information about Topic Modelling dataset:
+Dimensions:  (3285, 7) 
+
+First few records:
+          Id             Subject  ... TextTopics TopicPercentages
+0  99_3005_4  information giving  ...         []               []
+1  99_3006_4  information giving  ...         []               []
+2  99_3008_4  information giving  ...         []               []
+3  99_3010_4  information giving  ...         []               []
+4  99_3014_4  information giving  ...         []               []
+
+[5 rows x 7 columns] 
+
+Columns and data types:
+Id                  object
+Subject             object
+MainText            object
+Text                object
+TextTokens          object
+TextTopics          object
+TopicPercentages    object
+dtype: object 
+
+68 record(s) successfully inserted into Topics table
+3131 record(s) successfully inserted into FeedbackTopic table
+68 Topic(s)' PriorityScore updated
+
+Completed Topic Modelling in 250.14037 seconds
+
+Updating data-mined status of feedback..
+4557 record(s) successfully mined
+
+Program start time:  2020-01-12 23:52:53.574851
+Program end time:  2020-01-12 23:59:02.850883
+Program runtime:  369.276032 seconds

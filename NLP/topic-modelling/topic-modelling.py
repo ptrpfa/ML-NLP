@@ -927,8 +927,8 @@ for optimal_model in list_models:
     # Update optimal number of topics for current CategoryID
     selected_topic_no = optimal_model ['TopicNo']
 
-    # Print debugging message
-    print ("\nPerforming Topic Modelling on Category %s..\n" % category_id)
+     # Print debugging message
+    print ("\nPerforming Topic Modelling on Category %s with %s projected topics..\n" % (category_id, selected_topic_no))
 
     # 1) Get dataset
     try:
