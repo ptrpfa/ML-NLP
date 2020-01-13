@@ -1,2 +1,0 @@
-FeedbackID,CategoryID,WebAppID,Datetime,ContactName,ContactEmail,Rating,OverallScore,Subject,MainText,Status,Remarks,Whitelist,PreprocessStatus,MineStatus,SubjectCleaned,MainTextCleaned,SubjectSpam,MainTextSpam,SpamStatus,Subjectivity,Polarity,TextTokens
-7559,2,99,2020-01-13 08:15:10,Test,Test,4,16,BUG123456$,Received BUG123456$ when running update on page..,0,,1,1,0,BUG123456 ,Received BUG123456 when running update on page ,0,0,0,2,2,[]
