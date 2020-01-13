@@ -1,0 +1,2 @@
+FeedbackID,WebAppID,CategoryID,SubjectCleaned,MainTextCleaned,SubjectSpam,MainTextSpam,SpamStatus,Subjectivity,Polarity,TextTokens,Text
+7559,99,2,BUG123456 ,Received BUG123456 when running update on page ,0,0,0,2,2,"['BUG123456', 'receive', 'bug123456', 'run', 'update', 'page']",BUG123456  Received BUG123456 when running update on page

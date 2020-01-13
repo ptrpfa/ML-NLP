@@ -45,7 +45,9 @@ UPDATEs to the FeedbackTopic table will not re-calculate the OverallScore of eac
 Use case:
 This data mining program is designed to only run ONCE on Feedback data that HAVE NOT been data mined before
 --> The data mining program does not respond to UPDATEs of features that can only be derived after data mining
-(ie change of SpamStatus from 0 to 1 does not trigger the running of Sentiment Analysis/Topic Modelling)
+(ie change of SpamStatus from 0 to 1 does not trigger the running of Sentiment Analysis/Topic Modelling) OR any
+new INSERTIONS of feedback data into the pool of Feedback data collected (in this case topic modelling will not
+run properly due to the affected projected number of topics)
 
 2) This program uses PICKLED models for data mining (Spam-Detection and Topic Modelling models)
 --> Tuned models are required to be pickled and in the pickle file directory in order to run this program
