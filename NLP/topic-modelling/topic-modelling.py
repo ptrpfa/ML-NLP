@@ -658,11 +658,11 @@ def hypertune_no_topics (dictionary, corpus, texts, limit, start, step):
 def insert_topics_dataframe (series, cursor, connection): 
 
     # Create SQL statement to insert Topics table values
-    sql = "INSERT INTO %s (TopicID, WebAppID, Name, PriorityScore, Remarks) " % (topic_table)
-    sql = sql + "VALUES (%s, %s, %s, %s, %s);" 
+    sql = "INSERT INTO %s (TopicID, WebAppID, Name, PriorityScore, Remarks, Status) " % (topic_table)
+    sql = sql + "VALUES (%s, %s, %s, %s, %s, %s);" 
 
     # Execute SQL statement
-    cursor.execute (sql, (series ['Id'], web_app_id, series ['Name'], series ['PriorityScore'], series ['Remarks']))
+    cursor.execute (sql, (series ['Id'], web_app_id, series ['Name'], series ['PriorityScore'], series ['Remarks'], series ['Status']))
 
     # Commit changes made
     connection.commit ()
@@ -846,14 +846,14 @@ working_directory = "/home/p/Desktop/csitml/NLP/topic-modelling/" # Working dire
 pickles_file_path = "%spickles/" % working_directory # File path containing pickled objects
 
 # File paths
-train_file_path = "%sdata/feedback-ml-%s.csv" % working_directory                  # Dataset file path (prior to topic modelling)
-topic_file_path = '%sdata/feedback-ml-topics-%s.csv' % working_directory           # Topic modelled dataset file path
-topics_file_path = '%sdata/topics-%s.txt' % working_directory                      # File path of topic details
-topics_df_file_path = '%sdata/topics-%s.csv' % working_directory                   # File path of topics table
-feedback_topics_df_file_path = '%sdata/feedback-topics-%s.csv' % working_directory # File path of feedback-topics table
-manual_tagging_file_path = '%sdata/manual-tagging.txt' % working_directory         # Manually tagged topic-tokens file path
-pickles_file_path = "%spickles/" % working_directory                               # File path containing pickled objects
-accuracy_file_path = "%saccuracies/" % working_directory                           # Model accuracy results file path
+train_file_path = "%sdata/feedback-ml" % working_directory + "-%s.csv"                  # Dataset file path (prior to topic modelling)
+topic_file_path = '%sdata/feedback-ml-topics' % working_directory + "-%s.csv"           # Topic modelled dataset file path
+topics_file_path = '%sdata/topics' % working_directory + "-%s.txt"                      # File path of topic details
+topics_df_file_path = '%sdata/topics' % working_directory + "-%s.csv"                   # File path of topics table
+feedback_topics_df_file_path = '%sdata/feedback-topics' % working_directory + "-%s.csv" # File path of feedback-topics table
+manual_tagging_file_path = '%sdata/manual-tagging.txt' % working_directory              # Manually tagged topic-tokens file path
+pickles_file_path = "%spickles/" % working_directory                                    # File path containing pickled objects
+accuracy_file_path = "%saccuracies/" % working_directory                                # Model accuracy results file path
 
 # Boolean triggers global variables
 topic_model_data = True  # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
@@ -1234,6 +1234,18 @@ for optimal_model in list_models:
 
             # Remove topics that have not been assigned to at least one feedback in the Feedback-Topic mapping DataFrame
             topic_df = topic_df [topic_df.Id.isin (list_topics_assigned)]
+
+        """ Update Topic status """
+        # Check current category
+        if (category_id == 4 or category_id == 5):
+
+            # Add new column to Topic DataFrame
+            topic_df ['Status'] = 3 # Set default value of Closed for developer's status on Topic if category is 4:General or 5:Feature Request
+
+        else:
+
+            # Add new column to Topic DataFrame
+            topic_df ['Status'] = 0 # Default value of Pending for developer's status on Topic for any other category
 
         """ Database updates """
         # Check  global boolean variable to see whether or not to modify the database

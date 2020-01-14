@@ -347,10 +347,10 @@ def update_feedback_dataframe (series, cursor, connection):
 
     # Create SQL statement to update Feedback table values
     sql = "UPDATE %s " % (feedback_table)
-    sql = sql + "SET OverallScore = %s, Whitelist = %s, PreprocessStatus = %s WHERE FeedbackID = %s AND CategoryID = %s AND WebAppID = %s;" 
+    sql = sql + "SET OverallScore = %s, Whitelist = %s, PreprocessStatus = %s, Status = %s WHERE FeedbackID = %s AND CategoryID = %s AND WebAppID = %s;" 
 
     # Execute SQL statement
-    cursor.execute (sql, (series ['OverallScore'], series ['Whitelist'], series ['PreprocessStatus'], series ['FeedbackID'], series ['CategoryID'], series ['WebAppID']))
+    cursor.execute (sql, (series ['OverallScore'], series ['Whitelist'], series ['PreprocessStatus'], series ['Status'], series ['FeedbackID'], series ['CategoryID'], series ['WebAppID']))
 
     # Commit changes made
     connection.commit ()
@@ -889,11 +889,11 @@ def get_manual_feedback_topic_mapping (series, dictionary_manual_tag, minimum_pe
 def insert_topics_dataframe (series, cursor, connection): 
 
     # Create SQL statement to insert Topics table values
-    sql = "INSERT INTO %s (TopicID, WebAppID, Name, PriorityScore, Remarks) " % (topic_table)
-    sql = sql + "VALUES (%s, %s, %s, %s, %s);" 
+    sql = "INSERT INTO %s (TopicID, WebAppID, Name, PriorityScore, Remarks, Status) " % (topic_table)
+    sql = sql + "VALUES (%s, %s, %s, %s, %s, %s);" 
 
     # Execute SQL statement
-    cursor.execute (sql, (series ['Id'], web_app_id, series ['Name'], series ['PriorityScore'], series ['Remarks']))
+    cursor.execute (sql, (series ['Id'], web_app_id, series ['Name'], series ['PriorityScore'], series ['Remarks'], series ['Status']))
 
     # Commit changes made
     connection.commit ()
@@ -1301,6 +1301,10 @@ if (preprocess_data == True): # Pre-process feedback if there are unpre-processe
 
     # Tokenize feedback
     feedback_ml_df = feedback_ml_df.apply (tokenize_document, axis = 1)        
+
+    # Update default developer status of Feedbacks in categories (4: General, 5: Feature Request) to the value 3 (closed)
+    feedback_df.loc [feedback_df ['CategoryID'] == 4, 'Status'] = 3
+    feedback_df.loc [feedback_df ['CategoryID'] == 5, 'Status'] = 3
 
     # Connect to database to UPDATE Feedback table
     try:
@@ -2084,6 +2088,18 @@ if (mine_data == True):
 
             # Remove topics that have not been assigned to at least one feedback in the Feedback-Topic mapping DataFrame
             topic_df = topic_df [topic_df.Id.isin (list_topics_assigned)]
+
+        """ Update Topic status """
+        # Check current category
+        if (category_id == 4 or category_id == 5):
+
+            # Add new column to Topic DataFrame
+            topic_df ['Status'] = 3 # Set default value of Closed for developer's status on Topic if category is 4:General or 5:Feature Request
+
+        else:
+
+            # Add new column to Topic DataFrame
+            topic_df ['Status'] = 0 # Default value of Pending for developer's status on Topic for any other category
 
         """ Database updates """
         # Connect to database to INSERT new topics into the Topics table (need to first insert into the Topics table as FeedbackTopic insertions later on have foreign key references to the Topics table)
