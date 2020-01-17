@@ -773,10 +773,10 @@ def get_feedback_topic_mapping (model, corpus, texts, max_no_topics, minimum_per
 
     # Apply model on corpus to get a Gensim TransformedCorpus object of mappings (Document-Topic mapping ONLY)
     transformed_gensim_corpus = model [corpus]
-    
+    print (transformed_gensim_corpus, type (transformed_gensim_corpus), len (transformed_gensim_corpus))
     # Loop to access mappings in the Gensim transformed corpus (made of lists of document-topic mappings)
     for list_document_topic in transformed_gensim_corpus: # Access document by document
-
+        # print (list_document_topic)
         # Remove topics below specified minimum percentage contribution
         list_document_topic = list (filter (lambda tup: (tup [1] >= minimum_percentage), list_document_topic)) 
 
@@ -1154,7 +1154,7 @@ spam_check_data = True          # Boolean to trigger application of Spam Detecti
 sentiment_check_data = True     # Boolean to trigger application of Naive Sentiment Analysis on Feedback data in the database (Default value is TRUE)
 topic_model_data = True         # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 use_manual_tag = True           # Boolean to trigger whether to use manually tagged topics (keyword-based topic modelling) (Default value is TRUE)
-use_topic_model_pickle = False  # Boolean to trigger whether or not to use the already pickled Topic Models (For TESTING purposes only as pickled Gensim models will not be applied on new data)
+use_topic_model_pickle = True  # Boolean to trigger whether or not to use the already pickled Topic Models (For TESTING purposes only as pickled Gensim models will not be applied on new data)
 preliminary_check = True        # Boolean to trigger display of preliminary dataset visualisations and presentations
 
 """ Database global variables """
@@ -2021,6 +2021,18 @@ if (mine_data == True):
             list_hdp_topics = hdp_model.show_topics (formatted = True, num_topics = 150, num_words = 20)
             list_hdp_topics.sort (key = lambda tup: tup [0]) # Sort topics according to ascending order
 
+            # Check if folder to store data-mined feedback exists
+            if (not os.path.exists ("%sdata/%s" % (working_directory, folder))):
+
+                # Create folder if it doesn't exist
+                os.mkdir ("%sdata/%s" % (working_directory, folder)) 
+
+            # Check if sub-folder for data-mined feedback exists
+            if (not os.path.exists ("%sdata/%s/data-mining/" % (working_directory, folder))):
+
+                # Create sub-folder if it doesn't exist
+                os.mkdir ("%sdata/%s/data-mining/" % (working_directory, folder)) 
+
             # Save topics in topic file
             save_topics (list_lda_topics, list_hdp_topics, category_id)
 
@@ -2241,18 +2253,6 @@ if (mine_data == True):
             print (len (topic_df), "Category %s Topic(s)' PriorityScore updated" % category_id)
 
             """ Miscellaneous """
-            # Check if folder to store data-mined feedback exists
-            if (not os.path.exists ("%sdata/%s" % (working_directory, folder))):
-
-                # Create folder if it doesn't exist
-                os.mkdir ("%sdata/%s" % (working_directory, folder)) 
-
-            # Check if sub-folder for data-mined feedback exists
-            if (not os.path.exists ("%sdata/%s/data-mining/" % (working_directory, folder))):
-
-                # Create sub-folder if it doesn't exist
-                os.mkdir ("%sdata/%s/data-mining/" % (working_directory, folder)) 
-            
             # Create interactive visualisation for LDA model
             lda_visualise = pyLDAvis.gensim.prepare (lda_model, gensim_corpus, id2word, mds = 'mmds') # Create visualisation
             pyLDAvis.save_html (lda_visualise, topic_visualise_file_path_dm % category_id) # Export visualisation to HTML file
