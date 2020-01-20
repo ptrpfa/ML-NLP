@@ -1,1 +1,0 @@
-FeedbackID,CategoryID,WebAppID,Datetime,ContactName,ContactEmail,Rating,OverallScore,Subject,MainText,Status,Remarks,Whitelist,PreprocessStatus,MineStatus,SubjectCleaned,MainTextCleaned,SubjectSpam,MainTextSpam,SpamStatus,Subjectivity,Polarity,TextTokens

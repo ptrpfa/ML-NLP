@@ -134,7 +134,7 @@ Topic 33 :
 
 Topic 34 :
 
-0.061*"App" + 0.046*"app" + 0.046*"Dropbox" + 0.031*"box" + 0.031*"voice" + 0.031*"defect" + 0.031*"buggy" + 0.031*"slow" + 0.031*"update" + 0.031*"bug" + 0.015*"location" + 0.015*"info" + 0.015*"patience" + 0.015*"dialog" + 0.015*"5" + 0.015*"good" + 0.015*"1" + 0.015*"loop" + 0.015*"yesterday" + 0.015*"endless" 
+0.061*"App" + 0.046*"app" + 0.046*"Dropbox" + 0.031*"box" + 0.031*"voice" + 0.031*"defect" + 0.031*"buggy" + 0.031*"slow" + 0.031*"update" + 0.031*"bug" + 0.015*"yesterday" + 0.015*"loop" + 0.015*"endless" + 0.015*"location" + 0.015*"dialog" + 0.015*"good" + 0.015*"1" + 0.015*"info" + 0.015*"patience" + 0.015*"quirk" 
 
 Topic 35 :
 
@@ -142,7 +142,7 @@ Topic 35 :
 
 Topic 36 :
 
-0.049*"note" + 0.030*"version" + 0.030*"system" + 0.020*"problem" + 0.020*"spreadsheet" + 0.020*"look" + 0.020*"functionality" + 0.020*"major" + 0.020*"number" + 0.020*"good" + 0.020*"application" + 0.020*"Evernote" + 0.020*"bad" + 0.020*"verification" + 0.020*"upgrade" + 0.020*"city" + 0.020*"obvious" + 0.020*"release" + 0.010*"update" + 0.010*"message" 
+0.049*"note" + 0.030*"version" + 0.030*"system" + 0.020*"problem" + 0.020*"look" + 0.020*"functionality" + 0.020*"number" + 0.020*"good" + 0.020*"application" + 0.020*"spreadsheet" + 0.020*"major" + 0.020*"Evernote" + 0.020*"verification" + 0.020*"upgrade" + 0.020*"bad" + 0.020*"city" + 0.020*"obvious" + 0.020*"release" + 0.010*"update" + 0.010*"tool" 
 
 Topic 37 :
 
@@ -162,7 +162,7 @@ Topic 40 :
 
 Topic 41 :
 
-0.140*"problem" + 0.091*"way" + 0.046*"folder" + 0.033*"new" + 0.031*"layout" + 0.031*"pin" + 0.031*"button" + 0.031*"menu" + 0.031*"diy" + 0.031*"sure" + 0.015*"box" + 0.015*"close" + 0.015*"side" + 0.015*"bar" + 0.015*"x" + 0.015*"tap" + 0.015*"chance" + 0.015*"PIN" + 0.015*"correct" + 0.015*"mapping" 
+0.140*"problem" + 0.091*"way" + 0.046*"folder" + 0.033*"new" + 0.031*"layout" + 0.031*"pin" + 0.031*"button" + 0.031*"menu" + 0.031*"diy" + 0.031*"sure" + 0.015*"PIN" + 0.015*"chance" + 0.015*"box" + 0.015*"close" + 0.015*"side" + 0.015*"x" + 0.015*"correct" + 0.015*"bar" + 0.015*"tap" + 0.015*"annoyance" 
 
 Topic 42 :
 
@@ -174,7 +174,7 @@ Topic 43 :
 
 Topic 44 :
 
-0.036*"app" + 0.034*"hundred" + 0.034*"scam" + 0.034*"photo" + 0.034*"phone" + 0.034*"precious" + 0.034*"general" + 0.034*"pain" + 0.018*"bug" + 0.017*"bill" + 0.017*"way" + 0.017*"friend" + 0.017*"bird" + 0.017*"memory" + 0.017*"alllost" + 0.017*"time" + 0.017*"county" + 0.017*"hell" + 0.017*"cell" + 0.017*"game" 
+0.036*"app" + 0.034*"hundred" + 0.034*"photo" + 0.034*"precious" + 0.034*"scam" + 0.034*"phone" + 0.034*"general" + 0.034*"pain" + 0.018*"bug" + 0.017*"bill" + 0.017*"way" + 0.017*"friend" + 0.017*"bird" + 0.017*"memory" + 0.017*"alllost" + 0.017*"time" + 0.017*"county" + 0.017*"hell" + 0.017*"cell" + 0.017*"game" 
 
 Topic 45 :
 
@@ -202,7 +202,7 @@ Topic 50 :
 
 Topic 51 :
 
-0.324*"great" + 0.282*"app" + 0.059*"website" + 0.046*"problem" + 0.041*"update" + 0.016*"new" + 0.015*"useless" + 0.013*"password" + 0.012*"letter" + 0.012*"look" + 0.012*"class" + 0.006*"slow" + 0.006*"connection" + 0.006*"difficult" + 0.006*"useful" + 0.006*"desirable" + 0.006*"pretty" + 0.006*"crappy" + 0.006*"1" + 0.006*"grade" 
+0.324*"great" + 0.282*"app" + 0.059*"website" + 0.046*"problem" + 0.041*"update" + 0.016*"new" + 0.015*"useless" + 0.013*"password" + 0.012*"letter" + 0.012*"look" + 0.012*"class" + 0.006*"slow" + 0.006*"connection" + 0.006*"difficult" + 0.006*"desirable" + 0.006*"useful" + 0.006*"1" + 0.006*"crappy" + 0.006*"pretty" + 0.006*"grade" 
 
 Topic 52 :
 
@@ -226,7 +226,7 @@ Topic 56 :
 
 Topic 57 :
 
-0.073*"app" + 0.069*"good" + 0.046*"terrible" + 0.031*"numerous" + 0.031*"buggy" + 0.031*"version" + 0.031*"new" + 0.023*"problem" + 0.016*"location" + 0.016*"wrong" + 0.016*"pain" + 0.016*"search" + 0.016*"direction" + 0.016*"town" + 0.016*"hotel" + 0.016*"geographical" + 0.016*"step" + 0.016*"blue" + 0.016*"clean" + 0.016*"editing" 
+0.073*"app" + 0.069*"good" + 0.046*"terrible" + 0.031*"numerous" + 0.031*"version" + 0.031*"new" + 0.031*"buggy" + 0.023*"problem" + 0.016*"location" + 0.016*"wrong" + 0.016*"pain" + 0.016*"search" + 0.016*"direction" + 0.016*"town" + 0.016*"hotel" + 0.016*"geographical" + 0.016*"step" + 0.016*"blue" + 0.016*"clean" + 0.016*"editing" 
 
 Topic 58 :
 
@@ -238,7 +238,7 @@ Topic 59 :
 
 Topic 60 :
 
-0.141*"problem" + 0.124*"available" + 0.122*"update" + 0.082*"app" + 0.079*"page" + 0.034*"phone" + 0.023*"dropbox" + 0.023*"Pintrest" + 0.019*"version" + 0.011*"DROPBOX" + 0.011*"customer" + 0.011*"reason" + 0.011*"service" + 0.011*"videos" + 0.011*"ridiculous" + 0.011*"UPDATE" + 0.011*"late" + 0.011*"icon" + 0.011*"thing" + 0.011*"Update" 
+0.141*"problem" + 0.124*"available" + 0.122*"update" + 0.082*"app" + 0.079*"page" + 0.034*"phone" + 0.023*"dropbox" + 0.023*"Pintrest" + 0.019*"version" + 0.011*"DROPBOX" + 0.011*"videos" + 0.011*"service" + 0.011*"ridiculous" + 0.011*"customer" + 0.011*"thing" + 0.011*"reason" + 0.011*"late" + 0.011*"icon" + 0.011*"UPDATE" + 0.011*"Update" 
 
 Topic 61 :
 
@@ -270,7 +270,7 @@ Topic 67 :
 
 Topic 68 :
 
-0.051*"file" + 0.041*"zip" + 0.041*"UltraViolet" + 0.031*"movie" + 0.031*"document" + 0.031*"bad" + 0.031*"regular" + 0.022*"update" + 0.021*"app" + 0.021*"work" + 0.021*"Dropbox" + 0.021*"symbol" + 0.021*"teacher" + 0.021*"webpage" + 0.021*"screen" + 0.021*"copy" + 0.021*"blurry" + 0.021*"digital" + 0.021*"compatible" + 0.021*"problem" 
+0.051*"file" + 0.041*"zip" + 0.041*"UltraViolet" + 0.031*"document" + 0.031*"movie" + 0.031*"bad" + 0.031*"regular" + 0.022*"update" + 0.021*"app" + 0.021*"work" + 0.021*"Dropbox" + 0.021*"symbol" + 0.021*"teacher" + 0.021*"webpage" + 0.021*"screen" + 0.021*"copy" + 0.021*"blurry" + 0.021*"digital" + 0.021*"compatible" + 0.021*"problem" 
 
 Topic 69 :
 
@@ -290,7 +290,7 @@ Topic 72 :
 
 Topic 73 :
 
-0.127*"app" + 0.052*"update" + 0.048*"Evernote" + 0.044*"problem" + 0.016*"hang" + 0.016*"folder" + 0.016*"new" + 0.016*"month" + 0.016*"story" + 0.016*"note" + 0.016*"notebook" + 0.016*"iTunes" + 0.016*"reset" + 0.016*"people" + 0.016*"date" + 0.011*"day" + 0.008*"star" + 0.008*"blank" + 0.008*"screen" + 0.008*"action" 
+0.127*"app" + 0.052*"update" + 0.048*"Evernote" + 0.044*"problem" + 0.016*"hang" + 0.016*"folder" + 0.016*"new" + 0.016*"story" + 0.016*"month" + 0.016*"notebook" + 0.016*"note" + 0.016*"iTunes" + 0.016*"reset" + 0.016*"people" + 0.016*"date" + 0.011*"day" + 0.008*"star" + 0.008*"stuck" + 0.008*"tap" + 0.008*"blank" 
 
 Topic 74 :
 
@@ -365,39 +365,39 @@ HDP Model:
 
 Topic 1 :
 
-0.006*package + 0.005*problem + 0.005*material + 0.004*integration + 0.004*position + 0.004*starred + 0.004*advocate + 0.004*horrible + 0.004*item + 0.004*unhappy + 0.004*specific + 0.004*broken + 0.003*stuff + 0.003*individual + 0.003*IOS + 0.003*tiny + 0.003*Lame + 0.003*blurry + 0.003*ingredient + 0.003*responsible 
+0.006*package + 0.005*material + 0.005*problem + 0.004*integration + 0.004*position + 0.004*starred + 0.004*advocate + 0.004*item + 0.004*unhappy + 0.004*specific + 0.004*horrible + 0.004*broken + 0.003*stuff + 0.003*individual + 0.003*IOS + 0.003*tiny + 0.003*Lame + 0.003*blurry + 0.003*ingredient + 0.003*responsible 
 
 Topic 2 :
 
-0.005*UX + 0.004*cached + 0.004*Love + 0.004*basis + 0.004*webview + 0.004*preview + 0.004*weird + 0.004*room + 0.004*file + 0.003*poor + 0.003*egregious + 0.003*shape + 0.003*imagesi + 0.003*whatsapp + 0.003*fun + 0.003*occasionally + 0.003*brand + 0.003*taking + 0.003*catch + 0.003*close 
+0.005*UX + 0.004*cached + 0.004*Love + 0.004*basis + 0.004*webview + 0.004*weird + 0.004*room + 0.004*preview + 0.003*poor + 0.003*file + 0.003*egregious + 0.003*shape + 0.003*imagesi + 0.003*whatsapp + 0.003*fun + 0.003*occasionally + 0.003*brand + 0.003*taking + 0.003*catch + 0.003*close 
 
 Topic 3 :
 
-0.007*pinning + 0.006*board + 0.006*pinger + 0.005*refund + 0.004*fix + 0.004*updae + 0.004*keyboard + 0.004*4s + 0.004*excess + 0.004*TripAdvisor + 0.004*App + 0.004*half + 0.004*usability + 0.004*Fail + 0.003*success + 0.003*slow + 0.003*photo + 0.003*doc + 0.003*cloud + 0.003*smartphn 
+0.006*english + 0.005*alllost + 0.004*photography + 0.004*key + 0.004*Works + 0.004*feature + 0.004*sensitive + 0.004*epub + 0.004*spell + 0.004*cached + 0.004*organization + 0.004*basis + 0.004*making + 0.003*story + 0.003*k + 0.003*formatting + 0.003*new + 0.003*safe + 0.003*job + 0.003*Buggy 
 
 Topic 4 :
 
-0.006*english + 0.005*alllost + 0.004*photography + 0.004*key + 0.004*Works + 0.004*sensitive + 0.004*feature + 0.004*epub + 0.004*spell + 0.004*cached + 0.004*organization + 0.004*basis + 0.004*new + 0.004*making + 0.003*story + 0.003*k + 0.003*formatting + 0.003*safe + 0.003*job + 0.003*Buggy 
+0.007*pinning + 0.006*board + 0.006*pinger + 0.005*refund + 0.004*fix + 0.004*updae + 0.004*keyboard + 0.004*4s + 0.004*excess + 0.004*TripAdvisor + 0.004*App + 0.004*photo + 0.004*half + 0.004*usability + 0.004*Fail + 0.003*success + 0.003*slow + 0.003*doc + 0.003*cloud + 0.003*smartphn 
 
 Topic 5 :
 
-0.005*South + 0.005*instruction + 0.005*suggestion + 0.004*ingredient + 0.004*post + 0.004*open + 0.004*updte + 0.004*material + 0.004*Enjoy + 0.004*face + 0.004*certain + 0.004*everyonce + 0.004*transmission + 0.004*spam + 0.004*way + 0.003*inaccurate + 0.003*star + 0.003*mobility + 0.003*legacy + 0.003*stability 
+0.005*South + 0.005*instruction + 0.005*suggestion + 0.004*ingredient + 0.004*post + 0.004*open + 0.004*updte + 0.004*Enjoy + 0.004*material + 0.004*certain + 0.004*face + 0.004*everyonce + 0.004*transmission + 0.004*spam + 0.004*way + 0.003*inaccurate + 0.003*star + 0.003*mobility + 0.003*legacy + 0.003*stability 
 
 Topic 6 :
 
-0.005*frozen + 0.005*permanent + 0.005*air + 0.004*extreme + 0.004*meaning + 0.004*previous + 0.004*overall + 0.004*success + 0.004*long + 0.004*bullet + 0.004*hebrew + 0.004*crashing + 0.003*book + 0.003*101 + 0.003*aren + 0.003*environment + 0.003*pinger + 0.003*person + 0.003*crash + 0.003*closed 
+0.005*frozen + 0.005*permanent + 0.005*air + 0.004*extreme + 0.004*previous + 0.004*meaning + 0.004*overall + 0.004*success + 0.004*long + 0.004*bullet + 0.004*hebrew + 0.004*crashing + 0.003*book + 0.003*101 + 0.003*aren + 0.003*environment + 0.003*pinger + 0.003*person + 0.003*crash + 0.003*closed 
 
 Topic 7 :
 
-0.005*wiktionary + 0.005*authorization + 0.005*colored + 0.005*upset + 0.005*pinterest + 0.004*block + 0.004*verification + 0.004*game + 0.004*physical + 0.004*staff + 0.004*UI + 0.004*Flat + 0.004*Premium + 0.004*3rd + 0.003*action + 0.003*Fire + 0.003*navigation + 0.003*omission + 0.003*stability + 0.003*crap 
+0.006*Ledmetallicadc + 0.005*rythme + 0.004*response + 0.004*apple + 0.004*mainstay + 0.004*search + 0.004*lenovo + 0.004*Whatsapp + 0.004*detailed + 0.004*alert + 0.004*flicker + 0.003*iPhoto + 0.003*fact + 0.003*average + 0.003*alot + 0.003*entire + 0.003*cached + 0.003*Enjoy + 0.003*DropBox + 0.003*familysure 
 
 Topic 8 :
 
-0.006*Ledmetallicadc + 0.005*rythme + 0.004*response + 0.004*apple + 0.004*mainstay + 0.004*search + 0.004*lenovo + 0.004*Whatsapp + 0.004*detailed + 0.004*alert + 0.004*iPhoto + 0.003*flicker + 0.003*average + 0.003*alot + 0.003*entire + 0.003*fact + 0.003*cached + 0.003*Enjoy + 0.003*DropBox + 0.003*familysure 
+0.005*wiktionary + 0.005*authorization + 0.005*colored + 0.005*upset + 0.005*pinterest + 0.004*block + 0.004*verification + 0.004*game + 0.004*staff + 0.004*physical + 0.004*UI + 0.004*Flat + 0.004*Premium + 0.004*3rd + 0.003*action + 0.003*Fire + 0.003*navigation + 0.003*omission + 0.003*stability + 0.003*crap 
 
 Topic 9 :
 
-0.005*weekend + 0.005*glitchie + 0.005*boo + 0.005*ui + 0.004*TripAdvisor + 0.004*5S + 0.004*45 + 0.004*emoticon + 0.004*aren + 0.004*thin + 0.004*video + 0.003*new + 0.003*copy + 0.003*staut + 0.003*apparent + 0.003*commitment + 0.003*paste + 0.003*permanent + 0.003*doc + 0.003*joke 
+0.005*weekend + 0.005*glitchie + 0.005*boo + 0.005*ui + 0.004*TripAdvisor + 0.004*5S + 0.004*45 + 0.004*emoticon + 0.004*aren + 0.004*thin + 0.004*video + 0.003*staut + 0.003*copy + 0.003*apparent + 0.003*commitment + 0.003*paste + 0.003*permanent + 0.003*doc + 0.003*new + 0.003*joke 
 
 Topic 10 :
 
@@ -405,19 +405,19 @@ Topic 10 :
 
 Topic 11 :
 
-0.006*little + 0.006*idea + 0.006*search + 0.005*slow + 0.005*lumia + 0.005*program + 0.005*doc + 0.005*ball + 0.004*beautiful + 0.004*fun + 0.004*flash + 0.004*rare + 0.004*uptodate + 0.004*prior + 0.003*old + 0.003*premium + 0.003*losing + 0.003*brightness + 0.003*sake + 0.003*invention 
+0.007*Worst + 0.006*Renee + 0.004*spotty + 0.004*follow + 0.004*release + 0.004*Ugh + 0.004*pdfs + 0.004*proponent + 0.004*qb + 0.004*wifi + 0.004*gud + 0.004*yesterday + 0.004*frustrating + 0.004*background + 0.004*GROUP + 0.003*bugsproblem + 0.003*religion + 0.003*100 + 0.003*quality + 0.003*available 
 
 Topic 12 :
 
-0.007*Worst + 0.006*Renee + 0.004*spotty + 0.004*follow + 0.004*release + 0.004*Ugh + 0.004*pdfs + 0.004*proponent + 0.004*qb + 0.004*wifi + 0.004*gud + 0.004*yesterday + 0.004*frustrating + 0.004*background + 0.004*GROUP + 0.003*bugsproblem + 0.003*religion + 0.003*100 + 0.003*quality + 0.003*available 
+0.006*little + 0.006*idea + 0.006*search + 0.005*slow + 0.005*lumia + 0.005*program + 0.005*doc + 0.005*ball + 0.004*beautiful + 0.004*fun + 0.004*flash + 0.004*rare + 0.004*uptodate + 0.004*prior + 0.003*old + 0.003*premium + 0.003*losing + 0.003*brightness + 0.003*sake + 0.003*invention 
 
 Topic 13 :
 
-0.007*blue + 0.006*process + 0.005*large + 0.005*restart + 0.005*craziness + 0.005*vice + 0.005*smooth + 0.004*stability + 0.004*500 + 0.004*Renee + 0.004*familysure + 0.004*luck + 0.004*indentation + 0.004*amazing + 0.004*accuracy + 0.004*website + 0.004*conversation + 0.004*standpoint + 0.004*caution + 0.004*stupid 
+0.006*stand + 0.005*tomorrow + 0.005*air + 0.004*stability + 0.004*photo + 0.004*nGuys + 0.004*look + 0.004*reason + 0.004*mess + 0.004*whch + 0.004*conflict + 0.003*previous + 0.003*stuck + 0.003*doesn + 0.003*beginning + 0.003*hope + 0.003*e + 0.003*total + 0.003*Warner + 0.003*EMS 
 
 Topic 14 :
 
-0.006*stand + 0.005*tomorrow + 0.005*air + 0.004*stability + 0.004*photo + 0.004*nGuys + 0.004*look + 0.004*reason + 0.004*mess + 0.004*whch + 0.004*conflict + 0.003*previous + 0.003*stuck + 0.003*doesn + 0.003*beginning + 0.003*hope + 0.003*e + 0.003*total + 0.003*Warner + 0.003*EMS 
+0.007*blue + 0.006*process + 0.005*large + 0.005*restart + 0.005*craziness + 0.005*vice + 0.005*smooth + 0.004*stability + 0.004*500 + 0.004*Renee + 0.004*familysure + 0.004*luck + 0.004*indentation + 0.004*amazing + 0.004*accuracy + 0.004*website + 0.004*conversation + 0.004*standpoint + 0.004*caution + 0.004*playlist 
 
 Topic 15 :
 
@@ -433,15 +433,15 @@ Topic 17 :
 
 Topic 18 :
 
-0.006*datum + 0.006*wav + 0.005*album + 0.004*subscriber + 0.004*ppl + 0.004*occasional + 0.004*trouble + 0.004*available + 0.004*street + 0.004*alert + 0.004*shortcut + 0.004*cent + 0.004*city + 0.004*customization + 0.003*review + 0.003*Instagram + 0.003*recipe + 0.003*updae + 0.003*joke + 0.003*green 
+0.006*web + 0.005*fashion + 0.005*student + 0.005*Samsung + 0.005*patience + 0.005*Atlanta + 0.004*follower + 0.004*functional + 0.004*UltraViolet + 0.004*Scores + 0.004*location + 0.004*similar + 0.004*proper + 0.003*alot + 0.003*useable + 0.003*thank + 0.003*minor + 0.003*intuitive + 0.003*random + 0.003*waste 
 
 Topic 19 :
 
-0.006*web + 0.005*fashion + 0.005*student + 0.005*Samsung + 0.005*patience + 0.005*Atlanta + 0.004*follower + 0.004*functional + 0.004*UltraViolet + 0.004*Scores + 0.004*location + 0.004*similar + 0.004*proper + 0.003*alot + 0.003*useable + 0.003*thank + 0.003*minor + 0.003*intuitive + 0.003*random + 0.003*waste 
+0.005*beach + 0.004*oop + 0.004*late + 0.004*student + 0.004*hide + 0.004*upcoming + 0.004*money + 0.004*ui + 0.004*uploaded + 0.003*permission + 0.003*important + 0.003*tagging + 0.003*juice + 0.003*UltraViolet + 0.003*Zero + 0.003*window + 0.003*blockquote + 0.003*glad + 0.003*didn + 0.003*info 
 
 Topic 20 :
 
-0.005*beach + 0.004*oop + 0.004*late + 0.004*student + 0.004*hide + 0.004*upcoming + 0.004*money + 0.004*ui + 0.004*uploaded + 0.003*permission + 0.003*important + 0.003*tagging + 0.003*juice + 0.003*UltraViolet + 0.003*Zero + 0.003*window + 0.003*blockquote + 0.003*glad + 0.003*didn + 0.003*info 
+0.006*datum + 0.006*wav + 0.005*album + 0.004*subscriber + 0.004*ppl + 0.004*occasional + 0.004*trouble + 0.004*available + 0.004*street + 0.004*alert + 0.004*shortcut + 0.004*cent + 0.004*city + 0.004*customization + 0.003*Instagram + 0.003*recipe + 0.003*updae + 0.003*review + 0.003*joke + 0.003*green 
 
 Topic 21 :
 
@@ -453,19 +453,19 @@ Topic 22 :
 
 Topic 23 :
 
-0.005*item + 0.005*frnd + 0.005*Renee + 0.005*Atlanta + 0.004*detailed + 0.004*favorite + 0.004*nut + 0.004*b + 0.004*shape + 0.004*advantage + 0.004*reinstall + 0.004*green + 0.004*EN + 0.004*rest + 0.004*chapter + 0.004*download + 0.003*advance + 0.003*Haven + 0.003*fone + 0.003*kitchen 
+0.007*macros + 0.006*functional + 0.005*uninstalling + 0.005*launch + 0.005*architecture + 0.005*concert + 0.004*function + 0.004*advise + 0.004*problem + 0.004*maps + 0.004*album + 0.004*performance + 0.004*1st + 0.004*single + 0.003*gift + 0.003*Updating + 0.003*grand + 0.003*luck + 0.003*system + 0.003*reboot 
 
 Topic 24 :
 
-0.004*X + 0.004*minor + 0.004*change + 0.004*app + 0.004*fool + 0.004*flash + 0.004*week + 0.004*account + 0.004*losing + 0.004*unexpected + 0.003*eat + 0.003*green + 0.003*work + 0.003*bookmark + 0.003*air + 0.003*start + 0.003*Instagram + 0.003*regularity + 0.003*search + 0.003*ability 
+0.005*item + 0.005*frnd + 0.005*Renee + 0.005*Atlanta + 0.004*detailed + 0.004*favorite + 0.004*nut + 0.004*shape + 0.004*b + 0.004*advantage + 0.004*reinstall + 0.004*green + 0.004*EN + 0.004*rest + 0.004*chapter + 0.004*download + 0.003*advance + 0.003*Haven + 0.003*fone + 0.003*kitchen 
 
 Topic 25 :
 
-0.005*call + 0.005*30 + 0.004*hundred + 0.004*advise + 0.004*hotel + 0.004*note + 0.004*worthy + 0.004*company + 0.004*pinger + 0.004*editing + 0.004*numerous + 0.004*hacker + 0.004*delete + 0.004*catch + 0.003*flawless + 0.003*uploading + 0.003*severe + 0.003*ball + 0.003*cz + 0.003*horseback 
+0.004*X + 0.004*minor + 0.004*change + 0.004*fool + 0.004*flash + 0.004*week + 0.004*app + 0.004*account + 0.004*losing + 0.004*unexpected + 0.003*eat + 0.003*green + 0.003*work + 0.003*bookmark + 0.003*air + 0.003*start + 0.003*Instagram + 0.003*regularity + 0.003*search + 0.003*ability 
 
 Topic 26 :
 
-0.007*macros + 0.006*functional + 0.005*uninstalling + 0.005*launch + 0.005*architecture + 0.005*concert + 0.004*advise + 0.004*function + 0.004*maps + 0.004*album + 0.004*problem + 0.004*performance + 0.004*1st + 0.004*single + 0.003*gift + 0.003*Updating + 0.003*grand + 0.003*luck + 0.003*system + 0.003*reboot 
+0.005*call + 0.005*30 + 0.004*hundred + 0.004*note + 0.004*advise + 0.004*hotel + 0.004*worthy + 0.004*company + 0.004*pinger + 0.004*hacker + 0.004*editing + 0.004*numerous + 0.004*delete + 0.004*catch + 0.003*flawless + 0.003*uploading + 0.003*severe + 0.003*ball + 0.003*cz + 0.003*horseback 
 
 Topic 27 :
 
@@ -473,31 +473,31 @@ Topic 27 :
 
 Topic 28 :
 
-0.004*wifi + 0.004*70 + 0.004*auto + 0.004*song + 0.004*employee + 0.004*wiktionary + 0.004*freezing + 0.004*trouble + 0.004*compatible + 0.004*home + 0.003*inoperable + 0.003*bluetooth + 0.003*tribe + 0.003*plenty + 0.003*wife + 0.003*fifth + 0.003*daily + 0.003*Allie + 0.003*note + 0.003*fact 
+0.004*wifi + 0.004*70 + 0.004*auto + 0.004*song + 0.004*employee + 0.004*wiktionary + 0.004*freezing + 0.004*trouble + 0.004*compatible + 0.004*home + 0.003*inoperable + 0.003*bluetooth + 0.003*tribe + 0.003*plenty + 0.003*wife + 0.003*fifth + 0.003*daily + 0.003*Allie + 0.003*annoying + 0.003*illegible 
 
 Topic 29 :
 
-0.006*shortcut + 0.005*global + 0.005*frnd + 0.005*unpredictable + 0.004*complicated + 0.004*bar + 0.004*star + 0.004*b + 0.004*filter + 0.004*lack + 0.004*expect + 0.004*hotel + 0.004*reliant + 0.004*delicious + 0.003*unstable + 0.003*slow + 0.003*nDon + 0.003*Whatsapp + 0.003*3 + 0.003*current 
+0.006*shortcut + 0.005*global + 0.005*frnd + 0.005*unpredictable + 0.004*complicated + 0.004*bar + 0.004*star + 0.004*b + 0.004*filter + 0.004*lack + 0.004*hotel + 0.004*reliant + 0.004*delicious + 0.004*expect + 0.003*unstable + 0.003*slow + 0.003*nDon + 0.003*3 + 0.003*Whatsapp + 0.003*current 
 
 Topic 30 :
 
-0.006*study + 0.006*time + 0.005*app + 0.005*brand + 0.004*world + 0.004*glitch + 0.004*show + 0.004*iPadno + 0.004*stat + 0.004*story + 0.004*result + 0.004*well + 0.004*kid + 0.004*wrong + 0.004*close + 0.004*spotty + 0.004*rich + 0.003*brew + 0.003*functionality + 0.003*pale 
+0.006*DropBox + 0.006*proper + 0.005*quality + 0.004*didn + 0.004*3 + 0.004*k + 0.004*customization + 0.004*form + 0.004*Works + 0.004*familysure + 0.004*fave + 0.004*cheap + 0.003*zip + 0.003*available + 0.003*cause + 0.003*general + 0.003*customer + 0.003*Fire + 0.003*alphabetical + 0.003*video 
 
 Topic 31 :
 
-0.006*chey + 0.004*picturesnotesmemos + 0.004*fone + 0.004*nightmare + 0.004*file + 0.004*cloud + 0.004*hour + 0.004*drive + 0.004*45 + 0.004*lack + 0.004*avid + 0.004*3 + 0.004*ABC + 0.004*deposit + 0.003*whatsapp + 0.003*desktop + 0.003*podcast + 0.003*1st + 0.003*fake + 0.003*nthe 
+0.008*planet + 0.006*graphic + 0.005*bluetooth + 0.005*note + 0.005*flicker + 0.004*card + 0.004*boarding + 0.004*fb + 0.004*bloated + 0.004*lucky + 0.004*proper + 0.004*outdated + 0.004*videos + 0.004*staut + 0.004*comment + 0.004*proximity + 0.003*hacker + 0.003*pretty + 0.003*concept + 0.003*tap 
 
 Topic 32 :
 
-0.007*description + 0.007*old + 0.006*extreme + 0.006*frequent + 0.005*occasionally + 0.005*pattern + 0.004*iPad + 0.004*chey + 0.004*paragraph + 0.004*censor + 0.004*crappy + 0.004*editor + 0.004*accuracy + 0.004*worthy + 0.004*faithful + 0.003*version + 0.003*yesterday + 0.003*couple + 0.003*Don + 0.003*initial 
+0.006*chey + 0.004*picturesnotesmemos + 0.004*fone + 0.004*nightmare + 0.004*cloud + 0.004*file + 0.004*hour + 0.004*drive + 0.004*45 + 0.004*lack + 0.004*avid + 0.004*3 + 0.004*ABC + 0.004*deposit + 0.003*whatsapp + 0.003*desktop + 0.003*podcast + 0.003*1st + 0.003*fake + 0.003*nthe 
 
 Topic 33 :
 
-0.006*laptop + 0.005*text + 0.005*fattal + 0.004*available + 0.004*street + 0.004*restart + 0.004*notesit + 0.004*funny + 0.004*automatic + 0.004*legacy + 0.003*eye + 0.003*upgradeable + 0.003*msg + 0.003*NICE + 0.003*complicated + 0.003*rubbish + 0.003*12 + 0.003*mainstay + 0.003*correct + 0.003*cheap 
+0.006*time + 0.006*study + 0.005*brand + 0.004*world + 0.004*glitch + 0.004*iPadno + 0.004*show + 0.004*stat + 0.004*app + 0.004*well + 0.004*story + 0.004*result + 0.004*kid + 0.004*close + 0.004*spotty + 0.004*wrong + 0.004*rich + 0.004*brew + 0.003*functionality + 0.003*pale 
 
 Topic 34 :
 
-0.006*DropBox + 0.006*proper + 0.005*quality + 0.004*didn + 0.004*3 + 0.004*k + 0.004*customization + 0.004*form + 0.004*Works + 0.004*familysure + 0.004*fave + 0.004*cheap + 0.003*zip + 0.003*available + 0.003*general + 0.003*cause + 0.003*customer + 0.003*Fire + 0.003*alphabetical + 0.003*video 
+0.006*laptop + 0.005*text + 0.005*fattal + 0.004*available + 0.004*street + 0.004*restart + 0.004*notesit + 0.004*funny + 0.004*automatic + 0.004*legacy + 0.003*eye + 0.003*upgradeable + 0.003*msg + 0.003*NICE + 0.003*complicated + 0.003*rubbish + 0.003*12 + 0.003*mainstay + 0.003*correct + 0.003*cheap 
 
 Topic 35 :
 
@@ -505,55 +505,55 @@ Topic 35 :
 
 Topic 36 :
 
-0.008*operator + 0.004*revision + 0.004*bullet + 0.004*intensive + 0.004*year + 0.004*busy + 0.004*success + 0.004*iri + 0.004*attraction + 0.004*spinner + 0.004*love + 0.004*fair + 0.003*upgradeable + 0.003*super + 0.003*numerous + 0.003*contribution + 0.003*content + 0.003*saturation + 0.003*point + 0.003*xls 
+0.007*description + 0.006*extreme + 0.006*old + 0.006*frequent + 0.005*occasionally + 0.005*pattern + 0.005*iPad + 0.004*chey + 0.004*paragraph + 0.004*censor + 0.004*crappy + 0.004*editor + 0.004*accuracy + 0.004*worthy + 0.004*faithful + 0.003*yesterday + 0.003*couple + 0.003*Don + 0.003*initial + 0.003*pool 
 
 Topic 37 :
 
-0.005*effort + 0.005*nevernote + 0.005*dock + 0.005*tiny + 0.005*bothersome + 0.005*developer + 0.004*quick + 0.004*concept + 0.004*cell + 0.004*grade + 0.004*receiver + 0.004*clunky + 0.004*customization + 0.004*summary + 0.004*UX + 0.003*timesbut + 0.003*badge + 0.003*iPhoto + 0.003*roam + 0.003*hand 
+0.006*usefulness + 0.005*erratic + 0.005*BSRA1028 + 0.005*cast + 0.005*quick + 0.004*keyboard + 0.004*conflict + 0.004*Apple + 0.004*hour + 0.004*money + 0.004*staut + 0.004*ton + 0.004*bread + 0.003*favorite + 0.003*pinterest + 0.003*illegible + 0.003*accuracy + 0.003*connect + 0.003*precious + 0.003*year 
 
 Topic 38 :
 
-0.007*iphone + 0.006*bug + 0.006*msg + 0.005*Love + 0.005*laptop + 0.005*12th + 0.005*study + 0.004*Lin + 0.004*peepz + 0.004*hell + 0.004*predictable + 0.003*modern + 0.003*dependable + 0.003*Comm + 0.003*rest + 0.003*minor + 0.003*idea + 0.003*pack + 0.003*creative + 0.003*wish 
+0.008*operator + 0.004*bullet + 0.004*revision + 0.004*intensive + 0.004*year + 0.004*busy + 0.004*success + 0.004*iri + 0.004*attraction + 0.004*spinner + 0.004*love + 0.004*fair + 0.003*upgradeable + 0.003*super + 0.003*contribution + 0.003*content + 0.003*saturation + 0.003*point + 0.003*numerous + 0.003*xls 
 
 Topic 39 :
 
-0.007*hotfix + 0.005*shortcut + 0.005*bs + 0.005*personality + 0.004*whiteout + 0.004*theory + 0.004*role + 0.004*blue + 0.004*audio + 0.004*total + 0.004*TripAdvisor + 0.003*offer + 0.003*peek + 0.003*border + 0.003*amazing + 0.003*research + 0.003*doesn + 0.003*detailed + 0.003*sync + 0.003*digital 
+0.005*effort + 0.005*nevernote + 0.005*dock + 0.005*tiny + 0.005*bothersome + 0.005*developer + 0.004*quick + 0.004*concept + 0.004*cell + 0.004*grade + 0.004*receiver + 0.004*clunky + 0.004*customization + 0.004*summary + 0.004*UX + 0.003*timesbut + 0.003*badge + 0.003*iPhoto + 0.003*roam + 0.003*hand 
 
 Topic 40 :
 
-0.006*usefulness + 0.005*erratic + 0.005*BSRA1028 + 0.005*cast + 0.005*quick + 0.004*keyboard + 0.004*conflict + 0.004*Apple + 0.004*hour + 0.004*money + 0.004*staut + 0.004*ton + 0.004*bread + 0.003*favorite + 0.003*pinterest + 0.003*illegible + 0.003*accuracy + 0.003*connect + 0.003*precious + 0.003*year 
+0.007*hotfix + 0.005*shortcut + 0.005*bs + 0.005*personality + 0.004*whiteout + 0.004*theory + 0.004*role + 0.004*blue + 0.004*audio + 0.004*total + 0.004*TripAdvisor + 0.003*offer + 0.003*peek + 0.003*border + 0.003*amazing + 0.003*research + 0.003*doesn + 0.003*detailed + 0.003*sync + 0.003*digital 
 
 Topic 41 :
 
-0.008*planet + 0.006*graphic + 0.005*bluetooth + 0.005*flicker + 0.004*card + 0.004*boarding + 0.004*note + 0.004*fb + 0.004*bloated + 0.004*lucky + 0.004*proper + 0.004*outdated + 0.004*videos + 0.004*staut + 0.004*comment + 0.004*proximity + 0.004*hacker + 0.003*pretty + 0.003*concept + 0.003*tap 
+0.005*order + 0.005*kind + 0.005*s4 + 0.004*action + 0.004*tee + 0.004*joke + 0.004*advantage + 0.004*period + 0.004*universal + 0.004*selection + 0.004*dialog + 0.003*call + 0.003*Ford + 0.003*operator + 0.003*addictive + 0.003*censor + 0.003*nEvernote + 0.003*HTC + 0.003*Bug + 0.003*notesit 
 
 Topic 42 :
 
-0.005*order + 0.005*kind + 0.005*s4 + 0.004*action + 0.004*tee + 0.004*joke + 0.004*advantage + 0.004*period + 0.004*universal + 0.004*selection + 0.004*dialog + 0.003*call + 0.003*Ford + 0.003*operator + 0.003*addictive + 0.003*censor + 0.003*nEvernote + 0.003*HTC + 0.003*Bug + 0.003*notesit 
+0.007*101 + 0.005*feature + 0.005*person + 0.005*indentation + 0.005*sayin + 0.004*3 + 0.004*landscape + 0.004*annoyance + 0.004*menu + 0.004*gb + 0.004*Facebook + 0.004*Flat + 0.004*form + 0.003*os + 0.003*Renee + 0.003*record + 0.003*switch + 0.003*desirable + 0.003*epub + 0.003*kid 
 
 Topic 43 :
 
-0.005*MB + 0.005*sudden + 0.005*nmove + 0.004*historic + 0.004*chance + 0.004*kitchen + 0.004*status + 0.004*itouch + 0.004*recipe + 0.004*favor + 0.004*UltraViolet + 0.004*NFL + 0.004*ios7 + 0.004*small + 0.004*seat + 0.004*perfect + 0.003*indentation + 0.003*Pinterest + 0.003*0 + 0.003*marketing 
+0.007*iphone + 0.006*bug + 0.006*msg + 0.005*Love + 0.005*laptop + 0.005*12th + 0.005*study + 0.004*Lin + 0.004*peepz + 0.004*hell + 0.004*predictable + 0.003*modern + 0.003*dependable + 0.003*Comm + 0.003*rest + 0.003*minor + 0.003*idea + 0.003*pack + 0.003*creative + 0.003*wish 
 
 Topic 44 :
 
-0.006*conversation + 0.005*UX + 0.005*bad + 0.004*process + 0.004*stable + 0.004*lumia + 0.004*disappointment + 0.004*universal + 0.004*estate + 0.004*people + 0.004*invention + 0.004*work + 0.004*global + 0.004*specific + 0.003*warning + 0.003*situation + 0.003*pinner + 0.003*stand + 0.003*short + 0.003*night 
+0.005*versa + 0.005*deposit + 0.005*door + 0.005*tagging + 0.004*month + 0.004*street + 0.004*timesbut + 0.004*unhappy + 0.004*funny + 0.004*ABC + 0.004*ipad2 + 0.004*individual + 0.004*song + 0.004*reverse + 0.003*bloated + 0.003*lapse + 0.003*teacher + 0.003*temp + 0.003*future + 0.003*category 
 
 Topic 45 :
 
-0.006*GROUP + 0.006*updte + 0.006*webpage + 0.005*style + 0.005*hue + 0.004*tag + 0.004*dependable + 0.004*area + 0.004*un + 0.004*fair + 0.004*equipment + 0.003*startup + 0.003*gud + 0.003*DropBox + 0.003*standpoint + 0.003*doctoral + 0.003*patch + 0.003*try + 0.003*bunch + 0.003*Flixster 
+0.006*conversation + 0.005*UX + 0.005*bad + 0.004*process + 0.004*stable + 0.004*lumia + 0.004*disappointment + 0.004*universal + 0.004*estate + 0.004*people + 0.004*invention + 0.004*work + 0.004*global + 0.004*specific + 0.003*warning + 0.003*situation + 0.003*pinner + 0.003*stand + 0.003*short + 0.003*night 
 
 Topic 46 :
 
-0.005*versa + 0.005*deposit + 0.005*door + 0.005*tagging + 0.004*month + 0.004*street + 0.004*timesbut + 0.004*unhappy + 0.004*funny + 0.004*ABC + 0.004*ipad2 + 0.004*individual + 0.004*song + 0.004*reverse + 0.003*bloated + 0.003*lapse + 0.003*teacher + 0.003*temp + 0.003*future + 0.003*category 
+0.005*MB + 0.005*sudden + 0.005*nmove + 0.004*historic + 0.004*chance + 0.004*kitchen + 0.004*status + 0.004*itouch + 0.004*recipe + 0.004*favor + 0.004*perfect + 0.004*UltraViolet + 0.004*NFL + 0.004*ios7 + 0.004*small + 0.004*seat + 0.003*indentation + 0.003*Pinterest + 0.003*0 + 0.003*marketing 
 
 Topic 47 :
 
-0.007*101 + 0.005*feature + 0.005*person + 0.005*indentation + 0.005*sayin + 0.004*3 + 0.004*landscape + 0.004*annoyance + 0.004*menu + 0.004*gb + 0.004*Facebook + 0.004*Flat + 0.004*form + 0.003*os + 0.003*Renee + 0.003*record + 0.003*switch + 0.003*desirable + 0.003*epub + 0.003*kid 
+0.006*GROUP + 0.006*updte + 0.006*webpage + 0.005*style + 0.005*hue + 0.004*tag + 0.004*dependable + 0.004*area + 0.004*un + 0.004*fair + 0.004*equipment + 0.003*startup + 0.003*gud + 0.003*DropBox + 0.003*standpoint + 0.003*doctoral + 0.003*patch + 0.003*try + 0.003*bunch + 0.003*Flixster 
 
 Topic 48 :
 
-0.005*videos + 0.004*appplease + 0.004*general + 0.004*numerous + 0.004*Album + 0.004*combat + 0.004*secrion + 0.004*BSRA1028 + 0.004*didn + 0.004*maximization + 0.004*wrong + 0.003*work + 0.003*stand + 0.003*online + 0.003*high + 0.003*reinstallation + 0.003*delicious + 0.003*competition + 0.003*webview + 0.003*5S 
+0.005*videos + 0.004*appplease + 0.004*general + 0.004*numerous + 0.004*Album + 0.004*secrion + 0.004*combat + 0.004*BSRA1028 + 0.004*didn + 0.004*maximization + 0.004*wrong + 0.003*work + 0.003*stand + 0.003*online + 0.003*high + 0.003*reinstallation + 0.003*delicious + 0.003*competition + 0.003*webview + 0.003*5S 
 
 Topic 49 :
 
@@ -561,139 +561,139 @@ Topic 49 :
 
 Topic 50 :
 
-0.006*Bakwas + 0.005*mad + 0.005*few + 0.004*customization + 0.004*daughter + 0.004*cut + 0.004*medium + 0.004*freakin + 0.004*15th + 0.004*cause + 0.004*happy + 0.004*Lame + 0.004*category + 0.003*proximity + 0.003*UX + 0.003*inability + 0.003*ridiculous + 0.003*length + 0.003*accurate + 0.003*rubbish 
+0.007*worthless + 0.006*rice + 0.004*cover + 0.004*old + 0.004*aren + 0.004*restart + 0.004*Fox + 0.004*burn + 0.004*reset + 0.004*disastrous + 0.004*cent + 0.004*skeumorphic + 0.004*big + 0.004*photo + 0.004*equipment + 0.003*unable + 0.003*ad + 0.003*pass + 0.003*Comm + 0.003*decor 
 
 Topic 51 :
 
-0.007*worthless + 0.006*rice + 0.004*cover + 0.004*old + 0.004*aren + 0.004*restart + 0.004*Fox + 0.004*burn + 0.004*reset + 0.004*disastrous + 0.004*cent + 0.004*skeumorphic + 0.004*big + 0.004*photo + 0.004*equipment + 0.003*unable + 0.003*ad + 0.003*pass + 0.003*Comm + 0.003*decor 
+0.006*global + 0.004*post + 0.004*preview + 0.004*3rd + 0.004*paste + 0.004*Wifi + 0.004*possible + 0.004*individual + 0.004*song + 0.004*shot + 0.004*qb + 0.004*subtopic + 0.003*updae + 0.003*crash + 0.003*representation + 0.003*backup + 0.003*role + 0.003*East + 0.003*share + 0.003*page 
 
 Topic 52 :
 
-0.007*alot + 0.005*aren + 0.005*yesterday + 0.005*ready + 0.004*0 + 0.004*iphone + 0.004*EMS + 0.004*service + 0.004*info + 0.004*2011 + 0.004*nthe + 0.004*save + 0.004*ios + 0.004*death + 0.004*progress + 0.004*tee + 0.004*comopatible + 0.004*tomorrow + 0.003*everyonce + 0.003*card 
+0.007*alot + 0.005*aren + 0.005*yesterday + 0.005*ready + 0.005*iphone + 0.004*0 + 0.004*EMS + 0.004*service + 0.004*info + 0.004*2011 + 0.004*save + 0.004*nthe + 0.004*death + 0.004*ios + 0.004*tee + 0.004*comopatible + 0.004*tomorrow + 0.003*everyonce + 0.003*card + 0.003*progress 
 
 Topic 53 :
 
-0.006*global + 0.004*post + 0.004*preview + 0.004*3rd + 0.004*paste + 0.004*Wifi + 0.004*possible + 0.004*individual + 0.004*song + 0.004*shot + 0.004*qb + 0.004*subtopic + 0.003*updae + 0.003*crash + 0.003*representation + 0.003*backup + 0.003*role + 0.003*East + 0.003*share + 0.003*page 
+0.006*view + 0.005*advance + 0.004*1st + 0.004*uploaded + 0.004*caution + 0.004*user + 0.004*homepage + 0.004*updte + 0.004*modest + 0.004*initial + 0.004*bread + 0.004*religion + 0.004*glitchy + 0.004*strange + 0.004*historic + 0.004*tag + 0.003*burn + 0.003*left + 0.003*char + 0.003*color 
 
 Topic 54 :
 
-0.006*AirPrint + 0.005*update + 0.004*approval + 0.004*funny + 0.004*therese + 0.004*deal + 0.004*hell + 0.004*defect + 0.004*keyboard + 0.004*chat + 0.003*wish + 0.003*huge + 0.003*profile + 0.003*frequent + 0.003*morning + 0.003*step + 0.003*impossible + 0.003*stencil + 0.003*permanent + 0.003*free 
+0.005*Safari + 0.005*launch + 0.004*secrion + 0.004*reinstall + 0.004*Don + 0.004*spreadsheet + 0.003*week + 0.003*pane + 0.003*alternative + 0.003*Thursday + 0.003*useless + 0.003*Works + 0.003*Stay + 0.003*intensive + 0.003*listing + 0.003*leisure + 0.003*board + 0.003*upset + 0.003*ipad2 + 0.003*screen 
 
 Topic 55 :
 
-0.006*halt + 0.006*ios7 + 0.006*hour + 0.006*pod + 0.005*attraction + 0.005*impossible + 0.005*thin + 0.005*story + 0.004*bland + 0.004*diy + 0.004*approval + 0.004*updated + 0.004*provider + 0.004*auto + 0.004*pinner + 0.004*automatic + 0.003*comopatible + 0.003*Dalton + 0.003*try + 0.003*pdfs 
+0.006*AirPrint + 0.005*update + 0.004*approval + 0.004*funny + 0.004*therese + 0.004*deal + 0.004*hell + 0.004*defect + 0.004*keyboard + 0.004*chat + 0.003*wish + 0.003*huge + 0.003*profile + 0.003*frequent + 0.003*morning + 0.003*step + 0.003*impossible + 0.003*stencil + 0.003*permanent + 0.003*free 
 
 Topic 56 :
 
-0.005*Safari + 0.005*launch + 0.004*secrion + 0.004*reinstall + 0.004*Don + 0.004*spreadsheet + 0.003*week + 0.003*pane + 0.003*alternative + 0.003*Thursday + 0.003*useless + 0.003*Works + 0.003*Stay + 0.003*intensive + 0.003*listing + 0.003*leisure + 0.003*upset + 0.003*ipad2 + 0.003*screen + 0.003*board 
+0.006*halt + 0.006*ios7 + 0.006*hour + 0.006*pod + 0.005*attraction + 0.005*impossible + 0.005*thin + 0.005*story + 0.004*bland + 0.004*diy + 0.004*approval + 0.004*updated + 0.004*provider + 0.004*auto + 0.004*pinner + 0.004*automatic + 0.003*comopatible + 0.003*Dalton + 0.003*try + 0.003*pdfs 
 
 Topic 57 :
 
-0.006*view + 0.005*advance + 0.004*1st + 0.004*uploaded + 0.004*caution + 0.004*user + 0.004*homepage + 0.004*updte + 0.004*modest + 0.004*initial + 0.004*bread + 0.004*religion + 0.004*glitchy + 0.004*strange + 0.004*historic + 0.004*tag + 0.003*burn + 0.003*left + 0.003*char + 0.003*color 
+0.005*12 + 0.004*copy + 0.004*backup + 0.004*frustration + 0.004*tile + 0.004*strange + 0.004*geographical + 0.003*desirable + 0.003*convenient + 0.003*moment + 0.003*pod + 0.003*Error + 0.003*webview + 0.003*bug + 0.003*un + 0.003*death + 0.003*door + 0.003*example + 0.003*note + 0.003*initial 
 
 Topic 58 :
 
-0.005*Whtsap + 0.005*addictive + 0.004*search + 0.004*picturesnotesmemos + 0.004*multiple + 0.004*beginning + 0.004*complete + 0.004*Wtf + 0.004*filter + 0.004*certain + 0.004*shape + 0.004*fight + 0.004*sez + 0.004*restaurant + 0.003*ruler + 0.003*lovehate + 0.003*trashhhh + 0.003*modern + 0.003*Error + 0.003*upcoming 
+0.005*atrocious + 0.005*nDon + 0.005*stable + 0.004*reason + 0.004*sayin + 0.004*feature + 0.004*indentation + 0.004*original + 0.004*borderline + 0.004*15th + 0.004*historic + 0.004*cast + 0.004*freakin + 0.003*everytime + 0.003*e + 0.003*idiot + 0.003*advisor + 0.003*fine + 0.003*broken + 0.003*reset 
 
 Topic 59 :
 
-0.005*12 + 0.004*copy + 0.004*backup + 0.004*frustration + 0.004*tile + 0.004*strange + 0.004*geographical + 0.003*desirable + 0.003*convenient + 0.003*moment + 0.003*pod + 0.003*Error + 0.003*webview + 0.003*bug + 0.003*un + 0.003*death + 0.003*door + 0.003*note + 0.003*example + 0.003*initial 
+0.005*one + 0.005*bread + 0.005*lucky + 0.004*ABC + 0.004*service + 0.004*mode + 0.004*message + 0.004*152 + 0.004*popular + 0.004*usage + 0.004*emoticon + 0.004*screen + 0.004*500 + 0.004*million + 0.004*censor + 0.003*multiple + 0.003*ipad2 + 0.003*edit + 0.003*privacy + 0.003*audio 
 
 Topic 60 :
 
-0.005*atrocious + 0.005*nDon + 0.005*stable + 0.004*reason + 0.004*sayin + 0.004*feature + 0.004*indentation + 0.004*original + 0.004*borderline + 0.004*15th + 0.004*historic + 0.004*cast + 0.004*freakin + 0.003*everytime + 0.003*e + 0.003*idiot + 0.003*advisor + 0.003*fine + 0.003*broken + 0.003*reset 
+0.006*Wish + 0.006*occasionally + 0.005*emoticon + 0.005*wish + 0.005*allot + 0.004*irritating + 0.004*tile + 0.004*nevernote + 0.004*bothersome + 0.004*Zero + 0.004*Worst + 0.004*secrion + 0.004*part + 0.004*devicecomputer + 0.004*environment + 0.004*flight + 0.004*application + 0.003*area + 0.003*NICE + 0.003*awesome 
 
 Topic 61 :
 
-0.005*one + 0.005*bread + 0.005*lucky + 0.004*ABC + 0.004*service + 0.004*mode + 0.004*message + 0.004*152 + 0.004*popular + 0.004*usage + 0.004*emoticon + 0.004*screen + 0.004*500 + 0.004*million + 0.004*censor + 0.003*multiple + 0.003*ipad2 + 0.003*edit + 0.003*privacy + 0.003*audio 
+0.007*word + 0.005*daily + 0.005*Flat + 0.004*store + 0.004*netwrk + 0.004*everyonce + 0.004*Buggy + 0.004*nut + 0.004*smartphn + 0.003*position + 0.003*awful + 0.003*Tapatalk + 0.003*cloud + 0.003*future + 0.003*waste + 0.003*frustrated + 0.003*real + 0.003*add + 0.003*pretty + 0.003*print 
 
 Topic 62 :
 
-0.007*word + 0.005*daily + 0.005*Flat + 0.004*store + 0.004*netwrk + 0.004*everyonce + 0.004*Buggy + 0.004*nut + 0.004*smartphn + 0.003*position + 0.003*awful + 0.003*Tapatalk + 0.003*cloud + 0.003*future + 0.003*waste + 0.003*frustrated + 0.003*real + 0.003*add + 0.003*print + 0.003*pretty 
+0.005*Whtsap + 0.005*addictive + 0.004*search + 0.004*picturesnotesmemos + 0.004*beginning + 0.004*multiple + 0.004*complete + 0.004*Wtf + 0.004*filter + 0.004*certain + 0.004*shape + 0.004*fight + 0.004*sez + 0.004*restaurant + 0.003*ruler + 0.003*lovehate + 0.003*trashhhh + 0.003*modern + 0.003*Error + 0.003*upcoming 
 
 Topic 63 :
 
-0.006*Wish + 0.006*occasionally + 0.005*emoticon + 0.005*wish + 0.005*allot + 0.004*irritating + 0.004*tile + 0.004*nevernote + 0.004*bothersome + 0.004*Zero + 0.004*Worst + 0.004*secrion + 0.004*part + 0.004*devicecomputer + 0.004*environment + 0.004*flight + 0.004*application + 0.003*area + 0.003*NICE + 0.003*awesome 
+0.006*Bakwas + 0.005*mad + 0.005*few + 0.005*customization + 0.004*daughter + 0.004*cut + 0.004*medium + 0.004*freakin + 0.004*15th + 0.004*cause + 0.004*happy + 0.004*Lame + 0.004*category + 0.004*proximity + 0.004*UX + 0.003*inability + 0.003*ridiculous + 0.003*length + 0.003*accurate + 0.003*rubbish 
 
 Topic 64 :
 
-0.006*uninstalling + 0.006*pod + 0.005*star + 0.005*slight + 0.004*simplicity + 0.004*adjustment + 0.004*fone + 0.004*language + 0.004*support + 0.004*timing + 0.004*technology + 0.004*PNC + 0.004*411 + 0.004*inability + 0.004*spirit + 0.003*conflict + 0.003*engine + 0.003*b + 0.003*geographical + 0.003*medium 
+0.006*uninstalling + 0.006*pod + 0.005*star + 0.005*slight + 0.004*simplicity + 0.004*adjustment + 0.004*fone + 0.004*language + 0.004*support + 0.004*timing + 0.004*technology + 0.004*PNC + 0.004*inability + 0.004*spirit + 0.004*411 + 0.004*conflict + 0.003*engine + 0.003*b + 0.003*geographical + 0.003*medium 
 
 Topic 65 :
 
-0.005*html + 0.005*house + 0.005*inconvenient + 0.005*share + 0.005*weekend + 0.005*webview + 0.005*random + 0.005*proximity + 0.004*diy + 0.004*annoying + 0.004*radionic + 0.004*forecast + 0.004*919 + 0.004*workout + 0.004*hell + 0.004*letter + 0.004*bugsproblem + 0.003*didn + 0.003*urgent + 0.003*5 
+0.007*box + 0.006*possible + 0.005*pin + 0.005*refund + 0.005*audio + 0.004*attraction + 0.004*p.m. + 0.004*rename + 0.004*orientation + 0.004*way + 0.004*PODCAST + 0.004*garbage + 0.004*general + 0.004*webpage + 0.003*joke + 0.003*x + 0.003*restaurant + 0.003*pack + 0.003*tech + 0.003*Quit 
 
 Topic 66 :
 
-0.005*inaccurate + 0.005*lots + 0.005*wiktionary + 0.004*saturation + 0.004*platform + 0.004*1000 + 0.004*favor + 0.004*essential + 0.004*411 + 0.004*caution + 0.004*preseason + 0.004*stability + 0.004*purpose + 0.004*Lame + 0.004*emoticon + 0.004*beach + 0.004*scam + 0.003*follow + 0.003*accurate + 0.003*slight 
+0.005*html + 0.005*house + 0.005*inconvenient + 0.005*share + 0.005*weekend + 0.005*webview + 0.005*random + 0.005*proximity + 0.004*diy + 0.004*annoying + 0.004*radionic + 0.004*forecast + 0.004*919 + 0.004*workout + 0.004*hell + 0.004*letter + 0.004*bugsproblem + 0.003*didn + 0.003*urgent + 0.003*5 
 
 Topic 67 :
 
-0.006*brown + 0.006*start + 0.006*formatting + 0.005*rare + 0.005*zero + 0.004*president + 0.004*sake + 0.004*vortex + 0.004*wth + 0.004*Evernote + 0.004*wiktionary + 0.004*division + 0.004*problem + 0.004*FROZE + 0.004*english + 0.003*endless + 0.003*bit + 0.003*Works + 0.003*Pintrest + 0.003*theory 
+0.006*message + 0.005*ton + 0.005*url + 0.005*picture + 0.004*content + 0.004*whatsapp + 0.004*Instagram + 0.004*taking + 0.004*recent + 0.004*wanted + 0.003*indispensable + 0.003*fone + 0.003*awhile + 0.003*annoyed + 0.003*composition + 0.003*itune + 0.003*nEvernote + 0.003*adjustment + 0.003*making + 0.003*hour 
 
 Topic 68 :
 
-0.004*upload + 0.004*60 + 0.004*wifi + 0.004*edit + 0.004*lenovo + 0.004*simple + 0.004*happy + 0.004*UX + 0.004*magic + 0.004*county + 0.004*bothersome + 0.004*year + 0.004*endless + 0.004*graphic + 0.003*alternative + 0.003*medium + 0.003*AppStore + 0.003*early + 0.003*pattern + 0.003*incompatibility 
+0.006*brown + 0.006*start + 0.006*formatting + 0.005*rare + 0.005*zero + 0.004*president + 0.004*sake + 0.004*vortex + 0.004*wth + 0.004*Evernote + 0.004*wiktionary + 0.004*division + 0.004*problem + 0.004*FROZE + 0.004*english + 0.003*endless + 0.003*bit + 0.003*Pintrest + 0.003*Works + 0.003*theory 
 
 Topic 69 :
 
-0.006*quality + 0.006*component + 0.005*timesbut + 0.004*programmer + 0.004*giant + 0.004*Tapatalk + 0.004*hassle + 0.004*timing + 0.004*password + 0.004*balnce + 0.004*ni + 0.004*blockquote + 0.004*single + 0.004*Atlanta + 0.003*advance + 0.003*horseback + 0.003*DROPBOX + 0.003*rich + 0.003*premium + 0.003*ready 
+0.005*epub + 0.004*Wifi + 0.004*opposite + 0.004*work + 0.004*bit + 0.004*bot + 0.004*shape + 0.004*familysure + 0.004*safe + 0.003*character + 0.003*rich + 0.003*direct + 0.003*song + 0.003*composition + 0.003*101 + 0.003*yesterday + 0.003*sound + 0.003*1 + 0.003*eye + 0.003*laptop 
 
 Topic 70 :
 
-0.007*box + 0.006*possible + 0.005*pin + 0.005*refund + 0.005*audio + 0.004*attraction + 0.004*p.m. + 0.004*rename + 0.004*orientation + 0.004*PODCAST + 0.004*way + 0.004*garbage + 0.004*general + 0.004*webpage + 0.003*joke + 0.003*x + 0.003*restaurant + 0.003*pack + 0.003*tech + 0.003*Quit 
+0.006*quality + 0.006*component + 0.005*timesbut + 0.004*programmer + 0.004*giant + 0.004*Tapatalk + 0.004*hassle + 0.004*timing + 0.004*password + 0.004*balnce + 0.004*ni + 0.004*blockquote + 0.004*single + 0.004*Atlanta + 0.003*advance + 0.003*horseback + 0.003*DROPBOX + 0.003*rich + 0.003*premium + 0.003*ready 
 
 Topic 71 :
 
-0.006*message + 0.005*ton + 0.005*url + 0.005*picture + 0.004*content + 0.004*whatsapp + 0.004*Instagram + 0.004*taking + 0.004*recent + 0.004*indispensable + 0.003*wanted + 0.003*fone + 0.003*awhile + 0.003*annoyed + 0.003*composition + 0.003*itune + 0.003*nEvernote + 0.003*adjustment + 0.003*making + 0.003*hour 
+0.007*hit + 0.005*site + 0.005*obvious + 0.005*level + 0.005*complaint + 0.004*trouble + 0.004*rename + 0.004*general + 0.004*tagging + 0.004*proximity + 0.004*install + 0.004*SoundHound + 0.004*disconnect + 0.004*review + 0.003*oop + 0.003*topic + 0.003*layout + 0.003*control + 0.003*corner + 0.003*horizontal 
 
 Topic 72 :
 
-0.005*printer + 0.005*past + 0.005*tripadvisor + 0.004*tribe + 0.004*problem + 0.004*text + 0.004*need + 0.004*therese + 0.004*cast + 0.004*pissed + 0.004*Whtsap + 0.004*indispensable + 0.004*update + 0.003*intensive + 0.003*staut + 0.003*music + 0.003*pop + 0.003*MB + 0.003*catch + 0.003*effective 
+0.004*60 + 0.004*wifi + 0.004*edit + 0.004*lenovo + 0.004*upload + 0.004*simple + 0.004*happy + 0.004*UX + 0.004*magic + 0.004*county + 0.004*bothersome + 0.004*year + 0.004*endless + 0.004*graphic + 0.003*alternative + 0.003*medium + 0.003*AppStore + 0.003*early + 0.003*pattern + 0.003*incompatibility 
 
 Topic 73 :
 
-0.007*hit + 0.005*site + 0.005*obvious + 0.005*level + 0.005*complaint + 0.004*trouble + 0.004*rename + 0.004*general + 0.004*tagging + 0.004*proximity + 0.004*install + 0.004*SoundHound + 0.004*disconnect + 0.004*review + 0.004*oop + 0.003*layout + 0.003*control + 0.003*corner + 0.003*horizontal + 0.003*topic 
+0.005*inaccurate + 0.005*lots + 0.005*wiktionary + 0.004*saturation + 0.004*platform + 0.004*1000 + 0.004*favor + 0.004*essential + 0.004*411 + 0.004*caution + 0.004*preseason + 0.004*stability + 0.004*purpose + 0.004*Lame + 0.004*emoticon + 0.004*beach + 0.004*scam + 0.003*follow + 0.003*accurate + 0.003*slight 
 
 Topic 74 :
 
-0.005*epub + 0.004*Wifi + 0.004*opposite + 0.004*bit + 0.004*bot + 0.004*shape + 0.004*work + 0.004*familysure + 0.004*safe + 0.003*character + 0.003*rich + 0.003*direct + 0.003*song + 0.003*composition + 0.003*101 + 0.003*yesterday + 0.003*sound + 0.003*eye + 0.003*laptop + 0.003*green 
+0.005*printer + 0.005*past + 0.005*tripadvisor + 0.004*problem + 0.004*tribe + 0.004*text + 0.004*need + 0.004*cast + 0.004*therese + 0.004*pissed + 0.004*Whtsap + 0.004*indispensable + 0.003*intensive + 0.003*update + 0.003*staut + 0.003*music + 0.003*pop + 0.003*MB + 0.003*catch + 0.003*effective 
 
 Topic 75 :
 
-0.007*date + 0.006*halt + 0.006*useful + 0.005*bookmark + 0.005*devicecomputer + 0.004*videos + 0.004*cursor + 0.004*zip + 0.004*NFL + 0.004*door + 0.004*preview + 0.003*refund + 0.003*worthless + 0.003*popular + 0.003*pin + 0.003*datum + 0.003*addictive + 0.003*verification + 0.003*tablet + 0.003*TA 
+0.006*rich + 0.006*crashing + 0.005*cover + 0.004*happy + 0.004*flawless + 0.004*medium + 0.004*pdfs + 0.004*tomorrow + 0.004*pop + 0.004*look + 0.004*date + 0.004*selection + 0.004*desktop + 0.004*leisure + 0.004*design + 0.004*Bakwas + 0.003*release + 0.003*corner + 0.003*recording + 0.003*East 
 
 Topic 76 :
 
-0.007*subscription + 0.005*video + 0.005*factory + 0.004*spotty + 0.004*weird + 0.004*shortcut + 0.004*comment + 0.004*let + 0.004*interface + 0.004*solution + 0.004*SoundHound + 0.004*white + 0.004*future + 0.004*concert + 0.004*faithful + 0.003*horizontal + 0.003*kitchen + 0.003*statement + 0.003*dude + 0.003*Zulily 
+0.007*date + 0.006*halt + 0.006*useful + 0.005*bookmark + 0.005*devicecomputer + 0.004*videos + 0.004*cursor + 0.004*zip + 0.004*NFL + 0.004*door + 0.004*preview + 0.003*refund + 0.003*worthless + 0.003*popular + 0.003*datum + 0.003*pin + 0.003*addictive + 0.003*verification + 0.003*tablet + 0.003*TA 
 
 Topic 77 :
 
-0.005*Atlanta + 0.005*PIN + 0.004*tech + 0.004*appplz + 0.004*photo + 0.004*advise + 0.003*excited + 0.003*BROKEN + 0.003*typing + 0.003*rate + 0.003*wonderful + 0.003*road + 0.003*song + 0.003*search + 0.003*locker + 0.003*error + 0.003*27th + 0.003*signature + 0.003*Usability + 0.003*hotel 
+0.005*Atlanta + 0.005*PIN + 0.004*tech + 0.004*appplz + 0.004*photo + 0.004*advise + 0.003*excited + 0.003*BROKEN + 0.003*typing + 0.003*rate + 0.003*wonderful + 0.003*road + 0.003*song + 0.003*search + 0.003*error + 0.003*locker + 0.003*27th + 0.003*signature + 0.003*Usability + 0.003*hotel 
 
 Topic 78 :
 
-0.005*crappy + 0.005*thank + 0.005*Tapatalk + 0.005*EverNote + 0.005*juice + 0.004*preview + 0.004*pintr + 0.004*stat + 0.004*TA + 0.004*specific + 0.004*doctoral + 0.004*internet + 0.004*prime + 0.003*forum + 0.003*qb + 0.003*disappointment + 0.003*detail + 0.003*versa + 0.003*scam + 0.003*Doesn 
+0.007*subscription + 0.005*video + 0.005*factory + 0.004*spotty + 0.004*weird + 0.004*shortcut + 0.004*comment + 0.004*let + 0.004*interface + 0.004*solution + 0.004*SoundHound + 0.004*white + 0.004*concert + 0.004*faithful + 0.004*future + 0.003*horizontal + 0.003*kitchen + 0.003*statement + 0.003*dude + 0.003*Zulily 
 
 Topic 79 :
 
-0.006*listing + 0.005*text + 0.005*road + 0.005*updte + 0.005*miscommunication + 0.005*taking + 0.004*glitchy + 0.004*setting + 0.004*internet + 0.004*vortex + 0.004*NICE + 0.004*20 + 0.004*desktop + 0.004*opening + 0.004*purchase + 0.004*close + 0.003*organization + 0.003*bothersome + 0.003*Centro + 0.003*horizontal 
+0.004*loading + 0.004*stuck + 0.004*regularity + 0.004*running + 0.004*dolphin + 0.003*background + 0.003*tool + 0.003*wav + 0.003*functional + 0.003*versa + 0.003*number + 0.003*urgent + 0.003*gift + 0.003*101 + 0.003*homepage + 0.003*air + 0.003*convenient + 0.003*door + 0.003*contribution + 0.003*reboot 
 
 Topic 80 :
 
-0.006*cached + 0.005*sure + 0.004*frustrating + 0.004*freezing + 0.004*bad + 0.004*authorization + 0.004*push + 0.003*thank + 0.003*itouch + 0.003*thing + 0.003*help + 0.003*typing + 0.003*pool + 0.003*privacy + 0.003*nEvernote + 0.003*dimensional + 0.003*datum + 0.003*tomorrow + 0.003*friend + 0.003*Pintrest 
+0.005*crappy + 0.005*thank + 0.005*Tapatalk + 0.005*EverNote + 0.005*juice + 0.004*preview + 0.004*pintr + 0.004*stat + 0.004*TA + 0.004*specific + 0.004*doctoral + 0.004*internet + 0.004*prime + 0.003*forum + 0.003*qb + 0.003*disappointment + 0.003*detail + 0.003*versa + 0.003*scam + 0.003*Doesn 
 
 Topic 81 :
 
-0.006*rich + 0.006*crashing + 0.005*cover + 0.004*happy + 0.004*flawless + 0.004*medium + 0.004*pdfs + 0.004*tomorrow + 0.004*pop + 0.004*look + 0.004*date + 0.004*selection + 0.004*desktop + 0.004*leisure + 0.004*design + 0.004*Bakwas + 0.003*release + 0.003*corner + 0.003*recording + 0.003*East 
+0.006*cached + 0.005*sure + 0.004*frustrating + 0.004*freezing + 0.004*bad + 0.004*authorization + 0.004*push + 0.003*thank + 0.003*itouch + 0.003*help + 0.003*pool + 0.003*typing + 0.003*thing + 0.003*privacy + 0.003*nEvernote + 0.003*dimensional + 0.003*datum + 0.003*tomorrow + 0.003*friend + 0.003*Pintrest 
 
 Topic 82 :
 
-0.005*planet + 0.005*effective + 0.005*beautiful + 0.005*Dropbox + 0.005*peepz + 0.004*10 + 0.004*daily + 0.004*dock + 0.004*statement + 0.004*equipment + 0.004*flicker + 0.004*system + 0.004*street + 0.004*terrible + 0.004*finger + 0.004*crashing + 0.004*literate + 0.003*small + 0.003*grup + 0.003*ready 
+0.006*listing + 0.005*text + 0.005*road + 0.005*updte + 0.005*miscommunication + 0.005*taking + 0.004*glitchy + 0.004*setting + 0.004*internet + 0.004*vortex + 0.004*NICE + 0.004*20 + 0.004*desktop + 0.004*opening + 0.004*purchase + 0.004*close + 0.003*organization + 0.003*bothersome + 0.003*Centro + 0.003*horizontal 
 
 Topic 83 :
 
-0.004*loading + 0.004*stuck + 0.004*regularity + 0.004*running + 0.004*dolphin + 0.003*background + 0.003*tool + 0.003*wav + 0.003*functional + 0.003*versa + 0.003*number + 0.003*urgent + 0.003*gift + 0.003*101 + 0.003*homepage + 0.003*air + 0.003*convenient + 0.003*door + 0.003*contribution + 0.003*reboot 
+0.005*planet + 0.005*effective + 0.005*beautiful + 0.005*Dropbox + 0.005*peepz + 0.004*10 + 0.004*daily + 0.004*dock + 0.004*statement + 0.004*equipment + 0.004*flicker + 0.004*system + 0.004*street + 0.004*terrible + 0.004*finger + 0.004*crashing + 0.004*literate + 0.003*small + 0.003*grup + 0.003*ready 
 
 Topic 84 :
 
@@ -709,19 +709,19 @@ Topic 86 :
 
 Topic 87 :
 
-0.007*quick + 0.006*excited + 0.005*message + 0.005*opposite + 0.004*initial + 0.004*app + 0.004*horizontal + 0.004*iPadno + 0.004*timesbut + 0.004*occasionally + 0.004*reinstallation + 0.004*cent + 0.004*upload + 0.004*dropbox + 0.003*subsection + 0.003*html + 0.003*idea + 0.003*alphabetical + 0.003*3rd + 0.003*rice 
+0.004*graphical + 0.004*Zulily + 0.004*daily + 0.004*pack + 0.004*decor + 0.004*lots + 0.004*NFL + 0.004*technology + 0.004*beach + 0.003*BROKEN + 0.003*happy + 0.003*moment + 0.003*pdfs + 0.003*week + 0.003*great + 0.003*special + 0.003*somthing + 0.003*button + 0.003*Ford + 0.003*30 
 
 Topic 88 :
 
-0.004*graphical + 0.004*Zulily + 0.004*daily + 0.004*pack + 0.004*decor + 0.004*lots + 0.004*NFL + 0.004*technology + 0.004*beach + 0.003*BROKEN + 0.003*happy + 0.003*moment + 0.003*pdfs + 0.003*week + 0.003*great + 0.003*special + 0.003*somthing + 0.003*button + 0.003*Ford + 0.003*30 
+0.007*minor + 0.006*store + 0.005*motel + 0.005*option + 0.005*literate + 0.005*bar + 0.004*closed + 0.004*recording + 0.004*complaint + 0.004*movie + 0.004*peek + 0.004*annoying + 0.004*gud + 0.004*TA + 0.004*balnce + 0.004*pinning + 0.004*idea + 0.004*privacy + 0.003*design + 0.003*10 
 
 Topic 89 :
 
-0.007*minor + 0.006*store + 0.005*motel + 0.005*option + 0.005*literate + 0.005*bar + 0.004*closed + 0.004*recording + 0.004*complaint + 0.004*movie + 0.004*peek + 0.004*annoying + 0.004*gud + 0.004*TA + 0.004*balnce + 0.004*pinning + 0.004*idea + 0.004*privacy + 0.003*design + 0.003*10 
+0.007*quick + 0.006*excited + 0.005*opposite + 0.005*message + 0.004*initial + 0.004*app + 0.004*horizontal + 0.004*iPadno + 0.004*timesbut + 0.004*occasionally + 0.004*reinstallation + 0.004*cent + 0.004*upload + 0.004*dropbox + 0.003*subsection + 0.003*html + 0.003*idea + 0.003*alphabetical + 0.003*3rd + 0.003*rice 
 
 Topic 90 :
 
-0.007*package + 0.006*attraction + 0.005*pinger + 0.005*smooth + 0.005*close + 0.004*fake + 0.004*spell + 0.004*logo + 0.004*formatting + 0.004*catch + 0.004*list + 0.004*inability + 0.004*EN + 0.004*garbage + 0.004*self + 0.003*share + 0.003*shut + 0.003*study + 0.003*flawless + 0.003*workout 
+0.007*package + 0.006*attraction + 0.005*pinger + 0.005*smooth + 0.005*close + 0.004*fake + 0.004*spell + 0.004*logo + 0.004*formatting + 0.004*list + 0.004*catch + 0.004*inability + 0.004*EN + 0.004*garbage + 0.004*self + 0.003*share + 0.003*shut + 0.003*study + 0.003*flawless + 0.003*workout 
 
 Topic 91 :
 
@@ -729,11 +729,11 @@ Topic 91 :
 
 Topic 92 :
 
-0.007*adjustment + 0.006*order + 0.006*legacy + 0.005*tripadvisor + 0.005*confidence + 0.004*ton + 0.004*point + 0.004*cloud + 0.004*prime + 0.004*well + 0.004*transmission + 0.004*South + 0.003*chance + 0.003*juice + 0.003*bug + 0.003*initial + 0.003*gray + 0.003*pane + 0.003*greatnow + 0.003*pinterest 
+0.005*combo + 0.005*inability + 0.004*etsy + 0.004*different + 0.004*gb + 0.004*AirPrint + 0.004*synonym + 0.004*usefulness + 0.004*iTunes + 0.004*South + 0.004*app + 0.004*content + 0.004*pyramid + 0.004*inconvenient + 0.004*nut + 0.004*nightmare + 0.003*downtown + 0.003*pinterest + 0.003*wife + 0.003*internet 
 
 Topic 93 :
 
-0.005*combo + 0.005*inability + 0.004*etsy + 0.004*different + 0.004*gb + 0.004*AirPrint + 0.004*synonym + 0.004*app + 0.004*usefulness + 0.004*iTunes + 0.004*South + 0.004*pyramid + 0.004*inconvenient + 0.004*nut + 0.004*content + 0.004*nightmare + 0.003*downtown + 0.003*pinterest + 0.003*wife + 0.003*internet 
+0.007*adjustment + 0.006*order + 0.006*legacy + 0.005*tripadvisor + 0.005*confidence + 0.004*ton + 0.004*point + 0.004*cloud + 0.004*prime + 0.004*well + 0.004*transmission + 0.004*South + 0.003*chance + 0.003*juice + 0.003*bug + 0.003*initial + 0.003*gray + 0.003*pane + 0.003*greatnow + 0.003*pinterest 
 
 Topic 94 :
 
@@ -753,11 +753,11 @@ Topic 97 :
 
 Topic 98 :
 
-0.006*problem + 0.006*laptop + 0.006*webpage + 0.005*restaurant + 0.005*huge + 0.004*support + 0.004*good + 0.004*UI + 0.004*replacement + 0.004*reverse + 0.004*device + 0.004*nEvernote + 0.004*sync + 0.003*wonderful + 0.003*bite + 0.003*let + 0.003*pinning + 0.003*finger + 0.003*exact + 0.003*miscommunication 
+0.006*mp3 + 0.005*balnce + 0.005*dock + 0.005*employee + 0.004*needs + 0.004*pointless + 0.004*nthe + 0.004*os + 0.004*concept + 0.004*past + 0.004*type + 0.004*s4 + 0.004*average + 0.003*illegible + 0.003*update + 0.003*EXTREMELY + 0.003*lovehate + 0.003*middle + 0.003*clutter + 0.003*hierarchy 
 
 Topic 99 :
 
-0.006*individual + 0.005*audio + 0.004*ver + 0.004*day + 0.004*small + 0.004*Scores + 0.004*r + 0.004*ice + 0.004*unhappy + 0.004*role + 0.003*hang + 0.003*30 + 0.003*Upad + 0.003*Non + 0.003*white + 0.003*efficient + 0.003*download + 0.003*house + 0.003*breaker + 0.003*grey 
+0.006*joke + 0.005*deal + 0.005*pane + 0.005*upload + 0.004*basis + 0.004*complete + 0.004*item + 0.004*work + 0.004*alphabetical + 0.004*conflict + 0.004*indispensable + 0.004*Dec + 0.004*usability + 0.004*notebook + 0.004*book + 0.004*brand + 0.003*advise + 0.003*Updating + 0.003*eye + 0.003*excellent 
 
 Topic 100 :
 
@@ -765,19 +765,19 @@ Topic 100 :
 
 Topic 101 :
 
-0.006*joke + 0.005*deal + 0.005*pane + 0.004*basis + 0.004*upload + 0.004*complete + 0.004*item + 0.004*work + 0.004*alphabetical + 0.004*conflict + 0.004*indispensable + 0.004*Dec + 0.004*usability + 0.004*notebook + 0.004*book + 0.004*brand + 0.003*advise + 0.003*Updating + 0.003*eye + 0.003*excellent 
+0.006*clickable + 0.006*daughter + 0.004*practical + 0.004*garbage + 0.004*silly + 0.004*downgrade + 0.004*tech + 0.004*pic + 0.004*edit + 0.004*whiteout + 0.004*impossible + 0.004*authorization + 0.004*recent + 0.004*stable + 0.003*somthing + 0.003*prblm + 0.003*nthe + 0.003*bs + 0.003*advisor + 0.003*pointless 
 
 Topic 102 :
 
-0.006*clickable + 0.006*daughter + 0.004*practical + 0.004*garbage + 0.004*silly + 0.004*downgrade + 0.004*tech + 0.004*pic + 0.004*edit + 0.004*whiteout + 0.004*impossible + 0.004*authorization + 0.004*recent + 0.004*stable + 0.003*somthing + 0.003*prblm + 0.003*nthe + 0.003*bs + 0.003*advisor + 0.003*pointless 
+0.006*mini + 0.005*url + 0.005*balance + 0.005*guidebook + 0.005*open + 0.005*effective + 0.004*Dropbox + 0.004*statement + 0.004*luck + 0.004*house + 0.004*dialog + 0.004*preseason + 0.004*mainstay + 0.003*PIN + 0.003*green + 0.003*content + 0.003*component + 0.003*useful + 0.003*efficient + 0.003*late 
 
 Topic 103 :
 
-0.006*mp3 + 0.005*balnce + 0.005*dock + 0.005*employee + 0.004*needs + 0.004*pointless + 0.004*nthe + 0.004*os + 0.004*concept + 0.004*past + 0.004*type + 0.004*s4 + 0.004*average + 0.003*illegible + 0.003*EXTREMELY + 0.003*lovehate + 0.003*middle + 0.003*clutter + 0.003*update + 0.003*hierarchy 
+0.006*individual + 0.005*audio + 0.004*ver + 0.004*day + 0.004*small + 0.004*Scores + 0.004*r + 0.004*ice + 0.004*unhappy + 0.004*role + 0.003*hang + 0.003*30 + 0.003*Upad + 0.003*Non + 0.003*white + 0.003*efficient + 0.003*download + 0.003*house + 0.003*breaker + 0.003*grey 
 
 Topic 104 :
 
-0.006*mini + 0.005*url + 0.005*balance + 0.005*guidebook + 0.005*open + 0.005*effective + 0.004*Dropbox + 0.004*statement + 0.004*luck + 0.004*house + 0.004*dialog + 0.004*preseason + 0.004*mainstay + 0.003*PIN + 0.003*green + 0.003*component + 0.003*content + 0.003*useful + 0.003*efficient + 0.003*late 
+0.006*laptop + 0.006*webpage + 0.006*problem + 0.005*restaurant + 0.005*huge + 0.004*support + 0.004*good + 0.004*UI + 0.004*replacement + 0.004*reverse + 0.004*device + 0.004*nEvernote + 0.004*sync + 0.003*wonderful + 0.003*bite + 0.003*let + 0.003*pinning + 0.003*finger + 0.003*exact + 0.003*miscommunication 
 
 Topic 105 :
 
@@ -785,11 +785,11 @@ Topic 105 :
 
 Topic 106 :
 
-0.006*wrong + 0.006*basis + 0.006*modern + 0.005*unnecessary + 0.005*name + 0.004*authorization + 0.004*unpredictable + 0.004*religion + 0.004*rate + 0.004*101 + 0.004*hour + 0.004*sayin + 0.004*halt + 0.004*share + 0.004*response + 0.003*people + 0.003*language + 0.003*style + 0.003*awesome + 0.003*warning 
+0.005*precious + 0.005*layout + 0.004*subscription + 0.004*urgent + 0.004*mobility + 0.004*loyal + 0.004*graphical + 0.004*feature + 0.004*recipe + 0.004*ur + 0.003*919 + 0.003*low + 0.003*gb + 0.003*itouch + 0.003*grand + 0.003*rest + 0.003*past + 0.003*brightness + 0.003*yelp + 0.003*sluggish 
 
 Topic 107 :
 
-0.005*layout + 0.005*precious + 0.004*subscription + 0.004*urgent + 0.004*mobility + 0.004*loyal + 0.004*graphical + 0.004*feature + 0.004*recipe + 0.004*ur + 0.003*919 + 0.003*low + 0.003*gb + 0.003*itouch + 0.003*grand + 0.003*rest + 0.003*past + 0.003*brightness + 0.003*yelp + 0.003*sluggish 
+0.006*wrong + 0.006*basis + 0.006*modern + 0.005*unnecessary + 0.005*name + 0.004*authorization + 0.004*unpredictable + 0.004*religion + 0.004*rate + 0.004*101 + 0.004*hour + 0.004*sayin + 0.004*halt + 0.004*share + 0.004*response + 0.003*people + 0.003*language + 0.003*style + 0.003*awesome + 0.003*problem 
 
 Topic 108 :
 
@@ -797,11 +797,11 @@ Topic 108 :
 
 Topic 109 :
 
-0.006*logo + 0.006*favourite + 0.005*wall + 0.004*pin + 0.004*provider + 0.004*moment + 0.004*emoticon + 0.004*gift + 0.004*saturation + 0.003*feature + 0.003*5 + 0.003*horizontal + 0.003*Warner + 0.003*cursor + 0.003*view + 0.003*web + 0.003*hugz + 0.003*dimensional + 0.003*e + 0.003*fantastic 
+0.006*logo + 0.006*favourite + 0.005*wall + 0.005*pin + 0.004*provider + 0.004*moment + 0.004*emoticon + 0.004*gift + 0.004*saturation + 0.003*feature + 0.003*5 + 0.003*horizontal + 0.003*Warner + 0.003*cursor + 0.003*view + 0.003*web + 0.003*hugz + 0.003*dimensional + 0.003*e + 0.003*fantastic 
 
 Topic 110 :
 
-0.006*mini + 0.005*way + 0.005*webview + 0.005*helpful + 0.005*stencil + 0.004*impact + 0.004*error + 0.004*huge + 0.004*coz + 0.004*delicious + 0.004*tag + 0.004*track + 0.004*legibility + 0.004*platform + 0.004*html + 0.004*section + 0.004*widget + 0.003*fool + 0.003*downtown + 0.003*fun 
+0.006*mini + 0.005*way + 0.005*webview + 0.005*helpful + 0.005*stencil + 0.004*error + 0.004*impact + 0.004*huge + 0.004*coz + 0.004*delicious + 0.004*tag + 0.004*track + 0.004*legibility + 0.004*platform + 0.004*html + 0.004*section + 0.004*widget + 0.003*fool + 0.003*downtown + 0.003*fun 
 
 Topic 111 :
 
@@ -809,7 +809,7 @@ Topic 111 :
 
 Topic 112 :
 
-0.005*reason + 0.005*password + 0.005*secrion + 0.005*pointless + 0.004*backup + 0.004*medium + 0.004*incompatibility + 0.004*thread + 0.004*stuck + 0.004*teacher + 0.004*nice + 0.004*101 + 0.004*Urrrrm + 0.003*town + 0.003*Tech + 0.003*dead + 0.003*month + 0.003*low + 0.003*Whatsapp + 0.003*advocate 
+0.005*reason + 0.005*password + 0.005*secrion + 0.005*pointless + 0.004*backup + 0.004*medium + 0.004*incompatibility + 0.004*thread + 0.004*stuck + 0.004*teacher + 0.004*nice + 0.004*101 + 0.004*Urrrrm + 0.003*town + 0.003*Tech + 0.003*month + 0.003*dead + 0.003*low + 0.003*Whatsapp + 0.003*advocate 
 
 Topic 113 :
 
@@ -817,23 +817,23 @@ Topic 113 :
 
 Topic 114 :
 
-0.006*eye + 0.005*App + 0.004*GROUP + 0.004*kid + 0.004*frozen + 0.004*historic + 0.004*call + 0.003*experience + 0.003*Allie + 0.003*payment + 0.003*negative + 0.003*past + 0.003*Stay + 0.003*topic + 0.003*local + 0.003*garbage + 0.003*thin + 0.003*guy + 0.003*3 + 0.003*effective 
+0.006*eye + 0.005*App + 0.004*GROUP + 0.004*kid + 0.004*frozen + 0.004*historic + 0.004*call + 0.003*experience + 0.003*Allie + 0.003*payment + 0.003*negative + 0.003*past + 0.003*Stay + 0.003*topic + 0.003*local + 0.003*garbage + 0.003*second + 0.003*thin + 0.003*guy + 0.003*3 
 
 Topic 115 :
 
-0.005*selection + 0.005*date + 0.005*time + 0.005*tap + 0.005*bummer + 0.004*60 + 0.004*design + 0.004*system + 0.004*contact + 0.004*hour + 0.004*sloth + 0.004*nice + 0.004*therese + 0.004*leader + 0.004*descriptive + 0.004*error + 0.004*flat + 0.004*cheap + 0.004*wanted + 0.004*Centro 
+0.005*selection + 0.005*date + 0.005*time + 0.005*tap + 0.005*bummer + 0.004*60 + 0.004*design + 0.004*system + 0.004*contact + 0.004*hour + 0.004*sloth + 0.004*nice + 0.004*therese + 0.004*leader + 0.004*descriptive + 0.004*flat + 0.004*cheap + 0.004*wanted + 0.004*Centro + 0.003*functionality 
 
 Topic 116 :
 
-0.005*direction + 0.005*kid + 0.004*colored + 0.004*click + 0.004*device + 0.004*cloud + 0.004*sloth + 0.004*look + 0.004*teacher + 0.004*radar + 0.004*movie + 0.004*UI + 0.004*dude + 0.003*review + 0.003*dialog + 0.003*South + 0.003*IOS + 0.003*rushing + 0.003*service + 0.003*wth 
+0.007*letter + 0.005*nevernote + 0.005*commitment + 0.005*system + 0.004*diy + 0.004*egregious + 0.004*address + 0.004*proponent + 0.004*unable + 0.004*release + 0.004*gallery + 0.004*saturation + 0.003*medium + 0.003*progress + 0.003*list + 0.003*selectable + 0.003*crash + 0.003*favor + 0.003*request + 0.003*thinking 
 
 Topic 117 :
 
-0.007*moon + 0.005*space + 0.005*image + 0.005*clear + 0.004*Search + 0.004*chey + 0.004*desktop + 0.004*past + 0.004*selectable + 0.004*fave + 0.004*Bug + 0.004*Buggy + 0.004*frnd + 0.004*app + 0.004*staff + 0.004*combat + 0.004*way + 0.003*mobile + 0.003*Samsung + 0.003*cent 
+0.007*moon + 0.005*space + 0.005*image + 0.005*clear + 0.004*Search + 0.004*chey + 0.004*desktop + 0.004*past + 0.004*selectable + 0.004*fave + 0.004*Bug + 0.004*Buggy + 0.004*frnd + 0.004*app + 0.004*staff + 0.004*combat + 0.003*way + 0.003*mobile + 0.003*Samsung + 0.003*cent 
 
 Topic 118 :
 
-0.007*letter + 0.005*nevernote + 0.005*commitment + 0.005*system + 0.004*diy + 0.004*egregious + 0.004*address + 0.004*proponent + 0.004*unable + 0.004*release + 0.004*gallery + 0.004*saturation + 0.003*medium + 0.003*progress + 0.003*list + 0.003*selectable + 0.003*crash + 0.003*favor + 0.003*request + 0.003*thinking 
+0.005*direction + 0.005*kid + 0.004*colored + 0.004*click + 0.004*cloud + 0.004*sloth + 0.004*device + 0.004*look + 0.004*teacher + 0.004*radar + 0.004*movie + 0.004*UI + 0.004*dude + 0.003*review + 0.003*dialog + 0.003*South + 0.003*IOS + 0.003*rushing + 0.003*service + 0.003*wth 
 
 Topic 119 :
 
@@ -841,11 +841,11 @@ Topic 119 :
 
 Topic 120 :
 
-0.005*symbol + 0.005*ios7 + 0.005*bite + 0.005*pic + 0.004*v1 + 0.004*pinning + 0.004*worth + 0.004*accurate + 0.004*photo + 0.004*number + 0.004*city + 0.004*appplease + 0.004*flatness + 0.004*add + 0.004*smartphn + 0.004*period + 0.003*status + 0.003*detail + 0.003*direction + 0.003*3rd 
+0.005*ABC + 0.005*permanent + 0.004*pic + 0.004*way + 0.004*concern + 0.004*update + 0.004*favourite + 0.004*practical + 0.004*activity + 0.004*change + 0.004*visible + 0.004*advance + 0.004*feedback + 0.004*material + 0.004*invention + 0.003*EMS + 0.003*erratic + 0.003*low + 0.003*respect + 0.003*boarding 
 
 Topic 121 :
 
-0.007*internet + 0.005*nevernote + 0.005*webpage + 0.005*convenience + 0.004*column + 0.004*year + 0.004*Passbook + 0.004*hope + 0.004*profile + 0.004*lack + 0.004*IOS + 0.004*frustration + 0.004*bug + 0.004*direct + 0.004*netwrk + 0.004*push + 0.004*personnel + 0.003*hacker + 0.003*gladly + 0.003*green 
+0.005*symbol + 0.005*ios7 + 0.005*bite + 0.005*pic + 0.004*v1 + 0.004*pinning + 0.004*worth + 0.004*accurate + 0.004*photo + 0.004*number + 0.004*city + 0.004*appplease + 0.004*flatness + 0.004*add + 0.004*smartphn + 0.004*period + 0.003*status + 0.003*detail + 0.003*direction + 0.003*3rd 
 
 Topic 122 :
 
@@ -857,19 +857,19 @@ Topic 123 :
 
 Topic 124 :
 
-0.006*reinstall + 0.005*mp3 + 0.004*webpage + 0.004*pointless + 0.004*message + 0.004*Ford + 0.003*beautiful + 0.003*Enjoy + 0.003*prompt + 0.003*advance + 0.003*Pintrest + 0.003*account + 0.003*opening + 0.003*advantage + 0.003*creative + 0.003*continuously + 0.003*bookmark + 0.003*clutter + 0.003*easy + 0.003*large 
+0.007*internet + 0.005*nevernote + 0.005*webpage + 0.005*convenience + 0.004*column + 0.004*year + 0.004*Passbook + 0.004*hope + 0.004*profile + 0.004*lack + 0.004*IOS + 0.004*frustration + 0.004*bug + 0.004*direct + 0.004*netwrk + 0.004*push + 0.004*personnel + 0.003*hacker + 0.003*gladly + 0.003*green 
 
 Topic 125 :
 
-0.005*ABC + 0.005*permanent + 0.004*pic + 0.004*concern + 0.004*favourite + 0.004*practical + 0.004*way + 0.004*update + 0.004*activity + 0.004*change + 0.004*visible + 0.004*advance + 0.004*feedback + 0.004*material + 0.004*invention + 0.003*EMS + 0.003*erratic + 0.003*low + 0.003*respect + 0.003*boarding 
+0.006*reinstall + 0.005*mp3 + 0.004*webpage + 0.004*pointless + 0.004*message + 0.004*Ford + 0.003*beautiful + 0.003*Enjoy + 0.003*prompt + 0.003*advance + 0.003*Pintrest + 0.003*account + 0.003*opening + 0.003*advantage + 0.003*creative + 0.003*continuously + 0.003*bookmark + 0.003*clutter + 0.003*easy + 0.003*large 
 
 Topic 126 :
 
-0.006*application + 0.005*magic + 0.005*comment + 0.005*burn + 0.004*permission + 0.004*research + 0.004*BSRA1028 + 0.004*compatible + 0.004*PNC + 0.004*hue + 0.004*EMS + 0.004*tribe + 0.004*combat + 0.004*cache + 0.003*cool + 0.003*rubbish + 0.003*day + 0.003*cached + 0.003*call + 0.003*luck 
+0.005*network + 0.005*unstable + 0.005*composition + 0.004*Urrrrm + 0.004*workout + 0.004*defect + 0.004*NFL + 0.004*favor + 0.004*v1 + 0.004*block + 0.004*Dropbox + 0.004*urgent + 0.004*incompatibility + 0.003*subscription + 0.003*location + 0.003*Quit + 0.003*incorrect + 0.003*certain + 0.003*computer + 0.003*minor 
 
 Topic 127 :
 
-0.006*dead + 0.005*sound + 0.004*permission + 0.004*post + 0.004*corner + 0.004*million + 0.004*option + 0.004*yesterday + 0.004*maximization + 0.004*4 + 0.004*caption + 0.003*Quit + 0.003*teacher + 0.003*step + 0.003*pinterest + 0.003*contribution + 0.003*lovehate + 0.003*let + 0.003*authorization + 0.003*nice 
+0.006*application + 0.005*magic + 0.005*comment + 0.005*burn + 0.004*permission + 0.004*research + 0.004*BSRA1028 + 0.004*compatible + 0.004*PNC + 0.004*hue + 0.004*EMS + 0.004*tribe + 0.004*combat + 0.004*cache + 0.003*cool + 0.003*rubbish + 0.003*day + 0.003*cached + 0.003*call + 0.003*luck 
 
 Topic 128 :
 
@@ -877,19 +877,19 @@ Topic 128 :
 
 Topic 129 :
 
-0.007*husband + 0.005*joke + 0.005*seat + 0.005*today + 0.004*yelp + 0.004*temp + 0.004*usefulness + 0.004*nthe + 0.004*general + 0.004*vertical + 0.004*terrible + 0.004*South + 0.004*image + 0.004*permission + 0.004*mapping + 0.003*receiver + 0.003*Error + 0.003*plenty + 0.003*recent + 0.003*NC 
+0.006*dead + 0.005*sound + 0.004*permission + 0.004*post + 0.004*corner + 0.004*million + 0.004*option + 0.004*yesterday + 0.004*maximization + 0.004*4 + 0.004*caption + 0.003*Quit + 0.003*teacher + 0.003*step + 0.003*pinterest + 0.003*contribution + 0.003*lovehate + 0.003*let + 0.003*authorization + 0.003*nice 
 
 Topic 130 :
 
-0.005*network + 0.005*unstable + 0.005*composition + 0.004*Urrrrm + 0.004*workout + 0.004*defect + 0.004*NFL + 0.004*favor + 0.004*v1 + 0.004*block + 0.004*urgent + 0.004*incompatibility + 0.003*Dropbox + 0.003*subscription + 0.003*location + 0.003*Quit + 0.003*incorrect + 0.003*certain + 0.003*computer + 0.003*evangelist 
+0.007*husband + 0.005*joke + 0.005*seat + 0.005*today + 0.004*yelp + 0.004*temp + 0.004*usefulness + 0.004*nthe + 0.004*general + 0.004*vertical + 0.004*terrible + 0.004*South + 0.004*image + 0.004*permission + 0.004*mapping + 0.003*receiver + 0.003*Error + 0.003*plenty + 0.003*recent + 0.003*alot 
 
 Topic 131 :
 
-0.006*egregious + 0.004*thread + 0.004*chance + 0.004*awesome + 0.004*homepage + 0.004*k + 0.004*precious + 0.004*itune + 0.004*un + 0.004*install + 0.004*default + 0.004*effort + 0.004*daughter + 0.004*try + 0.004*hope + 0.003*large + 0.003*offer + 0.003*yesterday + 0.003*prob + 0.003*together 
+0.006*old + 0.006*inside + 0.005*tee + 0.005*FROZE + 0.004*post + 0.004*Enjoy + 0.004*broken + 0.004*wiktionary + 0.004*Warner + 0.004*AirPrint + 0.004*stencil + 0.004*bank + 0.004*road + 0.004*througj + 0.004*Non + 0.004*Love + 0.004*macros + 0.004*tripadvisor + 0.004*silly + 0.004*Evernote 
 
 Topic 132 :
 
-0.006*old + 0.006*inside + 0.005*tee + 0.005*FROZE + 0.004*post + 0.004*Enjoy + 0.004*broken + 0.004*wiktionary + 0.004*Warner + 0.004*AirPrint + 0.004*stencil + 0.004*bank + 0.004*road + 0.004*througj + 0.004*Non + 0.004*Love + 0.004*macros + 0.004*tripadvisor + 0.004*silly + 0.003*potential 
+0.006*egregious + 0.004*thread + 0.004*chance + 0.004*awesome + 0.004*homepage + 0.004*k + 0.004*precious + 0.004*itune + 0.004*un + 0.004*install + 0.004*default + 0.004*effort + 0.004*daughter + 0.004*try + 0.004*hope + 0.003*large + 0.003*offer + 0.003*yesterday + 0.003*prob + 0.003*together 
 
 Topic 133 :
 
@@ -901,7 +901,7 @@ Topic 134 :
 
 Topic 135 :
 
-0.006*intensive + 0.005*bite + 0.005*year + 0.005*color + 0.005*IOS + 0.004*problem + 0.004*radar + 0.004*screen + 0.004*working + 0.004*ppl + 0.004*versa + 0.004*fb + 0.004*reset + 0.004*bookmark + 0.004*comment + 0.004*stability + 0.003*highlighting + 0.003*badge + 0.003*section + 0.003*80 
+0.006*intensive + 0.005*bite + 0.005*year + 0.005*color + 0.005*IOS + 0.004*problem + 0.004*radar + 0.004*screen + 0.004*working + 0.004*ppl + 0.004*versa + 0.004*reset + 0.004*fb + 0.004*bookmark + 0.004*comment + 0.004*stability + 0.003*highlighting + 0.003*badge + 0.003*section + 0.003*80 
 
 Topic 136 :
 
@@ -909,7 +909,7 @@ Topic 136 :
 
 Topic 137 :
 
-0.007*complicated + 0.006*stand + 0.005*style + 0.004*employee + 0.004*connect + 0.004*Apple + 0.004*startup + 0.004*restaurant + 0.003*v1 + 0.003*oop + 0.003*summary + 0.003*swimming + 0.003*pool + 0.003*recording + 0.003*notification + 0.003*story + 0.003*prompt + 0.003*patch + 0.003*favorite + 0.003*dropbox 
+0.007*complicated + 0.006*stand + 0.005*style + 0.004*employee + 0.004*connect + 0.004*Apple + 0.004*startup + 0.004*restaurant + 0.003*v1 + 0.003*oop + 0.003*summary + 0.003*swimming + 0.003*pool + 0.003*recording + 0.003*notification + 0.003*story + 0.003*prompt + 0.003*patch + 0.003*dropbox + 0.003*favorite 
 
 Topic 138 :
 
@@ -917,7 +917,7 @@ Topic 138 :
 
 Topic 139 :
 
-0.006*creative + 0.006*lame + 0.006*modern + 0.005*Cincinnati + 0.004*hour + 0.004*upload + 0.004*UI + 0.004*boo + 0.004*topic + 0.004*clutter + 0.004*date + 0.004*look + 0.004*secrion + 0.004*X + 0.004*faithful + 0.004*Evernote + 0.003*setting + 0.003*Album + 0.003*EverNote + 0.003*oop 
+0.006*creative + 0.006*lame + 0.006*modern + 0.005*Cincinnati + 0.004*hour + 0.004*upload + 0.004*UI + 0.004*boo + 0.004*topic + 0.004*clutter + 0.004*look + 0.004*date + 0.004*secrion + 0.004*X + 0.004*faithful + 0.004*Evernote + 0.003*setting + 0.003*Album + 0.003*EverNote + 0.003*oop 
 
 Topic 140 :
 
@@ -929,7 +929,7 @@ Topic 141 :
 
 Topic 142 :
 
-0.005*strange + 0.005*netwrk + 0.005*mobile + 0.005*60 + 0.005*thank + 0.004*reason + 0.004*apparent + 0.004*r + 0.004*EXTREMELY + 0.004*previous + 0.004*annoyance + 0.004*hat + 0.004*cloud + 0.004*working + 0.004*v1 + 0.004*Tech + 0.003*composition + 0.003*contrast + 0.003*tab + 0.003*clunky 
+0.005*strange + 0.005*netwrk + 0.005*mobile + 0.005*60 + 0.005*thank + 0.004*reason + 0.004*apparent + 0.004*r + 0.004*EXTREMELY + 0.004*previous + 0.004*annoyance + 0.004*hat + 0.004*cloud + 0.004*working + 0.004*v1 + 0.004*Tech + 0.003*composition + 0.003*contrast + 0.003*clunky + 0.003*everyonce 
 
 Topic 143 :
 
@@ -937,7 +937,7 @@ Topic 143 :
 
 Topic 144 :
 
-0.005*flip + 0.005*pleeeease + 0.005*quick + 0.005*NICE + 0.004*netwrk + 0.004*solution + 0.004*PDF + 0.004*app + 0.004*excellent + 0.004*opposite + 0.004*App + 0.004*Usability + 0.004*friendly + 0.004*process + 0.004*list + 0.004*simple + 0.004*integration + 0.003*detailed + 0.003*Tech + 0.003*performance 
+0.005*flip + 0.005*pleeeease + 0.005*quick + 0.005*NICE + 0.004*netwrk + 0.004*solution + 0.004*PDF + 0.004*excellent + 0.004*app + 0.004*opposite + 0.004*App + 0.004*Usability + 0.004*friendly + 0.004*process + 0.004*list + 0.004*simple + 0.004*integration + 0.003*detailed + 0.003*Tech + 0.003*performance 
 
 Topic 145 :
 

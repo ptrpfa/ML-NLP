@@ -1998,7 +1998,7 @@ if (mine_data == True):
             gensim_corpus = [id2word.doc2bow (document_tokens) for document_tokens in list_corpus_tokens]
 
             # Create new models if not using serialised models
-            if (not use_topic_model_pickle):
+            if (not use_topic_model_pickle): # REMOVE THIS!
 
                 # Create Topic Modelling models
                 lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = selected_topic_no, passes = 100, 
