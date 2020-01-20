@@ -716,7 +716,7 @@ def check_new_topic (series):
 
 # Function to update the TopicID of the FeedbackTopic dataframe
 def update_feedback_topic_topic_id (series):
-    print ("Mapping:", series ['TextTopics', "->", dict_topic_id_mapping [int (series ['TextTopics'])]])
+    
     # Update the TopicID of the current Feedback-Topic mapping
     series ['TextTopics'] = dict_topic_id_mapping [int (series ['TextTopics'])]
 
@@ -1366,7 +1366,7 @@ for optimal_model in list_models:
             # Add new column to Topic DataFrame
             topic_df ['Status'] = 0 # Default value of Pending for developer's status on Topic for any other category
 
-        """ Update Topics DataFrame to remove duplicate topics that are already in the database """
+        """ Update Topics and FeedbackTopics DataFrame to remove duplicate topics that are already in the database """
         # Initialise list containing new topics
         list_new_topics = []
 
@@ -1376,17 +1376,8 @@ for optimal_model in list_models:
         # Update the Topics DataFrame with the TopicID of topics in the database for topics that have already been inserted to the database
         topic_df = topic_df.apply (check_new_topic, axis = 1)
 
-        print (dict_topic_id_mapping)
-
         # Update the FeedbackTopics dataframe with the updated TopicID values
         feedback_topic_df = feedback_topic_df.apply (update_feedback_topic_topic_id, axis = 1)
-        
-        # Loop to update the FeedbackTopics dataframe with the updated TopicID values
-        # for old_topic_id in dict_topic_id_mapping.keys ():
-                    
-        #     # Update the FeedbackTopic DataFrame to change the TopicID of the current Topic to that of the topic in the database
-        #     feedback_topic_df.loc [feedback_topic_df ['TextTopics'] == old_topic_id, 'TextTopics'] = dict_topic_id_mapping [old_topic_id]
-        
 
         """ Database updates """
         # Check  global boolean variable to see whether or not to modify the database
@@ -1403,7 +1394,7 @@ for optimal_model in list_models:
                 topic_df.apply (insert_topics_dataframe, axis = 1, args = (db_cursor, db_connection, list_new_topics))
 
                 # Print debugging message
-                print (len (topic_df), "record(s) successfully inserted into Topics table for Category %s" % category_id)
+                print (len (list_new_topics), "record(s) successfully inserted into Topics table for Category %s" % category_id)
                 
             # Catch MySQL Exception
             except mysql.connector.Error as error:
@@ -1425,7 +1416,7 @@ for optimal_model in list_models:
 
             # Connect to database to INSERT new Feedback-Topic mappings into the FeedbackTopic table
             try:
-                feedback_topic_df.to_csv (feedback_topics_df_file_path % "test", index = False, encoding = "utf-8") # Save FeedbackTopic DataFrame
+                
                 # Create MySQL connection and cursor objects to the database
                 db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
                 db_cursor = db_connection.cursor ()
