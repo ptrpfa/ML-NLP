@@ -926,18 +926,90 @@ def get_manual_feedback_topic_mapping (series, dictionary_manual_tag, minimum_pe
     # Return modified Series object
     return series
 
-# Function to insert each row in the series object passed to the Topics table
-def insert_topics_dataframe (series, cursor, connection): 
+# Function to check if the current topic is new (has not been inserted into the database)
+def check_new_topic (series):
+    
+    # Initialise variable containing the TopicID of the current topic in the database if it is already inside the database
+    db_topic_id = 0 # Default TopicID of 0 (means that the current topic is new and has not been added into the database)
 
-    # Create SQL statement to insert Topics table values
-    sql = "INSERT INTO %s (TopicID, WebAppID, Name, PriorityScore, Remarks, Status) " % (topic_table)
-    sql = sql + "VALUES (%s, %s, %s, %s, %s, %s);" 
+    # Connect to the the database to check if the current Topic is new (has not been added into the database)
+    try:
 
-    # Execute SQL statement
-    cursor.execute (sql, (series ['Id'], web_app_id, series ['Name'], series ['PriorityScore'], series ['Remarks'], series ['Status']))
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
 
-    # Commit changes made
-    connection.commit ()
+        # SQL query to get the largest TopicID value in the Topics table
+        sql = "SELECT IFNULL((SELECT TopicID FROM Topic WHERE Name LIKE %s AND Remarks LIKE %s AND WebAppID = %s), 0) AS Results;"
+    
+        # Execute query
+        db_cursor.execute (sql, ("%" + series ['Name'] + "%", "%" + series ['Remarks'] + "%", web_app_id))
+
+        # Get the TopicID value from the database
+        db_topic_id = db_cursor.fetchone () [0]
+
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error occurred when trying to check if a particular Topic already exists in the Topics table:", error)
+
+    # Catch other errors
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to check if a particular Topic already exists in the Topics table")
+
+    finally:
+
+        # Close connection objects once the largest TopicID value is obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
+
+    # Check if the current topic is new and has not been added into the database yet
+    if (db_topic_id == 0):
+        
+        # Append the TopicID of the current topic to the list containing new topics if the current topic have not been added into the database yet
+        list_new_topics.append (series ['Id'])
+
+        # Add a mapping in the dictionary containing the mappings between topics in the Topic DataFrame and topcis in the database
+        dict_topic_id_mapping [series ['Id']] = series ['Id'] # Set the mapping of the TopicID to itself since the current topic is new
+
+    else:
+        
+        # Add a mapping in the dictionary containing the mappings between topics in the Topic DataFrame and topcis in the database
+        dict_topic_id_mapping [series ['Id']] = db_topic_id
+
+        # Update the current topic's TopicID if it has already been added into the database
+        series ['Id'] = db_topic_id
+
+    # Return the updated series object
+    return series
+
+# Function to update the TopicID of the FeedbackTopic dataframe
+def update_feedback_topic_topic_id (series):
+    
+    # Update the TopicID of the current Feedback-Topic mapping
+    series ['TextTopics'] = dict_topic_id_mapping [int (series ['TextTopics'])]
+
+    # Return the updated series object
+    return series
+
+# Function to insert each row in the series object passed to the Topics table (if the current Topic is a new topic)
+def insert_topics_dataframe (series, cursor, connection, list_new_topics): 
+
+    # Check if the current topic is already in the database
+    if (series ['Id'] in list_new_topics): # Insert the current topic if it is a new topic that have not been added into the database
+
+        # Create SQL statement to insert Topics table values
+        sql = "INSERT INTO %s (TopicID, WebAppID, Name, PriorityScore, Remarks, Status) " % (topic_table)
+        sql = sql + "VALUES (%s, %s, %s, %s, %s, %s);" 
+
+        # Execute SQL statement
+        cursor.execute (sql, (series ['Id'], web_app_id, series ['Name'], series ['PriorityScore'], series ['Remarks'], series ['Status']))
+
+        # Commit changes made
+        connection.commit ()
 
 # Function to insert each row in the series object passed to the FeedbackTopic table
 def insert_feedback_topic_dataframe (series, cursor, connection): 
@@ -1195,7 +1267,6 @@ spam_check_data = True          # Boolean to trigger application of Spam Detecti
 sentiment_check_data = True     # Boolean to trigger application of Naive Sentiment Analysis on Feedback data in the database (Default value is TRUE)
 topic_model_data = True         # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 use_manual_tag = True           # Boolean to trigger whether to use manually tagged topics (keyword-based topic modelling) (Default value is TRUE)
-use_topic_model_pickle = True  # Boolean to trigger whether or not to use the already pickled Topic Models (For TESTING purposes only as pickled Gensim models will not be applied on new data)
 preliminary_check = True        # Boolean to trigger display of preliminary dataset visualisations and presentations
 
 """ Database global variables """
@@ -2029,33 +2100,15 @@ if (mine_data == True):
                 print (feedback_ml_df.dtypes, "\n")
             
             # 4) Apply topic modelling transformations and models
-            # Convert list of corpus document-tokens into a dictionary of the locations of each token in the format {location: 'term'}
-            # id2word = corpora.Dictionary (list_corpus_tokens)
-
-            # Load id2word dictionary
+            # Load pickled id2word dictionary (dictionary of the locations of each token in the format {location: 'term'})
             id2word = load_pickle ("id2word-%s.pkl" % category_id)
-
-            # # Human readable format of corpus (term-frequency)
-            # dtm = [[(id2word [id], freq) for id, freq in cp] for cp in corpus[:1]]
 
             # Get Term-Document Frequency
             gensim_corpus = [id2word.doc2bow (document_tokens) for document_tokens in list_corpus_tokens]
 
-            # Create new models if not using serialised models
-            if (not use_topic_model_pickle): # REMOVE THIS!
-
-                # Create Topic Modelling models
-                lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = selected_topic_no, passes = 100, 
-                                            chunksize = 3500, alpha = 'auto', eta = 'auto', random_state = 123, minimum_probability = 0.05) # LDA Model
-
-                hdp_model = models.HdpModel (corpus = gensim_corpus, id2word = id2word, random_state = 123) # HDP Model (infers the number of topics [always generates 150 topics])
-            
-            # Using pickled objects
-            else:
-
-                # Load serialised models
-                lda_model = load_pickle ("lda-model-%s.pkl" % category_id)
-                hdp_model = load_pickle ("hdp-model-%s.pkl" % category_id)
+            # Load serialised models
+            lda_model = load_pickle ("lda-model-%s.pkl" % category_id)
+            hdp_model = load_pickle ("hdp-model-%s.pkl" % category_id) # HDP Model (infers the number of topics [always generates 150 topics])
 
             """ Get Topics generated """
             # Get topics
@@ -2227,6 +2280,19 @@ if (mine_data == True):
                 # Add new column to Topic DataFrame
                 topic_df ['Status'] = 0 # Default value of Pending for developer's status on Topic for any other category
 
+            """ Update Topics and FeedbackTopics DataFrame to remove duplicate topics that are already in the database """
+            # Initialise list containing new topics
+            list_new_topics = []
+
+            # Initialise dictionary containing mapping between the TopicID of topics in the current Topic dataframe and topics in the database
+            dict_topic_id_mapping = {} # Dictionary is in the format {"old_topic_id: new_topic_id"}
+
+            # Update the Topics DataFrame with the TopicID of topics in the database for topics that have already been inserted to the database
+            topic_df = topic_df.apply (check_new_topic, axis = 1)
+
+            # Update the FeedbackTopics dataframe with the updated TopicID values
+            feedback_topic_df = feedback_topic_df.apply (update_feedback_topic_topic_id, axis = 1)
+
             """ Database updates """
             # Connect to database to INSERT new topics into the Topics table (need to first insert into the Topics table as FeedbackTopic insertions later on have foreign key references to the Topics table)
             try:
@@ -2236,10 +2302,10 @@ if (mine_data == True):
                 db_cursor = db_connection.cursor ()
 
                 # Insert the new topics into the Topics database table
-                topic_df.apply (insert_topics_dataframe, axis = 1, args = (db_cursor, db_connection))
+                topic_df.apply (insert_topics_dataframe, axis = 1, args = (db_cursor, db_connection, list_new_topics))
 
                 # Print debugging message
-                print (len (topic_df), "record(s) successfully inserted into Topics table for Category %s" % category_id)
+                print (len (list_new_topics), "record(s) successfully inserted into Topics table for Category %s" % category_id)
                 
             # Catch MySQL Exception
             except mysql.connector.Error as error:

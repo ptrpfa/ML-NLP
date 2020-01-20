@@ -1,4 +1,71 @@
-Start time:  2020-01-20 15:55:38.620293
+Start time:  2020-01-20 16:31:32.238271
+
+***Preliminary preparations before data mining process***
+
+Unprocessed feedback data detected!
+Pre-processing: 4557 record(s)
+Cleaning unprocessed feedbacks..
+Number of trash record(s) found: 13 record(s)
+4557 record(s) successfully pre-processed
+4557 record(s) successfully inserted into FeedbackML table
+
+Data pre-processing completed in 71.672635 seconds
+
+
+***Data Mining***
+
+Unmined feedback data detected!
+Mining: 4557 record(s)
+
+(1) Conducting SPAM DETECTION..
+
+Preliminary information about SPAM/HAM dataset:
+Dimensions:  (2185, 8) 
+
+First few records:
+          Id                     Subject                                           MainText  SubjectSpam  MainTextSpam  SpamStatus  Subjectivity  Polarity
+0      1_1_1                     Subject                                           MainText            2             2           2           2.0       2.0
+1      1_2_2                     Subject                                           MainText            2             2           2           2.0       2.0
+2  99_4377_2  It's good to look at stuff  It's good if you want to browse but is horribl...            2             2           2           2.0       2.0
+3  99_4380_2               Yup It's ugly  The white app icon is so atrocious I'm hiding ...            2             2           2           2.0       2.0
+4  99_4390_2                        Hats  I love the app but it's annoying cause when I ...            2             2           2           2.0       2.0 
+
+Columns and data types:
+Id               object
+Subject          object
+MainText         object
+SubjectSpam       int64
+MainTextSpam      int64
+SpamStatus        int64
+Subjectivity    float64
+Polarity        float64
+dtype: object 
+
+Loaded vectorizer in 0.92419 seconds
+Transformed subject to DTM in 21.918696 seconds
+Transformed main text to DTM in 22.159366 seconds
+
+Predicting whether subjects of feedback is spam..
+Predicted subject values: [0 0 0 ... 0 0 0]
+
+Predicting whether main texts of feedback is spam..
+Predicted main text values: [0 0 0 ... 0 0 0]
+
+Spam model runtime:  0.750589 seconds
+
+2185 record(s) successfully classified as SPAM/HAM
+
+Completed Spam Detection in 48.03941 seconds
+
+
+(2) Conducting SENTIMENT ANALYSIS..
+
+4533 record(s)' sentiment subjectivity and polarity values analysed
+
+Completed Sentiment Analysis in 5.960707 seconds
+
+
+(3) Conducting TOPIC MODELLING..
 
 Performing Topic Modelling on Category 2 with 90 projected topics..
 
@@ -25,16 +92,6 @@ TextTokens          object
 TextTopics          object
 TopicPercentages    object
 dtype: object 
-
-*****Model Performances***
-
-LDA:
-
-Coherence Score:  0.42320575646279057
-
-HDP:
-
-Coherence Score:  0.7732325972816982 
 
 93 record(s) successfully inserted into Topics table for Category 2
 962 record(s) successfully inserted into FeedbackTopic table for Category 2
@@ -67,16 +124,6 @@ TextTopics          object
 TopicPercentages    object
 dtype: object 
 
-*****Model Performances***
-
-LDA:
-
-Coherence Score:  0.4576548914463027
-
-HDP:
-
-Coherence Score:  0.7485384922401099 
-
 66 record(s) successfully inserted into Topics table for Category 4
 3131 record(s) successfully inserted into FeedbackTopic table for Category 4
 3285 record(s)' TopicModelStatus updated for Category 4
@@ -108,21 +155,16 @@ TextTopics          object
 TopicPercentages    object
 dtype: object 
 
-*****Model Performances***
-
-LDA:
-
-Coherence Score:  0.4803801015344955
-
-HDP:
-
-Coherence Score:  0.7884876187664643 
-
 67 record(s) successfully inserted into Topics table for Category 5
-472 record(s) successfully inserted into FeedbackTopic table for Category 5
+475 record(s) successfully inserted into FeedbackTopic table for Category 5
 401 record(s)' TopicModelStatus updated for Category 5
 68 Category 5 Topic(s)' PriorityScore updated
 
-Program start time:  2020-01-20 15:55:38.620293
-Program end time:  2020-01-20 16:01:44.701384
-Program runtime:  366.081091 seconds
+Completed Topic Modelling in 301.908331 seconds
+
+Updating data-mined status of feedback..
+4557 record(s) successfully mined
+
+Program start time:  2020-01-20 16:31:32.238271
+Program end time:  2020-01-20 16:38:40.154820
+Program runtime:  427.916549 seconds

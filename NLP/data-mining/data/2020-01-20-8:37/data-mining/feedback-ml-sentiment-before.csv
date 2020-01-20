@@ -1,3 +1,0 @@
-Id,MainText,Subjectivity,Polarity
-99_8002_4,Here I am taking advantage of refs in React and passing in our canvas as the first argument to our new Chart Both will work but my React approach will differ from the documentation No need to be scared though If we place the new Chart outside of a lifecycle method our component won't be able to find the canvas since render will not have executed yet There are a few different ways of handling this but we'll start with this ,2.0,2.0
-99_8003_4,BACKGROUND React is one of the most popular JavaScript libraries for creating user interfaces Likewise Chart js is one of the most popular JavaScript libraries for creating charts As we'll see in this tutorial the two libraries integrate smoothly ,2.0,2.0
