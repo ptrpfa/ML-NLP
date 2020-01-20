@@ -773,7 +773,7 @@ def get_feedback_topic_mapping (model, corpus, texts, max_no_topics, minimum_per
 
     # Apply model on corpus to get a Gensim TransformedCorpus object of mappings (Document-Topic mapping ONLY)
     transformed_gensim_corpus = model [corpus]
-    print (transformed_gensim_corpus, type (transformed_gensim_corpus), len (transformed_gensim_corpus))
+    
     # Loop to access mappings in the Gensim transformed corpus (made of lists of document-topic mappings)
     for list_document_topic in transformed_gensim_corpus: # Access document by document
         # print (list_document_topic)
@@ -954,6 +954,47 @@ def insert_feedback_topic_dataframe (series, cursor, connection):
 
     # Commit changes made
     connection.commit ()
+
+# Function to update the TopicModelStatus of feedback in the FeedbackML table
+def update_topic_status_dataframe (series):
+
+    # Split Id (WebAppID_FeedbackID_CategoryID) into a list
+    list_id = series ['Id'].split ('_') # Each ID component is delimited by underscore
+
+    # Connect to database to update the TopicModelStatus of the current feedback
+    try:
+        
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
+
+        # Create SQL statement to update FeedbackML table values
+        sql = "UPDATE %s " % (feedback_ml_table)
+        sql = sql + "SET TopicModelStatus = 1 WHERE WebAppID = %s AND FeedbackID = %s AND CategoryID = %s;"
+
+        # Execute SQL statement
+        db_cursor.execute (sql, (list_id [0], list_id [1], list_id [2]))
+
+        # Commit changes made
+        db_connection.commit ()
+
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error occurred when trying to update the TopicModelStatus of a particular feedback:", error)
+
+    # Catch other errors
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to update the TopicModelStatus of a particular feedback")
+
+    finally:
+
+        # Close connection objects once factor is obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
 
 # Function to calculate the PriorityScore of each Topic in the Topics DataFrame
 def calculate_topic_priority_score (series):
@@ -1899,7 +1940,7 @@ if (mine_data == True):
             db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
             # Create SQL query to get FeedbackML table values (Feature Engineering)
-            sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE WebAppID = %s AND SpamStatus = 0 AND CategoryID = %s;" % (feedback_ml_table, web_app_id, category_id)
+            sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE WebAppID = %s AND CategoryID = %s AND SpamStatus = 0 AND TopicModelStatus = 0;" % (feedback_ml_table, web_app_id, category_id)
 
             # Execute query and convert FeedbackML table into a pandas DataFrame
             feedback_ml_df = pd.read_sql (sql_query, db_connection)
@@ -2248,6 +2289,12 @@ if (mine_data == True):
                 # Close connection objects once Feedback has been obtained
                 db_cursor.close ()
                 db_connection.close () # Close MySQL connection
+
+            # Update FeedbackML table's TopicModelStatus
+            feedback_ml_df.apply (update_topic_status_dataframe, axis = 1)
+
+            # Print debugging message
+            print (len (feedback_ml_df), "record(s)' TopicModelStatus updated for Category %s" % category_id)
 
             # Calculate the PriorityScore of each Topic and update the Topics table
             topic_df.apply (calculate_topic_priority_score, axis = 1) # Access each topic row by row

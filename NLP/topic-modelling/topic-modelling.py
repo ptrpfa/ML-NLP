@@ -654,18 +654,90 @@ def hypertune_no_topics (dictionary, corpus, texts, limit, start, step):
         # Show visualisations
         plt.show ()
 
-# Function to insert each row in the series object passed to the Topics table
-def insert_topics_dataframe (series, cursor, connection): 
+# Function to check if the current topic is new (has not been inserted into the database)
+def check_new_topic (series):
+    
+    # Initialise variable containing the TopicID of the current topic in the database if it is already inside the database
+    db_topic_id = 0 # Default TopicID of 0 (means that the current topic is new and has not been added into the database)
 
-    # Create SQL statement to insert Topics table values
-    sql = "INSERT INTO %s (TopicID, WebAppID, Name, PriorityScore, Remarks, Status) " % (topic_table)
-    sql = sql + "VALUES (%s, %s, %s, %s, %s, %s);" 
+    # Connect to the the database to check if the current Topic is new (has not been added into the database)
+    try:
 
-    # Execute SQL statement
-    cursor.execute (sql, (series ['Id'], web_app_id, series ['Name'], series ['PriorityScore'], series ['Remarks'], series ['Status']))
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
 
-    # Commit changes made
-    connection.commit ()
+        # SQL query to get the largest TopicID value in the Topics table
+        sql = "SELECT IFNULL((SELECT TopicID FROM Topic WHERE Name LIKE %s AND Remarks LIKE %s AND WebAppID = %s), 0) AS Results;"
+    
+        # Execute query
+        db_cursor.execute (sql, ("%" + series ['Name'] + "%", "%" + series ['Remarks'] + "%", web_app_id))
+
+        # Get the TopicID value from the database
+        db_topic_id = db_cursor.fetchone () [0]
+
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error occurred when trying to check if a particular Topic already exists in the Topics table:", error)
+
+    # Catch other errors
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to check if a particular Topic already exists in the Topics table")
+
+    finally:
+
+        # Close connection objects once the largest TopicID value is obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
+
+    # Check if the current topic is new and has not been added into the database yet
+    if (db_topic_id == 0):
+        
+        # Append the TopicID of the current topic to the list containing new topics if the current topic have not been added into the database yet
+        list_new_topics.append (series ['Id'])
+
+        # Add a mapping in the dictionary containing the mappings between topics in the Topic DataFrame and topcis in the database
+        dict_topic_id_mapping [series ['Id']] = series ['Id'] # Set the mapping of the TopicID to itself since the current topic is new
+
+    else:
+        
+        # Add a mapping in the dictionary containing the mappings between topics in the Topic DataFrame and topcis in the database
+        dict_topic_id_mapping [series ['Id']] = db_topic_id
+
+        # Update the current topic's TopicID if it has already been added into the database
+        series ['Id'] = db_topic_id
+
+    # Return the updated series object
+    return series
+
+# Function to update the TopicID of the FeedbackTopic dataframe
+def update_feedback_topic_topic_id (series):
+    print ("Mapping:", series ['TextTopics', "->", dict_topic_id_mapping [int (series ['TextTopics'])]])
+    # Update the TopicID of the current Feedback-Topic mapping
+    series ['TextTopics'] = dict_topic_id_mapping [int (series ['TextTopics'])]
+
+    # Return the updated series object
+    return series
+
+# Function to insert each row in the series object passed to the Topics table (if the current Topic is a new topic)
+def insert_topics_dataframe (series, cursor, connection, list_new_topics): 
+
+    # Check if the current topic is already in the database
+    if (series ['Id'] in list_new_topics): # Insert the current topic if it is a new topic that have not been added into the database
+
+        # Create SQL statement to insert Topics table values
+        sql = "INSERT INTO %s (TopicID, WebAppID, Name, PriorityScore, Remarks, Status) " % (topic_table)
+        sql = sql + "VALUES (%s, %s, %s, %s, %s, %s);" 
+
+        # Execute SQL statement
+        cursor.execute (sql, (series ['Id'], web_app_id, series ['Name'], series ['PriorityScore'], series ['Remarks'], series ['Status']))
+
+        # Commit changes made
+        connection.commit ()
 
 # Function to insert each row in the series object passed to the FeedbackTopic table
 def insert_feedback_topic_dataframe (series, cursor, connection): 
@@ -676,12 +748,53 @@ def insert_feedback_topic_dataframe (series, cursor, connection):
     # Create SQL statement to insert FeedbackTopic table values
     sql = "INSERT INTO %s (FBWebAppID, FeedbackID, CategoryID, TopicID, TWebAppID, Percentage) " % (feedback_topic_table)
     sql = sql + "VALUES (%s, %s, %s, %s, %s, %s);" 
-
+    
     # Execute SQL statement
     cursor.execute (sql, (list_id [0], list_id [1], list_id [2], series ['TextTopics'], web_app_id, series ['TopicPercentages']))
 
     # Commit changes made
     connection.commit ()
+
+# Function to update the TopicModelStatus of feedback in the FeedbackML table
+def update_topic_status_dataframe (series):
+
+    # Split Id (WebAppID_FeedbackID_CategoryID) into a list
+    list_id = series ['Id'].split ('_') # Each ID component is delimited by underscore
+
+    # Connect to database to update the TopicModelStatus of the current feedback
+    try:
+        
+        # Create MySQL connection and cursor objects to the database
+        db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
+        db_cursor = db_connection.cursor ()
+
+        # Create SQL statement to update FeedbackML table values
+        sql = "UPDATE %s " % (feedback_ml_table)
+        sql = sql + "SET TopicModelStatus = 1 WHERE WebAppID = %s AND FeedbackID = %s AND CategoryID = %s;"
+
+        # Execute SQL statement
+        db_cursor.execute (sql, (list_id [0], list_id [1], list_id [2]))
+
+        # Commit changes made
+        db_connection.commit ()
+
+    # Catch MySQL Exception
+    except mysql.connector.Error as error:
+
+        # Print MySQL connection error
+        print ("MySQL error occurred when trying to update the TopicModelStatus of a particular feedback:", error)
+
+    # Catch other errors
+    except:
+
+        # Print other errors
+        print ("Error occurred attempting to establish database connection to update the TopicModelStatus of a particular feedback")
+
+    finally:
+
+        # Close connection objects once factor is obtained
+        db_cursor.close ()
+        db_connection.close () # Close MySQL connection
 
 # Function to calculate the PriorityScore of each Topic in the Topics DataFrame
 def calculate_topic_priority_score (series):
@@ -859,7 +972,7 @@ accuracy_file_path = "%saccuracies/" % working_directory                        
 topic_model_data = True  # Boolean to trigger application of Topic Modelling model on Feedback data in the database (Default value is TRUE)
 preliminary_check = True # Boolean to trigger display of preliminary dataset visualisations and presentations
 use_manual_tag = True    # Boolean to trigger whether to use manually tagged topics (Reads from manual-tagging.txt)
-use_pickle = False        # Boolean to trigger whether to use pickled objects or not
+use_pickle = True        # Boolean to trigger whether to use pickled objects or not
 display_visuals = True   # Boolean to trigger display of visualisations
 modify_database = True   # Boolean to trigger modifications of the database
 
@@ -873,15 +986,15 @@ feedback_ml_table = "FeedbackML"        # Name of feedback table in database use
 topic_table = "Topic"                   # Name of topic table in database 
 feedback_topic_table = "FeedbackTopic"  # Name of feedback-topic table in database 
 web_app_id = 99                         # ID of selected web app whose feedback will be topic modelled
-category_id = 4                         # ID of selected category whose feedback will be topic modelled (2: Bug Report, 4: General, 5: Feature Request)
 
 # Tokens
 list_corpus_tokens = [] # Initialise list containing lists of document tokens in the corpus for training Gensim Bigram and Trigram models and for Topic Modelling
 token_whitelist = ["photoshop", "editing", "pinterest", "xperia", "instagram", "facebook", "evernote", "update", "dropbox", "picsart", # Token whitelist (to prevent important terms from not being tokenized)
                    "whatsapp", "tripadvisor", "onenote"] 
 
-# Set projected number of topics
-selected_topic_no = 65
+# Initialise variables to set the category of dataset and number of topics
+selected_topic_no = 0  # Projected number of topics
+category_id = 0        # ID of selected category whose feedback will be topic modelled (2: Bug Report, 4: General, 5: Feature Request)
 
 # Initialise list containing the unique categories of feedback within the selected web application
 list_category = []
@@ -937,7 +1050,7 @@ for optimal_model in list_models:
         db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
 
         # Create SQL query to get FeedbackML table values (Feature Engineering)
-        sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE WebAppID = %s AND SpamStatus = 0 AND CategoryID = %s;" % (feedback_ml_table, web_app_id, category_id)
+        sql_query = "SELECT CONCAT(WebAppID, \'_\', FeedbackID, \'_\', CategoryID) as `Id`, SubjectCleaned as `Subject`, MainTextCleaned as `MainText` FROM %s WHERE WebAppID = %s AND CategoryID = %s AND SpamStatus = 0 AND TopicModelStatus = 0;" % (feedback_ml_table, web_app_id, category_id)
 
         # Execute query and convert FeedbackML table into a pandas DataFrame
         feedback_ml_df = pd.read_sql (sql_query, db_connection)
@@ -1029,17 +1142,17 @@ for optimal_model in list_models:
             print (feedback_ml_df.dtypes, "\n")
         
         # 4) Apply topic modelling transformations and models
-        # Convert list of corpus document-tokens into a dictionary of the locations of each token in the format {location: 'term'}
-        id2word = corpora.Dictionary (list_corpus_tokens)
-
-        # # Human readable format of corpus (term-frequency)
-        # dtm = [[(id2word [id], freq) for id, freq in cp] for cp in corpus[:1]]
-
-        # Get Term-Document Frequency
-        gensim_corpus = [id2word.doc2bow (document_tokens) for document_tokens in list_corpus_tokens]
-
         # Create new models if not using serialised models
         if (not use_pickle):
+            
+            # Convert list of corpus document-tokens into a dictionary of the locations of each token in the format {location: 'term'}
+            id2word = corpora.Dictionary (list_corpus_tokens)
+
+            # # Human readable format of corpus (term-frequency)
+            # dtm = [[(id2word [id], freq) for id, freq in cp] for cp in corpus[:1]]
+
+            # Get Term-Document Frequency
+            gensim_corpus = [id2word.doc2bow (document_tokens) for document_tokens in list_corpus_tokens]
 
             # Create Topic Modelling models
             lda_model = models.LdaModel (corpus = gensim_corpus, id2word = id2word, num_topics = selected_topic_no, passes = 100, 
@@ -1049,6 +1162,12 @@ for optimal_model in list_models:
         
         # Using pickled objects
         else:
+
+            # Load id2word dictionary (dictionary of the locations of each token in the format {location: 'term'})
+            id2word = load_pickle ("id2word-%s.pkl" % category_id)
+
+            # Get Term-Document Frequency
+            gensim_corpus = [id2word.doc2bow (document_tokens) for document_tokens in list_corpus_tokens]
 
             # Load serialised models
             lda_model = load_pickle ("lda-model-%s.pkl" % category_id)
@@ -1247,6 +1366,28 @@ for optimal_model in list_models:
             # Add new column to Topic DataFrame
             topic_df ['Status'] = 0 # Default value of Pending for developer's status on Topic for any other category
 
+        """ Update Topics DataFrame to remove duplicate topics that are already in the database """
+        # Initialise list containing new topics
+        list_new_topics = []
+
+        # Initialise dictionary containing mapping between the TopicID of topics in the current Topic dataframe and topics in the database
+        dict_topic_id_mapping = {} # Dictionary is in the format {"old_topic_id: new_topic_id"}
+
+        # Update the Topics DataFrame with the TopicID of topics in the database for topics that have already been inserted to the database
+        topic_df = topic_df.apply (check_new_topic, axis = 1)
+
+        print (dict_topic_id_mapping)
+
+        # Update the FeedbackTopics dataframe with the updated TopicID values
+        feedback_topic_df = feedback_topic_df.apply (update_feedback_topic_topic_id, axis = 1)
+        
+        # Loop to update the FeedbackTopics dataframe with the updated TopicID values
+        # for old_topic_id in dict_topic_id_mapping.keys ():
+                    
+        #     # Update the FeedbackTopic DataFrame to change the TopicID of the current Topic to that of the topic in the database
+        #     feedback_topic_df.loc [feedback_topic_df ['TextTopics'] == old_topic_id, 'TextTopics'] = dict_topic_id_mapping [old_topic_id]
+        
+
         """ Database updates """
         # Check  global boolean variable to see whether or not to modify the database
         if (modify_database == True): # Execute database modifications
@@ -1259,7 +1400,7 @@ for optimal_model in list_models:
                 db_cursor = db_connection.cursor ()
 
                 # Insert the new topics into the Topics database table
-                topic_df.apply (insert_topics_dataframe, axis = 1, args = (db_cursor, db_connection))
+                topic_df.apply (insert_topics_dataframe, axis = 1, args = (db_cursor, db_connection, list_new_topics))
 
                 # Print debugging message
                 print (len (topic_df), "record(s) successfully inserted into Topics table for Category %s" % category_id)
@@ -1284,7 +1425,7 @@ for optimal_model in list_models:
 
             # Connect to database to INSERT new Feedback-Topic mappings into the FeedbackTopic table
             try:
-
+                feedback_topic_df.to_csv (feedback_topics_df_file_path % "test", index = False, encoding = "utf-8") # Save FeedbackTopic DataFrame
                 # Create MySQL connection and cursor objects to the database
                 db_connection = mysql.connector.connect (host = mysql_host, user = mysql_user, password = mysql_password, database = mysql_schema)
                 db_cursor = db_connection.cursor ()
@@ -1312,6 +1453,12 @@ for optimal_model in list_models:
                 # Close connection objects once Feedback has been obtained
                 db_cursor.close ()
                 db_connection.close () # Close MySQL connection
+
+            # Update FeedbackML table's TopicModelStatus
+            feedback_ml_df.apply (update_topic_status_dataframe, axis = 1)
+
+            # Print debugging message
+            print (len (feedback_ml_df), "record(s)' TopicModelStatus updated for Category %s" % category_id)
 
             # Calculate the PriorityScore of each Topic and update the Topics table
             topic_df.apply (calculate_topic_priority_score, axis = 1) # Access each topic row by row
