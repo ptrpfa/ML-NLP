@@ -1989,7 +1989,10 @@ if (mine_data == True):
             
             # 4) Apply topic modelling transformations and models
             # Convert list of corpus document-tokens into a dictionary of the locations of each token in the format {location: 'term'}
-            id2word = corpora.Dictionary (list_corpus_tokens)
+            # id2word = corpora.Dictionary (list_corpus_tokens)
+
+            # Load id2word dictionary
+            id2word = load_pickle ("id2word-%s.pkl" % category_id)
 
             # # Human readable format of corpus (term-frequency)
             # dtm = [[(id2word [id], freq) for id, freq in cp] for cp in corpus[:1]]
