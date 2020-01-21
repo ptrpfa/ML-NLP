@@ -1,4 +1,4 @@
-Start time:  2020-01-20 16:31:32.238271
+Start time:  2020-01-21 14:12:39.649688
 
 ***Preliminary preparations before data mining process***
 
@@ -9,7 +9,7 @@ Number of trash record(s) found: 13 record(s)
 4557 record(s) successfully pre-processed
 4557 record(s) successfully inserted into FeedbackML table
 
-Data pre-processing completed in 71.672635 seconds
+Data pre-processing completed in 69.489729 seconds
 
 
 ***Data Mining***
@@ -41,9 +41,9 @@ Subjectivity    float64
 Polarity        float64
 dtype: object 
 
-Loaded vectorizer in 0.92419 seconds
-Transformed subject to DTM in 21.918696 seconds
-Transformed main text to DTM in 22.159366 seconds
+Loaded vectorizer in 0.865398 seconds
+Transformed subject to DTM in 20.174578 seconds
+Transformed main text to DTM in 22.149488 seconds
 
 Predicting whether subjects of feedback is spam..
 Predicted subject values: [0 0 0 ... 0 0 0]
@@ -51,18 +51,18 @@ Predicted subject values: [0 0 0 ... 0 0 0]
 Predicting whether main texts of feedback is spam..
 Predicted main text values: [0 0 0 ... 0 0 0]
 
-Spam model runtime:  0.750589 seconds
+Spam model runtime:  0.734923 seconds
 
 2185 record(s) successfully classified as SPAM/HAM
 
-Completed Spam Detection in 48.03941 seconds
+Completed Spam Detection in 46.168194 seconds
 
 
 (2) Conducting SENTIMENT ANALYSIS..
 
 4533 record(s)' sentiment subjectivity and polarity values analysed
 
-Completed Sentiment Analysis in 5.960707 seconds
+Completed Sentiment Analysis in 5.632498 seconds
 
 
 (3) Conducting TOPIC MODELLING..
@@ -160,11 +160,11 @@ dtype: object
 401 record(s)' TopicModelStatus updated for Category 5
 68 Category 5 Topic(s)' PriorityScore updated
 
-Completed Topic Modelling in 301.908331 seconds
+Completed Topic Modelling in 317.435775 seconds
 
 Updating data-mined status of feedback..
 4557 record(s) successfully mined
 
-Program start time:  2020-01-20 16:31:32.238271
-Program end time:  2020-01-20 16:38:40.154820
-Program runtime:  427.916549 seconds
+Program start time:  2020-01-21 14:12:39.649688
+Program end time:  2020-01-21 14:19:58.650071
+Program runtime:  439.000383 seconds

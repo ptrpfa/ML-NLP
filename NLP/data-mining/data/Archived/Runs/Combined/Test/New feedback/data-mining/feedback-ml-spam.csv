@@ -1,0 +1,3 @@
+Id,Subject,MainText,SubjectSpam,MainTextSpam,SpamStatus,Subjectivity,Polarity
+99_8001_4,The DNS Server allows zone transfers ,The DNS server on gala giac org allows DNS zone transfers to be performed This was tested with Nessus and verified by reviewing etc named conf see listing in 4 3 1 3 SANS Top 20 U1 ,0,0,0,2.0,2.0
+99_8004_4,How do I import an SQL file using the command line in MySQL ,Be sure to check that the backup file does not have use 'original db' in it Although i specified restore to new DB mysql new db dump sql the sql dump file had that in and it overwrote my live DB Not sure if there is an option to force it to use the DB specified and disregard the use 'original db' in the sql file,0,0,0,2.0,2.0
