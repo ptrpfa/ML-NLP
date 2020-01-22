@@ -43,7 +43,7 @@ UPDATEs to the Feedback table will not re-calculate the OverallScore of each Fee
 UPDATEs to the FeedbackTopic table will not re-calculate the OverallScore of each Topic.
 
 Use case:
-This data mining program is designed to only run ONCE on Feedback data that HAVE NOT been data mined before
+This data mining program is designed to run on a batch by batch basis on Feedback data that HAVE NOT been data mined before
 --> The data mining program does not respond to UPDATEs of features that can only be derived after data mining
 (ie change of SpamStatus from 0 to 1 does not trigger the running of Sentiment Analysis/Topic Modelling) OR any
 new INSERTIONS of feedback data into the pool of Feedback data collected (unless this program is run again)
@@ -53,6 +53,18 @@ new INSERTIONS of feedback data into the pool of Feedback data collected (unless
 
 3) This program conducts Topic Modelling on multiple categories specified in list_models in which their optimal 
 number of topics have been obtained after hypertuning. 
+
+4) This program will only insert new Feedback-Topic mappings into the database when conducting Topic Modelling if
+the number of mappings is at least 2 (more than 1) due to a limitation of pandas' .apply function (By default, pandas
+will execute a function called through .apply twice if there is only one record in the selected dataframe for optimization)
+--> Refer to: https://stackoverflow.com/questions/21635915/why-does-pandas-apply-calculate-twice
+              https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.apply.html (Under Notes)
+
+Limitation:
+As mentioned in (1), this program does processing on a batch by batch basis. As such, this program will not respond dynamically to changes 
+in the database (ie new feedback insertions, changing of the SpamStatus of a specific feedback). This program will only respond to such changes 
+on its next run. This limitation can be mitigated by setting the runtime interval of this program to be shorter (ie every week), provided the
+feedback collected are as specified in (4).
 
 """
 
@@ -774,7 +786,7 @@ def get_feedback_topic_mapping (model, corpus, texts, max_no_topics, minimum_per
     
     # Loop to access mappings in the Gensim transformed corpus (made of lists of document-topic mappings)
     for list_document_topic in transformed_gensim_corpus: # Access document by document
-        # print (list_document_topic)
+        
         # Remove topics below specified minimum percentage contribution
         list_document_topic = list (filter (lambda tup: (tup [1] >= minimum_percentage), list_document_topic)) 
 
@@ -1251,7 +1263,7 @@ def load_pickle (filename):
 # Global variables
 """ File paths to store data pre-processing and data mining feedback """
 folder = "%s-%s:%s" % (str (datetime.date.today ()), str (datetime.datetime.now ().hour), str (datetime.datetime.now ().minute)) # Folder file name (yyyy-mm-dd:hh:mm)
-working_directory = "/home/p/Desktop/csitml/NLP/data-mining/" # Working directory of program
+working_directory = os.getcwd () + "/"               # Working directory of program
 pickles_file_path = "%spickles/" % working_directory # File path containing pickled objects
 
 # Data Pre-processing
@@ -1261,16 +1273,16 @@ combined_feedback_file_path_p = "%sdata/%s/pre-processing/combined-feedback.csv"
 trash_feedback_file_path_p = "%sdata/%s/pre-processing/trash-feedback.csv" % (working_directory, folder)       # Dataset file path 
 
 # Data Mining
-feedback_ml_prior_file_path_spam_dm = '%sdata/%s/data-mining/feedback-ml-spam-before.csv' % (working_directory, folder)       # Raw dataset file path (dataset PRIOR to spam detection) 
-feedback_ml_file_path_spam_dm = "%sdata/%s/data-mining/feedback-ml-spam.csv" % (working_directory, folder)                    # Dataset file path (dataset AFTER spam detection)
-feedback_ml_prior_file_path_sa_dm = '%sdata/%s/data-mining/feedback-ml-sentiment-before.csv' % (working_directory, folder)    # Raw dataset file path (dataset PRIOR to sentiment analysis)
-feedback_ml_file_path_sa_dm = "%sdata/%s/data-mining/feedback-ml-sentiment.csv" % (working_directory, folder)                 # Dataset file path (dataset AFTER sentiment analysis)
-topic_file_path_dm = '%sdata/%s/data-mining/feedback-ml-topics' % (working_directory, folder) + '-%s.csv'                     # Topic modelled dataset file path
-topics_file_path_dm = '%sdata/%s/data-mining/topics' % (working_directory, folder) + '-%s.txt'                                # File path of topic details
-topics_df_file_path_dm = '%sdata/%s/data-mining/topics' % (working_directory, folder) + '-%s.csv'                             # File path of topics table
-feedback_topics_df_file_path_dm = '%sdata/%s/data-mining/feedback-topics' % (working_directory, folder) + '-%s.csv'           # File path of feedback-topics table
-manual_tagging_file_path_dm = '%sdata/manual-tagging.txt' % (working_directory)                                               # Manually tagged topic-tokens file path
-topic_visualise_file_path_dm = '%sdata/%s/data-mining/lda' % (working_directory, folder) + '-%s.html'                         # pyLDAvis topics file path
+feedback_ml_prior_file_path_spam_dm = '%sdata/%s/data-mining/spam-detection/feedback-ml-spam-before.csv' % (working_directory, folder)           # Raw dataset file path (dataset PRIOR to spam detection) 
+feedback_ml_file_path_spam_dm = "%sdata/%s/data-mining/spam-detection/feedback-ml-spam.csv" % (working_directory, folder)                        # Dataset file path (dataset AFTER spam detection)
+feedback_ml_prior_file_path_sa_dm = '%sdata/%s/data-mining/sentiment-analysis/feedback-ml-sentiment-before.csv' % (working_directory, folder)    # Raw dataset file path (dataset PRIOR to sentiment analysis)
+feedback_ml_file_path_sa_dm = "%sdata/%s/data-mining/sentiment-analysis/feedback-ml-sentiment.csv" % (working_directory, folder)                 # Dataset file path (dataset AFTER sentiment analysis)
+topic_file_path_dm = '%sdata/%s/data-mining/topic-modelling/feedback-ml-topics' % (working_directory, folder) + '-%s.csv'                        # Topic modelled dataset file path
+topics_file_path_dm = '%sdata/%s/data-mining/topic-modelling/topics' % (working_directory, folder) + '-%s.txt'                                   # File path of topic details
+topics_df_file_path_dm = '%sdata/%s/data-mining/topic-modelling/topics' % (working_directory, folder) + '-%s.csv'                                # File path of topics table
+feedback_topics_df_file_path_dm = '%sdata/%s/data-mining/topic-modelling/feedback-topics' % (working_directory, folder) + '-%s.csv'              # File path of feedback-topics table
+manual_tagging_file_path_dm = '%sdata/manual-tagging.txt' % (working_directory)                                                                  # Manually tagged topic-tokens file path
+topic_visualise_file_path_dm = '%sdata/%s/data-mining/topic-modelling/lda' % (working_directory, folder) + '-%s.html'                            # pyLDAvis topics file path
 
 """ Boolean triggers global variables """
 preprocess_data = True          # Boolean to trigger pre-processing of Feedback data in the database (Default value is TRUE)
@@ -1292,10 +1304,6 @@ feedback_ml_table = "FeedbackML"        # Name of feedback table in database use
 topic_table = "Topic"                   # Name of topic table in database 
 feedback_topic_table = "FeedbackTopic"  # Name of feedback-topic table in database 
 category_factor = {}                    # Initialise empty dictionary to contain mapping of category-factor values for computing overall score of feedback
-
-# Topic modelling specific variables (Need to specify the IDs of the selected Web App and selected Category for topic modelling as the models used will be different for different web apps and categories)
-web_app_id = 99  # ID of selected web app whose feedback will be topic modelled
-category_id = 4  # ID of selected category whose feedback will be topic modelled (2: Bug Report, 4: General, 5: Feature Request)
 
 """ Data mining specific variables and processings"""
 # Token whitelist (to prevent important terms from not being tokenized)
@@ -1327,10 +1335,12 @@ whitelist = ['csit', 'mindef', 'cve', 'cyber-tech', 'cyber-technology', # Spam D
             'install', 'fix', 'future', 'experience']
 bugcode_regex = r"(.*)(BUG\d{6}\$)(.*)" # Assume bug code is BUGXXXXXX$ ($ is delimiter)
 
-# Topic Modelling specific variables
+# Topic Modelling specific variables (Need to specify the ID of the selected Web App as the models used will be different for different web apps and categories)
 list_corpus_tokens = [] # Initialise list containing lists of document tokens in the corpus for Topic Modelling
-selected_topic_no = 65 # Set projected number of topics
-list_category = [] # Initialise list containing the unique categories of feedback within the selected web application
+list_category = []      # Initialise list containing the unique categories of feedback within the selected web application
+selected_topic_no = 0   # Initialise projected number of topics
+category_id = 0         # Initialise ID of selected category whose feedback will be topic modelled (2: Bug Report, 4: General, 5: Feature Request)
+web_app_id = 99         # ID of selected web app whose feedback will be topic modelled
 list_models = [{'CategoryID': 2, 'TopicNo': 90}, {'CategoryID': 4, 'TopicNo': 65}, 
                {'CategoryID': 5, 'TopicNo': 70}] # Set list containing the optimal number of topics for each category of the selected web application (AFTER hypertuning)
 
@@ -1739,6 +1749,12 @@ if (mine_data == True):
             # Create sub-folder if it doesn't exist
             os.mkdir ("%sdata/%s/data-mining/" % (working_directory, folder)) 
 
+        # Check if spam-detection folder exists
+        if (not os.path.exists ("%sdata/%s/data-mining/spam-detection" % (working_directory, folder))):
+
+            # Create sub-folder if it doesn't exist
+            os.mkdir ("%sdata/%s/data-mining/spam-detection" % (working_directory, folder)) 
+
         # Save cleaned raw (prior to spam detection data mining) dataset to CSV
         feedback_ml_df.to_csv (feedback_ml_prior_file_path_spam_dm, index = False, encoding = "utf-8")
 
@@ -1937,6 +1953,12 @@ if (mine_data == True):
 
             # Create sub-folder if it doesn't exist
             os.mkdir ("%sdata/%s/data-mining/" % (working_directory, folder)) 
+
+        # Check if sentiment-analysis folder exists
+        if (not os.path.exists ("%sdata/%s/data-mining/sentiment-analysis" % (working_directory, folder))):
+
+            # Create sub-folder if it doesn't exist
+            os.mkdir ("%sdata/%s/data-mining/sentiment-analysis" % (working_directory, folder)) 
 
         # Save cleaned raw (prior to sentiment analysis data mining) dataset to CSV
         feedback_ml_df.to_csv (feedback_ml_prior_file_path_sa_dm, index = False, encoding = "utf-8")
@@ -2142,6 +2164,12 @@ if (mine_data == True):
 
                 # Create sub-folder if it doesn't exist
                 os.mkdir ("%sdata/%s/data-mining/" % (working_directory, folder)) 
+
+            # Check if topic-modelling folder exists
+            if (not os.path.exists ("%sdata/%s/data-mining/topic-modelling" % (working_directory, folder))):
+
+                # Create sub-folder if it doesn't exist
+                os.mkdir ("%sdata/%s/data-mining/topic-modelling" % (working_directory, folder)) 
 
             # Save topics in topic file
             # save_topics (list_lda_topics, list_hdp_topics, category_id)
@@ -2419,7 +2447,7 @@ if (mine_data == True):
             if (len (topic_df) > 0):
 
                 # Calculate the PriorityScore of each Topic and update the Topics table if the topics dataframe contains at least a topic
-                topic_df.apply (calculate_topic_priority_score, axis = 1) # Access each topic row by row
+                topic_df = topic_df.apply (calculate_topic_priority_score, axis = 1) # Access each topic row by row
 
             # Print debugging message
             print (len (topic_df), "Category %s Topic(s)' PriorityScore updated" % category_id)

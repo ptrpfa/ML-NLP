@@ -1,0 +1,135 @@
+Start time:  2020-01-22 08:14:41.365958
+
+***Preliminary preparations before data mining process***
+
+Unprocessed feedback data detected!
+Pre-processing: 5 record(s)
+Cleaning unprocessed feedbacks..
+Number of trash record(s) found: 0 record(s)
+5 record(s) successfully pre-processed
+5 record(s) successfully inserted into FeedbackML table
+
+Data pre-processing completed in 0.332615 seconds
+
+
+***Data Mining***
+
+Unmined feedback data detected!
+Mining: 5 record(s)
+
+(1) Conducting SPAM DETECTION..
+
+Preliminary information about SPAM/HAM dataset:
+Dimensions:  (2, 8) 
+
+First few records:
+          Id                                            Subject                                           MainText  SubjectSpam  MainTextSpam  SpamStatus  Subjectivity  Polarity
+0  99_8001_4              The DNS Server allows zone transfers   The DNS server on gala giac org allows DNS zon...            2             2           2           2.0       2.0
+1  99_8004_4  How do I import an SQL file using the command ...  Be sure to check that the backup file does not...            2             2           2           2.0       2.0 
+
+Columns and data types:
+Id               object
+Subject          object
+MainText         object
+SubjectSpam       int64
+MainTextSpam      int64
+SpamStatus        int64
+Subjectivity    float64
+Polarity        float64
+dtype: object 
+
+Loaded vectorizer in 0.831066 seconds
+Transformed subject to DTM in 2.725912 seconds
+Transformed main text to DTM in 0.047314 seconds
+
+Predicting whether subjects of feedback is spam..
+Predicted subject values: [0 0]
+
+Predicting whether main texts of feedback is spam..
+Predicted main text values: [0 0]
+
+Spam model runtime:  0.0037340000000000003 seconds
+
+2 record(s) successfully classified as SPAM/HAM
+
+Completed Spam Detection in 3.670032 seconds
+
+
+(2) Conducting SENTIMENT ANALYSIS..
+
+5 record(s)' sentiment subjectivity and polarity values analysed
+
+Completed Sentiment Analysis in 0.09926 seconds
+
+
+(3) Conducting TOPIC MODELLING..
+
+Performing Topic Modelling on Category 2 with 90 projected topics..
+
+
+Preliminary information about Topic Modelling Category 2 dataset:
+Dimensions:  (2, 7) 
+
+First few records:
+          Id                                            Subject                                           MainText  ...                                         TextTokens TextTopics TopicPercentages
+0  99_8002_2   Anonymous logins to the FTP server are disabled   FTP server is being used to allow remote write...  ...  [anonymous, FTP, server, FTP, server, remote, ...         []               []
+1  99_8003_2  The POP3 and IMAP mail servers allow unencrypt...  The Postfix SMTP server and Cyrus IMAP POP3 se...  ...  [IMAP, mail, server, unencrypted, logon, serve...         []               []
+
+[2 rows x 7 columns] 
+
+Columns and data types:
+Id                  object
+Subject             object
+MainText            object
+Text                object
+TextTokens          object
+TextTopics          object
+TopicPercentages    object
+dtype: object 
+
+0 record(s) successfully inserted into Topics table for Category 2
+2 record(s) successfully inserted into FeedbackTopic table for Category 2
+2 record(s)' TopicModelStatus updated for Category 2
+2 Category 2 Topic(s)' PriorityScore updated
+
+Performing Topic Modelling on Category 4 with 65 projected topics..
+
+
+Preliminary information about Topic Modelling Category 4 dataset:
+Dimensions:  (3, 7) 
+
+First few records:
+          Id                                            Subject                                           MainText  ...                                         TextTokens TextTopics TopicPercentages
+0  99_8000_4              Why does pandas apply calculate twice  In the current implementation apply calls func...  ...  [calculate, current, implementation, apply, ca...         []               []
+1  99_8001_4              The DNS Server allows zone transfers   The DNS server on gala giac org allows DNS zon...  ...  [zone, transfer, server, zone, transfer, Nessu...         []               []
+2  99_8004_4  How do I import an SQL file using the command ...  Be sure to check that the backup file does not...  ...  [SQL, file, command, line, sure, backup, file,...         []               []
+
+[3 rows x 7 columns] 
+
+Columns and data types:
+Id                  object
+Subject             object
+MainText            object
+Text                object
+TextTokens          object
+TextTopics          object
+TopicPercentages    object
+dtype: object 
+
+0 record(s) successfully inserted into Topics table for Category 4
+0 record(s) successfully inserted into FeedbackTopic table for Category 4
+3 record(s)' TopicModelStatus updated for Category 4
+0 Category 4 Topic(s)' PriorityScore updated
+
+Performing Topic Modelling on Category 5 with 70 projected topics..
+
+Topic modelling not carried out for Category: 5
+
+Completed Topic Modelling in 2.086956 seconds
+
+Updating data-mined status of feedback..
+5 record(s) successfully mined
+
+Program start time:  2020-01-22 08:14:41.365958
+Program end time:  2020-01-22 08:14:47.701058
+Program runtime:  6.3351 seconds

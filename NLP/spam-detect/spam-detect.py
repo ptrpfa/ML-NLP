@@ -3,6 +3,7 @@ import numpy as np
 import re # REGEX
 import string
 import html
+import os
 import unidecode
 import pickle 
 import scipy
@@ -383,7 +384,7 @@ def model_runtime (duration, start_time, end_time):
 
 # Global variables
 # File paths to store data pre-processing and data mining feedback
-working_directory = "/home/p/Desktop/csitml/NLP/spam-detect/"     # Working directory of program
+working_directory = os.getcwd () + "/"                            # Working directory of program
 train_file_path = "%sdata/spam-ham.txt" % working_directory       # Dataset file path
 clean_file_path = '%sdata/clean-spam-ham.csv' % working_directory # Cleaned dataset file path
 pickles_file_path = "%spickles/" % working_directory              # File path containing pickled objects

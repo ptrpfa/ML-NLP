@@ -5,6 +5,7 @@ import numpy as np
 import re # REGEX
 import json
 import string
+import os
 import html
 import unidecode
 import pickle 
@@ -32,7 +33,7 @@ simplefilter (action = 'ignore', category = DeprecationWarning) # Ignore Depreca
 """ 
 NOTE: 
 This program conducts Topic Modelling on multiple categories specified in list_models in which their optimal number of topics have been obtained after hypertuning. 
-To conduct Topic modelling on a specified CATEGORY and WEB_APP_ID, run the topic-modelling-single.py program
+To conduct Topic modelling on a specified CATEGORY and WEB_APP_ID, modify list_models to only contain a single entry of category and the web_app_id global variable
 
 The Topic Modelling LDA Model needs to be hyper-tuned for every set of feedback (ie different category of Feedback)
 -Model performances were measured using Coherence Score/Value (CV) and eye-balling:
@@ -45,6 +46,10 @@ The Topic Modelling LDA Model needs to be hyper-tuned for every set of feedback 
 Caveat:
 -Some feedback will not be assigned any topic even though they contain certain keywords (for manual tagging), like 'iPhone' for topic 'Apple', as such topics' percentage 
 contribution to the feedbacks are lower than the minimum_percentage threshold specified
+-This program will only insert new Feedback-Topic mappings into the database if the number of mappings is at least 2 (more than 1) due to a limitation of pandas' .apply 
+function (By default, pandas will execute a function called through .apply twice if there is only one record in the selected dataframe for optimization)
+--> Refer to: https://stackoverflow.com/questions/21635915/why-does-pandas-apply-calculate-twice
+              https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.apply.html (Under Notes)
 
 Future enhancements:
 -Further hypertuning the LDA model's hyperparameters such as the alpha, beta and eta values (alpha and beta values from the HDP model could be used via the hdp_to_lda () 
@@ -970,7 +975,7 @@ def load_pickle (filename):
 
 # Global variables
 # File paths to store data pre-processing and data mining feedback
-working_directory = "/home/p/Desktop/csitml/NLP/topic-modelling/" # Working directory of program
+working_directory = os.getcwd () + "/"               # Working directory of program
 pickles_file_path = "%spickles/" % working_directory # File path containing pickled objects
 
 # File paths
@@ -990,6 +995,7 @@ use_manual_tag = True    # Boolean to trigger whether to use manually tagged top
 use_pickle = True        # Boolean to trigger whether to use pickled objects or not
 display_visuals = True   # Boolean to trigger display of visualisations
 modify_database = True   # Boolean to trigger modifications of the database
+hypertune_model = False  # Boolean to trigger the hypertuning of the LDA model for each category in list_models
 
 # Database global variables
 mysql_user = "root"                     # MySQL username
@@ -1014,7 +1020,7 @@ category_id = 0        # ID of selected category whose feedback will be topic mo
 # Initialise list containing the unique categories of feedback within the selected web application
 list_category = []
 
-# Set list containing the optimal number of topics for each category of the selected web application (AFTER hypertuning)
+# Set list containing the selected optimal number of topics for each category of the selected web application 
 list_models = [{'CategoryID': 2, 'TopicNo': 90}, {'CategoryID': 4, 'TopicNo': 65}, {'CategoryID': 5, 'TopicNo': 70}]
 
 # Create spaCy NLP object
@@ -1192,13 +1198,16 @@ for optimal_model in list_models:
         # Get model performance metrics
         print ("*****Model Performances***\n")
 
-        # Hypertune LDA model
-        # print ("Finding optimal number of topics for LDA model..")    
-        # hypertune_no_topics (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start = 5, limit = 100, step = 5) # Find optimal number of topics with highest coherence value for LDA model
+        # Check boolean to see whether or not to hypertune the number of topics for the LDA model
+        if (hypertune_model == True):
 
-        # Get equivalent LDA parameters of HDP model 
-        # print ("Hypertuned alpha and beta values of a LDA almost equivalent of current HDP:", hdp_model.hdp_to_lda ())
-        # print ("Closest LDA model to HDP model:", hdp_model.suggested_lda_model ())
+            # Hypertune LDA model
+            print ("Finding optimal number of topics for LDA model..")    
+            hypertune_no_topics (dictionary = id2word, corpus = gensim_corpus, texts = list_corpus_tokens, start = 5, limit = 100, step = 5) # Find optimal number of topics with highest coherence value for LDA model
+
+            # Get equivalent LDA parameters of HDP model 
+            print ("Hypertuned alpha and beta values of a LDA almost equivalent of current HDP:", hdp_model.hdp_to_lda ())
+            print ("Closest LDA model to HDP model:", hdp_model.suggested_lda_model ())
 
         # LDA Model
         print ("LDA:")
@@ -1510,7 +1519,7 @@ for optimal_model in list_models:
             if (len (topic_df) > 0):
 
                 # Calculate the PriorityScore of each Topic and update the Topics table if the topics dataframe contains at least a topic
-                topic_df.apply (calculate_topic_priority_score, axis = 1) # Access each topic row by row
+                topic_df = topic_df.apply (calculate_topic_priority_score, axis = 1) # Access each topic row by row
 
             # Print debugging message
             print (len (topic_df), "Category %s Topic(s)' PriorityScore updated" % category_id)
