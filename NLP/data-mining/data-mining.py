@@ -65,7 +65,6 @@ As mentioned in (1), this program does processing on a batch by batch basis. As 
 in the database (ie new feedback insertions, changing of the SpamStatus of a specific feedback). This program will only respond to such changes 
 on its next run. This limitation can be mitigated by setting the runtime interval of this program to be shorter (ie every week), provided the
 feedback collected are as specified in (4).
-
 """
 
 # Function to get the factor of each category from the database for computing the overall scores of feedbacks
