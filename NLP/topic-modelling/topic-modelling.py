@@ -50,6 +50,7 @@ contribution to the feedbacks are lower than the minimum_percentage threshold sp
 function (By default, pandas will execute a function called through .apply twice if there is only one record in the selected dataframe for optimization)
 --> Refer to: https://stackoverflow.com/questions/21635915/why-does-pandas-apply-calculate-twice
               https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.apply.html (Under Notes)
+==> However this is overcome through custom functions xxx and xxx
 
 Future enhancements:
 -Further hypertuning the LDA model's hyperparameters such as the alpha, beta and eta values (alpha and beta values from the HDP model could be used via the hdp_to_lda () 
@@ -59,6 +60,9 @@ suggested_lda_model () method)
 -Dataset used could have been crawled from the web for selected mobile applications in the Google Play Store/Apple Store for more specific type of topics (not done due to
 time constraint as would require a 1) Web crawling program and 2) Classification model to classify feedbacks obtained into the chosen categories)
 --> Normal use case would be just to query the database for collected user feedback
+
+Miscellaneous:
+-This program provides an option to automatically assign topics to feedback containing pre-defined keywords as specified in data/manual-tagging.txt
 
 Limitations:
 -Limitation of previous spam-detection model in mis-labelling of spam feedback as normal feedback resulted in topic modelling not being as good (error carry forward)
@@ -725,8 +729,14 @@ def check_new_topic (series):
 # Function to update the TopicID of the FeedbackTopic dataframe
 def update_feedback_topic_topic_id (series):
     
+    topic_id = series ['TextTopics']
+
+    if (type (topic_id) == list):
+
+        topic_id = topic_id [0]
+
     # Update the TopicID of the current Feedback-Topic mapping
-    series ['TextTopics'] = dict_topic_id_mapping [int (series ['TextTopics'])]
+    series ['TextTopics'] = dict_topic_id_mapping [int (topic_id)]
 
     # Return the updated series object
     return series
@@ -771,6 +781,22 @@ def insert_feedback_topic_dataframe (series, cursor, connection):
     
     # Execute SQL statement
     cursor.execute (sql, (list_id [0], list_id [1], list_id [2], series ['TextTopics'], web_app_id, series ['TopicPercentages']))
+
+    # Commit changes made
+    connection.commit ()
+
+# Function to insert single row into the FeedbackTopic table
+def insert_single_feedback_topic_dataframe (feedback_id, topic_id, percentage, cursor, connection): 
+
+    # Split Id (WebAppID_FeedbackID_CategoryID) into a list
+    list_id = feedback_id.split ('_') # Each ID component is delimited by underscore
+
+    # Create SQL statement to insert FeedbackTopic table values
+    sql = "INSERT INTO %s (FBWebAppID, FeedbackID, CategoryID, TopicID, TWebAppID, Percentage) " % (feedback_topic_table)
+    sql = sql + "VALUES (%s, %s, %s, %s, %s, %s);" 
+
+    # Execute SQL statement
+    cursor.execute (sql, (list_id [0], list_id [1], list_id [2], topic_id, web_app_id, percentage))
 
     # Commit changes made
     connection.commit ()
@@ -1271,7 +1297,7 @@ for optimal_model in list_models:
         list_new_feedback_topic = [] # List containing dictionaries of new rows to add to the topic-feedback dataframe later on
 
         # Check length of FeedbackTopics dataframe
-        if (len (feedback_topic_df) > 1): # Minimum length is 2 as current limitation of pandas apply function is that it will run twice if the dataframe only contains one record
+        if (len (feedback_topic_df) > 1): 
 
             # Clean and split feedback that are assigned more than one topic into multiple new entries to be added later on in the Feedback-Topic dataframe
             feedback_topic_df = feedback_topic_df.apply (clean_split_feedback_topic_dataframe, axis = 1) 
@@ -1423,17 +1449,46 @@ for optimal_model in list_models:
             # Update the Topics DataFrame with the TopicID of topics in the database for topics that have already been inserted to the database if it is not empty
             topic_df = topic_df.apply (check_new_topic, axis = 1)
 
+        # Check if dictionary of topic_id_mappings is empty (EDIT HERE)
+        if (len (dict_topic_id_mapping) == 0):
+
+            # Get data from database
+            pass
+            # Append data into dictionary
+
         # Check length of FeedbackTopic DataFrame
         if (len (feedback_topic_df) > 1): # Minimum length is 2 as current limitation of pandas apply function is that it will run twice if the dataframe only contains one record
             
             # Update the FeedbackTopics dataframe with the updated TopicID values
             feedback_topic_df = feedback_topic_df.apply (update_feedback_topic_topic_id, axis = 1)
 
+        else:
+
+            # First duplicate the FeedbackTopics dataframe so that it contains two records
+            feedback_topic_df = feedback_topic_df.append (feedback_topic_df, ignore_index = True)
+
+            # Update the FeedbackTopics dataframe with the updated TopicID values
+            feedback_topic_df = feedback_topic_df.apply (update_feedback_topic_topic_id, axis = 1)
+
+            # Remove the duplicate added
+            feedback_topic_df.drop_duplicates (inplace = True)
+
         # Check that the number of records in the FeedbackML dataframe that contains at least a topic is more than one
         if (len (feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'].copy ()) > 1): # Minimum length is 2 as current limitation of pandas apply function is that it will run twice if the dataframe only contains one record
 
             # Update the FeedbackML dataframe with the updated TopicID values
             feedback_ml_df = feedback_ml_df.apply (update_feedback_ml_topic_id, axis = 1)
+
+        else:
+
+            # First duplicate the FeedbackTopics dataframe so that it contains two records
+            feedback_ml_df = feedback_ml_df.append (feedback_ml_df, ignore_index = True)
+
+            # Update the FeedbackML dataframe with the updated TopicID values
+            feedback_ml_df = feedback_ml_df.apply (update_feedback_ml_topic_id, axis = 1)
+
+            # Remove the duplicate added
+            feedback_ml_df.drop_duplicates (inplace = True)
 
         """ Database updates """
         # Check  global boolean variable to see whether or not to modify the database
@@ -1487,9 +1542,18 @@ for optimal_model in list_models:
                     print (len (feedback_topic_df), "record(s) successfully inserted into FeedbackTopic table for Category %s" % category_id)
                 
                 else:
+                    
+                    # Duplicate FeedbackTopic dataframe first so that it now contains two records
+                    feedback_topic_df = feedback_topic_df.append (feedback_topic_df, ignore_index = True)
+                    print (feedback_topic_df.Id.iloc [0], feedback_topic_df.TextTopics.iloc [0], feedback_topic_df.TopicPercentages.iloc [0])
+                    # Insert single new FeedbackTopic mapping into the FeedbackTopic database table
+                    insert_single_feedback_topic_dataframe (feedback_topic_df.Id.iloc [0], feedback_topic_df.TextTopics.iloc [0][0], float(feedback_topic_df.TopicPercentages.iloc [0][0]), db_cursor, db_connection)
 
                     # Print debugging message
-                    print ("0 record(s) successfully inserted into FeedbackTopic table for Category %s" % category_id)
+                    print ("1 record(s) successfully inserted into FeedbackTopic table for Category %s" % category_id)
+
+                    # Remove the duplicated record
+                    feedback_topic_df.drop_duplicates (inplace = True)
                 
             # Catch MySQL Exception
             except mysql.connector.Error as error:

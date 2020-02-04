@@ -59,6 +59,7 @@ the number of mappings is at least 2 (more than 1) due to a limitation of pandas
 will execute a function called through .apply twice if there is only one record in the selected dataframe for optimization)
 --> Refer to: https://stackoverflow.com/questions/21635915/why-does-pandas-apply-calculate-twice
               https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.apply.html (Under Notes)
+==> However this is overcome through custom functions xxx and xxx
 
 Limitation:
 As mentioned in (1), this program does processing on a batch by batch basis. As such, this program will not respond dynamically to changes 
