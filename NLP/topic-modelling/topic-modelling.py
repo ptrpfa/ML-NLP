@@ -785,9 +785,9 @@ def insert_feedback_topic_dataframe (series, cursor, connection):
     # Commit changes made
     connection.commit ()
 
-# Function to insert single row into the FeedbackTopic table
+# Function to insert single row into the FeedbackTopic table 
 def insert_single_feedback_topic_dataframe (feedback_id, topic_id, percentage, cursor, connection): 
-
+    
     # Split Id (WebAppID_FeedbackID_CategoryID) into a list
     list_id = feedback_id.split ('_') # Each ID component is delimited by underscore
 
@@ -1306,6 +1306,18 @@ for optimal_model in list_models:
             feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"^\d*$")] # Only obtain feedbacks whose topics are made of digits (only one topic, since no commas which would be indicative of multiple topics)
             # feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"\d+,\D?\d+")] # Inverse
 
+        # Check if there is only one entry in the feedback topic dataframe
+        elif (len (feedback_topic_df) == 1):
+
+            # Check if current topic is a new topic that has not been added to the list containing all topics that have been assigned to at least one Feedback
+            if (feedback_topic_df.TextTopics.iloc [0][0] not in list_topics_assigned):
+
+                # Add topic into the list if it has not been added inside previously
+                list_topics_assigned.append (feedback_topic_df.TextTopics.iloc [0][0])
+
+                # Sort list of unique topics assigned to at least one Feedback in ascending order of TopicIDs
+                list_topics_assigned.sort ()
+
         # Check length of list containing new rows to add to the topic-feedback dataframe
         if (len (list_new_feedback_topic) > 0): # Proceed to insert feedback splitted previously if the list is not empty
 
@@ -1391,9 +1403,22 @@ for optimal_model in list_models:
                 largest_topicid = largest_topicid + 1
 
             """ Update FeedbackTopic DataFrame """
-            # Get Feedback-Topic mappings and update the FeedbackML DataFrame accordingly
-            feedback_ml_df = feedback_ml_df.apply (get_manual_feedback_topic_mapping, args = (dictionary_manual_tag, 0.3), axis = 1)
-        
+            # Check length of FeedbackML dataframe
+            if (len (feedback_ml_df) > 1):
+
+                # Get Feedback-Topic mappings and update the FeedbackML DataFrame accordingly
+                feedback_ml_df = feedback_ml_df.apply (get_manual_feedback_topic_mapping, args = (dictionary_manual_tag, 0.3), axis = 1)
+
+            # Accomodate pandas.apply limitation of running twice for single record dataframes
+            elif (len (feedback_ml_df) == 1):
+                
+                # Get Feedback-Topic mappings and update the FeedbackML DataFrame accordingly
+                feedback_ml_df = feedback_ml_df.apply (get_manual_feedback_topic_mapping, args = (dictionary_manual_tag, 0.3), axis = 1)
+                
+                # Remove duplicate topics assigned
+                feedback_ml_df.TextTopics.iloc [0] = list (set (feedback_ml_df.TextTopics.iloc [0]))
+                feedback_ml_df.TopicPercentages.iloc [0] = list (set (feedback_ml_df.TopicPercentages.iloc [0]))
+
             # Create Feedback-Topic DataFrame again to store all feedback that are assigned with at least one topic after Topic Modelling
             feedback_topic_df = feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'].copy () # Get feedback that are assigned at least one topic
 
@@ -1411,19 +1436,53 @@ for optimal_model in list_models:
             
                 # Remove feedbacks that are assigned with more than one topic
                 feedback_topic_df = feedback_topic_df [feedback_topic_df.TextTopics.str.match (r"^\d*$")] # Only obtain feedbacks whose topics are made of digits (only one topic, since no commas which would be indicative of multiple topics)
+            
+            # Check if there is only one entry in the feedback topic dataframe
+            elif (len (feedback_topic_df) == 1):
 
+                # Check length of TextTopics to see if more than one topic is assigned to current Feedback
+                if (len (feedback_topic_df.TextTopics.iloc [0]) > 1 ): # Proceed to split feedback into multiple new records if current feedback is assigned to more than one topic
+
+                    # Initialise counter variable
+                    counter = 0
+
+                    # Loop to access list of topics assigned to current feedback
+                    while (counter < len (feedback_topic_df.TextTopics.iloc [0])):
+                        
+                        # Initialise dictionary to store new row information
+                        dict_feedback_topic = {"Id": feedback_topic_df.Id.iloc [0], "TextTopics": 0, "TopicPercentages": 0}
+
+                        # Assign TopicID and percentage contribution of current topic to dictionary
+                        dict_feedback_topic ['TextTopics'] = feedback_topic_df.TextTopics.iloc [0] [counter]
+                        dict_feedback_topic ['TopicPercentages'] = feedback_topic_df.TopicPercentages.iloc [0] [counter]
+                        
+                        # Append dictionary of new row to list containing new rows to insert into the FeedbackTopic dataframe later on
+                        list_new_feedback_topic.append (dict_feedback_topic)
+                        
+                        # Increment counter
+                        counter = counter + 1
+                
+                # Check if current topic is a new topic that has not been added to the list containing all topics that have been assigned to at least one Feedback
+                if (feedback_topic_df.TextTopics.iloc [0][0] not in list_topics_assigned):
+
+                    # Add topic into the list if it has not been added inside previously
+                    list_topics_assigned.append (feedback_topic_df.TextTopics.iloc [0][0])
+
+                    # Sort list of unique topics assigned to at least one Feedback in ascending order of TopicIDs
+                    list_topics_assigned.sort ()
+           
             # Check length of list containing new rows to add to the topic-feedback dataframe
             if (len (list_new_feedback_topic) > 0): # Proceed to insert feedback splitted previously if the list is not empty
 
                 # Insert new rows of feedback splitted previously into the FeedbackTopic DataFrame
                 feedback_topic_df = feedback_topic_df.append (list_new_feedback_topic, ignore_index = True)
-
+                print (feedback_topic_df)
                 # Remove duplicate records (for redundancy)
                 feedback_topic_df.drop_duplicates (inplace = True)
 
             # Remove topics that have not been assigned to at least one feedback in the Feedback-Topic mapping DataFrame
             topic_df = topic_df [topic_df.Id.isin (list_topics_assigned)]
-
+            
         """ Update Topic status """
         # Check current category
         if (category_id == 4 or category_id == 5):
@@ -1449,26 +1508,24 @@ for optimal_model in list_models:
             # Update the Topics DataFrame with the TopicID of topics in the database for topics that have already been inserted to the database if it is not empty
             topic_df = topic_df.apply (check_new_topic, axis = 1)
 
-        # Check if dictionary of topic_id_mappings is empty (EDIT HERE)
-        if (len (dict_topic_id_mapping) == 0):
-
-            # Get data from database
-            pass
-            # Append data into dictionary
-
         # Check length of FeedbackTopic DataFrame
         if (len (feedback_topic_df) > 1): # Minimum length is 2 as current limitation of pandas apply function is that it will run twice if the dataframe only contains one record
             
             # Update the FeedbackTopics dataframe with the updated TopicID values
             feedback_topic_df = feedback_topic_df.apply (update_feedback_topic_topic_id, axis = 1)
 
-        else:
+        # Accomodate if feedback topic only contains one record
+        elif (len (feedback_topic_df) == 1):
 
             # First duplicate the FeedbackTopics dataframe so that it contains two records
             feedback_topic_df = feedback_topic_df.append (feedback_topic_df, ignore_index = True)
 
             # Update the FeedbackTopics dataframe with the updated TopicID values
             feedback_topic_df = feedback_topic_df.apply (update_feedback_topic_topic_id, axis = 1)
+
+            # Convert columns containing lists to string (as drop duplicates will not work otherwise)
+            feedback_topic_df.TextTopics = feedback_topic_df.TextTopics.astype (str)
+            feedback_topic_df.TopicPercentages = feedback_topic_df.TopicPercentages.astype (str)
 
             # Remove the duplicate added
             feedback_topic_df.drop_duplicates (inplace = True)
@@ -1479,7 +1536,7 @@ for optimal_model in list_models:
             # Update the FeedbackML dataframe with the updated TopicID values
             feedback_ml_df = feedback_ml_df.apply (update_feedback_ml_topic_id, axis = 1)
 
-        else:
+        elif (len (feedback_ml_df [feedback_ml_df.astype (str) ['TextTopics'] != '[]'].copy ()) == 1):
 
             # First duplicate the FeedbackTopics dataframe so that it contains two records
             feedback_ml_df = feedback_ml_df.append (feedback_ml_df, ignore_index = True)
@@ -1487,6 +1544,11 @@ for optimal_model in list_models:
             # Update the FeedbackML dataframe with the updated TopicID values
             feedback_ml_df = feedback_ml_df.apply (update_feedback_ml_topic_id, axis = 1)
 
+            # Convert columns containing lists to string (as drop duplicates will not work otherwise)
+            feedback_ml_df.TextTopics = feedback_ml_df.TextTopics.astype (str)
+            feedback_ml_df.TopicPercentages = feedback_ml_df.TopicPercentages.astype (str)
+            feedback_ml_df.TextTokens = feedback_ml_df.TextTokens.astype (str)
+            
             # Remove the duplicate added
             feedback_ml_df.drop_duplicates (inplace = True)
 
@@ -1541,19 +1603,13 @@ for optimal_model in list_models:
                     # Print debugging message
                     print (len (feedback_topic_df), "record(s) successfully inserted into FeedbackTopic table for Category %s" % category_id)
                 
-                else:
+                elif (len (feedback_topic_df) == 1):
                     
-                    # Duplicate FeedbackTopic dataframe first so that it now contains two records
-                    feedback_topic_df = feedback_topic_df.append (feedback_topic_df, ignore_index = True)
-                    print (feedback_topic_df.Id.iloc [0], feedback_topic_df.TextTopics.iloc [0], feedback_topic_df.TopicPercentages.iloc [0])
                     # Insert single new FeedbackTopic mapping into the FeedbackTopic database table
-                    insert_single_feedback_topic_dataframe (feedback_topic_df.Id.iloc [0], feedback_topic_df.TextTopics.iloc [0][0], float(feedback_topic_df.TopicPercentages.iloc [0][0]), db_cursor, db_connection)
+                    insert_single_feedback_topic_dataframe (feedback_topic_df.Id.iloc [0], feedback_topic_df.TextTopics.iloc [0], str (feedback_topic_df.TopicPercentages.iloc [0]).strip ("[]"), db_cursor, db_connection)
 
                     # Print debugging message
                     print ("1 record(s) successfully inserted into FeedbackTopic table for Category %s" % category_id)
-
-                    # Remove the duplicated record
-                    feedback_topic_df.drop_duplicates (inplace = True)
                 
             # Catch MySQL Exception
             except mysql.connector.Error as error:
